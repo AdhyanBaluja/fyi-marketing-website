@@ -1,0 +1,236 @@
+/* PlanPage.css */
+
+/* We'll import a Poppins or similar if you wish */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+.plan-page-container {
+  background: #FFECD1; /* main background from your palette */
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  color: #001524; /* Dark text from your palette */
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Header */
+.plan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #001524; /* deep navy from palette */
+  padding: 1rem 2rem;
+}
+.plan-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.header-title {
+  color: #FFECD1;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Tagline */
+.plan-tagline {
+  text-align: center;
+  padding: 2rem 1rem;
+  background-color: #15616D; /* from palette */
+  color: #FFECD1;
+}
+.plan-tagline h2 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* Plans Section */
+.plans-section {
+  padding: 2rem 1rem 4rem 1rem;
+  text-align: center;
+}
+.plans-title {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: #001524;
+  font-weight: 700;
+}
+
+.plans-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto 0 auto;
+  justify-content: center;
+}
+
+/* Plan Card */
+.plan-card {
+  width: 300px;
+  background-color: #FFF; /* fallback white, we'll override in classes below */
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.plan-header-box {
+  margin-bottom: 1rem;
+}
+
+.plan-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.plan-price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #15616D; /* or #001524, your choice */
+}
+
+.plan-description {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  color: #001524;
+}
+.plan-description li {
+  margin-bottom: 0.5rem;
+}
+
+/* Buy Plan Button */
+.buy-plan-btn {
+  background-color: #FF7D00;
+  color: #FFECD1;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+.buy-plan-btn:hover {
+  background-color: #78290F;
+  transform: scale(1.03);
+}
+
+/* Distinguish each plan with subtle color backgrounds or top border */
+/* Premium */
+.premium-plan {
+  border-top: 8px solid #78290F; /* from palette for emphasis */
+}
+/* Standard */
+.standard-plan {
+  border-top: 8px solid #15616D;
+}
+/* Lite */
+.lite-plan {
+  border-top: 8px solid #001524;
+}
+
+/* ========== Chatbot Icon ========== */
+/* If your AiChatbot includes the icon itself, ensure it is positioned fixed at bottom */
+
+/* =========== MEDIA QUERIES =========== */
+
+/* Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  .plan-header {
+    padding: 1rem;
+  }
+  .plan-header-left {
+    gap: 0.5rem;
+  }
+  .header-title {
+    font-size: 1.3rem;
+  }
+
+  .plan-tagline h2 {
+    font-size: 1.6rem;
+  }
+
+  .plans-section {
+    padding: 1.5rem 1rem 3rem 1rem;
+  }
+  .plans-title {
+    font-size: 1.8rem;
+  }
+
+  .plans-cards-container {
+    gap: 1.5rem;
+  }
+  .plan-card {
+    width: 260px;
+    padding: 1rem;
+  }
+  .plan-header-box {
+    margin-bottom: 0.5rem;
+  }
+  .plan-name {
+    font-size: 1.2rem;
+  }
+  .plan-price {
+    font-size: 1rem;
+  }
+  .buy-plan-btn {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .plan-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .plan-tagline h2 {
+    font-size: 1.4rem;
+  }
+
+  .plans-title {
+    font-size: 1.6rem;
+  }
+
+  .plan-card {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  .plan-name {
+    font-size: 1.1rem;
+  }
+  .plan-price {
+    font-size: 0.9rem;
+  }
+  .plan-description {
+    font-size: 0.9rem;
+  }
+  .buy-plan-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
+  }
+}

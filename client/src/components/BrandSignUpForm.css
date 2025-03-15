@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 
+  Let the container grow and be scrollable 
+  so if the form extends beyond one screen, user can scroll.
+*/
+.brand-form-container {
+  position: relative;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+/* ---- The embedded YouTube background ---- */
+.video-background {
+  position: fixed; 
+  /* fixed so it stays put when scrolling */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2; /* behind everything */
+  overflow: hidden;
+}
+
+/* Full-size iframe covering the screen */
+.video-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Dark overlay on top of the video for readability */
+.video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,21,36,0.4); /* using #001524 with transparency */
+  z-index: -1; 
+}
+
+/* 
+  The content (form) 
+  We'll center it but let it scroll as needed 
+*/
+.brand-form-content {
+  width: 90%;
+  max-width: 500px;
+  background-color: #FFECD1; /* replaced #fff with light palette color */
+  margin: 2rem auto;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,21,36,0.2);
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Title */
+.brand-form-content h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #001524; /* replaced #333 with dark palette color */
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #001524;
+}
+
+.form-group label span {
+  color: #FF7D00; 
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid #001524;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  outline: none;
+  background-color: #FFECD1;
+  color: #001524;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #FF7D00;
+}
+
+.form-group small {
+  color: #15616D;
+  font-size: 0.8rem;
+}
+
+/* Submit button */
+.submit-btn {
+  background-color: #FF7D00;
+  color: #FFECD1;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+}
+.submit-btn:hover {
+  background-color: #78290F;
+}
+
+/* ==================== MEDIA QUERIES ==================== */
+
+/* Tablet screens and down */
+@media (max-width: 768px) {
+  .brand-form-content {
+    margin: 1.5rem auto;
+    padding: 1.5rem;
+  }
+
+  .brand-form-content h2 {
+    font-size: 1.4rem;
+  }
+}
+
+/* Mobile screens and down */
+@media (max-width: 480px) {
+  .brand-form-content {
+    margin: 1rem auto;
+    padding: 1rem;
+  }
+
+  .brand-form-content h2 {
+    font-size: 1.2rem;
+  }
+
+  .form-group label {
+    font-size: 0.95rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+
+  .submit-btn {
+    font-size: 0.9rem;
+    padding: 0.65rem;
+  }
+}

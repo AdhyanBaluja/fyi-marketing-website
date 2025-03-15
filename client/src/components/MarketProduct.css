@@ -1,0 +1,189 @@
+.market-product-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+  background: #FFECD1; /* replaced #f9f9f9 */
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh; /* Ensures the page spans the full viewport height */
+  margin: 0;
+}
+
+.form-section {
+  flex: 1;
+  background: #FFECD1; /* replaced white */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #001524; /* replaced #333 */
+}
+
+p {
+  font-size: 14px;
+  color: #15616D; /* replaced #555 */
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #001524; /* replaced #333 */
+  margin-bottom: 5px;
+  display: block;
+}
+
+textarea,
+select,
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #FFECD1; /* replaced #ddd */
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #FFECD1;
+  color: #001524;
+}
+
+textarea:focus,
+select:focus,
+input:focus {
+  border-color: #FF7D00; /* replaced #007bff */
+  outline: none;
+}
+
+.timeframe-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.submit-btn {
+  background: #FF7D00; /* replaced #007bff */
+  color: #FFECD1; /* using light text for contrast */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: #78290F; /* replaced #0056b3 */
+}
+
+.image-section {
+  flex: 0.6; /* Adjust space given to the image section */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px; /* Adds spacing inside the image section */
+}
+
+.demo-image {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Fix the black line issue by resetting any unwanted bottom margin or background */
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: #FFECD1; /* replaced #f9f9f9 */
+}
+
+/* ==================== MEDIA QUERIES ==================== */
+
+/* Tablets and down */
+@media (max-width: 768px) {
+  .market-product-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .form-section,
+  .image-section {
+    padding: 15px;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  label {
+    font-size: 15px;
+  }
+
+  textarea,
+  select,
+  input {
+    font-size: 13px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .image-section {
+    order: 2; /* Image section after the form on tablets */
+    flex: none;
+  }
+
+  .form-section {
+    order: 1;
+  }
+}
+
+/* Mobile screens and down */
+@media (max-width: 480px) {
+  .market-product-container {
+    padding: 8px;
+  }
+
+  .form-section,
+  .image-section {
+    padding: 10px;
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  textarea,
+  select,
+  input {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .submit-btn {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .image-section {
+    order: 2;
+  }
+
+  .form-section {
+    order: 1;
+  }
+}

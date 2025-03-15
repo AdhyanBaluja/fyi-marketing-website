@@ -1,0 +1,230 @@
+/* InfluencerProfile.css */
+
+/* Container */
+.profile-container {
+  max-width: 800px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+  font-family: "Poppins", sans-serif;
+}
+
+/* Header */
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #eee;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.profile-name {
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.profile-subtext {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 2px 0;
+}
+
+/* Rating Display */
+.profile-rating {
+  margin: 10px 0;
+}
+.no-rating {
+  color: #aaa;
+}
+.stars-container {
+  display: inline-block;
+}
+.filled-star {
+  color: #f39c12;
+  margin-right: 2px;
+}
+.empty-star {
+  color: #ccc;
+  margin-right: 2px;
+}
+.rating-number {
+  margin-left: 5px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Info Section */
+.profile-info-section {
+  margin-bottom: 30px;
+}
+
+.profile-info-section h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.profile-info-item {
+  background: #fafafa;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  display: flex;
+  gap: 6px;
+}
+
+.profile-info-item span {
+  font-weight: 600;
+  color: #444;
+}
+
+/* Campaign Card */
+.campaign-card {
+  background: #f9f9f9;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+.campaign-card p {
+  margin: 4px 0;
+}
+
+/* Rating Form */
+.rating-section {
+  background: #fef8e7;
+  padding: 15px;
+  border-radius: 10px;
+}
+.rating-section h3 {
+  margin-bottom: 10px;
+}
+.rating-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rating-form label {
+  font-weight: 600;
+  color: #444;
+}
+.rating-form input {
+  width: 60px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+.rating-submit-btn {
+  background: #f39c12;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.rating-submit-btn:hover {
+  background: #d98a0f;
+}
+.success-msg {
+  color: green;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* Error */
+.error-msg {
+  color: red;
+  font-weight: bold;
+}
+
+/* ================= MEDIA QUERIES ================= */
+
+/* Tablet screens and down */
+@media (max-width: 768px) {
+  .profile-container {
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .profile-header {
+    margin-bottom: 20px;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+  }
+
+  .profile-name {
+    font-size: 1.5rem;
+  }
+
+  .profile-subtext {
+    font-size: 0.9rem;
+  }
+
+  .profile-info-section h3 {
+    font-size: 1.2rem;
+  }
+
+  .profile-info-item {
+    padding: 8px;
+  }
+}
+
+/* Mobile screens and down */
+@media (max-width: 480px) {
+  .profile-container {
+    margin: 10px auto;
+    padding: 10px;
+  }
+
+  .profile-name {
+    font-size: 1.3rem;
+  }
+
+  .profile-subtext {
+    font-size: 0.85rem;
+  }
+
+  .profile-info-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  .profile-info-item {
+    padding: 6px;
+  }
+
+  .campaign-card {
+    padding: 10px;
+  }
+
+  .rating-section {
+    padding: 10px;
+  }
+  .rating-form {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .rating-form input {
+    width: 50px;
+  }
+  .rating-submit-btn {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+}

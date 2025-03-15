@@ -1,0 +1,413 @@
+/* Root Container */
+.find-influencer-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to right, #FFECD1, #15616D);
+  min-height: 100vh;
+}
+
+/* Filters Section */
+.filters-section {
+  background: #FFECD1;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.filters-section h2 {
+  font-size: 1.8rem;
+  color: #001524;
+  margin-bottom: 20px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-item label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #15616D;
+  margin-bottom: 5px;
+}
+
+.filter-item input,
+.filter-item select {
+  padding: 10px;
+  border: 1px solid #FFECD1;
+  border-radius: 12px;
+  width: 100%;
+  font-size: 14px;
+  background: #FFECD1;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.filter-item input:focus,
+.filter-item select:focus {
+  box-shadow: 0px 0px 8px rgba(255, 125, 0, 0.5);
+  outline: none;
+}
+
+/* Add Button for Niche Platforms */
+.filter-item button {
+  padding: 6px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  background: linear-gradient(to right, #FF9800, #F57C00);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.filter-item button:hover {
+  background: linear-gradient(to right, #F57C00, #FF9800);
+  transform: scale(1.05);
+}
+
+/* Filter Buttons Container */
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.apply-filters-btn,
+.remove-filters-btn {
+  background: linear-gradient(to right, #FF7D00, #F4511E);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.apply-filters-btn:hover,
+.remove-filters-btn:hover {
+  background: linear-gradient(to right, #F4511E, #FF7D00);
+  transform: scale(1.05);
+}
+
+/* Influencers Section */
+.influencers-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-bar input {
+  padding: 15px;
+  border: 1px solid #FFECD1;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  background: #FFECD1;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.search-bar input:focus {
+  box-shadow: 0px 0px 8px rgba(255, 125, 0, 0.5);
+  outline: none;
+}
+
+.influencers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  animation: fadeInUp 1.5s ease-in-out;
+}
+
+/* Influencer Card */
+.influencer-card {
+  background: linear-gradient(to bottom right, #FFECD1, #FFECD1);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  animation: bounceIn 1.2s ease-in-out;
+}
+
+.influencer-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to bottom right, #FFECD1, #FFECD1);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.profile-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid #FFECD1;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.influencer-card:hover .profile-image {
+  transform: scale(1.2);
+  border-color: #FF7D00;
+}
+
+.card-info h3 {
+  font-size: 1.4rem;
+  color: #001524;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.card-info p {
+  font-size: 0.9rem;
+  color: #15616D;
+  margin: 5px 0;
+}
+
+/* Tags Section */
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.tag {
+  background: #FFECD1;
+  color: #15616D;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+  text-align: center;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.tag:hover {
+  background: #15616D;
+  color: #FFECD1;
+}
+
+/* Basic Stats */
+.card-followers p {
+  font-size: 0.9rem;
+  color: #001524;
+  margin: 3px 0;
+}
+
+/* Extra Info Section */
+.card-extra-info {
+  font-size: 0.85rem;
+  color: #001524;
+  margin-top: 10px;
+}
+.card-extra-info p {
+  margin: 3px 0;
+}
+
+/* RATING */
+.card-rating {
+  display: flex;
+  gap: 3px;
+  margin-top: 10px;
+}
+
+.filled-star {
+  color: #FF7D00;
+  font-size: 1rem;
+}
+
+.empty-star {
+  color: #FFECD1;
+  font-size: 1rem;
+}
+
+/* Invite Section */
+.invite-section {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+}
+.invite-section label {
+  font-size: 0.8rem;
+  color: #15616D;
+}
+.invite-section select {
+  margin: 0 5px;
+  padding: 6px 8px;
+  border: 1px solid #FFECD1;
+  border-radius: 8px;
+  background: #FFECD1;
+  font-size: 0.85rem;
+}
+.invite-btn {
+  background: linear-gradient(to right, #FF9800, #F57C00);
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  font-size: 0.85rem;
+}
+.invite-btn:hover {
+  background: linear-gradient(to right, #F57C00, #FF9800);
+  transform: scale(1.05);
+}
+
+/* Card Buttons */
+.card-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+.card-buttons button {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.view-profile-btn {
+  background: linear-gradient(to right, #1976D2, #2196F3);
+  color: white;
+}
+.view-profile-btn:hover {
+  background: linear-gradient(to right, #2196F3, #1976D2);
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==================== MEDIA QUERIES ==================== */
+
+/* Tablets and down */
+@media (max-width: 768px) {
+  .find-influencer-container {
+    grid-template-columns: 1fr;
+  }
+
+  /* Filters section on top, influencers below */
+  .filters-section {
+    order: 1;
+    margin-bottom: 20px;
+  }
+  .influencers-section {
+    order: 2;
+  }
+
+  .filters-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .apply-filters-btn,
+  .remove-filters-btn {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .influencers-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* Mobile screens and down */
+@media (max-width: 480px) {
+  .filters-section {
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .filters-section h2 {
+    font-size: 1.3rem;
+  }
+
+  .filter-item button {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+
+  .apply-filters-btn,
+  .remove-filters-btn {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+
+  .influencers-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .profile-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .card-info h3 {
+    font-size: 1.2rem;
+  }
+
+  .card-info p {
+    font-size: 0.8rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+  }
+
+  .card-extra-info {
+    font-size: 0.75rem;
+  }
+}

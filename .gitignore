@@ -1,0 +1,47 @@
+# Node dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Logs
+logs
+*.log
+*.log.*
+pids
+*.pid
+*.seed
+
+# Build output (React, Vue, Angular, etc.)
+build/
+dist/
+.tmp/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+
+# Environment variables and sensitive files
+.env
+.env.*  # If you use .env.development, etc.
+
+# Optional: Mac system files
+._*
+
+# Optional: if you’re using coverage tools (e.g. Jest)
+coverage/
+
+# Optional: if you have local Dockerfiles that shouldn't be committed
+docker-compose.override.yml
+
+# Linux / Unix swap files
+*~
+
+# Windows swap files
+*.swp
+
+# If using a UI library or specialized watchers that create local caches
+.cache/

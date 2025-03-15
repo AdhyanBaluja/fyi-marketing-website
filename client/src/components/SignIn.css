@@ -1,0 +1,184 @@
+/* src/components/SignIn.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 
+   Full-viewport container with a gradient 
+   modified to use palette colors instead of pastel turquoise to pink
+*/
+.signin-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Gradient background using palette colors */
+  background: linear-gradient(
+    135deg, 
+    #FFECD1 0%, 
+    #15616D 100%
+  );
+}
+
+/* The card with the login form using palette colors */
+.signin-card {
+  background-color: #FFECD1; /* replaced white */
+  width: 90%;
+  max-width: 400px;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+.signin-card h2 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #001524; /* replaced #333 */
+}
+
+/* Form groups: label + input */
+.form-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+  color: #001524; /* replaced #555 */
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.55rem;
+  border: 2px solid #001524; /* replaced #ddd */
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  background-color: #FFECD1; /* using palette background for inputs */
+  color: #001524; /* dark text for readability */
+}
+
+.form-group input:focus {
+  border-color: #FF7D00; /* replaced #ff6150 with palette color */
+}
+
+/* "Forgot your password?" link in a lighter style */
+.forgot-password {
+  margin-bottom: 1.5rem;
+  text-align: right;
+}
+
+.forgot-password a {
+  font-size: 0.9rem;
+  color: #001524; /* replaced #999 */
+  text-decoration: underline;
+  filter: blur(0.1px) brightness(1.05);
+  transition: color 0.2s;
+}
+
+.forgot-password a:hover {
+  color: #15616D; /* replaced #666 with a palette color */
+  filter: none;
+}
+
+/* Login button */
+.signin-btn {
+  background-color: #FF7D00; /* replaced #ff6150 */
+  color: #FFECD1; /* replaced white with palette color */
+  border: none;
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s;
+}
+
+.signin-btn:hover {
+  background-color: #78290F; /* replaced #e95445 */
+}
+
+/* Sign up link at bottom */
+.signup-cta {
+  font-size: 0.95rem;
+  color: #001524; /* replaced #444 */
+}
+
+.signup-cta span {
+  color: #FF7D00; /* replaced #ff6150 */
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* =========== MEDIA QUERIES =========== */
+
+/* Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  .signin-card {
+    width: 80%;
+    padding: 1.5rem;
+  }
+
+  .signin-card h2 {
+    font-size: 1.4rem;
+  }
+
+  .form-group input {
+    font-size: 0.95rem;
+    padding: 0.5rem;
+  }
+
+  .signin-btn {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .signin-card {
+    width: 90%;
+    padding: 1rem;
+  }
+
+  .signin-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .form-group label {
+    font-size: 0.85rem;
+  }
+
+  .form-group input {
+    font-size: 0.85rem;
+    padding: 0.45rem;
+  }
+
+  .forgot-password a {
+    font-size: 0.85rem;
+  }
+
+  .signin-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .signup-cta {
+    font-size: 0.85rem;
+  }
+}

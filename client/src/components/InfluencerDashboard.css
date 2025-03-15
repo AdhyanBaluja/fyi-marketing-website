@@ -1,0 +1,683 @@
+/* 
+   InfluencerDashboard.css
+   Styles updated to match brand colors and include a floating background effect.
+*/
+
+/* FONT EXAMPLE */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  color: #001524;
+  scroll-behavior: smooth;
+}
+
+/* Flowing Gradient Background with floating effect */
+body {
+  background: linear-gradient(120deg, #FFECD1, #FF7D00, #FF7D00, #FFECD1);
+  background-size: 400% 400%;
+  animation: gradientFlow 15s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.complete-profile-banner {
+  background-color: #fffbcc;
+  color: #665c00;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ffe58f;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.dashboard-container-big {
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* NAVIGATION BAR */
+.main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(0, 21, 36, 0.9);
+  padding: 0.75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.main-nav .nav-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #FFECD1;
+  margin: 0;
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+}
+
+.main-nav ul li {
+  cursor: pointer;
+  color: #FFECD1;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.main-nav ul li:hover {
+  color: #FF7D00;
+}
+
+/* PAGE TITLE */
+.page-title {
+  font-size: 2rem;
+  margin: 1rem 0 0 0;
+  text-align: center;
+  font-weight: 700;
+  color: #001524;
+}
+
+/* TOP SECTION (Personal Info) */
+.top-section {
+  padding: 1rem 2rem;
+  margin-bottom: 1rem;
+}
+
+/* 
+  .colored-container: a soft gradient or semi-transparent background 
+  for the main card sections 
+*/
+.colored-container {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.95) 100%
+  );
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.shadow-effect {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* PROFILE SECTION */
+.profile-section {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.profile-pic-container {
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Non-edit view */
+.profile-view p {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+}
+.profile-view strong {
+  color: #001524;
+}
+
+/* Edit form */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.edit-form label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #15616D;
+}
+.edit-form input,
+.edit-form textarea {
+  padding: 0.6rem;
+  border: 1px solid #FFECD1;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  background: #FFECD1;
+  color: #001524;
+}
+.edit-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+.edit-form-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.save-btn,
+.cancel-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.save-btn {
+  background-color: #FF7D00;
+  color: #FFECD1;
+  transition: background-color 0.3s;
+}
+.save-btn:hover {
+  background-color: #78290F;
+}
+.cancel-btn {
+  background-color: #15616D;
+  color: #FFECD1;
+  transition: background-color 0.3s;
+}
+.cancel-btn:hover {
+  background-color: #001524;
+}
+
+.edit-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #FF7D00;
+  color: #FFECD1;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+.edit-btn:hover {
+  background-color: #78290F;
+}
+
+/* CAMPAIGN SECTIONS */
+.campaign-section {
+  max-width: 1200px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+.campaign-section h2 {
+  color: #001524;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid #FFECD1;
+  padding-bottom: 0.5rem;
+}
+
+/* Active Campaigns wrapper */
+.campaigns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+/* Single campaign card */
+.campaign-card {
+  border-radius: 10px;
+  transition: transform 0.3s;
+  position: relative;
+  padding: 1.2rem;
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.hover-rise:hover {
+  transform: translateY(-4px) scale(1.01) !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.campaign-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+}
+
+.campaign-info h3 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: #001524;
+}
+.campaign-info p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+  color: #15616D;
+}
+
+/* For the progress bar */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #FFECD1;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.progress-fill {
+  height: 8px;
+  background-color: #FF7D00;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.progress-text {
+  font-size: 0.85rem;
+  color: #15616D;
+}
+
+/* "progress-update" container for Save Progress button */
+.progress-update {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.progress-update input {
+  width: 60px;
+  padding: 0.4rem;
+  border: 1px solid #FFECD1;
+  border-radius: 4px;
+  background: #FFECD1;
+  color: #001524;
+  font-weight: 500;
+  text-align: center;
+}
+.progress-update button {
+  background-color: #15616D;
+  color: #FFECD1;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.progress-update button:hover {
+  background-color: #001524;
+  transform: scale(1.05);
+}
+
+/* "Leave Campaign" button */
+.leave-btn {
+  background-color: #ff6150;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s, transform 0.3s;
+}
+.leave-btn:hover {
+  background-color: #c03f31;
+  transform: scale(1.05);
+}
+
+/* All Campaigns (bigger) */
+.big-campaigns {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+.big-campaign-card {
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  transition: transform 0.3s;
+  position: relative;
+  opacity: 0;
+  transform: translateY(50px);
+}
+.big-card-left {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+.big-logo {
+  width: 80px;
+  height: 80px;
+}
+
+/* Brand Requests Section */
+.brand-requests-section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+.brand-requests-section h2 {
+  color: #001524;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+.requests-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.brand-request-card {
+  background-color: #FFECD1;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 220px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.brand-request-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+.brand-request-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: #001524;
+}
+.brand-request-card p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+  color: #15616D;
+}
+.accept-btn {
+  background-color: #FF7D00;
+  color: #FFECD1;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.accept-btn:hover {
+  background-color: #78290F;
+  transform: scale(1.05);
+}
+
+/* SCROLL REVEAL CLASS */
+.scroll-reveal {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* FADE/SLIDE ANIMATIONS for immediate loading (or partial) */
+.fade-in-down {
+  animation: fadeInDown 1s ease both;
+}
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 1s ease both;
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-left {
+  animation: fadeInLeft 1s ease both;
+}
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fade-in-right {
+  animation: fadeInRight 1s ease both;
+}
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============= TASKS SECTION (IF ANY) ============= */
+.tasks-section {
+  margin-top: 1rem;
+  border-top: 2px dashed #FF7D00;
+  padding-top: 1rem;
+}
+
+.tasks-section h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #001524;
+  font-weight: 600;
+}
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #FFE4CC;
+  padding: 0.4rem 0.8rem;
+  margin-bottom: 0.4rem;
+  border-radius: 4px;
+  animation: fadeInTask 0.4s ease forwards;
+}
+
+.task-item span {
+  color: #001524;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.remove-task-btn {
+  background-color: #ff6150;
+  border: none;
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.remove-task-btn:hover {
+  background-color: #c03f31;
+}
+
+.add-task-form {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.add-task-form input {
+  flex: 1;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ffe4cc;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background-color: #ffe4cc;
+  color: #001524;
+  margin-right: 0.5rem;
+  transition: box-shadow 0.3s;
+}
+.add-task-form input:focus {
+  box-shadow: 0 0 5px rgba(255, 125, 0, 0.5);
+  outline: none;
+}
+
+.add-task-btn {
+  background-color: #FF7D00;
+  color: #ffe4cc;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.add-task-btn:hover {
+  background-color: #78290F;
+  transform: scale(1.1);
+}
+
+/* Keyframe for tasks fade-in */
+@keyframes fadeInTask {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========== MEDIA QUERIES =========== */
+
+/* Tablets and down */
+@media (max-width: 768px) {
+  .main-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .main-nav ul {
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+  }
+
+  .profile-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-pic-container {
+    margin-bottom: 1rem;
+  }
+
+  .campaigns {
+    justify-content: center;
+  }
+  .big-campaign-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Mobile screens and down */
+@media (max-width: 480px) {
+  .nav-logo {
+    font-size: 1.5rem;
+  }
+
+  .main-nav ul li {
+    font-size: 0.9rem;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .top-section {
+    padding: 0.5rem 1rem;
+  }
+
+  .colored-container {
+    padding: 1rem;
+  }
+
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+  }
+
+  .edit-form label {
+    font-size: 0.8rem;
+  }
+  .edit-form input,
+  .edit-form textarea {
+    font-size: 0.85rem;
+  }
+
+  .campaign-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .campaign-info h3 {
+    font-size: 1rem;
+  }
+  .campaign-info p {
+    font-size: 0.85rem;
+  }
+
+  .brand-request-card {
+    width: 180px;
+  }
+
+  .requests-list {
+    justify-content: center;
+  }
+}

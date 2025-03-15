@@ -1,0 +1,245 @@
+/* Basic reset, optional */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.choose-type-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  transition: background-color 0.5s;
+  background: #FFECD1; /* kept */
+  padding: 2rem;
+}
+
+/* Different backgrounds if brand or influencer is chosen */
+.influencer-bg {
+  background: linear-gradient(135deg, #FFECD1 0%, #FF7D00 100%);
+}
+
+.brand-bg {
+  background: linear-gradient(135deg, #FFECD1 0%, #15616D 100%);
+}
+
+/* HEADER */
+.choose-type-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.header-logo-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-right: 1rem;
+}
+.header-brand-text {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #001524;
+}
+
+/* CONTENT */
+.choose-type-content {
+  text-align: center;
+}
+.choose-type-content h2 {
+  font-size: 1.8rem;
+  color: #001524;
+  margin-bottom: 0.5rem;
+}
+.choose-type-subtitle {
+  font-size: 0.95rem;
+  color: #15616D;
+  margin-bottom: 2rem;
+}
+
+/* OPTION CARDS WRAPPER */
+.option-cards {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem; /* slightly increased gap for breathing room */
+  margin-bottom: 2rem;
+}
+
+.or-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #15616D;
+}
+
+/* OPTION CARDS */
+.option-card {
+  width: 180px;
+  background-color: #fff; 
+  border: 2px solid transparent;
+  border-radius: 10px; /* slightly larger radius */
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* subtle shadow by default */
+}
+
+.option-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.option-icon {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+.option-icon img {
+  width: 50px;
+  height: 50px;
+}
+
+.option-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #001524;
+  margin-top: 0.5rem;
+}
+
+/* SELECTED STATE */
+.option-card.selected {
+  border-color: #FF7D00;
+}
+
+/* Checkmark for selected card */
+.checkmark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.25rem;
+  color: #FF7D00;
+}
+
+/* BRAND & INFLUENCER SPECIFIC CARDS */
+.brand-card {
+  /* Unchanged, add brand styling here if you wish */
+}
+.influencer-card {
+  /* Unchanged, add influencer styling here if you wish */
+}
+
+/* NEXT BUTTON */
+.next-button {
+  background-color: #FF7D00;
+  color: #FFECD1;
+  border: none;
+  outline: none;
+  padding: 0.75rem 2rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+.next-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.next-button:hover:not(:disabled) {
+  background-color: #78290F;
+  transform: translateY(-2px);
+}
+
+/* ============ MEDIA QUERIES ============ */
+
+/* Tablets and down */
+@media (max-width: 768px) {
+  .header-brand-text {
+    font-size: 1.5rem;
+  }
+
+  .choose-type-content h2 {
+    font-size: 1.6rem;
+  }
+
+  /* Stack the cards or allow wrapping if there's an OR text */
+  .option-cards {
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .option-card {
+    width: 160px;
+    margin-bottom: 1rem;
+  }
+
+  .option-icon img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .option-label {
+    font-size: 0.95rem;
+  }
+
+  .next-button {
+    font-size: 0.9rem;
+    padding: 0.65rem 1.5rem;
+  }
+}
+
+/* Mobile screens and down */
+@media (max-width: 480px) {
+  .choose-type-container {
+    padding: 1rem;
+  }
+
+  .choose-type-header {
+    margin-bottom: 1rem;
+  }
+
+  .header-logo-img {
+    width: 50px;
+    height: 50px;
+  }
+  .header-brand-text {
+    font-size: 1.3rem;
+  }
+
+  .choose-type-content h2 {
+    font-size: 1.4rem;
+  }
+  .choose-type-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .option-cards {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .option-card {
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  .option-icon img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .option-label {
+    font-size: 0.9rem;
+  }
+
+  .next-button {
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+  }
+}

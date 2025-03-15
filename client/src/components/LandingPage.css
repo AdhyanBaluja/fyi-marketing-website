@@ -1,0 +1,637 @@
+/* LandingPage.css */
+
+/* Load Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #001524; /* dark background */
+}
+
+.landing-page {
+  overflow-x: hidden;
+}
+
+/* =========================================
+   SCROLLED STATE
+   When user scrolls beyond 50px, we add .scrolled to .landing-page
+   and apply a blur to the hero-video-container for an effect.
+========================================= */
+.landing-page.scrolled .hero-video-container {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
+}
+
+/* ========== HERO SECTION ========== */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  color: #FFECD1; /* text color */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden; /* so the video doesn't overflow */
+}
+
+/* The fixed background video at the top */
+.hero-video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  background-color: #001524;
+}
+
+.hero-section,
+.benefits-section,
+.brand-offerings-page,
+.influencer-offerings-page,
+.call-to-action-section,
+.brand-footer {
+  position: relative;
+  z-index: 1;  /* ensures content is stacked above .hero-video-container */
+}
+
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
+
+/* Dark overlay on top of the video for text readability */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 21, 36, 0.5);
+  z-index: 0;
+}
+
+/* 
+   HERO-HEADER:
+   Absolutely positioned top-right, below the fixed NavBar.
+   Contains Sign In & Sign Up buttons side by side.
+*/
+.hero-header {
+  position: absolute;
+  top: 80px;  /* Adjust if your Navbar is taller/shorter */
+  right: 30px;
+  display: flex;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.hero-header .auth-btn {
+  border: 2px solid #FF7D00;
+  background-color: transparent;
+  color: #FF7D00;
+  padding: 0.5rem 1.3rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.hero-header .auth-btn:hover {
+  background-color: #FF7D00;
+  color: #FFECD1;
+}
+
+/* The main content in the hero (centered) */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: auto 0;
+  z-index: 10; /* above the video overlay */
+}
+
+.hero-title {
+  font-size: 3rem;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 3px rgba(0, 21, 36, 0.6);
+}
+
+.hero-title em {
+  font-style: italic;
+  color: #FFECD1;
+}
+
+/* CTA buttons for "I AM AN INFLUENCER" / "I AM A BRAND" */
+.hero-cta {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem; /* spacing above other hero elements */
+}
+
+.cta-button {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #FFECD1;
+  background-color: transparent;
+  color: #FFECD1;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.influencer-cta:hover {
+  background-color: #FF7D00;
+  color: #FFECD1;
+  border-color: #FF7D00;
+}
+
+.brand-cta:hover {
+  background-color: #15616D;
+  color: #FFECD1;
+  border-color: #15616D;
+}
+
+/* ========== BENEFITS SECTION ========== */
+.benefits-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  color: #FFECD1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefits-overlay {
+  background: rgba(0, 21, 36, 0.4);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.benefits-content {
+  max-width: 900px;
+  text-align: center;
+}
+
+.benefits-content h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #FFECD1;
+}
+
+.benefits-subtext {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  color: #FFECD1;
+}
+
+.benefits-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.benefit-box {
+  background-color: rgba(255, 236, 209, 0.15);
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #FFECD1;
+  transition: background-color 0.3s;
+}
+
+.benefit-box:hover {
+  background-color: rgba(255, 236, 209, 0.25);
+}
+
+.benefit-box img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+/* ========== BRAND OFFERINGS ========== */
+.brand-offerings-page {
+  background: #FFECD1;
+  min-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #001524;
+}
+
+.page-title {
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  color: #001524;
+}
+
+.offerings-big-container {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.offering-box {
+  background-color: #FFECD1;
+  width: 500px;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 21, 36, 0.08);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.offering-box:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 20px rgba(0, 21, 36, 0.12);
+}
+
+.offering-img {
+  width: 500px;
+  height: auto;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.offering-box:hover .offering-img {
+  transform: scale(1.1);
+}
+
+.offering-box h3 {
+  font-size: 1.3rem;
+  color: #001524;
+  margin-bottom: 0.5rem;
+}
+
+.offering-box p {
+  font-size: 1rem;
+  color: #001524;
+  line-height: 1.5;
+}
+
+/* ========== INFLUENCER OFFERINGS ========== */
+.influencer-offerings-page {
+  background: #78290F;
+  min-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #FFECD1;
+}
+
+.influencer-offerings-container {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.offering-box.old-colors:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 20px rgba(0, 21, 36, 0.12);
+}
+
+.offering-box.old-colors:hover .offering-img {
+  transform: scale(1.1);
+}
+
+/* ========== CALL-TO-ACTION SECTION ========== */
+.call-to-action-section.final-cta {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #FFECD1 0%, #FF7D00 100%);
+}
+
+.cta-content {
+  max-width: 700px;
+  margin: 0 auto 2rem auto;
+}
+
+.cta-content h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: #001524;
+  font-weight: 700;
+}
+
+.cta-content p {
+  font-size: 1.1rem;
+  color: #001524;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.cta-demo-btn {
+  background-color: #FF7D00;
+  color: #FFECD1;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.cta-demo-btn:hover {
+  background-color: #78290F;
+  transform: scale(1.03);
+}
+
+.cta-dashboard-img {
+  max-width: 800px;
+  margin: 2rem auto 0 auto;
+}
+
+.cta-dashboard-img img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 21, 36, 0.1);
+}
+
+/* ========== FOOTER ========== */
+.brand-footer {
+  background-color: #001524;
+  color: #FFECD1;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-content h4 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #FFECD1;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  opacity: 0.8;
+}
+
+/* ========== AI Chatbot Icon ========== */
+.ai-chatbot-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 64px;
+  height: 64px;
+  z-index: 999;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.ai-chatbot-icon:hover {
+  transform: scale(1.1);
+}
+
+.ai-chatbot-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  background-color: #FFECD1;
+  box-shadow: 0 4px 14px rgba(0, 21, 36, 0.2);
+  padding: 6px;
+}
+
+/* ========== PROFILE CIRCLE (if user is logged in) ========== */
+.profile-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  margin-right: 1rem;
+  border: 2px solid #FF7D00; /* or your brand color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+}
+
+.profile-circle:hover {
+  transform: scale(1.05);
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =============== MEDIA QUERIES =============== */
+
+/* Tablets and down */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+  .hero-header {
+    top: 60px; /* adjust for smaller nav if needed */
+    right: 15px;
+    gap: 0.5rem;
+  }
+  .hero-header .auth-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+  }
+  .hero-cta {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .cta-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .benefits-section {
+    height: auto; /* Let content define height on smaller screens */
+    padding: 2rem 1rem;
+  }
+  .benefits-content h2 {
+    font-size: 1.8rem;
+  }
+  .benefits-boxes {
+    gap: 0.5rem;
+  }
+
+  .offerings-big-container {
+    gap: 1.5rem;
+  }
+  .offering-box {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .offering-img {
+    width: 100%;
+  }
+
+  .influencer-offerings-container {
+    gap: 1.5rem;
+  }
+
+  .cta-content h2 {
+    font-size: 1.8rem;
+  }
+  .cta-content p {
+    font-size: 1rem;
+  }
+  .cta-demo-btn {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.5rem;
+  }
+
+  .cta-dashboard-img {
+    max-width: 600px;
+  }
+
+  .footer-content {
+    padding: 0 1rem;
+  }
+}
+
+/* Mobile screens and down */
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  .hero-header {
+    top: 50px;
+    right: 10px;
+    gap: 0.3rem;
+  }
+  .hero-header .auth-btn {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+  }
+  .hero-cta {
+    gap: 0.5rem;
+  }
+  .cta-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .benefits-overlay {
+    padding: 1rem;
+  }
+  .benefits-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .benefits-subtext {
+    font-size: 0.9rem;
+  }
+  .benefits-box {
+    font-size: 0.9rem;
+  }
+
+  .brand-offerings-page,
+  .influencer-offerings-page {
+    padding: 2rem 1rem;
+  }
+  .offering-box {
+    width: 100%;
+    padding: 1.5rem;
+  }
+  .offering-img {
+    margin-bottom: 0.8rem;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .call-to-action-section.final-cta {
+    padding: 2rem 1rem;
+  }
+  .cta-content h2 {
+    font-size: 1.4rem;
+  }
+  .cta-content p {
+    font-size: 0.9rem;
+  }
+  .cta-demo-btn {
+    font-size: 0.8rem;
+    padding: 0.6rem 1rem;
+  }
+  .cta-dashboard-img {
+    max-width: 400px;
+  }
+
+  .brand-footer {
+    padding: 1rem;
+  }
+
+  .footer-content h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-links {
+    gap: 0.5rem;
+  }
+}
