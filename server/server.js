@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use(cors({
   origin: 'https://letsfyi.com',   // or an array if you have multiple domains
   credentials: true,
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  methods: ['GET','POST','PUT','DELETE','OPTIONS','PATCH'],
   allowedHeaders: ['Content-Type','Authorization']
 }));
 

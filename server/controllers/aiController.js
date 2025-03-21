@@ -151,7 +151,8 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
         { role: 'system', content: 'You are a marketing strategy wizard. Output JSON only.' },
         { role: 'user', content: instructions },
       ],
-      temperature: 0.7,
+      temperature: 0.3,
+      top_p: 0.9,
       max_tokens: 7000,
     });
 
