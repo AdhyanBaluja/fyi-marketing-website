@@ -25,8 +25,13 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// 2) Enable CORS
-app.use(cors());
+// 2) Configure CORS to allow requests from https://letsfyi.com
+app.use(cors({
+  origin: 'https://letsfyi.com',   // <— The domain of your front-end
+  credentials: true,               // If you need to send cookies or use Authorization headers
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'], 
+  allowedHeaders: ['Content-Type','Authorization']
+}));
 
 // 3) Stripe Webhook Route (must be defined before express.json())
 //    This route uses express.raw to capture the raw body for signature verification.
