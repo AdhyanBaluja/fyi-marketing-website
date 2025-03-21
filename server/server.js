@@ -27,9 +27,9 @@ mongoose.connect(process.env.MONGO_URI)
 
 // 2) Configure CORS to allow requests from https://letsfyi.com
 app.use(cors({
-  origin: 'https://letsfyi.com',   // <— The domain of your front-end
-  credentials: true,               // If you need to send cookies or use Authorization headers
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'], 
+  origin: 'https://letsfyi.com',   // or an array if you have multiple domains
+  credentials: true,
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization']
 }));
 
@@ -51,9 +51,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, // 1 day
-    // In production, if using HTTPS, uncomment the following options:
-    // secure: true,
-    // sameSite: 'none',
+    // secure: true,   // Uncomment in production if using HTTPS
+    // sameSite: 'none'
   }
 }));
 
@@ -78,6 +77,11 @@ app.use('/api/users', userRoutes);
 
 // 9) Start the server
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// 10) Increase server timeout to handle very long requests (e.g. large AI calls).
+//     The value here is in milliseconds. Example: 600000 => 10 minutes.
+server.setTimeout(600000);  // 10 minutes
+
