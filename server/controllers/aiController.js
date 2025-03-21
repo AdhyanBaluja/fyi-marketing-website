@@ -57,7 +57,7 @@ Use this JSON structure EXACTLY:
 
 - "calendarEvents": Include 10 to 20 objects, each with:
    "date",
-   "event" (4-5 lines minimum description),
+   "event" ,
    "platforms",
    "cta",
    "captions" (1-2 lines with hashtags).
