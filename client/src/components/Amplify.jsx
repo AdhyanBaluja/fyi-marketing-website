@@ -1,11 +1,12 @@
-// src/components/Amplify.jsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Amplify.css';
 import AiChatbot from './AiChatbot.jsx';
 import demoImage from '../assets/demo.png';
+
+// Use environment variable for API base URL; fallback to localhost if not defined
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function Amplify() {
   const navigate = useNavigate();
@@ -62,16 +63,15 @@ function Amplify() {
 
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:4000/api/ai/generateCampaign',
+        `${API_BASE_URL}/api/ai/generateCampaign`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const newCampaign = response.data.campaign;
       if (newCampaign && newCampaign._id) {
-        // Store the new ID in localStorage
+        // Store the new campaign ID in localStorage
         localStorage.setItem('latestCampaignId', newCampaign._id);
-
         // Then navigate to /loading
         navigate('/loading');
       } else {

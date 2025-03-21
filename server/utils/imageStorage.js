@@ -1,10 +1,9 @@
-// utils/imageStorage.js
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 
 /**
- * Make sure uploads directory exists
+ * Ensure that the uploads directory exists.
  */
 function ensureUploadsDir() {
   const uploadsPath = path.join(__dirname, '..', 'uploads');
@@ -15,26 +14,23 @@ function ensureUploadsDir() {
 }
 
 /**
- * Download image from a given URL and save to /uploads/dalle-xxxx.png
+ * Download image from a given URL and save it to /uploads/<filename>
  */
 async function downloadImage(imageUrl, filename) {
   try {
     const uploadsPath = ensureUploadsDir();
-
-    // Example: /.../server/uploads/dalle-12345.png
     const filePath = path.join(uploadsPath, filename);
 
-    // Request the image
-    const response = await axios.get(imageUrl, {
-      responseType: 'arraybuffer',
-    });
-
-    fs.writeFileSync(filePath, response.data);
+    // Request the image data as an arraybuffer
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+    
+    // Write the file asynchronously to avoid blocking the event loop
+    await fs.promises.writeFile(filePath, response.data);
     console.log('Image saved to', filePath);
     return filePath;
   } catch (err) {
     console.error('Error downloading image:', err);
-    return null; // or throw err
+    return null; // Optionally, you can throw the error instead
   }
 }
 

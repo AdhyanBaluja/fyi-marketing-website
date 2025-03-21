@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './AiChatbot.css';
 
-function AiChatbot() {
-  const [open, setOpen] = useState(false);         // Toggles chat window
-  const [messages, setMessages] = useState([]);    // Array of {role, content}
-  const [userInput, setUserInput] = useState('');
+// Use the environment variable for API base URL, fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
+function AiChatbot() {
+  const [open, setOpen] = useState(false); // Toggles chat window
+  const [messages, setMessages] = useState([]); // Array of {role, content}
+  const [userInput, setUserInput] = useState('');
   const chatEndRef = useRef(null);
 
-  // On mount, store the initial "Hello!! How are you today?" in state
+  // On mount, set initial bot message
   useEffect(() => {
     setMessages([{ role: 'bot', content: 'Hello!! How are you today?' }]);
   }, []);
@@ -21,29 +23,30 @@ function AiChatbot() {
   }, [messages]);
 
   const toggleOpen = () => {
-    setOpen(!open);
+    setOpen(prev => !prev);
   };
 
   const handleSend = async () => {
     if (!userInput.trim()) return;
-
-    // Add user message to local state
-    const newMsg = { role: 'user', content: userInput };
+    const messageToSend = userInput;
+    // Add user message to state
+    const newMsg = { role: 'user', content: messageToSend };
     setMessages(prev => [...prev, newMsg]);
     setUserInput('');
 
     try {
-      // Send user message to your backend
-      const res = await fetch('http://localhost:4000/api/chat', {
+      // Send message to backend using API_BASE_URL from env
+      const res = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userMessage: userInput }),
+        body: JSON.stringify({ userMessage: messageToSend }),
       });
       const data = await res.json();
 
-      // data.reply is the AI's response
       if (data.reply) {
         setMessages(prev => [...prev, { role: 'bot', content: data.reply }]);
+      } else {
+        setMessages(prev => [...prev, { role: 'bot', content: 'No reply received.' }]);
       }
     } catch (err) {
       console.error('Chat error:', err);
@@ -53,6 +56,7 @@ function AiChatbot() {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       handleSend();
     }
   };
@@ -77,10 +81,7 @@ function AiChatbot() {
 
           <div className="chat-window-messages">
             {messages.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`chat-bubble ${msg.role === 'bot' ? 'bot' : 'user'}`}
-              >
+              <div key={idx} className={`chat-bubble ${msg.role === 'bot' ? 'bot' : 'user'}`}>
                 {msg.content}
               </div>
             ))}

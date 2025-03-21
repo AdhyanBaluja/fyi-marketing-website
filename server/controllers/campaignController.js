@@ -1,8 +1,7 @@
-// controllers/campaignController.js
-
 const Campaign = require('../models/Campaign');
 const Influencer = require('../models/Influencer');
-
+const User = require('../models/User');
+const { sendEmail } = require('../utils/emailService');  // Added for email notifications
 
 /**
  * GET /api/campaigns
@@ -17,7 +16,6 @@ exports.listAllCampaigns = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
-
 
 /**
  * POST /api/campaigns
@@ -88,7 +86,7 @@ exports.getCampaignDetail = async (req, res) => {
       return {
         _id: inf._id,
         name: inf.name,
-        profileImage: inf.profileImage, // include the influencer's profileImage
+        profileImage: inf.profileImage,
         progress: subdoc?.progress ?? 0,
         tasks: subdoc?.tasks ?? [],
       };
@@ -101,6 +99,7 @@ exports.getCampaignDetail = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 /**
  * PATCH /api/campaigns/:campaignId
  * Only brand can update
@@ -124,8 +123,6 @@ exports.updateCampaign = async (req, res) => {
       clicks,
       conversions,
       formInputs,
-
-      // NEW:
       campaignImage,
     } = req.body;
 
@@ -134,15 +131,12 @@ exports.updateCampaign = async (req, res) => {
       return res.status(404).json({ error: 'Campaign not found' });
     }
 
-    // Existing top-level fields
     if (name !== undefined) campaign.name = name;
     if (objective !== undefined) campaign.objective = objective;
     if (targetAudience !== undefined) campaign.targetAudience = targetAudience;
     if (duration !== undefined) campaign.duration = duration;
     if (budget !== undefined) campaign.budget = budget;
-    if (influencerCollaboration !== undefined) {
-      campaign.influencerCollaboration = influencerCollaboration;
-    }
+    if (influencerCollaboration !== undefined) campaign.influencerCollaboration = influencerCollaboration;
     if (aboutCampaign !== undefined) campaign.aboutCampaign = aboutCampaign;
     if (aiResponse !== undefined) campaign.aiResponse = aiResponse;
     if (calendarEvents !== undefined) campaign.calendarEvents = calendarEvents;
@@ -151,13 +145,8 @@ exports.updateCampaign = async (req, res) => {
     if (progress !== undefined) campaign.progress = progress;
     if (clicks !== undefined) campaign.clicks = clicks;
     if (conversions !== undefined) campaign.conversions = conversions;
+    if (campaignImage !== undefined) campaign.campaignImage = campaignImage;
 
-    // NEW: set campaignImage if provided
-    if (campaignImage !== undefined) {
-      campaign.campaignImage = campaignImage;
-    }
-
-    // subdoc: formInputs (merge approach)
     if (formInputs !== undefined) {
       if (!campaign.formInputs) campaign.formInputs = {};
       for (const [key, val] of Object.entries(formInputs)) {
@@ -166,7 +155,7 @@ exports.updateCampaign = async (req, res) => {
     }
 
     await campaign.save();
-    return res.json({ message: 'Campaign updated', campaign });
+    return res.json({ message: 'Campaign updated successfully', campaign });
   } catch (error) {
     console.error('Error updating campaign:', error);
     return res.status(500).json({ error: 'Internal server error' });
@@ -220,7 +209,7 @@ exports.applyToCampaign = async (req, res) => {
     });
     await influencer.save();
 
-    // 2) Also add subdoc to campaign doc => brand sees 'applied'
+    // 2) Add to campaign subdoc for brand visibility
     campaign.requestsFromInfluencers.push({
       influencerId: influencer._id,
       status: 'applied',
@@ -234,6 +223,134 @@ exports.applyToCampaign = async (req, res) => {
     });
   } catch (error) {
     console.error('Error applying to campaign (campaignController):', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+  
+/**
+ * PATCH /api/campaigns/:campaignId
+ * Only brand can update campaign requests by accepting influencer applications.
+ */
+exports.acceptInboundRequest = async (req, res) => {
+  try {
+    const { requestId } = req.params;
+
+    // Find campaign with matching subdocument
+    const campaign = await Campaign.findOne({
+      userId: req.user.userId,
+      "requestsFromInfluencers._id": requestId
+    });
+    if (!campaign) {
+      return res.status(404).json({ error: 'Request/campaign not found or not owned by you' });
+    }
+
+    // Find the subdocument within requestsFromInfluencers
+    const subdoc = campaign.requestsFromInfluencers.find(
+      (r) => r._id.toString() === requestId
+    );
+    if (!subdoc) {
+      return res.status(404).json({ error: 'Request subdoc not found' });
+    }
+
+    if (subdoc.status !== 'applied') {
+      return res.status(400).json({ error: 'This request is not in "applied" status.' });
+    }
+
+    const influencerId = subdoc.influencerId;
+
+    // Update subdocument status to 'active'
+    subdoc.status = 'active';
+    await campaign.save();
+
+    // Update influencer doc: set joinedCampaigns status to 'active'
+    const influencerDoc = await Influencer.findById(influencerId);
+    if (!influencerDoc) {
+      return res.status(404).json({ error: 'Influencer doc not found' });
+    }
+
+    const joined = influencerDoc.joinedCampaigns.find(
+      (jc) => jc.campaignId.toString() === campaign._id.toString()
+    );
+    if (joined) {
+      joined.status = 'active';
+    } else {
+      influencerDoc.joinedCampaigns.push({
+        campaignId: campaign._id,
+        status: 'active',
+        progress: 0,
+        campaignName: campaign.name || 'Untitled',
+        budget: campaign.budget || 'N/A',
+        platform: 'Instagram'
+      });
+    }
+    await influencerDoc.save();
+
+    // Send email notification to influencer
+    const influencerUser = await User.findById(influencerDoc.userId);
+    if (influencerUser) {
+      const subject = 'Your application was accepted!';
+      const text = `Hello ${influencerDoc.name},\n\nYour application for the campaign "${campaign.name}" has been accepted!\n\nBest,\nPlatform Team.`;
+      await sendEmail(influencerUser.email, subject, text);
+    }
+
+    return res.json({ message: 'Inbound request accepted', campaign });
+  } catch (err) {
+    console.error('Error accepting inbound request:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+/**
+ * DELETE /api/brand/campaigns/:campaignId/influencers/:influencerId
+ * -> brand can remove an influencer from a campaign
+ * -> remove influencer from requestsFromInfluencers or requestsToInfluencers (if found)
+ * -> remove campaign from influencer's joinedCampaigns
+ * -> send an email to the influencer about removal
+ */
+exports.removeJoinedInfluencer = async (req, res) => {
+  try {
+    const { campaignId, influencerId } = req.params;
+
+    // 1) Find the campaign that belongs to the brand
+    const campaign = await Campaign.findOne({
+      _id: campaignId,
+      userId: req.user.userId
+    });
+    if (!campaign) {
+      return res.status(404).json({ error: 'Campaign not found or not owned by you' });
+    }
+
+    // 2) Remove from requests arrays
+    campaign.requestsFromInfluencers = campaign.requestsFromInfluencers.filter(
+      (r) => r.influencerId.toString() !== influencerId
+    );
+    campaign.requestsToInfluencers = campaign.requestsToInfluencers.filter(
+      (r) => r.influencerId.toString() !== influencerId
+    );
+    await campaign.save();
+
+    // 3) Remove campaign from influencer's joinedCampaigns
+    const influencerDoc = await Influencer.findById(influencerId);
+    if (!influencerDoc) {
+      return res.status(404).json({ error: 'Influencer not found' });
+    }
+
+    influencerDoc.joinedCampaigns = influencerDoc.joinedCampaigns.filter(
+      (jc) => jc.campaignId.toString() !== campaignId
+    );
+    await influencerDoc.save();
+
+    // 4) Send an email to the influencer about removal
+    const userDoc = await User.findById(influencerDoc.userId);
+    if (userDoc) {
+      const subject = 'You have been removed from a campaign';
+      const text = `Hello ${influencerDoc.name},\n\nYou have been removed from the campaign "${campaign.name}". If you have any questions, please contact the brand.\n\nBest,\nPlatform Team.`;
+      await sendEmail(userDoc.email, subject, text);
+    }
+
+    return res.json({ message: 'Influencer removed from campaign successfully' });
+  } catch (err) {
+    console.error('Error removing joined influencer:', err);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };

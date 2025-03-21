@@ -1,11 +1,12 @@
-// src/components/FindNewCustomers.jsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './FindNewCustomers.css';
 import AiChatbot from './AiChatbot.jsx';
 import demoImage from '../assets/demo.png';
+
+// Use environment variable for the API base URL; fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function FindNewCustomers() {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ function FindNewCustomers() {
 
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:4000/api/ai/generateCampaign',
+        `${API_BASE_URL}/api/ai/generateCampaign`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );

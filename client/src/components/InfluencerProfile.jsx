@@ -1,9 +1,10 @@
-// src/components/InfluencerProfile.jsx
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./InfluencerProfile.css";
+
+// Use environment variable for API base URL; fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function InfluencerProfile() {
   const { id } = useParams();
@@ -40,11 +41,11 @@ function InfluencerProfile() {
     );
   };
 
-  // 2) FETCH via AXIOS
+  // 2) FETCH via AXIOS using API_BASE_URL
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios
-      .get(`http://localhost:4000/api/influencer/${id}`, {
+      .get(`${API_BASE_URL}/api/influencer/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -86,7 +87,7 @@ function InfluencerProfile() {
     );
   }
 
-  // Destructure fields
+  // Destructure fields (joinedCampaigns assumed to be part of influencer data)
   const {
     name,
     numFollowers,
@@ -101,10 +102,10 @@ function InfluencerProfile() {
     profileImage,
     joinedCampaigns,
     averageRating,
-    platformDetails = {},  // This is our Map of handle/price
+    platformDetails = {}, // Map of handle/price info
   } = influencer;
 
-  // 4) SUBMIT RATING => /api/influencer/:id/rate
+  // 4) SUBMIT RATING => API call using API_BASE_URL
   const handleRatingSubmit = async (e) => {
     e.preventDefault();
     if (!newRating || newRating < 1 || newRating > 5) {
@@ -114,34 +115,32 @@ function InfluencerProfile() {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `http://localhost:4000/api/influencer/${id}/rate`,
+        `${API_BASE_URL}/api/influencer/${id}/rate`,
         { ratingValue: Number(newRating) },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
       setRatingSuccess("Rating submitted successfully!");
 
-      // re-fetch influencer to update averageRating
+      // Re-fetch influencer to update averageRating
       const refreshed = await axios.get(
-        `http://localhost:4000/api/influencer/${id}`,
+        `${API_BASE_URL}/api/influencer/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setInfluencer(refreshed.data.influencer);
 
-      // reset rating input
+      // Reset rating input
       setNewRating(0);
-      setTimeout(() => setRatingSuccess(""), 3000); // clear after 3s
+      setTimeout(() => setRatingSuccess(""), 3000);
     } catch (err) {
       console.error("Error submitting rating:", err);
       setError("Failed to submit rating.");
     }
   };
 
-  // Convert the Mongoose Map to a standard object (if needed)
-  // But typically you can do Object.entries(platformDetails).
+  // Convert platformDetails if needed (if Mongoose Map, you can do Object.entries)
   let platformDetailsObj = platformDetails;
-  // If platformDetails is a Mongoose Map, you might do:
-  //   platformDetailsObj = Object.fromEntries(platformDetails);
+  // Optionally: platformDetailsObj = Object.fromEntries(platformDetails);
 
   return (
     <div className="profile-container">

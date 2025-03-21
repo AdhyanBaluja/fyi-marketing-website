@@ -1,9 +1,10 @@
-// src/components/Loading.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Loading.css';
+
+// Use environment variable for API base URL; fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function Loading() {
   const [progress, setProgress] = useState(0);
@@ -32,13 +33,13 @@ function Loading() {
           return;
         }
 
-        // Must be correct route => /api/campaigns/:id
-        const res = await axios.get(`http://localhost:4000/api/campaigns/${campaignId}`, {
+        // Use API_BASE_URL from the environment variable
+        const res = await axios.get(`${API_BASE_URL}/api/campaigns/${campaignId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const campaignDoc = res.data.campaign;
 
-        // if we see campaignDoc.aiResponse => AI is done
+        // if campaignDoc.aiResponse exists, then AI processing is done
         if (campaignDoc && campaignDoc.aiResponse) {
           setAiReady(true);
         }
@@ -53,10 +54,7 @@ function Loading() {
   // 2) Progress bar
   useEffect(() => {
     const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) return 100;
-        return prev + 5;
-      });
+      setProgress((prev) => (prev >= 100 ? 100 : prev + 5));
     }, 250);
 
     return () => clearInterval(progressInterval);

@@ -1,5 +1,3 @@
-// controllers/influencerController.js
-
 const Influencer = require('../models/Influencer');
 const Campaign = require('../models/Campaign');
 const Brand = require('../models/Brand');
@@ -26,7 +24,7 @@ exports.updateMyProfile = async (req, res) => {
       return res.status(404).json({ error: 'Influencer not found' });
     }
 
-    // Destructure profileImage along with the other fields
+    // Destructure the fields from the request body
     const {
       profileImage,
       name,
@@ -39,7 +37,7 @@ exports.updateMyProfile = async (req, res) => {
       gender,
       industries,
       platforms,
-      averageRating, // Typically not updated by influencer, but it's here
+      averageRating, // Note: This typically should not be updated manually by influencer
     } = req.body;
 
     if (profileImage !== undefined) influencer.profileImage = profileImage;
@@ -47,20 +45,13 @@ exports.updateMyProfile = async (req, res) => {
     if (experience !== undefined) influencer.experience = experience;
     if (numFollowers !== undefined) influencer.numFollowers = numFollowers;
     if (influencerLocation !== undefined) influencer.influencerLocation = influencerLocation;
-    if (majorityAudienceLocation !== undefined) {
-      influencer.majorityAudienceLocation = majorityAudienceLocation;
-    }
+    if (majorityAudienceLocation !== undefined) influencer.majorityAudienceLocation = majorityAudienceLocation;
     if (audienceAgeGroup !== undefined) influencer.audienceAgeGroup = audienceAgeGroup;
-    if (audienceGenderDemographics !== undefined) {
-      influencer.audienceGenderDemographics = audienceGenderDemographics;
-    }
+    if (audienceGenderDemographics !== undefined) influencer.audienceGenderDemographics = audienceGenderDemographics;
     if (gender !== undefined) influencer.gender = gender;
     if (industries !== undefined) influencer.industries = industries;
     if (platforms !== undefined) influencer.nichePlatforms = platforms;
-
-    if (averageRating !== undefined) {
-      influencer.averageRating = averageRating;
-    }
+    if (averageRating !== undefined) influencer.averageRating = averageRating;
 
     await influencer.save();
     return res.json({ message: 'Influencer updated successfully', influencer });
@@ -72,8 +63,7 @@ exports.updateMyProfile = async (req, res) => {
 
 /**
  * GET /api/influencer/my-active-campaigns
- * => Only shows campaigns with status='active'
- * => Skips any campaign doc that's been physically deleted
+ * Returns only campaigns with status 'active' (ignores campaigns that were deleted)
  */
 exports.getMyActiveCampaigns = async (req, res) => {
   try {
@@ -84,10 +74,9 @@ exports.getMyActiveCampaigns = async (req, res) => {
       return res.status(404).json({ error: 'Influencer not found' });
     }
 
-    // Only status='active', skip if campaign doc is gone
-    const activeCampaigns = influencer.joinedCampaigns.filter((c) => {
-      return c.status === 'active' && c.campaignId != null;
-    });
+    const activeCampaigns = influencer.joinedCampaigns.filter(
+      (c) => c.status === 'active' && c.campaignId != null
+    );
 
     return res.json({ activeCampaigns });
   } catch (error) {
@@ -139,8 +128,7 @@ exports.getInfluencerById = async (req, res) => {
 
 /**
  * GET /api/influencer/brand-requests
- * => brand invites to this influencer (requestsToInfluencers)
- * => skip any physically deleted campaign doc
+ * Fetches all campaigns that have invited this influencer
  */
 exports.getBrandRequests = async (req, res) => {
   try {
@@ -149,7 +137,6 @@ exports.getBrandRequests = async (req, res) => {
       return res.status(404).json({ error: 'Influencer not found' });
     }
 
-    // find campaigns that invited this influencer
     const campaigns = await Campaign.find({
       "requestsToInfluencers.influencerId": influencer._id
     });
@@ -179,22 +166,19 @@ exports.getBrandRequests = async (req, res) => {
 
 /**
  * PATCH /api/influencer/brand-requests/:requestId/accept
- * => brand invited influencer => influencer accepts
- * => we change subdoc in requestsToInfluencers to status='accepted'
- * => we add campaign to influencer's joinedCampaigns with status='active'
- * => send email to brand
+ * Influencer accepts a brand invitation. Update request status and add campaign to joinedCampaigns.
  */
 exports.acceptBrandRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
 
-    // 1) find influencer
+    // Find influencer by authenticated user
     const influencer = await Influencer.findOne({ userId: req.user.userId });
     if (!influencer) {
       return res.status(404).json({ error: 'Influencer not found' });
     }
 
-    // 2) find campaign that has requestsToInfluencers subdoc with _id=requestId
+    // Find campaign containing the request subdocument
     const campaign = await Campaign.findOne({
       "requestsToInfluencers._id": requestId
     });
@@ -202,23 +186,22 @@ exports.acceptBrandRequest = async (req, res) => {
       return res.status(404).json({ error: "Campaign not found for this request" });
     }
 
-    // 3) find subdoc
+    // Locate the specific request subdocument
     const requestSubdoc = campaign.requestsToInfluencers.find(
       (r) => r._id.toString() === requestId
     );
     if (!requestSubdoc) {
       return res.status(404).json({ error: "Request subdoc not found" });
     }
-
     if (requestSubdoc.status !== 'pending') {
       return res.status(400).json({ error: "This request has already been handled" });
     }
 
-    // 4) Set status to 'accepted'
+    // Update the request subdocument status to 'accepted'
     requestSubdoc.status = 'accepted';
     await campaign.save();
 
-    // 5) Add campaign to influencer's joinedCampaigns => status 'active'
+    // Add campaign to influencer's joinedCampaigns if not already added
     const alreadyJoined = influencer.joinedCampaigns.some(
       (c) => c.campaignId.toString() === campaign._id.toString()
     );
@@ -234,7 +217,7 @@ exports.acceptBrandRequest = async (req, res) => {
       await influencer.save();
     }
 
-    // 6) Optional: send email to brand
+    // Optionally, send an email to the brand about the acceptance
     const brandUserId = campaign.userId;
     const brandUser = await User.findById(brandUserId);
     if (brandUser) {
@@ -285,8 +268,8 @@ exports.updateActiveCampaignProgress = async (req, res) => {
 };
 
 /**
- * NEW: DELETE /api/influencer/my-active-campaigns/:campaignId/leave
- * => influencer leaves an active campaign
+ * DELETE /api/influencer/my-active-campaigns/:campaignId/leave
+ * Influencer leaves an active campaign.
  */
 exports.leaveActiveCampaign = async (req, res) => {
   try {
@@ -303,7 +286,7 @@ exports.leaveActiveCampaign = async (req, res) => {
     );
     await influencer.save();
 
-    // 2) Find campaign doc and remove the influencer from subdocs
+    // 2) Find campaign and remove influencer from requests arrays
     const campaign = await Campaign.findById(campaignId);
     if (campaign) {
       campaign.requestsFromInfluencers = campaign.requestsFromInfluencers.filter(
@@ -314,7 +297,7 @@ exports.leaveActiveCampaign = async (req, res) => {
       );
       await campaign.save();
 
-      // 3) Send email to brand about the influencer leaving
+      // 3) Send email to brand about influencer leaving
       const brandUser = await User.findById(campaign.userId);
       if (brandUser) {
         const subject = 'Influencer Left Your Campaign';
@@ -361,7 +344,7 @@ exports.rateInfluencer = async (req, res) => {
 
     influencer.ratings.push({ brandId: brand._id, ratingValue });
 
-    // recalc average
+    // Recalculate average rating
     const totalRatings = influencer.ratings.length;
     const sumRatings = influencer.ratings.reduce((acc, r) => acc + r.ratingValue, 0);
     influencer.averageRating = sumRatings / totalRatings;
@@ -376,13 +359,12 @@ exports.rateInfluencer = async (req, res) => {
 
 /* ==============================
    ADDITIONAL: TASKS ENDPOINTS
-   (You must also update your model 
-    to have tasks[] in joinedCampaigns)
- ============================== */
+   (Ensure your model supports tasks[] in joinedCampaigns)
+============================== */
 
 /**
  * POST /api/influencer/my-active-campaigns/:campaignId/tasks
- * => Add a new task (text) to campaign's tasks array
+ * Adds a new task (text) to campaign's tasks array
  */
 exports.addTaskToCampaign = async (req, res) => {
   try {
@@ -394,7 +376,6 @@ exports.addTaskToCampaign = async (req, res) => {
       return res.status(404).json({ error: 'Influencer not found' });
     }
 
-    // Find the subdoc for the given campaignId with status=active
     const joinedCamp = influencer.joinedCampaigns.find(
       (c) => c.campaignId.toString() === campaignId && c.status === 'active'
     );
@@ -402,7 +383,6 @@ exports.addTaskToCampaign = async (req, res) => {
       return res.status(404).json({ error: 'No active campaign found with that ID' });
     }
 
-    // tasks array is an array of { _id, text, completed, ... }
     joinedCamp.tasks = joinedCamp.tasks || [];
     joinedCamp.tasks.push({
       text,
@@ -423,7 +403,7 @@ exports.addTaskToCampaign = async (req, res) => {
 
 /**
  * DELETE /api/influencer/my-active-campaigns/:campaignId/tasks/:taskId
- * => Remove a task from the campaign's tasks array
+ * Removes a task from the campaign's tasks array
  */
 exports.removeTaskFromCampaign = async (req, res) => {
   try {

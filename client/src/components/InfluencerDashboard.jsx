@@ -1,5 +1,3 @@
-// src/components/InfluencerDashboard.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,6 +5,10 @@ import './InfluencerDashboard.css';
 import useScrollReveal from '../hooks/useScrollReveal';
 import AiChatbot from './AiChatbot.jsx';
 import brandLogo from '../assets/bird_2.jpg';
+
+// ==================== Environment Variable ====================
+// Use environment variable for API base URL; fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 /* 
   CHILD COMPONENTS:
@@ -20,22 +22,17 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   const [cardRef, cardRevealed] = useScrollReveal({ threshold: 0.15 });
   const [tempProgress, setTempProgress] = useState(campaign.progress || 0);
 
-  // We'll still use this "realId" for the network calls
   const token = localStorage.getItem('token');
   const realId = campaign.campaignId?._id || campaign._id;
 
-  // If brand/campaign name/budget is stored in subdoc, use it; 
-  // otherwise, fallback to the brand’s campaign doc.
   const realCampaign = campaign.campaignId || campaign;
   const brandName = realCampaign.brandName || 'Unknown Brand';
   const campaignName = realCampaign.name || 'Untitled';
 
-  // ==================== (A) To-Do Tasks ====================
-  // IMPORTANT: tasks actually live on the joinedCampaign subdoc => "campaign.tasks"
+  // To-Do Tasks
   const [tasks, setTasks] = useState(campaign.tasks || []);
   const [newTaskText, setNewTaskText] = useState('');
 
-  // Re-sync tasks whenever the parent re-renders with fresh data:
   useEffect(() => {
     setTasks(campaign.tasks || []);
   }, [campaign.tasks]);
@@ -46,13 +43,12 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
     if (!newTaskText.trim()) return;
     try {
       const res = await axios.post(
-        `http://localhost:4000/api/influencer/my-active-campaigns/${realId}/tasks`,
+        `${API_BASE_URL}/api/influencer/my-active-campaigns/${realId}/tasks`,
         { text: newTaskText },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setTasks(res.data.tasks);
       setNewTaskText('');
-      // Re-fetch to show updated tasks
       if (onRefresh) onRefresh();
     } catch (err) {
       console.error('Error adding task:', err);
@@ -64,11 +60,10 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   const handleRemoveTask = async (taskId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:4000/api/influencer/my-active-campaigns/${realId}/tasks/${taskId}`,
+        `${API_BASE_URL}/api/influencer/my-active-campaigns/${realId}/tasks/${taskId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setTasks(res.data.tasks);
-      // Re-fetch to show updated tasks
       if (onRefresh) onRefresh();
     } catch (err) {
       console.error('Error removing task:', err);
@@ -83,13 +78,11 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
 
   // Leave campaign
   const handleLeave = async () => {
-    const confirmed = window.confirm(
-      `Are you sure you want to leave "${campaignName}"?`
-    );
+    const confirmed = window.confirm(`Are you sure you want to leave "${campaignName}"?`);
     if (!confirmed) return;
     try {
       await axios.delete(
-        `http://localhost:4000/api/influencer/my-active-campaigns/${realId}/leave`,
+        `${API_BASE_URL}/api/influencer/my-active-campaigns/${realId}/leave`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert(`You left the campaign "${campaignName}".`);
@@ -110,25 +103,14 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
       <img src={brandLogo} alt={brandName} className="campaign-logo" />
       <div className="campaign-info">
         <h3>{campaignName}</h3>
-        <p>
-          <strong>Brand:</strong> {brandName}
-        </p>
-        <p>
-          <strong>Budget:</strong> {campaign.budget || realCampaign.budget || 'N/A'}
-        </p>
-        <p>
-          <strong>Platform:</strong> {campaign.platform || 'N/A'}
-        </p>
-        <p>
-          <strong>Target Audience:</strong> {realCampaign.targetAudience || 'N/A'}
-        </p>
+        <p><strong>Brand:</strong> {brandName}</p>
+        <p><strong>Budget:</strong> {campaign.budget || realCampaign.budget || 'N/A'}</p>
+        <p><strong>Platform:</strong> {campaign.platform || 'N/A'}</p>
+        <p><strong>Target Audience:</strong> {realCampaign.targetAudience || 'N/A'}</p>
 
-        {/* PROGRESS BAR */}
+        {/* Progress Bar */}
         <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{ width: `${campaign.progress || 0}%` }}
-          ></div>
+          <div className="progress-fill" style={{ width: `${campaign.progress || 0}%` }}></div>
         </div>
         <p className="progress-text">Progress: {campaign.progress || 0}%</p>
 
@@ -145,28 +127,21 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
           <button onClick={handleSaveProgress}>Save Progress</button>
         </div>
 
-        {/* "Leave" button if status is active */}
+        {/* Leave Campaign */}
         {campaign.status === 'active' && (
           <div style={{ marginTop: '10px' }}>
-            <button onClick={handleLeave} className="leave-btn">
-              Leave Campaign
-            </button>
+            <button onClick={handleLeave} className="leave-btn">Leave Campaign</button>
           </div>
         )}
 
-        {/* =========== (B) TASKS SECTION =========== */}
+        {/* Tasks Section */}
         <div className="tasks-section">
           <h4>My To-Do List</h4>
           <ul className="task-list">
             {tasks.map((task) => (
               <li key={task._id} className="task-item">
                 <span>{task.text}</span>
-                <button
-                  className="remove-task-btn"
-                  onClick={() => handleRemoveTask(task._id)}
-                >
-                  ✕
-                </button>
+                <button className="remove-task-btn" onClick={() => handleRemoveTask(task._id)}>✕</button>
               </li>
             ))}
           </ul>
@@ -177,9 +152,7 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
               value={newTaskText}
               onChange={(e) => setNewTaskText(e.target.value)}
             />
-            <button type="submit" className="add-task-btn">
-              +
-            </button>
+            <button type="submit" className="add-task-btn">+</button>
           </form>
         </div>
       </div>
@@ -188,13 +161,7 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
 }
 
 // ==================== AllCampaignCard ====================
-function AllCampaignCard({
-  campaign,
-  influencerId,
-  onApplied,
-  appliedCampaignIds,
-  activeCampaignIds,
-}) {
+function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds, activeCampaignIds }) {
   const [bigRef, bigRevealed] = useScrollReveal({ threshold: 0.15 });
   const brandName = campaign.brandName || 'Unknown Brand';
   const token = localStorage.getItem('token');
@@ -206,13 +173,11 @@ function AllCampaignCard({
   const handleApply = async () => {
     try {
       await axios.post(
-        `http://localhost:4000/api/campaigns/${campaign._id}/apply`,
+        `${API_BASE_URL}/api/campaigns/${campaign._id}/apply`,
         { influencerId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert(
-        'Successfully applied to campaign! Status = "applied" (pending brand acceptance).'
-      );
+      alert('Successfully applied to campaign! Status = "applied" (pending brand acceptance).');
       if (onApplied) onApplied();
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
@@ -230,11 +195,7 @@ function AllCampaignCard({
   } else if (isApplied) {
     actionButton = <button className="apply-btn" disabled>Pending</button>;
   } else {
-    actionButton = (
-      <button className="apply-btn" onClick={handleApply}>
-        Apply
-      </button>
-    );
+    actionButton = <button className="apply-btn" onClick={handleApply}>Apply</button>;
   }
 
   return (
@@ -248,15 +209,9 @@ function AllCampaignCard({
         <img src={brandLogo} alt={brandName} className="campaign-logo big-logo" />
         <div className="campaign-info">
           <h3>{campaign.name || 'Untitled Campaign'}</h3>
-          <p>
-            <strong>Brand:</strong> {brandName}
-          </p>
-          <p>
-            <strong>Budget:</strong> {campaign.budget || 'N/A'}
-          </p>
-          <p>
-            <strong>Target Audience:</strong> {campaign.targetAudience || 'N/A'}
-          </p>
+          <p><strong>Brand:</strong> {brandName}</p>
+          <p><strong>Budget:</strong> {campaign.budget || 'N/A'}</p>
+          <p><strong>Target Audience:</strong> {campaign.targetAudience || 'N/A'}</p>
         </div>
       </div>
       <div className="big-card-right">{actionButton}</div>
@@ -276,19 +231,11 @@ function BrandRequestCard({ request, onAccept }) {
       }`}
     >
       <h3>{request.campaignName}</h3>
-      <p>
-        <strong>Brand:</strong> {request.brandName || 'Unknown Brand'}
-      </p>
-      <p>
-        <strong>Budget:</strong> {request.budget || 'N/A'}
-      </p>
-      <p>
-        <strong>Status:</strong> {request.status}
-      </p>
+      <p><strong>Brand:</strong> {request.brandName || 'Unknown Brand'}</p>
+      <p><strong>Budget:</strong> {request.budget || 'N/A'}</p>
+      <p><strong>Status:</strong> {request.status}</p>
       {request.status === 'pending' && (
-        <button className="accept-btn" onClick={() => onAccept(request._id)}>
-          Accept
-        </button>
+        <button className="accept-btn" onClick={() => onAccept(request._id)}>Accept</button>
       )}
     </div>
   );
@@ -346,7 +293,7 @@ function InfluencerDashboard() {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
-      const res = await axios.get('http://localhost:4000/api/influencer/my-profile', {
+      const res = await axios.get(`${API_BASE_URL}/api/influencer/my-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setInfluencerInfo(res.data.influencer);
@@ -376,7 +323,7 @@ function InfluencerDashboard() {
       };
 
       await axios.patch(
-        'http://localhost:4000/api/influencer/my-profile',
+        `${API_BASE_URL}/api/influencer/my-profile`,
         patchData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -407,27 +354,22 @@ function InfluencerDashboard() {
 
     try {
       // 1) Brand requests
-      const reqRes = await axios.get(
-        'http://localhost:4000/api/influencer/brand-requests',
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const reqRes = await axios.get(`${API_BASE_URL}/api/influencer/brand-requests`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const requestsArr = reqRes.data.requests || [];
-      // Hide accepted requests in UI
-      const visibleRequests = requestsArr.filter(
-        (r) => r.status !== 'accepted'
-      );
+      const visibleRequests = requestsArr.filter((r) => r.status !== 'accepted');
       setBrandRequests(visibleRequests);
 
       // 2) Active campaigns
-      const activeRes = await axios.get(
-        'http://localhost:4000/api/influencer/my-active-campaigns',
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const activeRes = await axios.get(`${API_BASE_URL}/api/influencer/my-active-campaigns`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const activeArr = activeRes.data.activeCampaigns || [];
       setActiveCampaigns(activeArr);
 
       // 3) All campaigns
-      const allRes = await axios.get('http://localhost:4000/api/campaigns', {
+      const allRes = await axios.get(`${API_BASE_URL}/api/campaigns`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const allArr = allRes.data.campaigns || [];
@@ -462,11 +404,10 @@ function InfluencerDashboard() {
     if (!token) return;
     try {
       await axios.patch(
-        `http://localhost:4000/api/influencer/brand-requests/${requestId}/accept`,
+        `${API_BASE_URL}/api/influencer/brand-requests/${requestId}/accept`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Re-fetch so that accepted request is removed from the list
       fetchDashboardData();
     } catch (error) {
       console.error('Error accepting brand request:', error);
@@ -479,7 +420,7 @@ function InfluencerDashboard() {
     if (!token) return;
     try {
       await axios.patch(
-        `http://localhost:4000/api/influencer/my-active-campaigns/${campaignId}/progress`,
+        `${API_BASE_URL}/api/influencer/my-active-campaigns/${campaignId}/progress`,
         { progress: newProgress },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -536,7 +477,6 @@ function InfluencerDashboard() {
                   className="profile-pic"
                 />
               </div>
-
               <label>Profile Image (URL):</label>
               <input
                 type="text"
@@ -545,7 +485,6 @@ function InfluencerDashboard() {
                   setTempInfo({ ...tempInfo, profileImage: e.target.value })
                 }
               />
-
               <label>Name:</label>
               <input
                 type="text"
@@ -554,7 +493,6 @@ function InfluencerDashboard() {
                   setTempInfo({ ...tempInfo, name: e.target.value })
                 }
               />
-
               <label>Experience (Years):</label>
               <input
                 type="number"
@@ -563,7 +501,6 @@ function InfluencerDashboard() {
                   setTempInfo({ ...tempInfo, experience: e.target.value })
                 }
               />
-
               <label>Number of Followers:</label>
               <input
                 type="number"
@@ -572,55 +509,38 @@ function InfluencerDashboard() {
                   setTempInfo({ ...tempInfo, numFollowers: e.target.value })
                 }
               />
-
               <label>Influencer Location:</label>
               <input
                 type="text"
                 value={tempInfo.influencerLocation}
                 onChange={(e) =>
-                  setTempInfo({
-                    ...tempInfo,
-                    influencerLocation: e.target.value,
-                  })
+                  setTempInfo({ ...tempInfo, influencerLocation: e.target.value })
                 }
               />
-
               <label>Majority Audience Location:</label>
               <input
                 type="text"
                 value={tempInfo.majorityAudienceLocation}
                 onChange={(e) =>
-                  setTempInfo({
-                    ...tempInfo,
-                    majorityAudienceLocation: e.target.value,
-                  })
+                  setTempInfo({ ...tempInfo, majorityAudienceLocation: e.target.value })
                 }
               />
-
               <label>Audience Age Group:</label>
               <input
                 type="text"
                 value={tempInfo.audienceAgeGroup}
                 onChange={(e) =>
-                  setTempInfo({
-                    ...tempInfo,
-                    audienceAgeGroup: e.target.value,
-                  })
+                  setTempInfo({ ...tempInfo, audienceAgeGroup: e.target.value })
                 }
               />
-
               <label>Audience Gender Demographics:</label>
               <input
                 type="text"
                 value={tempInfo.audienceGenderDemographics}
                 onChange={(e) =>
-                  setTempInfo({
-                    ...tempInfo,
-                    audienceGenderDemographics: e.target.value,
-                  })
+                  setTempInfo({ ...tempInfo, audienceGenderDemographics: e.target.value })
                 }
               />
-
               <label>Gender:</label>
               <input
                 type="text"
@@ -629,7 +549,6 @@ function InfluencerDashboard() {
                   setTempInfo({ ...tempInfo, gender: e.target.value })
                 }
               />
-
               <label>Industries (comma-separated):</label>
               <input
                 type="text"
@@ -641,7 +560,6 @@ function InfluencerDashboard() {
                   })
                 }
               />
-
               <label>Niche Platforms (comma-separated):</label>
               <input
                 type="text"
@@ -653,7 +571,6 @@ function InfluencerDashboard() {
                   })
                 }
               />
-
               <div className="edit-form-buttons">
                 <button className="save-btn" onClick={handleSaveClick}>
                   Save
@@ -673,41 +590,16 @@ function InfluencerDashboard() {
                 />
               </div>
               <div className="profile-view">
-                <p>
-                  <strong>Name:</strong> {influencerInfo.name}
-                </p>
-                <p>
-                  <strong>Experience:</strong> {influencerInfo.experience} years
-                </p>
-                <p>
-                  <strong>Number of Followers:</strong> {influencerInfo.numFollowers}
-                </p>
-                <p>
-                  <strong>Influencer Location:</strong>{' '}
-                  {influencerInfo.influencerLocation}
-                </p>
-                <p>
-                  <strong>Majority Audience Location:</strong>{' '}
-                  {influencerInfo.majorityAudienceLocation}
-                </p>
-                <p>
-                  <strong>Audience Age Group:</strong>{' '}
-                  {influencerInfo.audienceAgeGroup}
-                </p>
-                <p>
-                  <strong>Audience Gender Demographics:</strong>{' '}
-                  {influencerInfo.audienceGenderDemographics}
-                </p>
-                <p>
-                  <strong>Gender:</strong> {influencerInfo.gender}
-                </p>
-                <p>
-                  <strong>Industries:</strong> {influencerInfo.industries.join(', ')}
-                </p>
-                <p>
-                  <strong>Niche Platforms:</strong>{' '}
-                  {influencerInfo.nichePlatforms.join(', ')}
-                </p>
+                <p><strong>Name:</strong> {influencerInfo.name}</p>
+                <p><strong>Experience:</strong> {influencerInfo.experience} years</p>
+                <p><strong>Number of Followers:</strong> {influencerInfo.numFollowers}</p>
+                <p><strong>Influencer Location:</strong> {influencerInfo.influencerLocation}</p>
+                <p><strong>Majority Audience Location:</strong> {influencerInfo.majorityAudienceLocation}</p>
+                <p><strong>Audience Age Group:</strong> {influencerInfo.audienceAgeGroup}</p>
+                <p><strong>Audience Gender Demographics:</strong> {influencerInfo.audienceGenderDemographics}</p>
+                <p><strong>Gender:</strong> {influencerInfo.gender}</p>
+                <p><strong>Industries:</strong> {influencerInfo.industries.join(', ')}</p>
+                <p><strong>Niche Platforms:</strong> {influencerInfo.nichePlatforms.join(', ')}</p>
                 <button className="edit-btn" onClick={handleEditClick}>
                   Edit Info
                 </button>
@@ -725,11 +617,7 @@ function InfluencerDashboard() {
             <p>No brand requests at the moment.</p>
           ) : (
             brandRequests.map((req) => (
-              <BrandRequestCard
-                key={req._id}
-                request={req}
-                onAccept={handleAcceptRequest}
-              />
+              <BrandRequestCard key={req._id} request={req} onAccept={handleAcceptRequest} />
             ))
           )}
         </div>

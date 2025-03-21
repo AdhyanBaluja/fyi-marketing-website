@@ -1,5 +1,3 @@
-// controllers/aiController.js
-
 require('dotenv').config();
 const axios = require('axios');
 const { default: OpenAI } = require('openai');
@@ -12,7 +10,6 @@ const openai = new OpenAI({
 exports.generateCampaignPlan = async (req, res) => {
   try {
     const { campaignType } = req.body;
-
     let {
       describeBusiness,
       industry,
@@ -34,16 +31,16 @@ exports.generateCampaignPlan = async (req, res) => {
       brandMessage,
     } = req.body;
 
-    // If brandUSP is empty, fallback to brandMessage
+    // Fallback for brandUSP
     if (!brandUSP && brandMessage) {
       brandUSP = brandMessage;
     }
 
-    // ========== (A) GPT instructions
+    // ========== (A) Construct GPT Instructions ==========
     let instructions = `
 You are ChatGPT, a top-tier marketing consultant using GPT-4.
-You MUST produce a thoroughly reasoned, multi-week plan in strict JSON. 
-We want no disclaimers or extraneous text outside JSON.
+You MUST produce a thoroughly reasoned, multi-week plan in strict JSON.
+Output no extra commentary or disclaimers outside of valid JSON.
 
 Use this JSON structure EXACTLY:
 {
@@ -58,24 +55,24 @@ Use this JSON structure EXACTLY:
   "moreAdvice": [...]
 }
 
-- "calendarEvents": 10 to 20 objects, each with:
+- "calendarEvents": Include 10 to 20 objects, each with:
    "date",
-   "event" //event should be well descriptive with 4-5 lines minimum,
+   "event" (4-5 lines minimum description),
    "platforms",
-   "cta" ,
-   "captions" //captions should be 1-2 lines and then hashtags,
+   "cta",
+   "captions" (1-2 lines with hashtags).
 
-- "bingoSuggestions": EXACTLY 5 objects, each with:
+- "bingoSuggestions": Exactly 5 objects, each with:
    "suggestion",
    "strategy"
 
-- "moreAdvice": at least 3 hooks and advice
+- "moreAdvice": Include at least 3 pieces of additional advice.
 
-Return valid JSON only. If you add commentary or disclaimers, wrap them inside the JSON as "note" or so we can still parse.
+Return valid JSON only.
 ----
 `;
 
-    // (B) Specialized chunk per campaignType
+    // ========== (B) Append Campaign-Type Specific Details ==========
     if (campaignType === 'amplify') {
       instructions += `
 [AMPLIFY BRAND AWARENESS]
@@ -87,7 +84,7 @@ Market trends: ${marketTrends}
 Target audience: ${targetAudience}
 Brand USP: ${brandUSP}
 
-Focus on brand awareness.
+Focus on boosting brand awareness.
 `;
     } else if (campaignType === 'marketProduct') {
       instructions += `
@@ -112,7 +109,7 @@ Product/Service: ${salesProductOrService}
 Promotional offers: ${promotionalOffers}
 Target location(s): ${salesLocation}
 
-Focus on daily/weekly promotions, discount codes, etc.
+Focus on sales promotions and conversion strategies.
 `;
     } else if (campaignType === 'findNewCustomers') {
       instructions += `
@@ -124,7 +121,7 @@ Platforms: ${platforms}
 Open to new segments? ${exploringNewSegments}
 Value proposition: ${newCustomerValueProp}
 
-Focus on new geographies/demographics.
+Focus on exploring new geographies and demographics.
 `;
     } else if (campaignType === 'driveEventAwareness') {
       instructions += `
@@ -140,14 +137,14 @@ Focus on event-based marketing strategies.
 `;
     } else {
       instructions += `
-[NO RECOGNIZED CAMPAIGN TYPE]
+[GENERAL CAMPAIGN]
 Use your best judgement for a general marketing plan:
-Produce 10–20 "calendarEvents", EXACTLY 5 "bingoSuggestions", 3+ "moreAdvice".
-Also fill the top-level fields: objective, targetAudience, duration, budget, influencerCollaboration, aboutCampaign.
+Produce 10–20 "calendarEvents", EXACTLY 5 "bingoSuggestions", and 3+ "moreAdvice".
+Fill top-level fields: objective, targetAudience, duration, budget, influencerCollaboration, aboutCampaign.
 `;
     }
 
-    // ========== (C) GPT-4 Chat
+    // ========== (C) Call GPT-4 ==========
     const textResponse = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
@@ -160,7 +157,7 @@ Also fill the top-level fields: objective, targetAudience, duration, budget, inf
 
     const aiText = textResponse.choices?.[0]?.message?.content || '';
 
-    // ========== (D) parse JSON
+    // ========== (D) Parse the AI Response ==========
     let parsed;
     try {
       parsed = JSON.parse(aiText);
@@ -170,7 +167,7 @@ Also fill the top-level fields: objective, targetAudience, duration, budget, inf
       parsed = { raw: aiText };
     }
 
-    // If the JSON includes top-level fields, we store them.
+    // Extract top-level fields
     const objective = parsed.objective || '';
     const targAudience = parsed.targetAudience || '';
     const duration = parsed.duration || '';
@@ -182,7 +179,7 @@ Also fill the top-level fields: objective, targetAudience, duration, budget, inf
     let bingoSuggestions = parsed.bingoSuggestions || [];
     const moreAdvice = parsed.moreAdvice || [];
 
-    // ========== (E) Generate ephemeral DALL-E images => store ephemeral links
+    // ========== (E) Generate Ephemeral DALL-E Images ==========
     const updatedSuggestions = [];
     for (let i = 0; i < bingoSuggestions.length; i++) {
       let suggestionObj = bingoSuggestions[i];
@@ -212,29 +209,22 @@ Style: Crisp, modern. DALL-E 3, 1024x1024.
 
       updatedSuggestions.push(suggestionObj);
     }
-
     bingoSuggestions = updatedSuggestions;
 
-    // ========== (F) Save to Mongo
-    // (F.1) Build a name from the type
+    // ========== (F) Save the Campaign Document ==========
     let nameFromType = campaignType || 'Custom';
     nameFromType = nameFromType.replace(/([A-Z])/g, ' $1').trim();
 
-    // (F.2) CREATE the campaign doc and store the user inputs in formInputs
     const campaignDoc = await Campaign.create({
       userId: req.user.userId,
       name: `${nameFromType} Plan (AI)`,
       campaignType: campaignType || 'custom',
-
-      // top-level fields from GPT
       objective,
       targetAudience: targAudience,
       duration,
       budget,
       influencerCollaboration: influencerCollab,
       aboutCampaign: aboutCamp,
-
-      // store user-provided fields in formInputs so the front end can display them
       formInputs: {
         businessDescription: describeBusiness || '',
         industry: industry || '',
@@ -254,7 +244,6 @@ Style: Crisp, modern. DALL-E 3, 1024x1024.
         eventName: eventName || '',
         eventUniqueness: eventUniqueness || '',
       },
-
       aiResponse: aiText,
       calendarEvents,
       bingoSuggestions,

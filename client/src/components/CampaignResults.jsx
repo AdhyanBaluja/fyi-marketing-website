@@ -1,5 +1,3 @@
-// src/components/CampaignResults.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -15,6 +13,9 @@ const platformColors = {
   TikTok: '#EE1D52',
   Default: '#ffa726',
 };
+
+// Use environment variable for API base URL, fallback to localhost if not defined
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function CampaignResults() {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ function CampaignResults() {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(`http://localhost:4000/api/campaigns/${id}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/campaigns/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCampaign(res.data.campaign);
@@ -102,7 +103,7 @@ function CampaignResults() {
     try {
       const token = localStorage.getItem('token');
       await axios.patch(
-        `http://localhost:4000/api/campaigns/${campaign._id}`,
+        `${API_BASE_URL}/api/campaigns/${campaign._id}`,
         { status: 'Active' },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -117,7 +118,7 @@ function CampaignResults() {
     if (!campaign?._id) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:4000/api/campaigns/${campaign._id}`, {
+      await axios.delete(`${API_BASE_URL}/api/campaigns/${campaign._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       navigate('/brand/dashboard');
@@ -149,7 +150,6 @@ function CampaignResults() {
     if (dayEvents.length === 0) {
       return { bgColor: 'rgba(255,255,255,0.2)', fontColor: '#333' };
     }
-    // If only one event => use that platform color
     if (dayEvents.length === 1) {
       const firstPlatform = dayEvents[0].platforms?.[0] || 'Default';
       return {
@@ -157,7 +157,6 @@ function CampaignResults() {
         fontColor: '#fff',
       };
     }
-    // If exactly two events => two-color gradient
     if (dayEvents.length === 2) {
       const platform1 = dayEvents[0].platforms?.[0] || 'Default';
       const platform2 = dayEvents[1].platforms?.[0] || 'Default';
@@ -168,7 +167,6 @@ function CampaignResults() {
         fontColor: '#fff',
       };
     }
-    // If more than two => fallback to Default or do your own logic
     return {
       bgColor: platformColors.Default,
       fontColor: '#fff',
@@ -179,29 +177,31 @@ function CampaignResults() {
     <div className="campaign-results-container">
       {/* Ephemeral images notice */}
       {showImageNotice && (
-        <div className="image-notice" style={{ 
-          background: '#FFECD1', 
-          padding: '1rem', 
-          borderRadius: '6px',
-          marginBottom: '1rem',
-          boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-          textAlign: 'center'
-        }}>
+        <div
+          className="image-notice"
+          style={{
+            background: '#FFECD1',
+            padding: '1rem',
+            borderRadius: '6px',
+            marginBottom: '1rem',
+            boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+            textAlign: 'center',
+          }}
+        >
           <p style={{ marginBottom: '0.5rem' }}>
-            If you like the generated images and want to save them, please 
-            Right Click on the image and save them to your local device, 
-            as they will disappear after 2–3 hours.
+            If you like the generated images and want to save them, please
+            Right Click on the image and save them to your local device, as they will disappear after 2–3 hours.
           </p>
-          <button 
+          <button
             onClick={() => setShowImageNotice(false)}
-            style={{ 
-              background: '#FF7D00', 
-              color: '#FFECD1', 
-              border: 'none', 
-              padding: '0.5rem 1rem', 
-              borderRadius: '6px', 
+            style={{
+              background: '#FF7D00',
+              color: '#FFECD1',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
               cursor: 'pointer',
-              fontWeight: '600'
+              fontWeight: '600',
             }}
           >
             OK
@@ -232,14 +232,18 @@ function CampaignResults() {
       {/* Calendar */}
       <div className="calendar-section bounce-in">
         <div className="calendar-header">
-          <button onClick={handlePrevMonth} className="month-btn">&lt;</button>
+          <button onClick={handlePrevMonth} className="month-btn">
+            &lt;
+          </button>
           <h3>
             {new Date(currentYear, currentMonth).toLocaleString('default', {
               month: 'long',
               year: 'numeric',
             })}
           </h3>
-          <button onClick={handleNextMonth} className="month-btn">&gt;</button>
+          <button onClick={handleNextMonth} className="month-btn">
+            &gt;
+          </button>
         </div>
 
         <div className="calendar-grid">

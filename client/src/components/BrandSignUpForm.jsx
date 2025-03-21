@@ -1,9 +1,11 @@
-// src/components/BrandSignUpForm.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from './NavBar';
 import './BrandSignUpForm.css';
+
+// Use the API base URL from the environment variable (fallback to localhost for development)
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function BrandSignUpForm() {
   const navigate = useNavigate();
@@ -115,7 +117,7 @@ function BrandSignUpForm() {
 
     try {
       const res = await axios.post(
-        'http://localhost:4000/api/auth/signup/brand',
+        `${API_BASE_URL}/api/auth/signup/brand`,
         finalData
       );
       console.log('Brand signup success:', res.data);

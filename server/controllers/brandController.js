@@ -1,5 +1,3 @@
-// controllers/brandController.js
-
 const Brand = require('../models/Brand');
 const Campaign = require('../models/Campaign');
 const Influencer = require('../models/Influencer');
@@ -162,18 +160,14 @@ exports.inviteInfluencer = async (req, res) => {
       userId: req.user.userId,
     });
     if (!campaign) {
-      return res
-        .status(404)
-        .json({ error: 'Campaign not found or not owned by you' });
+      return res.status(404).json({ error: 'Campaign not found or not owned by you' });
     }
 
     const alreadyInvited = campaign.requestsToInfluencers.some(
       (r) => r.influencerId.toString() === influencerId
     );
     if (alreadyInvited) {
-      return res
-        .status(400)
-        .json({ error: 'Influencer already invited to this campaign' });
+      return res.status(400).json({ error: 'Influencer already invited to this campaign' });
     }
 
     campaign.requestsToInfluencers.push({ influencerId, status: 'pending' });
@@ -230,16 +224,14 @@ exports.updateCampaignByBrand = async (req, res) => {
     if (targetAudience !== undefined) campaign.targetAudience = targetAudience;
     if (duration !== undefined) campaign.duration = duration;
     if (budget !== undefined) campaign.budget = budget;
-    if (influencerCollaboration !== undefined) {
-      campaign.influencerCollaboration = influencerCollaboration;
-    }
+    if (influencerCollaboration !== undefined) campaign.influencerCollaboration = influencerCollaboration;
     if (aboutCampaign !== undefined) campaign.aboutCampaign = aboutCampaign;
     if (progress !== undefined) campaign.progress = progress;
     if (clicks !== undefined) campaign.clicks = clicks;
     if (conversions !== undefined) campaign.conversions = conversions;
     if (status !== undefined) campaign.status = status;
 
-    // Optionally re-set brandName if brand changed name
+    // Optionally re-set brandName if the brand's name has changed
     const brandDoc = await Brand.findOne({ userId: req.user.userId });
     if (brandDoc) {
       campaign.brandName = brandDoc.businessName;
@@ -314,7 +306,7 @@ exports.getJoinedInfluencersForAllCampaigns = async (req, res) => {
       .populate('requestsFromInfluencers.influencerId', 'name profileImage');
 
     const result = campaigns.map((camp) => {
-      // brand->influencer invites => 'accepted'
+      // brand->influencer invites => status 'accepted'
       const acceptedTo = camp.requestsToInfluencers
         .filter((r) => r.status === 'accepted')
         .map((r) => ({
@@ -324,7 +316,7 @@ exports.getJoinedInfluencersForAllCampaigns = async (req, res) => {
           source: 'brandInvite'
         }));
 
-      // influencer->brand => only 'active' now (not 'applied')
+      // influencer->brand applications with status 'active'
       const activeFrom = camp.requestsFromInfluencers
         .filter((r) => r.status === 'active')
         .map((r) => ({
@@ -359,7 +351,7 @@ exports.acceptInboundRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
 
-    // find campaign with subdoc
+    // Find campaign with matching subdoc
     const campaign = await Campaign.findOne({
       userId: req.user.userId,
       "requestsFromInfluencers._id": requestId
@@ -368,7 +360,7 @@ exports.acceptInboundRequest = async (req, res) => {
       return res.status(404).json({ error: 'Request/campaign not found or not owned by you' });
     }
 
-    // find the subdoc
+    // Find the subdocument within requestsFromInfluencers
     const subdoc = campaign.requestsFromInfluencers.find(
       (r) => r._id.toString() === requestId
     );
@@ -382,11 +374,11 @@ exports.acceptInboundRequest = async (req, res) => {
 
     const influencerId = subdoc.influencerId;
 
-    // update subdoc to 'active' so brand sees them in joinedInfluencers
+    // Update subdoc status to 'active'
     subdoc.status = 'active';
     await campaign.save();
 
-    // now update the influencer doc => set joinedCampaigns to active
+    // Update influencer doc => set joinedCampaigns status to 'active'
     const influencerDoc = await Influencer.findById(influencerId);
     if (!influencerDoc) {
       return res.status(404).json({ error: 'Influencer doc not found' });
@@ -398,7 +390,6 @@ exports.acceptInboundRequest = async (req, res) => {
     if (joined) {
       joined.status = 'active';
     } else {
-      // fallback if for some reason not found
       influencerDoc.joinedCampaigns.push({
         campaignId: campaign._id,
         status: 'active',
@@ -410,7 +401,7 @@ exports.acceptInboundRequest = async (req, res) => {
     }
     await influencerDoc.save();
 
-    // send email to influencer
+    // Send email to influencer
     const influencerUser = await User.findById(influencerDoc.userId);
     if (influencerUser) {
       const subject = 'Your application was accepted!';

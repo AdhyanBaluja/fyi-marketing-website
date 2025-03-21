@@ -1,4 +1,3 @@
-// src/components/ChooseAccountType.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavBar from './NavBar';
@@ -9,15 +8,14 @@ function ChooseAccountType() {
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState('');
 
-  // choose influencer or brand
+  // Select account type: influencer or brand
   const handleSelect = (type) => {
     setSelectedType(type);
   };
 
-  // on next, go to brand or influencer sign-up form
+  // Navigate to the respective sign-up form based on selection
   const handleNext = () => {
     if (!selectedType) return;
-
     if (selectedType === 'influencer') {
       navigate('/signup/influencer');
     } else if (selectedType === 'brand') {
@@ -25,7 +23,7 @@ function ChooseAccountType() {
     }
   };
 
-  // container class changes color based on selection
+  // Container class changes background based on selection
   let containerClass = 'choose-type-container';
   if (selectedType === 'influencer') {
     containerClass += ' influencer-bg';
@@ -40,7 +38,7 @@ function ChooseAccountType() {
       <NavBar />
 
       <header className="choose-type-header">
-        
+        {/* You can include a logo or header content here if needed */}
       </header>
 
       <div className="choose-type-content">
@@ -50,11 +48,9 @@ function ChooseAccountType() {
         </p>
 
         <div className="option-cards">
-          {/* Brand card (now on the LEFT) */}
+          {/* Brand card (on the LEFT) */}
           <div
-            className={`option-card brand-card ${
-              selectedType === 'brand' ? 'selected' : ''
-            }`}
+            className={`option-card brand-card ${selectedType === 'brand' ? 'selected' : ''}`}
             onClick={() => handleSelect('brand')}
           >
             <div className="option-icon">
@@ -69,11 +65,9 @@ function ChooseAccountType() {
 
           <span className="or-text">OR</span>
 
-          {/* Influencer card (now on the RIGHT) */}
+          {/* Influencer card (on the RIGHT) */}
           <div
-            className={`option-card influencer-card ${
-              selectedType === 'influencer' ? 'selected' : ''
-            }`}
+            className={`option-card influencer-card ${selectedType === 'influencer' ? 'selected' : ''}`}
             onClick={() => handleSelect('influencer')}
           >
             <div className="option-icon">

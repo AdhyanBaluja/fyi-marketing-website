@@ -1,4 +1,3 @@
-// server.js
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -29,30 +28,31 @@ mongoose.connect(process.env.MONGO_URI)
 // 2) Enable CORS
 app.use(cors());
 
-// 3) Stripe Webhook Route BEFORE express.json()
-//    We must read the raw body for signature verification.
+// 3) Stripe Webhook Route (must be defined before express.json())
+//    This route uses express.raw to capture the raw body for signature verification.
 app.post(
   '/api/payment/stripe-webhook',
   express.raw({ type: 'application/json' }),
   handleStripeWebhook
 );
 
-// 4) Now parse JSON for all other routes
+// 4) Parse JSON for all other routes
 app.use(express.json());
 
-// 5) Configure session
+// 5) Configure sessions
 app.use(session({
   secret: process.env.SESSION_SECRET || 'someSuperSecretKey',
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, // 1 day
-    // secure: true,  // if using HTTPS in production
-    // sameSite: 'none', // if cross-site
+    // In production, if using HTTPS, uncomment the following options:
+    // secure: true,
+    // sameSite: 'none',
   }
 }));
 
-// 6) Serve local "uploads" folder
+// 6) Serve static files from the "uploads" folder
 const uploadsPath = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsPath));
 
@@ -61,32 +61,17 @@ app.get('/', (req, res) => {
   res.send('Hello from the backend!');
 });
 
-// 8) Mount routes
-// Auth => /api/auth
+// 8) Mount all routes
 app.use('/api/auth', authRoutes);
-
-// Brand => /api/brand
 app.use('/api/brand', brandRoutes);
-
-// Influencer => /api/influencer
 app.use('/api/influencer', influencerRoutes);
-
-// Campaign => /api/campaigns
 app.use('/api/campaigns', campaignRoutes);
-
-// AI => /api/ai
 app.use('/api/ai', aiRoutes);
-
-// Chat => /api/chat
 app.use('/api/chat', chatRoutes);
-
-// Payment => /api/payment
 app.use('/api/payment', paymentRoutes);
-
-// Users => /api/users
 app.use('/api/users', userRoutes);
 
-// 9) Start server
+// 9) Start the server
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

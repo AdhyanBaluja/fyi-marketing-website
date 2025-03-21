@@ -1,11 +1,12 @@
-// src/components/DriveSales.jsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './DriveSales.css';
 import AiChatbot from './AiChatbot.jsx';
 import demoImage from '../assets/demo.png';
+
+// Use environment variable for the API base URL; fallback to localhost if not defined
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function DriveSales() {
   const navigate = useNavigate();
@@ -61,10 +62,10 @@ function DriveSales() {
         salesLocation: formData.targetLocations,
       };
 
-      // 2) Call your AI endpoint
+      // 2) Call your AI endpoint using API_BASE_URL from env
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:4000/api/ai/generateCampaign',
+        `${API_BASE_URL}/api/ai/generateCampaign`,
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -77,7 +78,7 @@ function DriveSales() {
         localStorage.setItem('latestCampaignId', newCampaign._id);
       }
 
-      // 4) Navigate to loading
+      // 4) Navigate to the loading page
       navigate('/loading');
     } catch (error) {
       console.error('Error creating DriveSales campaign:', error);

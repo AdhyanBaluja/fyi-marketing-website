@@ -1,5 +1,3 @@
-// controllers/authController.js
-
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
@@ -33,7 +31,7 @@ exports.signupBrand = async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // 3) Create user doc => role=brand
+    // 3) Create user doc with role "brand"
     const user = await User.create({
       firstName,
       lastName,
@@ -42,7 +40,7 @@ exports.signupBrand = async (req, res) => {
       role: 'brand',
     });
 
-    // 4) Create brand doc
+    // 4) Create brand doc with additional brand info
     const brandDoc = await Brand.create({
       userId: user._id,
       businessName,
@@ -53,7 +51,7 @@ exports.signupBrand = async (req, res) => {
       platforms,
     });
 
-    // 5) Generate JWT
+    // 5) Generate JWT (expires in 1 day)
     const token = jwt.sign(
       { userId: user._id, role: 'brand' },
       process.env.JWT_SECRET,
@@ -75,14 +73,13 @@ exports.signupBrand = async (req, res) => {
 // =============== INFLUENCER SIGNUP ===============
 exports.signupInfluencer = async (req, res) => {
   try {
-    // Extract influencer + user fields from request body
+    // Extract influencer and user fields from request body
     const {
       firstName,
       lastName,
       email,
       password,
-
-      // Basic influencer fields
+      // Influencer-specific fields:
       name,
       experience,
       numFollowers,
@@ -92,16 +89,11 @@ exports.signupInfluencer = async (req, res) => {
       audienceGenderDemographics,
       gender,
       industries,
-
-      // The array of selected platforms
-      platforms,
-
-      // The object storing handle + price for each platform
-      // e.g. { "Instagram": { handle: "myInsta", price: 50 }, ... }
-      platformDetails,
+      platforms,          // Array of selected platforms
+      platformDetails,    // Object with platform handle and price info
     } = req.body;
 
-    // 1) Check if user exists
+    // 1) Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: 'Email already taken' });
@@ -111,7 +103,7 @@ exports.signupInfluencer = async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // 3) Create user doc => role=influencer
+    // 3) Create user doc with role "influencer"
     const user = await User.create({
       firstName,
       lastName,
@@ -121,8 +113,8 @@ exports.signupInfluencer = async (req, res) => {
     });
 
     // 4) Create influencer doc referencing user
-    //    note: the schema calls it "nichePlatforms" for the array
-    //          and "platformDetails" for the handle/price map
+    // Note: "nichePlatforms" stores the array of selected platforms
+    // and "platformDetails" stores additional info for each platform.
     const influencerDoc = await Influencer.create({
       userId: user._id,
       name,
@@ -134,12 +126,11 @@ exports.signupInfluencer = async (req, res) => {
       audienceGenderDemographics,
       gender,
       industries,
-
-      nichePlatforms: platforms,   // array of strings
-      platformDetails,            // map of subdocs
+      nichePlatforms: platforms,
+      platformDetails,
     });
 
-    // 5) Generate JWT
+    // 5) Generate JWT (expires in 1 day)
     const token = jwt.sign(
       { userId: user._id, role: 'influencer' },
       process.env.JWT_SECRET,
@@ -163,26 +154,26 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1) Find user
+    // 1) Find user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // 2) Compare password
+    // 2) Compare provided password with hashed password in DB
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // 3) Generate JWT
+    // 3) Generate JWT (expires in 1 day)
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
-    // 4) Return
+    // 4) Return token and basic user info (excluding sensitive data)
     return res.json({
       message: 'Login successful',
       token,

@@ -1,9 +1,11 @@
-// src/components/InfluencerSignUpForm.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from './NavBar';
 import './InfluencerSignUpForm.css';
+
+// Use environment variable for the API base URL; fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function InfluencerSignUpForm() {
   const navigate = useNavigate();
@@ -116,7 +118,7 @@ function InfluencerSignUpForm() {
     });
   };
 
-  // For each selected platform, handle the handle/price
+  // For each selected platform, handle the handle/price changes
   const handlePlatformDetailChange = (platform, field, value) => {
     setPlatformDetails((prev) => ({
       ...prev,
@@ -160,7 +162,7 @@ function InfluencerSignUpForm() {
 
     try {
       const res = await axios.post(
-        'http://localhost:4000/api/auth/signup/influencer',
+        `${API_BASE_URL}/api/auth/signup/influencer`,
         finalData
       );
       console.log('Influencer signup success:', res.data);
@@ -339,11 +341,7 @@ function InfluencerSignUpForm() {
                   </option>
                 ))}
               </select>
-              <button
-                type="button"
-                className="add-btn"
-                onClick={handleAddIndustry}
-              >
+              <button type="button" className="add-btn" onClick={handleAddIndustry}>
                 Add Industry
               </button>
               <div className="selected-items">
@@ -364,11 +362,7 @@ function InfluencerSignUpForm() {
                   </option>
                 ))}
               </select>
-              <button
-                type="button"
-                className="add-btn"
-                onClick={handleAddPlatform}
-              >
+              <button type="button" className="add-btn" onClick={handleAddPlatform}>
                 Add Platform
               </button>
               <div className="selected-items">

@@ -1,9 +1,10 @@
-// src/components/BrandDashboard.jsx
-
 import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './BrandDashboard.css';
+
+// Use environment variable for API base URL, fallback to localhost if not defined
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function BrandDashboard() {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ function BrandDashboard() {
   // 1) membership plan
   const fetchUserPlan = async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/api/users/${userId}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMembershipPlan(res.data.user.membershipPlan || 'Free');
@@ -74,7 +75,7 @@ function BrandDashboard() {
   const fetchBrandDashboardData = async () => {
     setLoadingCampaigns(true);
     try {
-      const response = await axios.get('http://localhost:4000/api/brand/dashboard', {
+      const response = await axios.get(`${API_BASE_URL}/api/brand/dashboard`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = response.data;
@@ -92,7 +93,7 @@ function BrandDashboard() {
   // 3) brand requests => to find "applied" influencer requests
   const fetchBrandRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/brand/requests', {
+      const response = await axios.get(`${API_BASE_URL}/api/brand/requests`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = response.data;
@@ -139,7 +140,7 @@ function BrandDashboard() {
   // 4) brand active events
   const fetchAllActiveEvents = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/brand/active-events', {
+      const response = await axios.get(`${API_BASE_URL}/api/brand/active-events`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAllActiveEvents(response.data.events || []);
@@ -151,7 +152,7 @@ function BrandDashboard() {
   // 5) joined influencers
   const fetchJoinedInfluencers = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/brand/joinedInfluencers', {
+      const response = await axios.get(`${API_BASE_URL}/api/brand/joinedInfluencers`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJoinedInfluencers(response.data.campaigns || []);
@@ -192,7 +193,7 @@ function BrandDashboard() {
   const handleUpdateStatus = async (campaignId, newStatus) => {
     try {
       await axios.patch(
-        `http://localhost:4000/api/brand/campaigns/${campaignId}`,
+        `${API_BASE_URL}/api/brand/campaigns/${campaignId}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -211,7 +212,7 @@ function BrandDashboard() {
     }
     try {
       await axios.delete(
-        `http://localhost:4000/api/brand/campaigns/${campaignId}`,
+        `${API_BASE_URL}/api/brand/campaigns/${campaignId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchBrandDashboardData();
@@ -226,7 +227,7 @@ function BrandDashboard() {
   const handleAcceptInfluencerRequest = async (requestId) => {
     try {
       await axios.patch(
-        `http://localhost:4000/api/brand/requests/${requestId}/accept`,
+        `${API_BASE_URL}/api/brand/requests/${requestId}/accept`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -246,7 +247,7 @@ function BrandDashboard() {
 
     try {
       await axios.delete(
-        `http://localhost:4000/api/brand/campaigns/${campaignId}/influencers/${influencerId}`,
+        `${API_BASE_URL}/api/brand/campaigns/${campaignId}/influencers/${influencerId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert('Influencer removed from the campaign successfully!');
@@ -443,8 +444,6 @@ function BrandDashboard() {
             <thead>
               <tr>
                 <th>Campaign Name</th>
-                
-                
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -455,8 +454,6 @@ function BrandDashboard() {
                   <td onClick={() => handleCampaignClick(c._id)} style={{ cursor: 'pointer' }}>
                     {c.name}
                   </td>
-                
-                  
                   <td>{c.status}</td>
                   <td>
                     <select

@@ -1,8 +1,6 @@
-// src/components/FindInfluencer.jsx
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import AiChatbot from './AiChatbot.jsx';
+import AiChatbot from "./AiChatbot.jsx";
 import axios from "axios";
 import "./FindInfluencer.css";
 
@@ -34,7 +32,7 @@ function FindInfluencer() {
   // track each influencer's selected campaign => { influencerId: campaignId }
   const [selectedCampaignMap, setSelectedCampaignMap] = useState({});
 
-  // location + industry + platform options
+  // Options
   const locationOptions = [
     "--Select--",
     "United States",
@@ -61,13 +59,16 @@ function FindInfluencer() {
     "TikTok", "X", "Youtube", "Threads", "Quora", "Discord", "Snapchat"
   ];
 
+  // Environment variable for API base URL (fallback to localhost for development)
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
+
   // -------------------------------
   // 1) FETCH all influencers
   // -------------------------------
   useEffect(() => {
     if (!token) return;
     axios
-      .get("http://localhost:4000/api/influencer/all", {
+      .get(`${API_BASE_URL}/api/influencer/all`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -77,23 +78,24 @@ function FindInfluencer() {
         }
       })
       .catch((err) => console.error("Error fetching influencers:", err));
-  }, [token]);
+  }, [token, API_BASE_URL]);
 
-  // 2) FETCH brand's campaigns => /api/brand/my-campaigns
+  // -------------------------------
+  // 2) FETCH brand's campaigns
+  // -------------------------------
   useEffect(() => {
     if (!token) return;
     axios
-      .get("http://localhost:4000/api/brand/my-campaigns", {
+      .get(`${API_BASE_URL}/api/brand/my-campaigns`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        // res.data => { campaigns: [...] }
         if (res.data.campaigns) {
           setBrandCampaigns(res.data.campaigns);
         }
       })
       .catch((err) => console.error("Error fetching brand campaigns:", err));
-  }, [token]);
+  }, [token, API_BASE_URL]);
 
   // -------------------------------
   // FILTER LOGIC
@@ -203,7 +205,6 @@ function FindInfluencer() {
 
   // REMOVE ALL FILTERS
   const handleRemoveAllFilters = () => {
-    // reset filter states
     setFilters({
       experience: "",
       followers: "",
@@ -216,8 +217,6 @@ function FindInfluencer() {
     });
     setTempPlatformSelection([]);
     setSearchTerm("");
-
-    // show all influencers again
     setInfluencers(allInfluencers);
   };
 
@@ -243,7 +242,7 @@ function FindInfluencer() {
     return <>{stars}</>;
   };
 
-  // 6) track selected campaign
+  // 6) Track selected campaign
   const handleCampaignSelect = (influencerId, campaignId) => {
     setSelectedCampaignMap((prev) => ({
       ...prev,
@@ -251,7 +250,7 @@ function FindInfluencer() {
     }));
   };
 
-  // 7) send invite => brand/invite-influencer
+  // 7) Send invite => brand/invite-influencer
   const handleSendInvite = async (influencerId) => {
     const selectedCampaignId = selectedCampaignMap[influencerId];
     if (!selectedCampaignId) {
@@ -260,7 +259,7 @@ function FindInfluencer() {
     }
     try {
       await axios.post(
-        "http://localhost:4000/api/brand/invite-influencer",
+        `${API_BASE_URL}/api/brand/invite-influencer`,
         {
           influencerId,
           campaignId: selectedCampaignId,
@@ -423,7 +422,7 @@ function FindInfluencer() {
             type="text"
             placeholder="Search by name..."
             value={searchTerm}
-            onChange={handleSearchChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
@@ -457,7 +456,7 @@ function FindInfluencer() {
                 <p>Experience: {inf.experience || 0} yrs</p>
               </div>
 
-              {/* EXTRA INFO => majorityAudienceLocation, audienceAgeGroup, gender, industries */}
+              {/* EXTRA INFO */}
               <div className="card-extra-info">
                 <p>Majority Audience Loc: {inf.majorityAudienceLocation || "N/A"}</p>
                 <p>Audience Age Group: {inf.audienceAgeGroup || "N/A"}</p>
@@ -472,9 +471,7 @@ function FindInfluencer() {
               </div>
 
               {/* RATING */}
-              <div className="card-rating">
-                {renderStars(inf.averageRating)}
-              </div>
+              <div className="card-rating">{renderStars(inf.averageRating)}</div>
 
               {/* Invite Section */}
               <div className="invite-section">
@@ -482,7 +479,9 @@ function FindInfluencer() {
                 <select
                   style={{ marginLeft: "5px", marginRight: "5px" }}
                   value={selectedCampaignMap[inf._id] || ""}
-                  onChange={(e) => handleCampaignSelect(inf._id, e.target.value)}
+                  onChange={(e) =>
+                    handleCampaignSelect(inf._id, e.target.value)
+                  }
                 >
                   <option value="">--Select Campaign--</option>
                   {brandCampaigns.map((camp) => (

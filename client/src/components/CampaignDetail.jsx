@@ -1,10 +1,11 @@
-// src/components/CampaignDetail.jsx
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './CampaignDetail.css';
 import demoImage from '../assets/demo.png';
+
+// Use environment variable for API base URL; fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 const CampaignDetail = () => {
   const navigate = useNavigate();
@@ -17,15 +18,13 @@ const CampaignDetail = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
 
-  // =========================
-  // 1) Fetch the campaign doc
-  // =========================
+  // 1) Fetch the campaign document on mount
   useEffect(() => {
     const fetchCampaign = async () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(
-          `http://localhost:4000/api/campaigns/${campaignId}`,
+          `${API_BASE_URL}/api/campaigns/${campaignId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const c = response.data.campaign;
@@ -67,17 +66,13 @@ const CampaignDetail = () => {
     fetchCampaign();
   }, [campaignId]);
 
-  // =========================
-  // 2) Handle input changes
-  // =========================
+  // 2) Handle input changes in edit mode
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // =========================
-  // 3) Save => PATCH
-  // =========================
+  // 3) Save updates (PATCH request)
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -108,14 +103,14 @@ const CampaignDetail = () => {
       };
 
       await axios.patch(
-        `http://localhost:4000/api/campaigns/${campaignId}`,
+        `${API_BASE_URL}/api/campaigns/${campaignId}`,
         payload,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Re-fetch updated doc
+      // Re-fetch updated document
       const refreshed = await axios.get(
-        `http://localhost:4000/api/campaigns/${campaignId}`,
+        `${API_BASE_URL}/api/campaigns/${campaignId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setCampaign(refreshed.data.campaign);
@@ -126,9 +121,7 @@ const CampaignDetail = () => {
     }
   };
 
-  // =========================
-  // 4) Conditional Rendering
-  // =========================
+  // 4) Conditional rendering for loading, error, or no campaign found
   if (loading) {
     return (
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
@@ -151,7 +144,7 @@ const CampaignDetail = () => {
     );
   }
 
-  // Use campaign.campaignImage or fallback to demoImage
+  // Display campaign image or fallback to demo image
   const displayedImage = campaign.campaignImage || demoImage;
 
   return (
@@ -178,7 +171,6 @@ const CampaignDetail = () => {
         /* ================== EDIT MODE ================== */
         <div className="campaign-edit-form">
           <h2>Edit Campaign</h2>
-
           {/* Campaign Image field */}
           <label>Campaign Image (URL)</label>
           <input
@@ -187,7 +179,6 @@ const CampaignDetail = () => {
             value={editData.campaignImage}
             onChange={handleChange}
           />
-
           {/* Basic fields */}
           <label>Name</label>
           <input
@@ -196,7 +187,6 @@ const CampaignDetail = () => {
             value={editData.name}
             onChange={handleChange}
           />
-
           <label>Objective</label>
           <input
             type="text"
@@ -204,7 +194,6 @@ const CampaignDetail = () => {
             value={editData.objective}
             onChange={handleChange}
           />
-
           <label>Target Audience</label>
           <input
             type="text"
@@ -212,7 +201,6 @@ const CampaignDetail = () => {
             value={editData.targetAudience}
             onChange={handleChange}
           />
-
           <label>Duration</label>
           <input
             type="text"
@@ -220,7 +208,6 @@ const CampaignDetail = () => {
             value={editData.duration}
             onChange={handleChange}
           />
-
           <label>Budget</label>
           <input
             type="text"
@@ -228,7 +215,6 @@ const CampaignDetail = () => {
             value={editData.budget}
             onChange={handleChange}
           />
-
           <label>Influencer Collaboration</label>
           <input
             type="text"
@@ -236,7 +222,6 @@ const CampaignDetail = () => {
             value={editData.influencerCollaboration}
             onChange={handleChange}
           />
-
           <label>About Campaign</label>
           <textarea
             name="aboutCampaign"
@@ -244,7 +229,6 @@ const CampaignDetail = () => {
             value={editData.aboutCampaign}
             onChange={handleChange}
           />
-
           <label>Progress</label>
           <input
             type="number"
@@ -252,7 +236,6 @@ const CampaignDetail = () => {
             value={editData.progress}
             onChange={handleChange}
           />
-
           <label>Clicks</label>
           <input
             type="number"
@@ -260,7 +243,6 @@ const CampaignDetail = () => {
             value={editData.clicks}
             onChange={handleChange}
           />
-
           <label>Conversions</label>
           <input
             type="number"
@@ -268,7 +250,6 @@ const CampaignDetail = () => {
             value={editData.conversions}
             onChange={handleChange}
           />
-
           <label>Status</label>
           <select name="status" value={editData.status} onChange={handleChange}>
             <option value="Draft">Draft</option>
@@ -286,7 +267,6 @@ const CampaignDetail = () => {
             value={editData.businessDescription}
             onChange={handleChange}
           />
-
           <label>Industry</label>
           <input
             type="text"
@@ -294,7 +274,6 @@ const CampaignDetail = () => {
             value={editData.industry}
             onChange={handleChange}
           />
-
           <label>Timeframe Start</label>
           <input
             type="text"
@@ -302,7 +281,6 @@ const CampaignDetail = () => {
             value={editData.timeframeStart}
             onChange={handleChange}
           />
-
           <label>Timeframe End</label>
           <input
             type="text"
@@ -310,7 +288,6 @@ const CampaignDetail = () => {
             value={editData.timeframeEnd}
             onChange={handleChange}
           />
-
           <label>Platforms</label>
           <textarea
             name="platforms"
@@ -318,7 +295,6 @@ const CampaignDetail = () => {
             value={editData.platforms}
             onChange={handleChange}
           />
-
           <label>Market Trends</label>
           <textarea
             name="marketTrends"
@@ -326,7 +302,6 @@ const CampaignDetail = () => {
             value={editData.marketTrends}
             onChange={handleChange}
           />
-
           <label>Target Audience (Form)</label>
           <textarea
             name="targetAudienceForm"
@@ -334,7 +309,6 @@ const CampaignDetail = () => {
             value={editData.targetAudienceForm}
             onChange={handleChange}
           />
-
           <label>Brand USP</label>
           <textarea
             name="brandUSP"
@@ -574,7 +548,6 @@ const CampaignDetail = () => {
               <ul className="joined-influencers-list">
                 {campaign.joinedInfluencers.map((inf) => (
                   <li key={inf._id} style={{ marginBottom: '1rem' }}>
-                    {/* Row container for the image + text */}
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <img
                         src={inf.profileImage || 'https://via.placeholder.com/40'}
@@ -591,8 +564,6 @@ const CampaignDetail = () => {
                         {inf.name} — {inf.progress}% complete
                       </strong>
                     </div>
-
-                    {/* Render tasks for each influencer */}
                     {inf.tasks && inf.tasks.length > 0 ? (
                       <ul style={{ marginLeft: '2.5rem', marginTop: '0.5rem' }}>
                         {inf.tasks.map((task) => (

@@ -1,5 +1,3 @@
-// src/components/LandingPage.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css'; 
@@ -23,6 +21,9 @@ const iconDiverse= 'https://cdn-icons-png.flaticon.com/512/2278/2278125.png';
 const iconGlobal = 'https://cdn-icons-png.flaticon.com/512/984/984233.png';
 const iconTrust  = 'https://cdn-icons-png.flaticon.com/512/709/709624.png';
 
+// Define API base URL from env variable; fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
+
 function LandingPage() {
   const navigate = useNavigate();
 
@@ -44,15 +45,14 @@ function LandingPage() {
     setUserType(storedUserType || null);
 
     // If a token is present, verify it's still valid by calling a protected route
-    // If 401 => token is expired => log out
     if (token && userId) {
       axios
-        .get(`http://localhost:4000/api/users/${userId}`, {
+        .get(`${API_BASE_URL}/api/users/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .catch((error) => {
           if (error.response && error.response.status === 401) {
-            // token expired => forcibly logout
+            // token expired => log out
             localStorage.clear();
             setIsLoggedIn(false);
             setUserType(null);

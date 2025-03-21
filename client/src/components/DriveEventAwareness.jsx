@@ -1,11 +1,12 @@
-// src/components/DriveEventAwareness.jsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './DriveEventAwareness.css';
 import AiChatbot from './AiChatbot.jsx';
 import demoImage from '../assets/demo.png';
+
+// Use environment variable for API base URL; fallback to localhost for development
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
 function DriveEventAwareness() {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ function DriveEventAwareness() {
     setIsCreating(true);
 
     try {
-      // 1) Prepare data for AI endpoint
+      // Prepare data for AI endpoint
       const payload = {
         campaignType: 'driveEventAwareness',
         describeBusiness: formData.businessDescription,
@@ -58,23 +59,21 @@ function DriveEventAwareness() {
         eventUniqueness: formData.uniqueFeatures,
       };
 
-      // 2) Send request to /api/ai/generateCampaign
+      // Send request to the AI endpoint using the API base URL from env
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:4000/api/ai/generateCampaign',
+        `${API_BASE_URL}/api/ai/generateCampaign`,
         payload,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // 3) Capture the new campaign _id
+      // Capture the new campaign _id
       const newCampaign = response.data.campaign;
       if (newCampaign && newCampaign._id) {
         localStorage.setItem('latestCampaignId', newCampaign._id);
       }
 
-      // 4) Navigate to the loading page
+      // Navigate to the loading page
       navigate('/loading');
     } catch (error) {
       console.error('Error creating DriveEventAwareness campaign:', error);
@@ -95,7 +94,6 @@ function DriveEventAwareness() {
 
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-        {/* Show a small "Creating..." hint if needed */}
         {isCreating && (
           <p style={{ fontStyle: 'italic', color: '#666' }}>
             Creating campaign, please wait...
