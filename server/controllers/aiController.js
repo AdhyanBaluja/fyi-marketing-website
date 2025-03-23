@@ -35,42 +35,52 @@ exports.generateCampaignPlan = async (req, res) => {
     if (!brandUSP && brandMessage) {
       brandUSP = brandMessage;
     }
+// ========== (A) Construct GPT Instructions ==========
+let instructions = `
+You are ChatGPT, an expert marketing consultant powered by GPT-4.
+Your task is to create a comprehensive, multi-week marketing campaign plan in strict JSON format.
+Output **only valid JSON** with no extra commentary or disclaimers.
 
-    // ========== (A) Construct GPT Instructions ==========
-    let instructions = `
-You are ChatGPT, a top-tier marketing consultant using GPT-4.
-You MUST produce a thoroughly reasoned, multi-week plan in strict JSON.
-Output no extra commentary or disclaimers outside of valid JSON.
-
-Use this JSON structure EXACTLY:
+Use the following JSON structure EXACTLY:
 {
-  "objective": "...",
-  "targetAudience": "...",
-  "duration": "...",
-  "budget": "...",
-  "influencerCollaboration": "...",
-  "aboutCampaign": "...",
-  "calendarEvents": [...],
-  "bingoSuggestions": [...],
-  "moreAdvice": [...]
+  "objective": "The main goal of the campaign.",
+  "targetAudience": "A detailed description of the audience.",
+  "duration": "Campaign duration (e.g., 6 weeks).",
+  "budget": "Budget allocated for the campaign.",
+  "influencerCollaboration": "Details about any influencer partnerships.",
+  "aboutCampaign": "Overview of the campaign concept.",
+  "calendarEvents": [
+    {
+      "date": "YYYY-MM-DD",
+      "event": "Brief description of the event",
+      "platforms": "Social media platforms to be used",
+      "cta": "Call-to-action text",
+      "captions": "One or two lines with hashtags"
+    },
+    // Include 10 to 20 such event objects.
+  ],
+  "bingoSuggestions": [
+    {
+      "suggestion": "Marketing idea or tactic",
+      "strategy": "How to implement it"
+    }
+    // Exactly 5 objects.
+  ],
+  "moreAdvice": [
+    "Additional advice point 1",
+    "Additional advice point 2",
+    "Additional advice point 3"
+    // Include at least 3 advice strings.
+  ]
 }
 
-- "calendarEvents": Include 10 to 20 objects, each with:
-   "date",
-   "event" ,
-   "platforms",
-   "cta",
-   "captions" (1-2 lines with hashtags).
-
-- "bingoSuggestions": Exactly 5 objects, each with:
-   "suggestion",
-   "strategy"
-
-- "moreAdvice": Include at least 3 pieces of additional advice.
-
-Return valid JSON only.
+Guidelines:
+- Do not output any text outside of the JSON structure.
+- Ensure all fields are filled with creative, actionable, and data-driven recommendations.
+- Be thorough and detailed, ensuring the campaign plan is realistic and innovative.
 ----
 `;
+
 
     // ========== (B) Append Campaign-Type Specific Details ==========
     if (campaignType === 'amplify') {
@@ -151,8 +161,8 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
         { role: 'system', content: 'You are a marketing strategy wizard. Output JSON only.' },
         { role: 'user', content: instructions },
       ],
-      temperature: 0.3,
-      top_p: 0.9,
+      temperature: 0.4,
+      top_p: 1,
       max_tokens: 7000,
     });
 
