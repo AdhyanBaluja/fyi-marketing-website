@@ -160,26 +160,39 @@ exports.inviteInfluencer = async (req, res) => {
       userId: req.user.userId,
     });
     if (!campaign) {
-      return res.status(404).json({ error: 'Campaign not found or not owned by you' });
+      return res
+        .status(404)
+        .json({ error: 'Campaign not found or not owned by you' });
     }
 
     const alreadyInvited = campaign.requestsToInfluencers.some(
       (r) => r.influencerId.toString() === influencerId
     );
     if (alreadyInvited) {
-      return res.status(400).json({ error: 'Influencer already invited to this campaign' });
+      return res
+        .status(400)
+        .json({ error: 'Influencer already invited to this campaign' });
     }
 
+    // Add influencer to requestsToInfluencers
     campaign.requestsToInfluencers.push({ influencerId, status: 'pending' });
     await campaign.save();
+
+    // Retrieve brand name (optional: if you want to mention brand in email)
+    const brandDoc = await Brand.findOne({ userId: req.user.userId });
 
     // Send email to influencer
     const influencerDoc = await Influencer.findById(influencerId);
     if (influencerDoc) {
       const userDoc = await User.findById(influencerDoc.userId);
       if (userDoc) {
-        const subject = 'You have a new campaign invite!';
-        const text = `Hello,\n\nYou have been invited to the campaign "${campaign.name}". Please log in and check your brand requests.\n\nBest,\nPlatform Team.`;
+        const subject = brandDoc
+          ? `New Campaign Invite from ${brandDoc.businessName}`
+          : 'You have a new campaign invite!';
+        const text = `Hello,\n\nYou have been invited to the campaign "${campaign.name}"${
+          brandDoc ? ` by ${brandDoc.businessName}` : ''
+        }. Please log in and check your brand requests.\n\nBest,\nPlatform Team.`;
+
         await sendEmail(userDoc.email, subject, text);
       }
     }
@@ -208,15 +221,17 @@ exports.updateCampaignByBrand = async (req, res) => {
       progress,
       clicks,
       conversions,
-      status
+      status,
     } = req.body;
 
     const campaign = await Campaign.findOne({
       _id: campaignId,
-      userId: req.user.userId
+      userId: req.user.userId,
     });
     if (!campaign) {
-      return res.status(404).json({ error: 'Campaign not found or not owned by you' });
+      return res
+        .status(404)
+        .json({ error: 'Campaign not found or not owned by you' });
     }
 
     if (name !== undefined) campaign.name = name;
@@ -224,7 +239,9 @@ exports.updateCampaignByBrand = async (req, res) => {
     if (targetAudience !== undefined) campaign.targetAudience = targetAudience;
     if (duration !== undefined) campaign.duration = duration;
     if (budget !== undefined) campaign.budget = budget;
-    if (influencerCollaboration !== undefined) campaign.influencerCollaboration = influencerCollaboration;
+    if (influencerCollaboration !== undefined) {
+      campaign.influencerCollaboration = influencerCollaboration;
+    }
     if (aboutCampaign !== undefined) campaign.aboutCampaign = aboutCampaign;
     if (progress !== undefined) campaign.progress = progress;
     if (clicks !== undefined) campaign.clicks = clicks;
@@ -253,10 +270,12 @@ exports.deleteCampaignByBrand = async (req, res) => {
     const { campaignId } = req.params;
     const campaign = await Campaign.findOne({
       _id: campaignId,
-      userId: req.user.userId
+      userId: req.user.userId,
     });
     if (!campaign) {
-      return res.status(404).json({ error: 'Campaign not found or not owned by you' });
+      return res
+        .status(404)
+        .json({ error: 'Campaign not found or not owned by you' });
     }
 
     await Campaign.findByIdAndDelete(campaignId);
@@ -274,16 +293,16 @@ exports.getAllActiveEvents = async (req, res) => {
   try {
     const activeCamps = await Campaign.find({
       userId: req.user.userId,
-      status: 'Active'
+      status: 'Active',
     });
 
     let allEvents = [];
     activeCamps.forEach((camp) => {
       if (camp.calendarEvents && camp.calendarEvents.length > 0) {
-        const mapped = camp.calendarEvents.map(ev => ({
+        const mapped = camp.calendarEvents.map((ev) => ({
           ...ev,
           campaignId: camp._id,
-          campaignName: camp.name
+          campaignName: camp.name,
         }));
         allEvents = [...allEvents, ...mapped];
       }
@@ -313,23 +332,23 @@ exports.getJoinedInfluencersForAllCampaigns = async (req, res) => {
           influencerId: r.influencerId?._id,
           name: r.influencerId?.name,
           profileImage: r.influencerId?.profileImage,
-          source: 'brandInvite'
+          source: 'brandInvite',
         }));
 
-      // influencer->brand applications with status 'active'
+      // influencer->brand => 'active'
       const activeFrom = camp.requestsFromInfluencers
         .filter((r) => r.status === 'active')
         .map((r) => ({
           influencerId: r.influencerId?._id,
           name: r.influencerId?.name,
           profileImage: r.influencerId?.profileImage,
-          source: 'influencerApply'
+          source: 'influencerApply',
         }));
 
       return {
         campaignId: camp._id,
         campaignName: camp.name,
-        joinedInfluencers: [...acceptedTo, ...activeFrom]
+        joinedInfluencers: [...acceptedTo, ...activeFrom],
       };
     });
 
@@ -354,10 +373,12 @@ exports.acceptInboundRequest = async (req, res) => {
     // Find campaign with matching subdoc
     const campaign = await Campaign.findOne({
       userId: req.user.userId,
-      "requestsFromInfluencers._id": requestId
+      "requestsFromInfluencers._id": requestId,
     });
     if (!campaign) {
-      return res.status(404).json({ error: 'Request/campaign not found or not owned by you' });
+      return res
+        .status(404)
+        .json({ error: 'Request/campaign not found or not owned by you' });
     }
 
     // Find the subdocument within requestsFromInfluencers
@@ -369,7 +390,9 @@ exports.acceptInboundRequest = async (req, res) => {
     }
 
     if (subdoc.status !== 'applied') {
-      return res.status(400).json({ error: 'This request is not in "applied" status.' });
+      return res
+        .status(400)
+        .json({ error: 'This request is not in "applied" status.' });
     }
 
     const influencerId = subdoc.influencerId;
@@ -396,16 +419,24 @@ exports.acceptInboundRequest = async (req, res) => {
         progress: 0,
         campaignName: campaign.name || 'Untitled',
         budget: campaign.budget || 'N/A',
-        platform: 'Instagram'
+        platform: 'Instagram',
       });
     }
     await influencerDoc.save();
 
+    // (Optional) retrieve brand name for email text
+    const brandDoc = await Brand.findOne({ userId: req.user.userId });
+
     // Send email to influencer
     const influencerUser = await User.findById(influencerDoc.userId);
     if (influencerUser) {
-      const subject = 'Your application was accepted!';
-      const text = `Hello ${influencerDoc.name},\n\nYour application for the campaign "${campaign.name}" has been accepted!\n\nBest,\nPlatform Team.`;
+      const subject = brandDoc
+        ? `Your application was accepted by ${brandDoc.businessName}!`
+        : 'Your application was accepted!';
+      const text = `Hello ${influencerDoc.name},\n\nYour application for the campaign "${campaign.name}"${
+        brandDoc ? ` from ${brandDoc.businessName}` : ''
+      } has been accepted!\n\nBest,\nPlatform Team.`;
+
       await sendEmail(influencerUser.email, subject, text);
     }
 
@@ -430,13 +461,15 @@ exports.removeJoinedInfluencer = async (req, res) => {
     // 1) Find the campaign that belongs to the brand
     const campaign = await Campaign.findOne({
       _id: campaignId,
-      userId: req.user.userId
+      userId: req.user.userId,
     });
     if (!campaign) {
-      return res.status(404).json({ error: 'Campaign not found or not owned by you' });
+      return res
+        .status(404)
+        .json({ error: 'Campaign not found or not owned by you' });
     }
 
-    // 2) Remove from requestsFromInfluencers or requestsToInfluencers if present
+    // 2) Remove from requestsFromInfluencers / requestsToInfluencers
     campaign.requestsFromInfluencers = campaign.requestsFromInfluencers.filter(
       (r) => r.influencerId.toString() !== influencerId
     );

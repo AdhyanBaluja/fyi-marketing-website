@@ -1,6 +1,6 @@
 const Influencer = require('../models/Influencer');
 const Campaign = require('../models/Campaign');
-const Brand = require('../models/Brand');
+const Brand = require('../models/Brand');        // ← ADDED to fetch brandDoc
 const User = require('../models/User');
 const { sendEmail } = require('../utils/emailService');
 
@@ -37,7 +37,7 @@ exports.updateMyProfile = async (req, res) => {
       gender,
       industries,
       platforms,
-      averageRating, // Note: This typically should not be updated manually by influencer
+      averageRating, // Typically not updated by influencer
     } = req.body;
 
     if (profileImage !== undefined) influencer.profileImage = profileImage;
@@ -217,12 +217,21 @@ exports.acceptBrandRequest = async (req, res) => {
       await influencer.save();
     }
 
-    // Optionally, send an email to the brand about the acceptance
+    // Optionally, fetch brand doc for brand name in email
     const brandUserId = campaign.userId;
     const brandUser = await User.findById(brandUserId);
     if (brandUser) {
-      const subject = 'Influencer Accepted Your Campaign Invitation';
-      const text = `Hello,\n\nInfluencer ${influencer.name} has accepted your invitation for campaign: "${campaign.name}".\n\nBest,\nPlatform Team.`;
+      // find brand doc if we want brand name
+      const brandDoc = await Brand.findOne({ userId: brandUserId });
+
+      let subject = 'Influencer Accepted Your Campaign Invitation';
+      let text = `Hello,\n\nInfluencer ${influencer.name} has accepted your invitation for campaign: "${campaign.name}".\n\nBest,\nPlatform Team.`;
+
+      if (brandDoc) {
+        subject = `Influencer Accepted Your ${brandDoc.businessName} Invitation`;
+        text = `Hello ${brandDoc.businessName},\n\nInfluencer ${influencer.name} has accepted your invitation for campaign: "${campaign.name}".\n\nBest,\nPlatform Team.`;
+      }
+
       await sendEmail(brandUser.email, subject, text);
     }
 
@@ -275,7 +284,7 @@ exports.leaveActiveCampaign = async (req, res) => {
   try {
     const { campaignId } = req.params;
 
-    // 1) Find influencer and remove the campaign from joinedCampaigns
+    // 1) Find influencer and remove the campaign
     const influencer = await Influencer.findOne({ userId: req.user.userId });
     if (!influencer) {
       return res.status(404).json({ error: 'Influencer not found' });
@@ -286,7 +295,7 @@ exports.leaveActiveCampaign = async (req, res) => {
     );
     await influencer.save();
 
-    // 2) Find campaign and remove influencer from requests arrays
+    // 2) Find campaign doc, remove from subdocs
     const campaign = await Campaign.findById(campaignId);
     if (campaign) {
       campaign.requestsFromInfluencers = campaign.requestsFromInfluencers.filter(
@@ -297,11 +306,20 @@ exports.leaveActiveCampaign = async (req, res) => {
       );
       await campaign.save();
 
-      // 3) Send email to brand about influencer leaving
+      // 3) Send email to brand about the influencer leaving
       const brandUser = await User.findById(campaign.userId);
       if (brandUser) {
-        const subject = 'Influencer Left Your Campaign';
-        const text = `Hello,\n\nInfluencer ${influencer.name} has left your campaign: "${campaign.name}".\n\nBest,\nPlatform Team.`;
+        // We can also fetch brandDoc for brand name
+        const brandDoc = await Brand.findOne({ userId: campaign.userId });
+
+        let subject = 'Influencer Left Your Campaign';
+        let text = `Hello,\n\nInfluencer ${influencer.name} has left your campaign: "${campaign.name}".\n\nBest,\nPlatform Team.`;
+
+        if (brandDoc) {
+          subject = `Influencer Left ${brandDoc.businessName}'s Campaign`;
+          text = `Hello ${brandDoc.businessName},\n\nInfluencer ${influencer.name} has left your campaign: "${campaign.name}".\n\nBest,\nPlatform Team.`;
+        }
+
         await sendEmail(brandUser.email, subject, text);
       }
     }
@@ -332,14 +350,18 @@ exports.rateInfluencer = async (req, res) => {
 
     const brand = await Brand.findOne({ userId: req.user.userId });
     if (!brand) {
-      return res.status(403).json({ error: 'Not a valid brand or brand doc not found' });
+      return res
+        .status(403)
+        .json({ error: 'Not a valid brand or brand doc not found' });
     }
 
     const alreadyRated = influencer.ratings.some(
       (r) => r.brandId.toString() === brand._id.toString()
     );
     if (alreadyRated) {
-      return res.status(400).json({ error: 'You have already rated this influencer' });
+      return res
+        .status(400)
+        .json({ error: 'You have already rated this influencer' });
     }
 
     influencer.ratings.push({ brandId: brand._id, ratingValue });
@@ -380,7 +402,9 @@ exports.addTaskToCampaign = async (req, res) => {
       (c) => c.campaignId.toString() === campaignId && c.status === 'active'
     );
     if (!joinedCamp) {
-      return res.status(404).json({ error: 'No active campaign found with that ID' });
+      return res
+        .status(404)
+        .json({ error: 'No active campaign found with that ID' });
     }
 
     joinedCamp.tasks = joinedCamp.tasks || [];
@@ -418,7 +442,9 @@ exports.removeTaskFromCampaign = async (req, res) => {
       (c) => c.campaignId.toString() === campaignId && c.status === 'active'
     );
     if (!joinedCamp) {
-      return res.status(404).json({ error: 'No active campaign found with that ID' });
+      return res
+        .status(404)
+        .json({ error: 'No active campaign found with that ID' });
     }
 
     joinedCamp.tasks = joinedCamp.tasks.filter(

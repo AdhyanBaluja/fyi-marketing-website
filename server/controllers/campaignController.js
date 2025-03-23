@@ -1,7 +1,8 @@
 const Campaign = require('../models/Campaign');
 const Influencer = require('../models/Influencer');
 const User = require('../models/User');
-const { sendEmail } = require('../utils/emailService');  // Added for email notifications
+const Brand = require('../models/Brand'); // <— ADDED to fetch brand name
+const { sendEmail } = require('../utils/emailService');
 
 /**
  * GET /api/campaigns
@@ -136,7 +137,9 @@ exports.updateCampaign = async (req, res) => {
     if (targetAudience !== undefined) campaign.targetAudience = targetAudience;
     if (duration !== undefined) campaign.duration = duration;
     if (budget !== undefined) campaign.budget = budget;
-    if (influencerCollaboration !== undefined) campaign.influencerCollaboration = influencerCollaboration;
+    if (influencerCollaboration !== undefined) {
+      campaign.influencerCollaboration = influencerCollaboration;
+    }
     if (aboutCampaign !== undefined) campaign.aboutCampaign = aboutCampaign;
     if (aiResponse !== undefined) campaign.aiResponse = aiResponse;
     if (calendarEvents !== undefined) campaign.calendarEvents = calendarEvents;
@@ -147,6 +150,7 @@ exports.updateCampaign = async (req, res) => {
     if (conversions !== undefined) campaign.conversions = conversions;
     if (campaignImage !== undefined) campaign.campaignImage = campaignImage;
 
+    // formInputs subdoc => merge approach
     if (formInputs !== undefined) {
       if (!campaign.formInputs) campaign.formInputs = {};
       for (const [key, val] of Object.entries(formInputs)) {
@@ -209,7 +213,7 @@ exports.applyToCampaign = async (req, res) => {
     });
     await influencer.save();
 
-    // 2) Add to campaign subdoc for brand visibility
+    // 2) Also update campaign => requestsFromInfluencers
     campaign.requestsFromInfluencers.push({
       influencerId: influencer._id,
       status: 'applied',
@@ -226,7 +230,7 @@ exports.applyToCampaign = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
-  
+
 /**
  * PATCH /api/campaigns/:campaignId
  * Only brand can update campaign requests by accepting influencer applications.
@@ -235,16 +239,18 @@ exports.acceptInboundRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
 
-    // Find campaign with matching subdocument
+    // 1) Find campaign with matching subdoc
     const campaign = await Campaign.findOne({
       userId: req.user.userId,
       "requestsFromInfluencers._id": requestId
     });
     if (!campaign) {
-      return res.status(404).json({ error: 'Request/campaign not found or not owned by you' });
+      return res
+        .status(404)
+        .json({ error: 'Request/campaign not found or not owned by you' });
     }
 
-    // Find the subdocument within requestsFromInfluencers
+    // 2) Find subdoc
     const subdoc = campaign.requestsFromInfluencers.find(
       (r) => r._id.toString() === requestId
     );
@@ -253,16 +259,18 @@ exports.acceptInboundRequest = async (req, res) => {
     }
 
     if (subdoc.status !== 'applied') {
-      return res.status(400).json({ error: 'This request is not in "applied" status.' });
+      return res
+        .status(400)
+        .json({ error: 'This request is not in "applied" status.' });
     }
 
     const influencerId = subdoc.influencerId;
 
-    // Update subdocument status to 'active'
+    // 3) Update subdoc => 'active'
     subdoc.status = 'active';
     await campaign.save();
 
-    // Update influencer doc: set joinedCampaigns status to 'active'
+    // 4) Update influencer doc => joinedCampaigns => 'active'
     const influencerDoc = await Influencer.findById(influencerId);
     if (!influencerDoc) {
       return res.status(404).json({ error: 'Influencer doc not found' });
@@ -285,11 +293,19 @@ exports.acceptInboundRequest = async (req, res) => {
     }
     await influencerDoc.save();
 
-    // Send email notification to influencer
+    // (Optional) Fetch brand doc to mention brand name
+    const brandDoc = await Brand.findOne({ userId: req.user.userId });
+
+    // 5) Send email to influencer
     const influencerUser = await User.findById(influencerDoc.userId);
     if (influencerUser) {
-      const subject = 'Your application was accepted!';
-      const text = `Hello ${influencerDoc.name},\n\nYour application for the campaign "${campaign.name}" has been accepted!\n\nBest,\nPlatform Team.`;
+      const subject = brandDoc
+        ? `Your application was accepted by ${brandDoc.businessName}!`
+        : 'Your application was accepted!';
+      const text = `Hello ${influencerDoc.name},\n\nYour application for the campaign "${campaign.name}"${
+        brandDoc ? ` from ${brandDoc.businessName}` : ''
+      } has been accepted!\n\nBest,\nPlatform Team.`;
+
       await sendEmail(influencerUser.email, subject, text);
     }
 
@@ -311,16 +327,18 @@ exports.removeJoinedInfluencer = async (req, res) => {
   try {
     const { campaignId, influencerId } = req.params;
 
-    // 1) Find the campaign that belongs to the brand
+    // 1) Find campaign that belongs to brand
     const campaign = await Campaign.findOne({
       _id: campaignId,
       userId: req.user.userId
     });
     if (!campaign) {
-      return res.status(404).json({ error: 'Campaign not found or not owned by you' });
+      return res
+        .status(404)
+        .json({ error: 'Campaign not found or not owned by you' });
     }
 
-    // 2) Remove from requests arrays
+    // 2) Remove from subdocs
     campaign.requestsFromInfluencers = campaign.requestsFromInfluencers.filter(
       (r) => r.influencerId.toString() !== influencerId
     );
@@ -329,7 +347,7 @@ exports.removeJoinedInfluencer = async (req, res) => {
     );
     await campaign.save();
 
-    // 3) Remove campaign from influencer's joinedCampaigns
+    // 3) Remove from influencer doc
     const influencerDoc = await Influencer.findById(influencerId);
     if (!influencerDoc) {
       return res.status(404).json({ error: 'Influencer not found' });
@@ -340,11 +358,18 @@ exports.removeJoinedInfluencer = async (req, res) => {
     );
     await influencerDoc.save();
 
-    // 4) Send an email to the influencer about removal
+    // (Optional) fetch brand doc to mention brand name
+    const brandDoc = await Brand.findOne({ userId: req.user.userId });
+
+    // 4) Email influencer about removal
     const userDoc = await User.findById(influencerDoc.userId);
     if (userDoc) {
-      const subject = 'You have been removed from a campaign';
-      const text = `Hello ${influencerDoc.name},\n\nYou have been removed from the campaign "${campaign.name}". If you have any questions, please contact the brand.\n\nBest,\nPlatform Team.`;
+      const subject = brandDoc
+        ? `Removed from a ${brandDoc.businessName} campaign`
+        : 'You have been removed from a campaign';
+      const text = `Hello ${influencerDoc.name},\n\nYou have been removed from the campaign "${campaign.name}"${
+        brandDoc ? ` by ${brandDoc.businessName}` : ''
+      }. If you have any questions, please contact the brand.\n\nBest,\nPlatform Team.`;
       await sendEmail(userDoc.email, subject, text);
     }
 

@@ -3,47 +3,41 @@ const nodemailer = require('nodemailer');
 
 /**
  * Minimal email sender using nodemailer + Gmail SMTP.
- *
- * Environment separation:
- *   - In production (NODE_ENV=production), actually send the email.
- *   - Otherwise, log to console and skip sending.
  */
 exports.sendEmail = async (to, subject, text) => {
   try {
-    // In non-production environments, log the email details without sending.
+    // If not in production, just log details
     if (process.env.NODE_ENV !== 'production') {
-      console.log('EmailService: Mock email (not sending in non-production environment)');
+      console.log('Mock email (not sending in non-prod):');
       console.log(`To: ${to}`);
       console.log(`Subject: ${subject}`);
       console.log(`Body:\n${text}`);
       return;
     }
 
-    // In production, create a transporter using Gmail's SMTP server.
-    let transporter = nodemailer.createTransport({
+    // In production, create a transporter using Gmail's SMTP
+    const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
-      secure: true, // Use SSL
+      secure: true,
       auth: {
-        user: process.env.EMAIL_USER, // Your Gmail address
-        pass: process.env.EMAIL_PASS  // Your app-specific password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
       },
-      tls: {
-        rejectUnauthorized: false
-      }
+      tls: { rejectUnauthorized: false }
     });
 
-    // Send the email
-    let info = await transporter.sendMail({
+    // Actually send email
+    const info = await transporter.sendMail({
       from: `"letsFYI" <${process.env.EMAIL_USER}>`,
-      to,
+      to,       // This is critical: the actual person's email
       subject,
-      text,
+      text
     });
 
     console.log(`Email sent successfully: ${info.messageId} to ${to}`);
   } catch (err) {
     console.error('Error sending email:', err);
-    // Optionally rethrow or handle the error as needed.
+    // Optionally rethrow or handle further
   }
 };
