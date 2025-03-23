@@ -38,7 +38,7 @@ exports.generateCampaignPlan = async (req, res) => {
 
     // ========== (A) Construct GPT Instructions ==========
     let instructions = `
-You are ChatGPT, a top-tier marketing consultant using GPT-4.
+You are ChatGPT, an experienced marketing director.
 You MUST produce a thoroughly reasoned, multi-week plan in strict JSON.
 Output no extra commentary or disclaimers outside of valid JSON.
 
@@ -55,18 +55,18 @@ Use this JSON structure EXACTLY:
   "moreAdvice": [...]
 }
 
-- "calendarEvents": Include 10 to 20 objects, each with:
-   "date", (always give at least 10 with 1-2 lines)
-   "event" ,
+- "calendarEvents": Include minimum 10 objects, each with:
+   "date", 
+   "event" (always with 1-2 lines),
    "platforms",
    "cta",
-   "captions" (1-2 lines with hashtags).
+   "captions" (50 words with hashtags).
 
 - "bingoSuggestions": Exactly 5 objects, each with:
    "suggestion",
    "strategy"
 
-- "moreAdvice": Include at least 3 pieces of additional advice.
+- "moreAdvice": Suggest 5 UK based inflencers for the campaign.
 
 Return valid JSON only.
 ----
@@ -138,7 +138,7 @@ Focus on event-based marketing strategies.
     } else {
       instructions += `
 [GENERAL CAMPAIGN]
-Use your best judgement for a general marketing plan:
+Create an advanced social media marketing plan:
 Produce 10–20 "calendarEvents", EXACTLY 5 "bingoSuggestions", and 3+ "moreAdvice".
 Fill top-level fields: objective, targetAudience, duration, budget, influencerCollaboration, aboutCampaign.
 `;
@@ -189,7 +189,7 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
       }
 
       const promptForImage = `
-A high-quality, creative illustration for: "${suggestionObj.suggestion || 'marketing suggestion'}"
+A high-quality, creative illustration related to the business description for: "${suggestionObj.suggestion || 'marketing suggestion'}"
 Style: Crisp, modern. DALL-E 3, 1024x1024.
       `;
 
