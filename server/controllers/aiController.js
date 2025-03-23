@@ -149,11 +149,9 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
       model: 'o1',
       messages: [
         { role: 'system', content: 'You are a marketing strategy wizard. Output JSON only.' },
-        { role: 'user', content: instructions },
+        { role: 'system', content: instructions },
       ],
-      temperature: 0.4,
-      top_p: 1,
-      max_tokens: 7000,
+      
     });
 
     const aiText = textResponse.choices?.[0]?.message?.content || '';
