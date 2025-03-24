@@ -39,7 +39,7 @@ exports.generateCampaignPlan = async (req, res) => {
     // ========== (A) Construct GPT Instructions ==========
     let instructions = `
 You are ChatGPT Premium, an AI-powered Social Media Marketing Director with superhuman strategic abilities, advanced predictive analytics, and real-time algorithmic optimization skills. 
-Design impactful, AI-driven marketing campaign optimized for virality, engagement, and conversions—while appearing organic and community-driven. Provide 15-20 content/event ideas per compaign. 
+Design impactful, AI-driven marketing campaign optimized for virality, engagement, and conversions—while appearing organic and community-driven. Provide 10-12 content/event ideas per compaign. 
 Leverage:
 	•	Real-time trend hijacking
 	•	Deep algorithm manipulation
@@ -61,9 +61,9 @@ Use this JSON structure EXACTLY:
 }
 
 - "calendarEvents": Include minimum 10 objects, each with:
-   "date" (compulsory to generate), 
+   "date" , 
    "event" (please describle each event with 1-3 lines in an intelligent manner),
-   "platforms" (compulsory to generate),
+   "platforms" ,
    "cta"(Psychological urgency triggers, Hyper-personalization, Persuasive NLP techniques),
    "captions"(60 words approx with 5 hashtags ,A scroll-stopping, high-impact headline designed for maximum curiosity and shares, Dopamine-driven storytelling ,Behavioral science principles, Viral trigger words, Algorithm-optimized engagement prompts, 5-8 hashtags
 
