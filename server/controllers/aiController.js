@@ -61,7 +61,7 @@ Use this JSON structure EXACTLY:
 
 - "calendarEvents": Include minimum 10 objects, each with:
    "date", 
-   "event" (please describle each event with 3-4 lines in an intelligent manner),
+   "event" (please describle each event with 1-3 lines in an intelligent manner),
    "platforms",
    "cta"(Psychological urgency triggers, Hyper-personalization, Persuasive NLP techniques),
    "captions"(100 words approx with 5 hashtags ,A scroll-stopping, high-impact headline designed for maximum curiosity and shares, Dopamine-driven storytelling ,Behavioral science principles, Viral trigger words, Algorithm-optimized engagement prompts, 5-8 hashtags
@@ -70,11 +70,9 @@ Use this JSON structure EXACTLY:
    "suggestion",
    "strategy"
 
-- "moreAdvice": Identify 12 ultra-strategic influencers based on deep AI audience sentiment and engagement analysis. Location must be based in United Kingdom and directly relevant to the business description. 
-• 4 Macro-Influencers (500K - 1M+ followers) - Chosen using real-time trend prediction to maximize campaign reach.
-• 4 Micro-Influencers (50K - 500K followers) - Trust-building powerhouses with the highest conversion rates.
-• 4 Nano-Influencers (10K - 50K followers) - Hyper-engaged community leaders who dominate UGC-driven amplification.
-Suggest Influencer IDs with platform name and no other additional info please
+- "moreAdvice": Provide at least 5 advanced tips for boosting brand consistency across social media.
+                Focus on psychological engagement, algorithmic optimization, and viral triggers in each tip.
+                Add information about gamification points, color palette and Brand Visual Guidelines,Restrictions/Compliance, Seasonal or Event Hooks
 
 Return valid JSON only.
 ----
