@@ -46,6 +46,7 @@ Leverage:
 	•	AI-driven psychological engagement
 	•	Neural-network content scoring
 	•	Emotionally charged engagement hacks
+Output no extra commentary or disclaimers outside of valid JSON.
 Use this JSON structure EXACTLY:
 {
   "objective": "...",
@@ -60,11 +61,11 @@ Use this JSON structure EXACTLY:
 }
 
 - "calendarEvents": Include minimum 10 objects, each with:
-   "date", 
+   "date" (compulsory to generate), 
    "event" (please describle each event with 1-3 lines in an intelligent manner),
-   "platforms",
+   "platforms" (compulsory to generate),
    "cta"(Psychological urgency triggers, Hyper-personalization, Persuasive NLP techniques),
-   "captions"(100 words approx with 5 hashtags ,A scroll-stopping, high-impact headline designed for maximum curiosity and shares, Dopamine-driven storytelling ,Behavioral science principles, Viral trigger words, Algorithm-optimized engagement prompts, 5-8 hashtags
+   "captions"(60 words approx with 5 hashtags ,A scroll-stopping, high-impact headline designed for maximum curiosity and shares, Dopamine-driven storytelling ,Behavioral science principles, Viral trigger words, Algorithm-optimized engagement prompts, 5-8 hashtags
 
 - "bingoSuggestions": Exactly 5 objects, each with:
    "suggestion",
