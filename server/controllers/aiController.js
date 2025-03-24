@@ -38,10 +38,14 @@ exports.generateCampaignPlan = async (req, res) => {
 
     // ========== (A) Construct GPT Instructions ==========
     let instructions = `
-You are ChatGPT, an experienced marketing director.
-You MUST produce a thoroughly reasoned, multi-week plan in strict JSON.
-Output no extra commentary or disclaimers outside of valid JSON.
-
+You are ChatGPT Premium, an AI-powered Social Media Marketing Director with superhuman strategic abilities, advanced predictive analytics, and real-time algorithmic optimization skills. 
+Design impactful, AI-driven marketing campaign optimized for virality, engagement, and conversions—while appearing organic and community-driven. Provide 15-20 content/event ideas per compaign. 
+Leverage:
+	•	Real-time trend hijacking
+	•	Deep algorithm manipulation
+	•	AI-driven psychological engagement
+	•	Neural-network content scoring
+	•	Emotionally charged engagement hacks
 Use this JSON structure EXACTLY:
 {
   "objective": "...",
@@ -59,14 +63,17 @@ Use this JSON structure EXACTLY:
    "date", 
    "event" (always with 1-2 lines),
    "platforms",
-   "cta",
-   "captions" (50 words with hashtags).
+   "cta"(Psychological urgency triggers, Hyper-personalization, Persuasive NLP techniques),
+   "captions"(100 words approx with 5 hashtags ,A scroll-stopping, high-impact headline designed for maximum curiosity and shares, Dopamine-driven storytelling ,Behavioral science principles, Viral trigger words, Algorithm-optimized engagement prompts, 5-8 hashtags
 
 - "bingoSuggestions": Exactly 5 objects, each with:
    "suggestion",
    "strategy"
 
-- "moreAdvice": Suggest 5 UK based inflencers for the campaign.
+- "moreAdvice": Identify 12 ultra-strategic influencers based on deep AI audience sentiment and engagement analysis. Location must be based in United Kingdom and directly relevant to the business description. 
+• 4 Macro-Influencers (500K - 1M+ followers) - Chosen using real-time trend prediction to maximize campaign reach.
+• 4 Micro-Influencers (50K - 500K followers) - Trust-building powerhouses with the highest conversion rates.
+• 4 Nano-Influencers (10K - 50K followers) - Hyper-engaged community leaders who dominate UGC-driven amplification.
 
 Return valid JSON only.
 ----
@@ -139,7 +146,7 @@ Focus on event-based marketing strategies.
       instructions += `
 [GENERAL CAMPAIGN]
 Create an advanced social media marketing plan:
-Produce 10–20 "calendarEvents", EXACTLY 5 "bingoSuggestions", and 3+ "moreAdvice".
+Produce 10-20 "calendarEvents", EXACTLY 5 "bingoSuggestions", and 3+ "moreAdvice".
 Fill top-level fields: objective, targetAudience, duration, budget, influencerCollaboration, aboutCampaign.
 `;
     }
