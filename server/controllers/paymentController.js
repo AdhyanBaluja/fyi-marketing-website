@@ -77,7 +77,7 @@ exports.handleStripeWebhook = async (req, res) => {
 
   try {
     event = stripe.webhooks.constructEvent(
-      req.rawBody, // The raw body must be passed here.
+      req.body, // The raw body must be passed here.
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );

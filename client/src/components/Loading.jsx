@@ -27,7 +27,7 @@ function Loading() {
       try {
         setPollCount((prev) => prev + 1);
 
-        if (pollCount >= 30) {
+        if (pollCount >= 100) {
           setError('AI results are taking longer than expected. Please refresh or try again.');
           clearInterval(pollInterval);
           return;
