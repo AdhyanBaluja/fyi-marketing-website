@@ -13,9 +13,9 @@ exports.createCheckoutSession = async (req, res) => {
     // Convert amounts to pence (Stripe expects the smallest currency unit)
     let amountInPence;
     if (planName === 'Standard') {
-      amountInPence = 50 * 1; // £50
+      amountInPence = 50 * 1; // 
     } else if (planName === 'Premium') {
-      amountInPence = 100 * 1; // £100
+      amountInPence = 100 * 1; // £1
     } else {
       return res.status(400).json({ error: 'Invalid plan name' });
     }
