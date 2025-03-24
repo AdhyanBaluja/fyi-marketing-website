@@ -63,7 +63,7 @@ Use this JSON structure EXACTLY:
 - "calendarEvents": Include minimum 10 objects, each with:
    "date" , 
    "event" (please describle each event with 1-3 lines in an intelligent manner),
-   "platforms" ,
+   "platforms" (please output these as an array) ,
    "cta"(Psychological urgency triggers, Hyper-personalization, Persuasive NLP techniques),
    "captions"(60 words approx with 5 hashtags ,A scroll-stopping, high-impact headline designed for maximum curiosity and shares, Dopamine-driven storytelling ,Behavioral science principles, Viral trigger words, Algorithm-optimized engagement prompts, 5-8 hashtags
 
