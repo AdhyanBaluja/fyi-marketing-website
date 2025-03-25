@@ -71,9 +71,19 @@ Use this JSON structure EXACTLY:
    "suggestion",
    "strategy"
 
-- "moreAdvice": Provide at least 5 advanced tips for boosting brand consistency across social media.
-                Focus on psychological engagement, algorithmic optimization, and viral triggers in each tip.
-                Add information about gamification points, color palette and Brand Visual Guidelines,Restrictions/Compliance, Seasonal or Event Hooks
+- "moreAdvice": Identify 12 strategically selected influencers with:
+	•	Live, active accounts with recent posts.
+	•	Platform & Handle (e.g., Instagram: @username).
+	•	Relevance in 1-2 lines.
+
+  Influencer Criteria:
+	•	4 Macro-Influencers (500K – 1M+ followers)
+	•	4 Micro-Influencers (50K – 500K followers)
+	•	4 Nano-Influencers (10K – 50K followers)
+
+Source: Pull data from reliable influencer marketing platforms only (e.g., Upfluence, Heepsy, HypeAuditor).
+
+Location: London
 
 Return valid JSON only.
 ----

@@ -111,10 +111,10 @@ function BrandDashboard() {
           const fromInf = camp.requestsFromInfluencers || [];
 
           // brand->influencer invites => status=pending
-          toCount += toInf.filter(r => r.status === 'pending').length;
+          toCount += toInf.filter((r) => r.status === 'pending').length;
 
           // influencer->brand apps => status=applied
-          const applied = fromInf.filter(r => r.status === 'applied');
+          const applied = fromInf.filter((r) => r.status === 'applied');
           fromCount += applied.length;
 
           applied.forEach((r) => {
@@ -123,7 +123,7 @@ function BrandDashboard() {
               campaignName: campaignTitle,
               influencer: r.influencerId?.name || 'Unknown',
               influencerId: r.influencerId?._id,
-              status: r.status
+              status: r.status,
             });
           });
         });
@@ -165,9 +165,11 @@ function BrandDashboard() {
   const handleScrollToCampaigns = () => {
     campaignsRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
   const handleDashboardClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
   const handleStartCampaignClick = () => {
     if (membershipPlan === 'Free') {
       alert('AI Campaign Builder is locked. Please upgrade to Premium or Pro.');
@@ -175,10 +177,19 @@ function BrandDashboard() {
     }
     navigate('/brand/campaign-builder');
   };
+
   const handleFindInfluencersClick = () => {
     navigate('/find-influencer');
   };
-  const handleHelpClick = () => {};
+
+  const handleBuyPlanClick = () => {
+    navigate('/plans');
+  };
+
+  const handleHelpClick = () => {
+    // Implement help dialog or redirect here
+  };
+
   const handleLogoutClick = () => {
     localStorage.clear();
     navigate('/signin');
@@ -211,10 +222,9 @@ function BrandDashboard() {
       return;
     }
     try {
-      await axios.delete(
-        `${API_BASE_URL}/api/brand/campaigns/${campaignId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.delete(`${API_BASE_URL}/api/brand/campaigns/${campaignId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       fetchBrandDashboardData();
       fetchAllActiveEvents();
     } catch (err) {
@@ -270,7 +280,7 @@ function BrandDashboard() {
     snapchat: '#FFF66E',
     reddit: '#FFBA9E',
     twitch: '#C8ACFF',
-    default: '#CCCCCC'
+    default: '#CCCCCC',
   };
 
   const getDayStyle = (dayEvents) => {
@@ -288,7 +298,7 @@ function BrandDashboard() {
     if (platformSet.size === 0) {
       return {
         backgroundColor: '#B7D4D2',
-        color: '#001524'
+        color: '#001524',
       };
     }
 
@@ -298,7 +308,7 @@ function BrandDashboard() {
     if (colors.length === 1) {
       return {
         backgroundColor: colors[0],
-        color: '#333'
+        color: '#333',
       };
     } else {
       const step = 100 / (colors.length - 1);
@@ -306,7 +316,7 @@ function BrandDashboard() {
       const gradientStr = `linear-gradient(135deg, ${gradientParts.join(', ')})`;
       return {
         background: gradientStr,
-        color: '#333'
+        color: '#333',
       };
     }
   };
@@ -335,15 +345,8 @@ function BrandDashboard() {
   };
 
   const getEventsForDay = (day) => {
-    const dateString = new Date(calendarYear, calendarMonth, day)
-      .toISOString()
-      .split('T')[0];
+    const dateString = new Date(calendarYear, calendarMonth, day).toISOString().split('T')[0];
     return allActiveEvents.filter((ev) => ev.date?.startsWith(dateString));
-  };
-
-  const handleDayClick = (day) => {
-    const dayEvents = getEventsForDay(day);
-    setSelectedCalendarEvents(dayEvents);
   };
 
   return (
@@ -356,6 +359,8 @@ function BrandDashboard() {
           <li onClick={handleStartCampaignClick}>Start a Campaign</li>
           <li onClick={handleScrollToCampaigns}>Your Campaigns</li>
           <li onClick={handleFindInfluencersClick}>Find Influencers</li>
+          {/* NEW BUY PLAN NAV ITEM */}
+          <li onClick={handleBuyPlanClick}>Buy Plan</li>
           <li onClick={handleHelpClick}>Help</li>
           <li onClick={handleLogoutClick}>Logout</li>
         </ul>
@@ -406,7 +411,7 @@ function BrandDashboard() {
         </div>
       </section>
 
-      {/* Influencer Applications Section (always visible) */}
+      {/* Influencer Applications Section */}
       <section className="applications-section fade-in-up">
         <h2>Influencer Applications</h2>
         {influencerApplications.length === 0 ? (
@@ -420,10 +425,7 @@ function BrandDashboard() {
                   <strong>Influencer:</strong> {app.influencer}
                 </p>
                 <p>Status: {app.status}</p>
-                <button
-                  onClick={() => handleAcceptInfluencerRequest(app.requestId)}
-                  className="accept-btn"
-                >
+                <button onClick={() => handleAcceptInfluencerRequest(app.requestId)} className="accept-btn">
                   Accept
                 </button>
               </div>
@@ -466,10 +468,7 @@ function BrandDashboard() {
                       <option value="Paused">Paused</option>
                       <option value="Completed">Completed</option>
                     </select>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDeleteCampaign(c._id)}
-                    >
+                    <button className="delete-btn" onClick={() => handleDeleteCampaign(c._id)}>
                       Delete
                     </button>
                   </td>
@@ -498,32 +497,28 @@ function BrandDashboard() {
           </button>
         </div>
         <div className="calendar-grid">
-          {Array.from({ length: new Date(calendarYear, calendarMonth + 1, 0).getDate() }).map(
-            (_, idx) => {
-              const day = idx + 1;
-              const dayEvents = getEventsForDay(day);
-              const styleForDay = getDayStyle(dayEvents);
+          {Array.from({
+            length: new Date(calendarYear, calendarMonth + 1, 0).getDate(),
+          }).map((_, idx) => {
+            const day = idx + 1;
+            const dayEvents = getEventsForDay(day);
+            const styleForDay = getDayStyle(dayEvents);
 
-              return (
-                <div
-                  key={day}
-                  className="calendar-day"
-                  style={styleForDay}
-                  onClick={() => setSelectedCalendarEvents(dayEvents)}
-                >
-                  <span className="day-number">{day}</span>
-                  {dayEvents.length > 1 && (
-                    <div className="event-title">{dayEvents.length} events</div>
-                  )}
-                  {dayEvents.length === 1 && (
-                    <div className="event-title">
-                      {dayEvents[0].event || 'No Title'}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-          )}
+            return (
+              <div
+                key={day}
+                className="calendar-day"
+                style={styleForDay}
+                onClick={() => setSelectedCalendarEvents(dayEvents)}
+              >
+                <span className="day-number">{day}</span>
+                {dayEvents.length > 1 && <div className="event-title">{dayEvents.length} events</div>}
+                {dayEvents.length === 1 && (
+                  <div className="event-title">{dayEvents[0].event || 'No Title'}</div>
+                )}
+              </div>
+            );
+          })}
         </div>
         {selectedCalendarEvents && selectedCalendarEvents.length > 0 && (
           <div className="day-details">
@@ -548,13 +543,37 @@ function BrandDashboard() {
 
               return (
                 <div key={i} className="day-event-card">
-                  <p><strong>Date:</strong> {ev.date}</p>
-                  <p><strong>Event:</strong> {ev.event || 'No event'}</p>
-                  {ev.platforms && <p><strong>Platforms:</strong> {platformsStr}</p>}
-                  {ev.campaignName && <p><strong>Campaign:</strong> {ev.campaignName}</p>}
-                  {ev.cta && <p><strong>CTA:</strong> {ev.cta}</p>}
-                  {ev.captions && <p><strong>Captions:</strong> {ev.captions}</p>}
-                  {ev.kpis && <p><strong>KPIs:</strong> {kpisStr}</p>}
+                  <p>
+                    <strong>Date:</strong> {ev.date}
+                  </p>
+                  <p>
+                    <strong>Event:</strong> {ev.event || 'No event'}
+                  </p>
+                  {ev.platforms && (
+                    <p>
+                      <strong>Platforms:</strong> {platformsStr}
+                    </p>
+                  )}
+                  {ev.campaignName && (
+                    <p>
+                      <strong>Campaign:</strong> {ev.campaignName}
+                    </p>
+                  )}
+                  {ev.cta && (
+                    <p>
+                      <strong>CTA:</strong> {ev.cta}
+                    </p>
+                  )}
+                  {ev.captions && (
+                    <p>
+                      <strong>Captions:</strong> {ev.captions}
+                    </p>
+                  )}
+                  {ev.kpis && (
+                    <p>
+                      <strong>KPIs:</strong> {kpisStr}
+                    </p>
+                  )}
                 </div>
               );
             })}

@@ -27,9 +27,10 @@ const UserSchema = new mongoose.Schema({
   // New fields for membership plan
   membershipPlan: {
     type: String,
-    enum: ['Free', 'Pro', 'Enterprise'],
+    enum: ['Free', 'Standard', 'Premium'],
     default: 'Free',
   },
+  
   planExpiresAt: { type: Date, default: null },
   // Array of strings for any features or items the user has access to
   accessItems: [
