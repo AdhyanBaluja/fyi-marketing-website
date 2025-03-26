@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css'; 
 import AiChatbot from './AiChatbot.jsx';
-import NavBar from './NavBar.jsx';  // your separate NavBar component
-import axios from 'axios'; // Minimal addition for the token check
+import NavBar from './NavBar.jsx';
+import axios from 'axios';
 
-// Asset imports
+// Import the local MP4 file
+import landingPageVideo from '../assets/landingPage.mp4';
+
+// Import images
 import benefitsBkg from '../assets/benefitsBkg.png';
 import brandimg1 from '../assets/leftimg.png';
 import brandimg2 from '../assets/rightimg.png';
@@ -24,6 +27,61 @@ const iconTrust  = 'https://cdn-icons-png.flaticon.com/512/709/709624.png';
 // Define API base URL from env variable; fallback to localhost for development
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
+
+// ----- Simple Typewriter Component ----- //
+function TypewriterTitle() {
+  const typedWords = ['nfluence....', 'nsights....', 'nteraction....', 'nnovation....', 'mpact....'];
+
+// Slower typing, slower deleting, longer pause
+const TYPING_SPEED = 120;     // was 120
+const DELETING_SPEED = 60;   // was 70
+const PAUSE_TIME = 1500;     // was 800 (now 1.5s)
+
+
+  const [text, setText] = useState('');
+  const [wordIndex, setWordIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [pause, setPause] = useState(false);
+
+  useEffect(() => {
+    if (pause) return;
+
+    const currentWord = typedWords[wordIndex];
+    const isWordComplete = charIndex === currentWord.length;
+    const isWordEmpty = charIndex === 0;
+
+    let speed = isDeleting ? DELETING_SPEED : TYPING_SPEED;
+
+    if (!isDeleting && isWordComplete) {
+      setPause(true);
+      setTimeout(() => {
+        setIsDeleting(true);
+        setPause(false);
+      }, PAUSE_TIME);
+    } else if (isDeleting && isWordEmpty) {
+      setIsDeleting(false);
+      setWordIndex((prev) => (prev + 1) % typedWords.length);
+    } else {
+      const timer = setTimeout(() => {
+        setCharIndex((prev) => prev + (isDeleting ? -1 : 1));
+      }, speed);
+      return () => clearTimeout(timer);
+    }
+  }, [charIndex, isDeleting, pause, typedWords, wordIndex]);
+
+  useEffect(() => {
+    setText(typedWords[wordIndex].substring(0, charIndex));
+  }, [charIndex, typedWords, wordIndex]);
+
+  return (
+    <h1 className="hero-title">
+      Let’s FYI<span className="typewriter-text" style={{ whiteSpace: 'nowrap' }}>{text}</span>
+    </h1>
+  );
+}
+
+
 function LandingPage() {
   const navigate = useNavigate();
 
@@ -34,7 +92,6 @@ function LandingPage() {
   // Track scroll for NavBar background effect
   const [scrolled, setScrolled] = useState(false);
 
-  // On mount, read from localStorage, then check token validity
   useEffect(() => {
     const storedLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const storedUserType = localStorage.getItem('userType');
@@ -92,16 +149,12 @@ function LandingPage() {
 
       {/* ========== HERO SECTION ========== */}
       <section className="hero-section">
-        {/* Video background container */}
+        {/* Local video background container (replaces the old YouTube iframe) */}
         <div className="hero-video-container">
-          <iframe
-            className="hero-video"
-            src="https://www.youtube.com/embed/V3cB0WmBV5M?autoplay=1&mute=1&controls=0&loop=1&playlist=V3cB0WmBV5M"
-            title="Background Video"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          />
+          <video className="hero-video" autoPlay muted loop>
+            <source src={landingPageVideo} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
           <div className="hero-overlay"></div>
         </div>
 
@@ -119,10 +172,13 @@ function LandingPage() {
 
         {/* Centered hero content */}
         <div className="hero-content">
-          <h1 className="hero-title">
-            Free <em>and easy</em> influencer &amp; creator<br />
-            marketing platform
-          </h1>
+          <TypewriterTitle />
+
+          {/* New smaller text below the typewriter */}
+          <p className="hero-subtitle">
+            Get started today to know more
+          </p>
+
           <div className="hero-cta">
             <button
               className="cta-button influencer-cta"

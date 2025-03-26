@@ -1,7 +1,13 @@
 /* LandingPage.css */
 
 /* Load Poppins font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+/* Load both Poppins and a cursive font */
+/* Load Poppins and Montserrat */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap');
+/* Load both Poppins and a cursive font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Dancing+Script:wght@400;700&display=swap');
+
+
 
 * {
   margin: 0;
@@ -634,4 +640,24 @@ body {
   .footer-links {
     gap: 0.5rem;
   }
+}
+
+/* Make the typed portion use the new cursive font & a subtle glow */
+/* Typewriter text uses Montserrat, a subtle glow, and no italics */
+.hero-title .typewriter-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  /* Slight text shadow for emphasis, reduce the glow */
+  text-shadow: 1px 1px 3px rgba(255, 125, 0, 0.4);
+  transition: color 0.3s ease;
+}
+
+/* Subtitle: also Montserrat, no italics, keep it smaller and centered */
+.hero-subtitle {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.8rem; /* keep your original size */
+  margin-top: 0.5rem;
+  color: #fff;
+  text-align: center;
+  font-style: italic;
 }
