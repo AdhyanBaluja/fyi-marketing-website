@@ -1,22 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './NavBar.css'; // Optional: if you want separate styling
+import './NavBar.css';
 
-import logoBird from '../assets/newLogo.png'; // Adjust path if needed
+import logoBird from '../assets/newLogo.png';
 
 /**
- * NavBar component that:
- * - Shows letFYI logo + brand name.
- * - If user is logged in & is a brand, shows "Buy Premium Plan" button.
- * - If user is logged in (brand or influencer), shows a profile circle.
- * - Sign In / Sign Up buttons appear only on LandingPage.
- * - Clicking on the brand name or logo navigates accordingly:
- *    - if not logged in => goes to Sign In,
- *    - if brand => /brand/dashboard,
- *    - if influencer => /influencer/dashboard.
+ * Enhanced NavBar component with animations and interactive effects:
+ * - Shows letFYI logo + brand name with animations
+ * - Dynamic background with gradient shift
+ * - Interactive elements with hover and click effects
+ * - Responsive design with mobile adaptations
+ * - If user is logged in & is a brand, shows "Buy Premium Plan" button
+ * - If user is logged in (brand or influencer), shows a profile circle
+ * - Clicking on the brand name or logo navigates accordingly
  */
+
 function NavBar({ isLoggedIn, userType, scrolled }) {
   const navigate = useNavigate();
+  const [showLoadingEffect, setShowLoadingEffect] = useState(true);
+  const navbarRef = useRef(null);
+  const buttonsRef = useRef([]);
 
   // Handle clicking on the brand logo/title
   const handleTitleClick = () => {
@@ -40,17 +43,81 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
     else navigate('/influencer/dashboard');
   };
 
+  // Magnetic button effect
+  const handleButtonMouseMove = (e, index) => {
+    const button = buttonsRef.current[index];
+    if (!button) return;
+    
+    const rect = button.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const moveX = (x - centerX) / 5;
+    const moveY = (y - centerY) / 5;
+    
+    button.style.transform = `translate(${moveX}px, ${moveY}px)`;
+  };
+
+  const handleButtonMouseLeave = (index) => {
+    const button = buttonsRef.current[index];
+    if (!button) return;
+    button.style.transform = 'translate(0, 0)';
+  };
+
+  // Initialize animations and effects on component mount
+  useEffect(() => {
+    // Remove loading effect after animation completes
+    const timer = setTimeout(() => {
+      setShowLoadingEffect(false);
+    }, 2000);
+
+    // Add event listeners for magnetic effect
+    buttonsRef.current.forEach((button, index) => {
+      if (!button) return;
+      
+      button.addEventListener('mousemove', (e) => handleButtonMouseMove(e, index));
+      button.addEventListener('mouseleave', () => handleButtonMouseLeave(index));
+    });
+
+    return () => {
+      clearTimeout(timer);
+      
+      // Clean up event listeners
+      buttonsRef.current.forEach((button, index) => {
+        if (!button) return;
+        
+        button.removeEventListener('mousemove', (e) => handleButtonMouseMove(e, index));
+        button.removeEventListener('mouseleave', () => handleButtonMouseLeave(index));
+      });
+    };
+  }, []);
+
   return (
-    <nav className={`navbar ${scrolled ? 'navbar-scrolled' : ''}`}>
+    <nav 
+      ref={navbarRef}
+      className={`navbar ${scrolled ? 'navbar-scrolled' : ''} ${showLoadingEffect ? 'loading' : ''}`}
+    >
+      {/* Background pattern for extra visual interest */}
+      <div className="navbar-pattern"></div>
+      
       <div className="navbar-left" onClick={handleTitleClick}>
-        <img src={logoBird} alt="FYI logo" className="navbar-logo" />
-        <h1 className="navbar-title">Let’sFYI</h1>
-      </div>
+  <div className="logo-container">
+    <img src={logoBird} alt="FYI logo" className="navbar-logo" />
+  </div>
+  <h1 className="navbar-title typing-animation">Let'sFYI</h1>
+</div>
 
       <div className="navbar-right">
         {/* Show "Buy Premium Plan" button only if user is logged in as a brand */}
         {isLoggedIn && userType === 'brand' && (
-          <button className="navbar-btn plan-btn" onClick={handleBuyPremium}>
+          <button 
+            ref={el => buttonsRef.current[0] = el}
+            className="navbar-btn plan-btn clip-animation" 
+            onClick={handleBuyPremium}
+          >
             Buy Premium Plan
           </button>
         )}
@@ -67,7 +134,29 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
               alt="Profile"
               className="profile-img"
             />
+            {/* Uncomment for notification indicator */}
+            {/* <span className="notification-badge"></span> */}
           </div>
+        )}
+        
+        {/* Show Sign In / Sign Up buttons when not logged in */}
+        {!isLoggedIn && (
+          <>
+            <button 
+              ref={el => buttonsRef.current[1] = el}
+              className="navbar-btn" 
+              onClick={() => navigate('/signin')}
+            >
+              Sign In
+            </button>
+            <button 
+              ref={el => buttonsRef.current[2] = el}
+              className="navbar-btn plan-btn" 
+              onClick={() => navigate('/signup')}
+            >
+              Sign Up
+            </button>
+          </>
         )}
       </div>
     </nav>

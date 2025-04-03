@@ -7,44 +7,112 @@
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.8);
+  background: linear-gradient(90deg, rgba(21,97,109,0.8), rgba(11,59,64,0.8), rgba(21,97,109,0.8));
+  background-size: 200% 100%;
+  animation: gradientShift 8s ease infinite;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.6rem 2rem;
   z-index: 999;
-  transition: background-color 0.3s, box-shadow 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s, backdrop-filter 0.5s ease;
   font-family: "Poppins", sans-serif;
+  backdrop-filter: blur(0px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .navbar-scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.navbar-title {
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.navbar-logo {
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
 }
 
 .navbar-left {
   display: flex;
   align-items: center;
   cursor: pointer;
+  position: relative;
+}
+
+.navbar-left::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -8px;
+  left: 0;
+  background-color: #ffffff;
+  transition: width 0.3s ease;
+}
+
+.navbar-left:hover::before {
+  width: 100%;
 }
 
 .navbar-logo {
   height: 40px;
   margin-right: 0.8rem;
+  animation: logoPulse 3s ease-in-out infinite;
+  /* Add stronger drop shadow for visibility */
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5)) 
+          drop-shadow(0 0 5px rgba(21, 97, 109, 0.7));
+  /* Add slight border */
+  border-radius: 50%;
+  /* Add glow effect */
+  transition: all 0.3s ease;
+}
+.navbar-logo:hover {
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5)) 
+          drop-shadow(0 0 8px rgba(21, 97, 109, 0.9))
+          brightness(1.1);
+}
+
+
+.navbar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: -1;
 }
 
 .navbar-title {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #15616D;
+  color: #ffffff;
   letter-spacing: 1px;
   margin: 0;
-  transition: transform 0.3s;
-  font-family: 'Satoshi', sans-serif; /* Added Satoshi font here */
+  transition: all 0.3s;
+  font-family: 'Satoshi', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-title::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  animation: textReveal 1.5s cubic-bezier(0.77, 0, 0.18, 1) forwards;
 }
 
 .navbar-title:hover {
   transform: scale(1.05);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  color: #FFFFFF;
 }
 
 .navbar-right {
@@ -53,32 +121,79 @@
   gap: 1rem;
 }
 
+.navbar-right > * {
+  transition: transform 0.3s ease;
+  animation: float 3s ease-in-out infinite;
+}
+
+.navbar-right > *:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.navbar-right > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.navbar-right > *:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
 .navbar-btn {
   border: none;
-  background: #15616D;
+  background: rgba(21,97,109,0.8);
   color: #fff;
   font-size: 0.95rem;
   cursor: pointer;
   border-radius: 4px;
   padding: 0.4rem 0.8rem;
-  transition: background 0.3s, color 0.3s;
+  transition: all 0.3s;
   font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn::after {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: scale(0);
+  transform-origin: center;
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+}
+
+.navbar-btn:active::after {
+  animation: ripple 0.6s ease-out;
 }
 
 .navbar-btn:hover {
-  background: #0B3B40; /* darker shade */
+  background: #0B3B40;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 .plan-btn {
-  border: 2px solid #15616D;
-  background: #fff;
-  color: #15616D;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background: transparent;
+  color: #ffffff;
   margin-right: 0.5rem;
+  box-shadow: inset 0 0 0 0 #15616D;
+  transition: all 0.3s ease-out;
 }
 
 .plan-btn:hover {
-  background: #15616D;
+  background: transparent;
   color: #fff;
+  box-shadow: inset 200px 0 0 0 #15616D;
 }
 
 .profile-circle {
@@ -86,22 +201,289 @@
   height: 42px;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid #15616D;
+  border: 2px solid rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 0.3s;
+  transition: all 0.3s;
+  position: relative;
+  box-shadow: 0 0 10px rgba(21, 97, 109, 0.4);
+}
+
+.profile-circle::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(90deg, #15616D, #0B3B40, #15616D) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: borderRotate 2s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.profile-circle:hover::before {
+  opacity: 1;
 }
 
 .profile-circle:hover {
   transform: scale(1.05);
+  border-color: #15616D;
+}
+
+.profile-circle:hover .profile-img {
+  animation: profileSpin 0.8s ease;
 }
 
 .profile-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: all 0.3s;
+}
+
+/* Glow effect for navbar on scroll */
+.navbar::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  transform: scaleX(0);
+  transition: transform 0.5s;
+}
+
+.navbar-scrolled::after {
+  transform: scaleX(1);
+}
+
+/* Hover effect for navbar buttons */
+.navbar-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.navbar-btn:hover::before {
+  left: 100%;
+}
+
+/* Navbar menu underline effect (add class to nav links if you have them) */
+.nav-link {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  transform: scaleX(0);
+  transition: transform 0.3s;
+  transform-origin: right;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Loading bar effect for top of navbar */
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #15616D, #83c5be);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.logo-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-container::before {
+  content: '';
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(3px);
+  z-index: -1;
+}
+
+.navbar.loading::before {
+  animation: loadingBar 2s ease-out forwards;
+}
+
+/* Notification pulse for profile (add a span with class .notification-badge to profile-circle) */
+.notification-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background-color: #ff4757;
+  border-radius: 50%;
+  animation: notificationPulse 2s infinite;
+}
+
+/* Cool background pattern */
+.navbar-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ========== KEYFRAMES ANIMATIONS ========== */
+
+@keyframes gradientShift {
+  0% {background-position: 0% 50%}
+  50% {background-position: 100% 50%}
+  100% {background-position: 0% 50%}
+}
+
+@keyframes logoPulse {
+  0%, 100% {transform: scale(1);}
+  50% {transform: scale(1.08);}
+}
+
+@keyframes textReveal {
+  0% {transform: translateX(0%);}
+  100% {transform: translateX(101%);}
+}
+
+@keyframes float {
+  0%, 100% {transform: translateY(0px);}
+  50% {transform: translateY(-4px);}
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes profileSpin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+@keyframes borderRotate {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+@keyframes loadingBar {
+  0% {transform: scaleX(0);}
+  100% {transform: scaleX(1);}
+}
+
+@keyframes notificationPulse {
+  0% {transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);}
+  70% {transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);}
+  100% {transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);}
+}
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5)) 
+            drop-shadow(0 0 5px rgba(21, 97, 109, 0.7));
+  }
+  50% {
+    transform: scale(1.08) rotate(2deg);
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.6)) 
+            drop-shadow(0 0 8px rgba(21, 97, 109, 0.9));
+  }
+}
+
+/* For magnetic effect (JavaScript required - add this function in your JS file) */
+/*
+function magneticButtons() {
+  const buttons = document.querySelectorAll('.navbar-btn');
+
+  buttons.forEach(button => {
+    button.addEventListener('mousemove', (e) => {
+      const rect = button.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const moveX = (x - centerX) / 5;
+      const moveY = (y - centerY) / 5;
+      
+      button.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+    
+    button.addEventListener('mouseleave', () => {
+      button.style.transform = 'translate(0, 0)';
+    });
+  });
+}
+*/
+
+/* Typing animation for title (can be triggered on page load) */
+@keyframes typing {
+  from {width: 0;}
+  to {width: 100%;}
+}
+
+.typing-animation {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0;
+  animation: typing 2.5s steps(40, end);
+}
+
+/* Clip path animations for navbar elements */
+.clip-animation {
+  clip-path: inset(0 100% 0 0);
+  animation: revealClip 1s forwards;
+}
+
+@keyframes revealClip {
+  from {clip-path: inset(0 100% 0 0);}
+  to {clip-path: inset(0 0 0 0);}
 }
 
 /* ========== MEDIA QUERIES ========== */
@@ -140,6 +522,9 @@
   .navbar-left {
     margin-bottom: 0.5rem;      /* Spacing below logo/title */
   }
+  .navbar-left {
+    position: relative;
+  }
 
   .navbar-title {
     font-size: 1.2rem;
@@ -163,4 +548,30 @@
     width: 36px;
     height: 36px;
   }
+
+  /* Adjusted animations for mobile */
+  .navbar-right > * {
+    animation: none; /* Turn off floating animation on mobile for better usability */
+  }
 }
+
+/* JavaScript to enable some of the effects (add to your JS file) */
+/*
+document.addEventListener('DOMContentLoaded', function() {
+  // Loading bar effect on page load
+  const navbar = document.querySelector('.navbar');
+  navbar.classList.add('loading');
+  
+  // Scroll effect
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 50) {
+      navbar.classList.add('navbar-scrolled');
+    } else {
+      navbar.classList.remove('navbar-scrolled');
+    }
+  });
+  
+  // Initialize magnetic buttons
+  magneticButtons();
+});
+*/
