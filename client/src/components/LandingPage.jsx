@@ -165,16 +165,7 @@ function LandingPage() {
         </div>
 
         {/* Sign In / Sign Up at top-right only if user is NOT logged in */}
-        {!isLoggedIn && (
-          <div className="hero-header">
-            <button className="auth-btn" onClick={handleSignUp}>
-              SIGN UP
-            </button>
-            <button className="auth-btn" onClick={handleSignIn}>
-              SIGN IN
-            </button>
-          </div>
-        )}
+        
 
         {/* Centered hero content */}
         <div className="hero-content">
