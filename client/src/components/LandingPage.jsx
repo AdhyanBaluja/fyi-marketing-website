@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css'; 
 import AiChatbot from './AiChatbot.jsx';
@@ -10,10 +10,13 @@ import landingPageVideo from '../assets/landingPage.mp4';
 
 // Import images
 import benefitsBkg from '../assets/benefitsBkg.png';
-import brandimg1 from '../assets/leftimg.png';
-import brandimg2 from '../assets/rightimg.png';
-import inflimg1 from '../assets/leftimg.png';
-import inflimg2 from '../assets/rightimg.png';
+
+// Use different left and right images for brand & influencer
+import brandLeft from '../assets/brandLeft.png';
+import brandRight from '../assets/brandRight.png';
+import inflLeft from '../assets/inflLeft.png';
+import inflRight from '../assets/inflRight.png';
+
 import dashboardImg from '../assets/dashboard.png';
 
 // Example icons
@@ -30,13 +33,16 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:400
 
 // ----- Simple Typewriter Component ----- //
 function TypewriterTitle() {
-  const typedWords = ['nfluence....', 'nsights....', 'nteraction....', 'nnovation....', 'mpact....'];
+  // Wrap the array in useMemo to avoid re-creating it on each render
+  const typedWords = useMemo(
+    () => ['nfluence....', 'nsights....', 'nteraction....', 'nnovation....', 'mpact....'],
+    []
+  );
 
-// Slower typing, slower deleting, longer pause
-const TYPING_SPEED = 120;     // was 120
-const DELETING_SPEED = 60;   // was 70
-const PAUSE_TIME = 1500;     // was 800 (now 1.5s)
-
+  // Slower typing, slower deleting, longer pause
+  const TYPING_SPEED = 120;     
+  const DELETING_SPEED = 60;   
+  const PAUSE_TIME = 1500;     
 
   const [text, setText] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
@@ -76,7 +82,7 @@ const PAUSE_TIME = 1500;     // was 800 (now 1.5s)
 
   return (
     <h1 className="hero-title">
-      Let’s FYI<span className="typewriter-text" style={{ whiteSpace: 'nowrap' }}>{text}</span>
+      Let’sFYI<span className="typewriter-text" style={{ whiteSpace: 'nowrap' }}>{text}</span>
     </h1>
   );
 }
@@ -184,13 +190,13 @@ function LandingPage() {
               className="cta-button influencer-cta"
               onClick={handleInfluencerClick}
             >
-              I AM AN INFLUENCER
+              I AM INFLUENCER
             </button>
             <button
               className="cta-button brand-cta"
               onClick={handleBrandClick}
             >
-              I AM A BRAND
+              I AM BRAND
             </button>
           </div>
         </div>
@@ -211,27 +217,27 @@ function LandingPage() {
             </p>
             <div className="benefits-boxes">
               <div className="benefit-box">
-                <img src={iconAi} alt="AI" />
+                <img className="orange-icon" src={iconAi} alt="AI" />
                 <span>AI Powered</span>
               </div>
               <div className="benefit-box">
-                <img src={iconIdeas} alt="Ideas" />
+                <img className="orange-icon" src={iconIdeas} alt="Ideas" />
                 <span>Personalised Influencer Campaigns</span>
               </div>
               <div className="benefit-box">
-                <img src={iconSeam} alt="Seamless" />
+                <img className="orange-icon" src={iconSeam} alt="Seamless" />
                 <span>Seamless Collaboration</span>
               </div>
               <div className="benefit-box">
-                <img src={iconDiverse} alt="Diverse" />
+                <img className="orange-icon" src={iconDiverse} alt="Diverse" />
                 <span>Diverse Creators</span>
               </div>
               <div className="benefit-box">
-                <img src={iconGlobal} alt="Global" />
+                <img className="orange-icon" src={iconGlobal} alt="Global" />
                 <span>Global Reach</span>
               </div>
               <div className="benefit-box">
-                <img src={iconTrust} alt="Trusted" />
+                <img className="orange-icon" src={iconTrust} alt="Trusted" />
                 <span>Trusted Partnerships</span>
               </div>
             </div>
@@ -241,11 +247,11 @@ function LandingPage() {
 
       {/* ========== BRAND OFFERINGS ========== */}
       <section className="brand-offerings-page">
-        <h2 className="page-title">Brand Offerings</h2>
+        <h2 className="benefits-heading">BRAND OFFERINGS</h2>
         <div className="offerings-big-container">
           <div className="offering-box old-colors">
             <img
-              src={brandimg1}
+              src={brandLeft}
               alt="Brand 1"
               className="offering-img hover-zoom"
             />
@@ -258,7 +264,7 @@ function LandingPage() {
 
           <div className="offering-box old-colors">
             <img
-              src={brandimg2}
+              src={brandRight}
               alt="Brand 2"
               className="offering-img hover-zoom"
             />
@@ -273,11 +279,11 @@ function LandingPage() {
 
       {/* ========== INFLUENCER OFFERINGS ========== */}
       <section className="influencer-offerings-page">
-        <h2 className="page-title">Influencer Offerings</h2>
+        <h2 className="benefits-heading">INFLUENCER OFFERINGS</h2>
         <div className="offerings-big-container">
           <div className="offering-box old-colors">
             <img
-              src={inflimg1}
+              src={inflLeft}
               alt="Infl 1"
               className="offering-img hover-zoom"
             />
@@ -291,7 +297,7 @@ function LandingPage() {
 
           <div className="offering-box old-colors">
             <img
-              src={inflimg2}
+              src={inflRight}
               alt="Infl 2"
               className="offering-img hover-zoom"
             />
@@ -319,7 +325,7 @@ function LandingPage() {
       {/* ========== FOOTER ========== */}
       <footer className="brand-footer">
         <div className="footer-content">
-          <h4>© 2025 letFYI</h4>
+          <h4>© 2025 Let’sFYI</h4>
           <div className="footer-links">
             <a href="#0">Terms &amp; Conditions</a>
             <a href="#0">Privacy Policy</a>

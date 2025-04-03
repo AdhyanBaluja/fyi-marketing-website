@@ -7,8 +7,6 @@
 /* Load both Poppins and a cursive font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Dancing+Script:wght@400;700&display=swap');
 
-
-
 * {
   margin: 0;
   padding: 0;
@@ -130,7 +128,7 @@ body {
 }
 
 .hero-title {
-  font-size: 3rem;
+  font-size: 95px;
   line-height: 1.2;
   margin-bottom: 2rem;
   font-weight: 700;
@@ -145,7 +143,7 @@ body {
 /* CTA buttons for "I AM AN INFLUENCER" / "I AM A BRAND" */
 .hero-cta {
   display: flex;
-  gap: 1.5rem;
+  gap: 4rem;
   margin-bottom: 1.5rem; /* spacing above other hero elements */
 }
 
@@ -167,9 +165,9 @@ body {
 }
 
 .brand-cta:hover {
-  background-color: #15616D;
+  background-color: #FF7D00;
   color: #FFECD1;
-  border-color: #15616D;
+  border-color: #FF7D00;
 }
 
 /* ========== BENEFITS SECTION ========== */
@@ -242,6 +240,13 @@ body {
   object-fit: contain;
 }
 
+/* Make icon orange using filter (assuming original icons are black or dark) */
+.orange-icon {
+  /* Approximate #FF7D00 using filter.
+     Works best if the source icon is white or very light. */
+  filter: brightness(0) saturate(100%) invert(26%) sepia(100%) hue-rotate(2deg) saturate(4000%) brightness(90%);
+}
+
 /* ========== BRAND OFFERINGS ========== */
 .brand-offerings-page {
   background: #FFECD1;
@@ -252,6 +257,15 @@ body {
   justify-content: center;
   text-align: center;
   padding: 3rem 2rem;
+  color: #001524;
+}
+
+/* Matching the style of "FROM CONCEPT TO CONVERSION" but ensuring it's legible on a light background */
+.benefits-heading {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-align: center;
   color: #001524;
 }
 
@@ -650,13 +664,13 @@ body {
   /* Slight text shadow for emphasis, reduce the glow */
   text-shadow: 1px 1px 3px rgba(255, 125, 0, 0.4);
   transition: color 0.3s ease;
+  
 }
 
 /* Subtitle: also Montserrat, no italics, keep it smaller and centered */
 .hero-subtitle {
   font-family: 'Dancing Script', cursive;
-  font-size: 1.8rem; /* keep your original size */
-  margin-top: 0.5rem;
+  font-size: 35px; /* keep your original size */
   color: #fff;
   text-align: center;
   font-style: italic;

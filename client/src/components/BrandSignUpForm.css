@@ -7,65 +7,46 @@ body {
 }
 
 /* 
-  Let the container grow and be scrollable 
-  so if the form extends beyond one screen, user can scroll.
+  The container for the entire page,
+  including the NavBar at the top (which is fixed).
+  Give enough top padding/margin so form content isn't overlapped.
 */
 .brand-form-container {
-  position: relative;
+  background-color: #15616D; /* plain teal background */
   min-height: 100vh;
-  overflow-y: auto;
-}
-
-/* ---- The embedded YouTube background ---- */
-.video-background {
-  position: fixed; 
-  /* fixed so it stays put when scrolling */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -2; /* behind everything */
-  overflow: hidden;
-}
-
-/* Full-size iframe covering the screen */
-.video-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-/* Dark overlay on top of the video for readability */
-.video-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,21,36,0.4); /* using #001524 with transparency */
-  z-index: -1; 
+  padding-top: 80px; /* avoid overlap from fixed NavBar */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* form starts at top, can scroll if needed */
 }
 
 /* 
-  The content (form) 
-  We'll center it but let it scroll as needed 
+  The content block (the form) 
+  We'll center it horizontally, 
+  and separate from container background
 */
 .brand-form-content {
   width: 90%;
   max-width: 500px;
-  background-color: #FFECD1; /* replaced #fff with light palette color */
-  margin: 2rem auto;
+  background-color: #FFECD1; /* brand's light beige */
   border-radius: 8px;
   box-shadow: 0 6px 20px rgba(0,21,36,0.2);
   text-align: center;
   padding: 2rem;
+  margin: 2rem auto; /* some vertical margin */
 }
 
 /* Title */
 .brand-form-content h2 {
   margin-bottom: 1.5rem;
   font-weight: 600;
-  color: #001524; /* replaced #333 with dark palette color */
+  color: #001524; 
+}
+
+/* Display any error message */
+.error-message {
+  color: red;
+  margin-bottom: 1rem;
 }
 
 /* Form groups */
@@ -96,6 +77,7 @@ body {
   outline: none;
   background-color: #FFECD1;
   color: #001524;
+  transition: border-color 0.3s;
 }
 
 .form-group input:focus,
@@ -104,9 +86,36 @@ body {
   border-color: #FF7D00;
 }
 
-.form-group small {
-  color: #15616D;
-  font-size: 0.8rem;
+/* The multi-select "Add" buttons */
+.add-btn {
+  margin-top: 0.5rem;
+  background-color: #FF7D00;
+  color: #FFECD1;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-btn:hover {
+  background-color: #78290F;
+}
+
+/* Selected items (tags) below the multi-select */
+.selected-items {
+  margin-top: 0.5rem;
+}
+
+.selected-tag {
+  display: inline-block;
+  background-color: #15616D;
+  color: #FFECD1;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  margin: 0.2rem;
+  font-size: 0.85rem;
 }
 
 /* Submit button */
@@ -123,6 +132,7 @@ body {
   margin-top: 1rem;
   transition: background-color 0.3s;
 }
+
 .submit-btn:hover {
   background-color: #78290F;
 }

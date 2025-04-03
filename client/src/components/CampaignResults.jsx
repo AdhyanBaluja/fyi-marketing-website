@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './CampaignResults.css';
+import NavBar from './NavBar';
 
 // Colors for single platforms
 const platformColors = {
@@ -175,6 +176,7 @@ function CampaignResults() {
 
   return (
     <div className="campaign-results-container">
+      <NavBar/>
       {/* Ephemeral images notice */}
       {showImageNotice && (
         <div

@@ -1,5 +1,8 @@
 /* NavBar.css */
 
+/* Load Satoshi font (example from Google Fonts or a known source) */
+@import url('https://fonts.googleapis.com/css2?family=Satoshi&display=swap');
+
 .navbar {
   position: fixed;
   top: 0;
@@ -37,6 +40,7 @@
   letter-spacing: 1px;
   margin: 0;
   transition: transform 0.3s;
+  font-family: 'Satoshi', sans-serif; /* Added Satoshi font here */
 }
 
 .navbar-title:hover {

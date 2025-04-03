@@ -1,0 +1,103 @@
+/* brandNav.css */
+
+/* Font import (matching the main dashboard font) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* Reset if desired */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* We assume the page (body) uses Poppins globally */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ============================= */
+/* BRAND NAV */
+/* ============================= */
+
+.brand-nav {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(0, 21, 36, 0.9);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+  /* Optional fade-in animation */
+  animation: fade-in-down 1s ease forwards;
+}
+
+.brand-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #FFECD1;
+  cursor: pointer;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links li {
+  color: #FFECD1;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.nav-links li:hover {
+  color: #FF7D00;
+  transform: scale(1.08);
+}
+
+/* ========== Keyframe: fade in from above ========== */
+@keyframes fade-in-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== MEDIA QUERIES ========== */
+
+/* Tablets and down */
+@media (max-width: 768px) {
+  .brand-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .nav-links {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Mobile and down */
+@media (max-width: 480px) {
+  .brand-nav {
+    padding: 0.5rem 1rem;
+  }
+  .brand-logo {
+    font-size: 1.3rem;
+  }
+  .nav-links {
+    gap: 0.4rem;
+  }
+  .nav-links li {
+    font-size: 0.9rem;
+  }
+}

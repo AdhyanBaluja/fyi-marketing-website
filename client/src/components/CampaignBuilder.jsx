@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './CampaignBuilder.css';
+import NavBar from './NavBar';
 
 // Use the environment variable for the API base URL, falling back to localhost if not set
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
@@ -145,6 +146,7 @@ function CampaignBuilder() {
 
   return (
     <div className="campaign-builder-full-page">
+      <NavBar/>
       <div className="campaign-builder-panel">
         <div className="campaign-builder-header">
           <h2>

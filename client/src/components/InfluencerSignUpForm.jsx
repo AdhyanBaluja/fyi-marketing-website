@@ -30,6 +30,7 @@ function InfluencerSignUpForm() {
     audienceGenderDemographics: ''
   });
 
+  // Multi-select fields
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [platformDetails, setPlatformDetails] = useState({});
@@ -37,6 +38,7 @@ function InfluencerSignUpForm() {
   const [tempIndustrySelection, setTempIndustrySelection] = useState([]);
   const [tempPlatformSelection, setTempPlatformSelection] = useState([]);
 
+  // Industry & Platform options
   const industryOptions = [
     'Agriculture', 'Aviation', 'Beauty', 'Biotechnology', 'Chemical',
     'Construction', 'Defense and Security', 'E-commerce', 'Education',
@@ -53,13 +55,13 @@ function InfluencerSignUpForm() {
     'TikTok', 'X', 'Youtube', 'Threads', 'Quora', 'Discord', 'Snapchat'
   ];
 
-  // For the user account info
+  // Handle user account info
   const handleUserChange = (e) => {
     const { name, value } = e.target;
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // For influencer-specific fields
+  // Handle influencer-specific fields
   const handleInfluencerChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -76,6 +78,7 @@ function InfluencerSignUpForm() {
     }
     setTempIndustrySelection(selected);
   };
+
   const handleAddIndustry = () => {
     const newIndustries = [...selectedIndustries];
     tempIndustrySelection.forEach((item) => {
@@ -107,6 +110,7 @@ function InfluencerSignUpForm() {
     });
     setSelectedPlatforms(newPlatforms);
 
+    // Initialize platform details if not present
     setPlatformDetails((prev) => {
       const newDetails = { ...prev };
       newPlatforms.forEach((p) => {
@@ -118,7 +122,7 @@ function InfluencerSignUpForm() {
     });
   };
 
-  // For each selected platform, handle the handle/price changes
+  // Handle handle/price changes for each selected platform
   const handlePlatformDetailChange = (platform, field, value) => {
     setPlatformDetails((prev) => ({
       ...prev,
@@ -129,19 +133,20 @@ function InfluencerSignUpForm() {
     }));
   };
 
-  // For submission
+  // Submit
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Combine all data
     const finalData = {
-      // The user info for the "User" doc
+      // User account info
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
       password: userData.password,
 
-      // The influencer doc fields
+      // Influencer fields
       name: formData.name,
       experience: formData.experience,
       numFollowers: formData.numFollowers,
@@ -155,10 +160,9 @@ function InfluencerSignUpForm() {
       industries: selectedIndustries,
       platforms: selectedPlatforms,
 
-      // Additional detail about each platform handle + price
+      // Additional platform details
       platformDetails
     };
-    console.log('Submitting influencer form data:', finalData);
 
     try {
       const res = await axios.post(
@@ -166,8 +170,6 @@ function InfluencerSignUpForm() {
         finalData
       );
       console.log('Influencer signup success:', res.data);
-
-      // On success, go to login
       navigate('/signin');
     } catch (error) {
       console.error('Error signing up influencer:', error);
@@ -179,26 +181,18 @@ function InfluencerSignUpForm() {
 
   return (
     <div className="influencer-form-container">
-      {/* NavBar at the top */}
       <NavBar />
-
-      <video
-        className="background-video"
-        src={require('../assets/IMG_3078.mov')}
-        autoPlay
-        muted
-        loop
-      />
-      <div className="video-overlay"></div>
-
+      
       <div className="influencer-form-box">
         <h2>Influencer Registration</h2>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <form onSubmit={handleSubmit}>
-          {/* ---------- User Fields (Required by backend) ---------- */}
+          {/* ---------- User Fields ---------- */}
           <div className="form-group">
-            <label>First Name <span>*</span></label>
+            <label>
+              First Name <span>*</span>
+            </label>
             <input
               type="text"
               name="firstName"
@@ -209,7 +203,9 @@ function InfluencerSignUpForm() {
           </div>
 
           <div className="form-group">
-            <label>Last Name <span>*</span></label>
+            <label>
+              Last Name <span>*</span>
+            </label>
             <input
               type="text"
               name="lastName"
@@ -220,7 +216,9 @@ function InfluencerSignUpForm() {
           </div>
 
           <div className="form-group">
-            <label>Email <span>*</span></label>
+            <label>
+              Email <span>*</span>
+            </label>
             <input
               type="email"
               name="email"
@@ -231,7 +229,9 @@ function InfluencerSignUpForm() {
           </div>
 
           <div className="form-group">
-            <label>Password <span>*</span></label>
+            <label>
+              Password <span>*</span>
+            </label>
             <input
               type="password"
               name="password"
@@ -243,7 +243,9 @@ function InfluencerSignUpForm() {
 
           {/* ---------- Influencer-Specific Fields ---------- */}
           <div className="form-group">
-            <label>Display Name <span>*</span></label>
+            <label>
+              Display Name <span>*</span>
+            </label>
             <input
               type="text"
               name="name"
@@ -254,7 +256,9 @@ function InfluencerSignUpForm() {
           </div>
 
           <div className="form-group">
-            <label>Experience (Years) <span>*</span></label>
+            <label>
+              Experience (Years) <span>*</span>
+            </label>
             <input
               type="number"
               name="experience"

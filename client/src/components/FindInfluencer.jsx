@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AiChatbot from "./AiChatbot.jsx";
 import axios from "axios";
 import "./FindInfluencer.css";
+import NavBar from "./NavBar.jsx";
 
 function FindInfluencer() {
   const navigate = useNavigate();
@@ -156,12 +157,20 @@ function FindInfluencer() {
     }
 
     // influencerLocation
-    if (filters.influencerLocation && filters.influencerLocation !== "--Select--") {
-      filtered = filtered.filter((inf) => inf.influencerLocation === filters.influencerLocation);
+    if (
+      filters.influencerLocation &&
+      filters.influencerLocation !== "--Select--"
+    ) {
+      filtered = filtered.filter(
+        (inf) => inf.influencerLocation === filters.influencerLocation
+      );
     }
 
     // majorityAudienceLocation
-    if (filters.majorityAudienceLocation && filters.majorityAudienceLocation !== "--Select--") {
+    if (
+      filters.majorityAudienceLocation &&
+      filters.majorityAudienceLocation !== "--Select--"
+    ) {
       filtered = filtered.filter(
         (inf) => inf.majorityAudienceLocation === filters.majorityAudienceLocation
       );
@@ -228,15 +237,27 @@ function FindInfluencer() {
   // 5) star rating
   const renderStars = (rating) => {
     if (rating == null || rating === 0) {
-      return <span style={{ color: "#15616D", fontSize: "0.9rem" }}>No rating yet</span>;
+      return (
+        <span style={{ color: "#15616D", fontSize: "0.9rem" }}>
+          No rating yet
+        </span>
+      );
     }
     const rounded = Math.round(rating);
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= rounded) {
-        stars.push(<span key={i} className="filled-star">★</span>);
+        stars.push(
+          <span key={i} className="filled-star">
+            ★
+          </span>
+        );
       } else {
-        stars.push(<span key={i} className="empty-star">★</span>);
+        stars.push(
+          <span key={i} className="empty-star">
+            ★
+          </span>
+        );
       }
     }
     return <>{stars}</>;
@@ -274,244 +295,263 @@ function FindInfluencer() {
   };
 
   return (
-    <div className="find-influencer-container">
-      {/* FILTERS SECTION */}
-      <div className="filters-section">
-        <h2>Find Influencers</h2>
+    <>
+      {/* Fixed NavBar at the top */}
+      <NavBar />
 
-        <div className="filter-item">
-          <label>Experience (Years)</label>
-          <input
-            type="number"
-            name="experience"
-            placeholder="Min years"
-            value={filters.experience}
-            onChange={handleChange}
-          />
-        </div>
+      {/* Main content container */}
+      <div className="find-influencer-container">
+        {/* FILTERS SECTION */}
+        <div className="filters-section">
+          <h2>Find Influencers</h2>
 
-        <div className="filter-item">
-          <label>Number of Followers</label>
-          <input
-            type="text"
-            name="followers"
-            placeholder="e.g., >10000"
-            value={filters.followers}
-            onChange={handleChange}
-          />
-        </div>
+          <div className="filter-item">
+            <label>Experience (Years)</label>
+            <input
+              type="number"
+              name="experience"
+              placeholder="Min years"
+              value={filters.experience}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="filter-item">
-          <label>Influencer Location</label>
-          <select
-            name="influencerLocation"
-            value={filters.influencerLocation}
-            onChange={handleChange}
-          >
-            {locationOptions.map((loc) => (
-              <option key={loc} value={loc}>
-                {loc}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="filter-item">
+            <label>Number of Followers</label>
+            <input
+              type="text"
+              name="followers"
+              placeholder="e.g., >10000"
+              value={filters.followers}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="filter-item">
-          <label>Majority Audience Location</label>
-          <select
-            name="majorityAudienceLocation"
-            value={filters.majorityAudienceLocation}
-            onChange={handleChange}
-          >
-            {locationOptions.map((loc) => (
-              <option key={loc} value={loc}>
-                {loc}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-item">
-          <label>Audience Age-Group Demographics</label>
-          <input
-            type="text"
-            name="audienceAgeGroup"
-            placeholder="e.g., 18–25"
-            value={filters.audienceAgeGroup}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="filter-item">
-          <label>Audience Gender Demographics</label>
-          <input
-            type="text"
-            name="audienceGenderDemographics"
-            placeholder="e.g., 70% Female"
-            value={filters.audienceGenderDemographics}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="filter-item">
-          <label>Industry Category</label>
-          <select
-            name="industry"
-            value={filters.industry}
-            onChange={handleChange}
-          >
-            <option value="">Select Industry</option>
-            {industryOptions.map((ind) => (
-              <option key={ind} value={ind}>
-                {ind}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Niche Platforms */}
-        <div className="filter-item">
-          <label>Niche Platforms</label>
-          <select multiple onChange={handlePlatformSelect}>
-            {platformOptions.map((plat) => (
-              <option key={plat} value={plat}>
-                {plat}
-              </option>
-            ))}
-          </select>
-          <button type="button" onClick={handleAddPlatforms}>
-            Add
-          </button>
-
-          {/* Show selected platforms */}
-          {filters.platforms.length > 0 && (
-            <div style={{ marginTop: "8px" }}>
-              {filters.platforms.map((p, idx) => (
-                <span
-                  key={idx}
-                  style={{
-                    display: "inline-block",
-                    backgroundColor: "#d5e8ff",
-                    padding: "3px 8px",
-                    borderRadius: "10px",
-                    margin: "0 5px 5px 0",
-                    fontSize: "0.85rem",
-                  }}
-                >
-                  {p}
-                </span>
+          <div className="filter-item">
+            <label>Influencer Location</label>
+            <select
+              name="influencerLocation"
+              value={filters.influencerLocation}
+              onChange={handleChange}
+            >
+              {locationOptions.map((loc) => (
+                <option key={loc} value={loc}>
+                  {loc}
+                </option>
               ))}
-            </div>
-          )}
-        </div>
+            </select>
+          </div>
 
-        <div className="filter-buttons">
-          <button className="apply-filters-btn" onClick={handleApplyFilters}>
-            Apply Filters
-          </button>
-          <button className="remove-filters-btn" onClick={handleRemoveAllFilters}>
-            Remove All Filters
-          </button>
-        </div>
-      </div>
+          <div className="filter-item">
+            <label>Majority Audience Location</label>
+            <select
+              name="majorityAudienceLocation"
+              value={filters.majorityAudienceLocation}
+              onChange={handleChange}
+            >
+              {locationOptions.map((loc) => (
+                <option key={loc} value={loc}>
+                  {loc}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      {/* INFLUENCERS SECTION */}
-      <div className="influencers-section">
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search by name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+          <div className="filter-item">
+            <label>Audience Age-Group Demographics</label>
+            <input
+              type="text"
+              name="audienceAgeGroup"
+              placeholder="e.g., 18–25"
+              value={filters.audienceAgeGroup}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="influencers-grid">
-          {influencers.map((inf) => (
-            <div key={inf._id} className="influencer-card">
-              <div className="card-header">
-                <img
-                  src={inf.profileImage || "https://via.placeholder.com/60"}
-                  alt={inf.name}
-                  className="profile-image"
-                />
-                <div className="card-info">
-                  <h3>{inf.name}</h3>
-                  <p>{inf.influencerLocation || "N/A"}</p>
-                </div>
-              </div>
+          <div className="filter-item">
+            <label>Audience Gender Demographics</label>
+            <input
+              type="text"
+              name="audienceGenderDemographics"
+              placeholder="e.g., 70% Female"
+              value={filters.audienceGenderDemographics}
+              onChange={handleChange}
+            />
+          </div>
 
-              {/* Niche Platforms => tags */}
-              <div className="card-tags">
-                {inf.nichePlatforms?.map((tag, index) => (
-                  <span key={index} className="tag">
-                    {tag}
+          <div className="filter-item">
+            <label>Industry Category</label>
+            <select
+              name="industry"
+              value={filters.industry}
+              onChange={handleChange}
+            >
+              <option value="">Select Industry</option>
+              {industryOptions.map((ind) => (
+                <option key={ind} value={ind}>
+                  {ind}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Niche Platforms */}
+          <div className="filter-item">
+            <label>Niche Platforms</label>
+            <select multiple onChange={handlePlatformSelect}>
+              {platformOptions.map((plat) => (
+                <option key={plat} value={plat}>
+                  {plat}
+                </option>
+              ))}
+            </select>
+            <button type="button" onClick={handleAddPlatforms}>
+              Add
+            </button>
+
+            {/* Show selected platforms */}
+            {filters.platforms.length > 0 && (
+              <div style={{ marginTop: "8px" }}>
+                {filters.platforms.map((p, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      display: "inline-block",
+                      backgroundColor: "#d5e8ff",
+                      padding: "3px 8px",
+                      borderRadius: "10px",
+                      margin: "0 5px 5px 0",
+                      fontSize: "0.85rem",
+                    }}
+                  >
+                    {p}
                   </span>
                 ))}
               </div>
+            )}
+          </div>
 
-              {/* Basic stats */}
-              <div className="card-followers">
-                <p>Followers: {inf.numFollowers || 0}</p>
-                <p>Experience: {inf.experience || 0} yrs</p>
-              </div>
+          <div className="filter-buttons">
+            <button className="apply-filters-btn" onClick={handleApplyFilters}>
+              Apply Filters
+            </button>
+            <button
+              className="remove-filters-btn"
+              onClick={handleRemoveAllFilters}
+            >
+              Remove All Filters
+            </button>
+          </div>
+        </div>
 
-              {/* EXTRA INFO */}
-              <div className="card-extra-info">
-                <p>Majority Audience Loc: {inf.majorityAudienceLocation || "N/A"}</p>
-                <p>Audience Age Group: {inf.audienceAgeGroup || "N/A"}</p>
-                <p>Audience Gender Demo: {inf.audienceGenderDemographics || "N/A"}</p>
-                <p>Gender: {inf.gender || "N/A"}</p>
-                <p>
-                  Industries:{" "}
-                  {inf.industries && inf.industries.length > 0
-                    ? inf.industries.join(", ")
-                    : "N/A"}
-                </p>
-              </div>
+        {/* INFLUENCERS SECTION */}
+        <div className="influencers-section">
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search by name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
 
-              {/* RATING */}
-              <div className="card-rating">{renderStars(inf.averageRating)}</div>
+          <div className="influencers-grid">
+            {influencers.map((inf) => (
+              <div key={inf._id} className="influencer-card">
+                <div className="card-header">
+                  <img
+                    src={inf.profileImage || "https://via.placeholder.com/60"}
+                    alt={inf.name}
+                    className="profile-image"
+                  />
+                  <div className="card-info">
+                    <h3>{inf.name}</h3>
+                    <p>{inf.influencerLocation || "N/A"}</p>
+                  </div>
+                </div>
 
-              {/* Invite Section */}
-              <div className="invite-section">
-                <label style={{ fontSize: "0.8rem" }}>Invite to:</label>
-                <select
-                  style={{ marginLeft: "5px", marginRight: "5px" }}
-                  value={selectedCampaignMap[inf._id] || ""}
-                  onChange={(e) =>
-                    handleCampaignSelect(inf._id, e.target.value)
-                  }
-                >
-                  <option value="">--Select Campaign--</option>
-                  {brandCampaigns.map((camp) => (
-                    <option key={camp._id} value={camp._id}>
-                      {camp.name}
-                    </option>
+                {/* Niche Platforms => tags */}
+                <div className="card-tags">
+                  {inf.nichePlatforms?.map((tag, index) => (
+                    <span key={index} className="tag">
+                      {tag}
+                    </span>
                   ))}
-                </select>
-                <button
-                  className="invite-btn"
-                  onClick={() => handleSendInvite(inf._id)}
-                >
-                  Send Invite
-                </button>
-              </div>
+                </div>
 
-              <div className="card-buttons">
-                <button
-                  className="view-profile-btn"
-                  onClick={() => handleViewProfile(inf._id)}
-                >
-                  View Profile
-                </button>
+                {/* Basic stats */}
+                <div className="card-followers">
+                  <p>Followers: {inf.numFollowers || 0}</p>
+                  <p>Experience: {inf.experience || 0} yrs</p>
+                </div>
+
+                {/* EXTRA INFO */}
+                <div className="card-extra-info">
+                  <p>
+                    Majority Audience Loc:{" "}
+                    {inf.majorityAudienceLocation || "N/A"}
+                  </p>
+                  <p>
+                    Audience Age Group: {inf.audienceAgeGroup || "N/A"}
+                  </p>
+                  <p>
+                    Audience Gender Demo:{" "}
+                    {inf.audienceGenderDemographics || "N/A"}
+                  </p>
+                  <p>Gender: {inf.gender || "N/A"}</p>
+                  <p>
+                    Industries:{" "}
+                    {inf.industries && inf.industries.length > 0
+                      ? inf.industries.join(", ")
+                      : "N/A"}
+                  </p>
+                </div>
+
+                {/* RATING */}
+                <div className="card-rating">{renderStars(inf.averageRating)}</div>
+
+                {/* Invite Section */}
+                <div className="invite-section">
+                  <label style={{ fontSize: "0.8rem" }}>Invite to:</label>
+                  <select
+                    style={{ marginLeft: "5px", marginRight: "5px" }}
+                    value={selectedCampaignMap[inf._id] || ""}
+                    onChange={(e) =>
+                      handleCampaignSelect(inf._id, e.target.value)
+                    }
+                  >
+                    <option value="">--Select Campaign--</option>
+                    {brandCampaigns.map((camp) => (
+                      <option key={camp._id} value={camp._id}>
+                        {camp.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    className="invite-btn"
+                    onClick={() => handleSendInvite(inf._id)}
+                  >
+                    Send Invite
+                  </button>
+                </div>
+
+                <div className="card-buttons">
+                  <button
+                    className="view-profile-btn"
+                    onClick={() => handleViewProfile(inf._id)}
+                  >
+                    View Profile
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
+
+      {/* Chatbot at the bottom (or anywhere below the main content) */}
       <AiChatbot />
-    </div>
+    </>
   );
 }
 

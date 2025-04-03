@@ -5,116 +5,131 @@
   box-sizing: border-box;
 }
 
+/* Main container for the page */
 .choose-type-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   transition: background-color 0.5s;
-  background: #FFECD1; /* kept */
-  padding: 2rem;
+  background: #FFECD1; /* brand's beige background */
+  padding: 3rem 2rem; /* more padding */
 }
 
 /* Different backgrounds if brand or influencer is chosen */
 .influencer-bg {
   background: linear-gradient(135deg, #FFECD1 0%, #FF7D00 100%);
 }
-
 .brand-bg {
   background: linear-gradient(135deg, #FFECD1 0%, #15616D 100%);
 }
 
-/* HEADER */
+/* ========== HEADER ========== */
 .choose-type-header {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
 }
+
 .header-logo-img {
   width: 60px;
   height: 60px;
   object-fit: contain;
   margin-right: 1rem;
 }
+
 .header-brand-text {
-  font-size: 1.75rem;
+  font-size: 2rem;   /* larger heading */
   font-weight: 700;
   color: #001524;
+  text-transform: uppercase;
 }
 
-/* CONTENT */
+/* ========== CONTENT ========== */
 .choose-type-content {
   text-align: center;
-}
-.choose-type-content h2 {
-  font-size: 1.8rem;
-  color: #001524;
-  margin-bottom: 0.5rem;
-}
-.choose-type-subtitle {
-  font-size: 0.95rem;
-  color: #15616D;
   margin-bottom: 2rem;
 }
 
-/* OPTION CARDS WRAPPER */
+.choose-type-content h2 {
+  font-size: 2.2rem;         /* bigger title */
+  color: #001524;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.choose-type-subtitle {
+  font-size: 1.1rem;         /* slightly bigger subtitle */
+  color: #15616D;
+  margin-bottom: 2.5rem;
+}
+
+/* ========== OPTION CARDS WRAPPER ========== */
 .option-cards {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 3rem; /* slightly increased gap for breathing room */
+  gap: 2rem; /* space between cards */
   margin-bottom: 2rem;
 }
 
+/* Hide or remove "OR" text if you don't want it. Comment out or remove if not needed. */
 .or-text {
   font-size: 1.1rem;
   font-weight: 600;
   color: #15616D;
 }
 
-/* OPTION CARDS */
+/* ========== OPTION CARDS ========== */
 .option-card {
-  width: 180px;
+  width: 240px;
+  height: 180px;
   background-color: #fff; 
   border: 2px solid transparent;
-  border-radius: 10px; /* slightly larger radius */
+  border-radius: 12px;
   padding: 1.5rem;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   position: relative;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* subtle shadow by default */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* subtle default shadow */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .option-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
 }
 
+/* The icon area inside each card */
 .option-icon {
   margin-bottom: 1rem;
   display: flex;
   justify-content: center;
 }
 .option-icon img {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
 }
 
+/* The label (e.g. "I want Influence") */
 .option-label {
-  font-size: 1rem;
+  font-size: 1.1rem;         /* bigger label text */
   font-weight: 600;
   color: #001524;
-  margin-top: 0.5rem;
+  text-align: center;
 }
 
 /* SELECTED STATE */
 .option-card.selected {
-  border-color: #FF7D00;
+  border-color: #FF7D00; /* highlight border for selected */
 }
 
-/* Checkmark for selected card */
+/* Checkmark for selected card (optional) */
 .checkmark {
   position: absolute;
   top: 10px;
@@ -123,31 +138,50 @@
   color: #FF7D00;
 }
 
-/* BRAND & INFLUENCER SPECIFIC CARDS */
+/* BRAND CARD */
 .brand-card {
-  /* Unchanged, add brand styling here if you wish */
+  background-color: #15616D; /* dark teal for brand */
+  border: 2px solid #fff;
 }
-.influencer-card {
-  /* Unchanged, add influencer styling here if you wish */
+.brand-card .option-label {
+  color: #fff; /* white text on brand card */
+}
+.brand-card .option-icon img {
+  /* optional: if your icon is black, you can invert or recolor using filter:
+     filter: brightness(0) invert(1) sepia(1) hue-rotate(180deg); 
+     or simply provide a white icon for brand
+  */
 }
 
-/* NEXT BUTTON */
+/* INFLUENCER CARD */
+.influencer-card {
+  background-color: #fff;
+  border: 2px solid #15616D;
+}
+.influencer-card .option-label {
+  color: #15616D; /* teal text */
+}
+
+/* ========== NEXT BUTTON ========== */
 .next-button {
   background-color: #FF7D00;
   color: #FFECD1;
   border: none;
   outline: none;
-  padding: 0.75rem 2rem;
+  padding: 1rem 2.5rem;   /* bigger button size */
   border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.1rem;      /* bigger font */
+  font-weight: 700;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
+  margin-top: 1rem;       /* spacing above button */
 }
+
 .next-button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
+
 .next-button:hover:not(:disabled) {
   background-color: #78290F;
   transform: translateY(-2px);
@@ -158,47 +192,47 @@
 /* Tablets and down */
 @media (max-width: 768px) {
   .header-brand-text {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
   }
 
   .choose-type-content h2 {
-    font-size: 1.6rem;
+    font-size: 2rem;
   }
 
-  /* Stack the cards or allow wrapping if there's an OR text */
   .option-cards {
     flex-wrap: wrap;
     gap: 1.5rem;
   }
 
   .option-card {
-    width: 160px;
+    width: 220px;
+    height: 160px;
     margin-bottom: 1rem;
   }
 
   .option-icon img {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 
   .option-label {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .next-button {
-    font-size: 0.9rem;
-    padding: 0.65rem 1.5rem;
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
   }
 }
 
 /* Mobile screens and down */
 @media (max-width: 480px) {
   .choose-type-container {
-    padding: 1rem;
+    padding: 1.5rem 1rem;
   }
 
   .choose-type-header {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .header-logo-img {
@@ -206,15 +240,15 @@
     height: 50px;
   }
   .header-brand-text {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
 
   .choose-type-content h2 {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   .choose-type-subtitle {
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .option-cards {
@@ -224,22 +258,23 @@
 
   .option-card {
     width: 100%;
-    max-width: 250px;
+    max-width: 280px;
+    height: auto;
     margin: 0 auto;
     padding: 1rem;
   }
 
   .option-icon img {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
   }
 
   .option-label {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .next-button {
-    font-size: 0.85rem;
-    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.5rem;
   }
 }

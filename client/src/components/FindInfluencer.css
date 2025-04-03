@@ -1,15 +1,26 @@
-/* Root Container */
+/* Root Container - Navbar (fixed at the top) */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 70px; /* or any nav height */
+  z-index: 999; /* ensure it stays above page content */
+  /* Any desired styling, e.g.: background: #001524; */
+}
+
+/* Main Container */
 .find-influencer-container {
   display: grid;
   grid-template-columns: 300px 1fr;
-  gap: 20px;
-  padding: 20px;
+  gap: 2rem;
+  padding: 80px 20px 20px 20px; /* top right bottom left */
   font-family: "Poppins", sans-serif;
   background: linear-gradient(to right, #FFECD1, #15616D);
   min-height: 100vh;
 }
 
-/* Filters Section */
+/* ================= FILTERS SECTION ================= */
+
 .filters-section {
   background: #FFECD1;
   padding: 25px;
@@ -100,12 +111,14 @@
   transform: scale(1.05);
 }
 
-/* Influencers Section */
+/* ================= INFLUENCERS SECTION ================= */
+
 .influencers-section {
   display: flex;
   flex-direction: column;
 }
 
+/* Search Bar */
 .search-bar input {
   padding: 15px;
   border: 1px solid #FFECD1;
@@ -122,6 +135,7 @@
   outline: none;
 }
 
+/* Influencers Grid */
 .influencers-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -147,6 +161,7 @@
   background: linear-gradient(to bottom right, #FFECD1, #FFECD1);
 }
 
+/* Card Header */
 .card-header {
   display: flex;
   align-items: center;
@@ -154,6 +169,7 @@
   margin-bottom: 15px;
 }
 
+/* Profile Image */
 .profile-image {
   width: 60px;
   height: 60px;
@@ -168,6 +184,7 @@
   border-color: #FF7D00;
 }
 
+/* Card Info */
 .card-info h3 {
   font-size: 1.4rem;
   color: #001524;
@@ -181,7 +198,7 @@
   margin: 5px 0;
 }
 
-/* Tags Section */
+/* Tags */
 .card-tags {
   display: flex;
   flex-wrap: wrap;
@@ -204,14 +221,14 @@
   color: #FFECD1;
 }
 
-/* Basic Stats */
+/* Followers + Experience */
 .card-followers p {
   font-size: 0.9rem;
   color: #001524;
   margin: 3px 0;
 }
 
-/* Extra Info Section */
+/* Extra Info */
 .card-extra-info {
   font-size: 0.85rem;
   color: #001524;
@@ -244,10 +261,12 @@
   display: flex;
   align-items: center;
 }
+
 .invite-section label {
   font-size: 0.8rem;
   color: #15616D;
 }
+
 .invite-section select {
   margin: 0 5px;
   padding: 6px 8px;
@@ -256,6 +275,7 @@
   background: #FFECD1;
   font-size: 0.85rem;
 }
+
 .invite-btn {
   background: linear-gradient(to right, #FF9800, #F57C00);
   color: white;
@@ -266,6 +286,7 @@
   transition: background 0.3s ease, transform 0.3s ease;
   font-size: 0.85rem;
 }
+
 .invite-btn:hover {
   background: linear-gradient(to right, #F57C00, #FF9800);
   transform: scale(1.05);
@@ -277,6 +298,7 @@
   justify-content: space-between;
   margin-top: 15px;
 }
+
 .card-buttons button {
   font-size: 14px;
   font-weight: bold;
@@ -286,16 +308,18 @@
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
+
 .view-profile-btn {
   background: linear-gradient(to right, #1976D2, #2196F3);
   color: white;
 }
+
 .view-profile-btn:hover {
   background: linear-gradient(to right, #2196F3, #1976D2);
   transform: scale(1.05);
 }
 
-/* Animations */
+/* ============ ANIMATIONS ============ */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -333,7 +357,7 @@
 
 /* ==================== MEDIA QUERIES ==================== */
 
-/* Tablets and down */
+/* Tablets (max-width: 768px) */
 @media (max-width: 768px) {
   .find-influencer-container {
     grid-template-columns: 1fr;
@@ -363,7 +387,7 @@
   }
 }
 
-/* Mobile screens and down */
+/* Mobile (max-width: 480px) */
 @media (max-width: 480px) {
   .filters-section {
     padding: 15px;

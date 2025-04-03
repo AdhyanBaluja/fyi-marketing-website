@@ -36,7 +36,7 @@ exports.generateCampaignPlan = async (req, res) => {
       brandUSP = brandMessage;
     }
 
-    // ========== (A) Construct GPT Instructions ==========
+    // ========== (A) Construct GPT Instructions ========== 
     let instructions = `
 You are ChatGPT Premium, an AI-powered Social Media Marketing Director with superhuman strategic abilities, advanced predictive analytics, and real-time algorithmic optimization skills. 
 Design impactful, AI-driven marketing campaign optimized for virality, engagement, and conversions—while appearing organic and community-driven. Provide 15-20 content/event ideas per compaign. 
@@ -89,7 +89,7 @@ Return valid JSON only.
 ----
 `;
 
-    // ========== (B) Append Campaign-Type Specific Details ==========
+    // ========== (B) Append Campaign-Type Specific Details ========== 
     if (campaignType === 'amplify') {
       instructions += `
 [AMPLIFY BRAND AWARENESS]
@@ -161,19 +161,18 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
 `;
     }
 
-    // ========== (C) Call GPT-4 ==========
+    // ========== (C) Call GPT-4 ========== 
     const textResponse = await openai.chat.completions.create({
       model: 'o1',
       messages: [
         { role: 'system', content: 'You are a marketing strategy wizard. Output JSON only.' },
         { role: 'system', content: instructions },
       ],
-      
     });
 
     const aiText = textResponse.choices?.[0]?.message?.content || '';
 
-    // ========== (D) Parse the AI Response ==========
+    // ========== (D) Parse the AI Response ========== 
     let parsed;
     try {
       parsed = JSON.parse(aiText);
@@ -195,7 +194,7 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
     let bingoSuggestions = parsed.bingoSuggestions || [];
     const moreAdvice = parsed.moreAdvice || [];
 
-    // ========== (E) Generate Ephemeral DALL-E Images ==========
+    // ========== (E) Generate Ephemeral DALL-E Images ========== 
     const updatedSuggestions = [];
     for (let i = 0; i < bingoSuggestions.length; i++) {
       let suggestionObj = bingoSuggestions[i];
@@ -203,9 +202,11 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
         suggestionObj = { suggestion: suggestionObj };
       }
 
+      // ----------- New prompt as requested -----------
       const promptForImage = `
-A high-quality, creative illustration related to the business description for: "${suggestionObj.suggestion || 'marketing suggestion'}"
-Style: Crisp, modern. DALL-E 3, 1024x1024.
+"Generate a high-resolution, photorealistic image for the social media marketing campaign of ${describeBusiness} in the ${industry} sector. The composition must be optimized for ${platforms}, with an engaging and authentic setting that reflects ${brandUSP} or showcases ${product}, capturing the attention of ${targetAudience}. Ensure professional realism—never cartoonish—while conveying the brand’s essence to spark immediate viewer interest. The final image should measure 1024x1024 for maximum shareability and be ready for posting on all relevant social platforms."
+
+less but suffecient Focus on: "${suggestionObj.suggestion || 'marketing suggestion'}"
       `;
 
       try {
@@ -227,7 +228,7 @@ Style: Crisp, modern. DALL-E 3, 1024x1024.
     }
     bingoSuggestions = updatedSuggestions;
 
-    // ========== (F) Save the Campaign Document ==========
+    // ========== (F) Save the Campaign Document ========== 
     let nameFromType = campaignType || 'Custom';
     nameFromType = nameFromType.replace(/([A-Z])/g, ' $1').trim();
 

@@ -44,7 +44,7 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
     <nav className={`navbar ${scrolled ? 'navbar-scrolled' : ''}`}>
       <div className="navbar-left" onClick={handleTitleClick}>
         <img src={logoBird} alt="FYI logo" className="navbar-logo" />
-        <h1 className="navbar-title">letFYI</h1>
+        <h1 className="navbar-title">Let’sFYI</h1>
       </div>
 
       <div className="navbar-right">
@@ -63,7 +63,7 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
             title="Go to Dashboard"
           >
             <img
-              src="https://via.placeholder.com/40x40.png?text=User"
+              src="https://i.pinimg.com/736x/ee/93/08/ee9308209e84dacf627e251004eeab64.jpg"
               alt="Profile"
               className="profile-img"
             />

@@ -42,7 +42,7 @@ function BrandSignUpForm() {
 
   // Platform options list
   const platformOptions = [
-    'Instagram', 'TikTok', 'YouTube', 'Facebook', 'X', 'LinkedIn', 
+    'Instagram', 'TikTok', 'YouTube', 'Facebook', 'X', 'LinkedIn',
     'Twitch', 'Reddit', 'Pinterest', 'Threads', 'Quora', 'Discord', 'Snapchat'
   ];
 
@@ -137,25 +137,16 @@ function BrandSignUpForm() {
       {/* NavBar at the top */}
       <NavBar />
 
-      <div className="video-background">
-        <iframe
-          className="video-iframe"
-          src="https://www.youtube.com/embed/RRv5udKGG68?autoplay=1&mute=1&controls=0&loop=1&playlist=RRv5udKGG68"
-          title="Brand Background Video"
-          frameBorder="0"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        />
-        <div className="video-overlay"></div>
-      </div>
-
+      {/* Main form wrapper (plain background, no video) */}
       <div className="brand-form-content">
         <h2>Brand Registration</h2>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>First Name <span>*</span></label>
+            <label>
+              First Name <span>*</span>
+            </label>
             <input
               type="text"
               name="firstName"
@@ -164,8 +155,11 @@ function BrandSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
           <div className="form-group">
-            <label>Last Name <span>*</span></label>
+            <label>
+              Last Name <span>*</span>
+            </label>
             <input
               type="text"
               name="lastName"
@@ -174,8 +168,11 @@ function BrandSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
           <div className="form-group">
-            <label>Email <span>*</span></label>
+            <label>
+              Email <span>*</span>
+            </label>
             <input
               type="email"
               name="email"
@@ -184,8 +181,11 @@ function BrandSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
           <div className="form-group">
-            <label>Password <span>*</span></label>
+            <label>
+              Password <span>*</span>
+            </label>
             <input
               type="password"
               name="password"
@@ -194,8 +194,11 @@ function BrandSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
           <div className="form-group">
-            <label>Business Name <span>*</span></label>
+            <label>
+              Business Name <span>*</span>
+            </label>
             <input
               type="text"
               name="businessName"
@@ -204,6 +207,7 @@ function BrandSignUpForm() {
               onChange={handleChange}
             />
           </div>
+
           <div className="form-group">
             <label>Brand Website</label>
             <input
@@ -215,9 +219,11 @@ function BrandSignUpForm() {
             />
           </div>
 
-          {/* Industry multi-select with add button */}
+          {/* Industry multi-select */}
           <div className="form-group">
-            <label>Industry <span>*</span></label>
+            <label>
+              Industry <span>*</span>
+            </label>
             <select multiple onChange={handleIndustryChange}>
               {industryOptions.map((opt) => (
                 <option key={opt} value={opt}>
@@ -225,11 +231,7 @@ function BrandSignUpForm() {
                 </option>
               ))}
             </select>
-            <button
-              type="button"
-              className="add-btn"
-              onClick={handleAddIndustry}
-            >
+            <button type="button" className="add-btn" onClick={handleAddIndustry}>
               Add Industry
             </button>
             <div className="selected-items">
@@ -241,7 +243,6 @@ function BrandSignUpForm() {
             </div>
           </div>
 
-          {/* Campaign Goals */}
           <div className="form-group">
             <label>Define Your Campaign Goals</label>
             <textarea
@@ -262,7 +263,7 @@ function BrandSignUpForm() {
             />
           </div>
 
-          {/* Platforms multi-select with add button */}
+          {/* Platforms multi-select */}
           <div className="form-group">
             <label>Platforms</label>
             <select multiple onChange={handlePlatformChange}>
@@ -272,11 +273,7 @@ function BrandSignUpForm() {
                 </option>
               ))}
             </select>
-            <button
-              type="button"
-              className="add-btn"
-              onClick={handleAddPlatform}
-            >
+            <button type="button" className="add-btn" onClick={handleAddPlatform}>
               Add Platform
             </button>
             <div className="selected-items">
