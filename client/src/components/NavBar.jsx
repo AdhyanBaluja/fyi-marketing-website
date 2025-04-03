@@ -140,24 +140,7 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
         )}
         
         {/* Show Sign In / Sign Up buttons when not logged in */}
-        {!isLoggedIn && (
-          <>
-            <button 
-              ref={el => buttonsRef.current[1] = el}
-              className="navbar-btn" 
-              onClick={() => navigate('/signin')}
-            >
-              Sign In
-            </button>
-            <button 
-              ref={el => buttonsRef.current[2] = el}
-              className="navbar-btn plan-btn" 
-              onClick={() => navigate('/signup')}
-            >
-              Sign Up
-            </button>
-          </>
-        )}
+        
       </div>
     </nav>
   );
