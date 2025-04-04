@@ -65,6 +65,46 @@ app.get('/', (req, res) => {
   res.send('Hello from the backend!');
 });
 
+/* ========== Google Sheets API Endpoint ========== */
+const { google } = require('googleapis');
+
+// Create a GoogleAuth instance using your service account credentials
+const sheetsAuth = new google.auth.GoogleAuth({
+  keyFile: path.join(__dirname, 'google-credentials.json'),
+  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+});
+
+app.get('/api/influencers-from-sheet', async (req, res) => {
+  try {
+    const client = await sheetsAuth.getClient();
+    const sheets = google.sheets({ version: 'v4', auth: client });
+    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+    
+    // Adjust the range if needed (here "Sheet1" reads the entire first sheet)
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: 'Sheet1',
+    });
+
+    const rows = response.data.values;
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ error: 'No data found in sheet' });
+    }
+    // Assume the first row contains headers
+    const headers = rows[0];
+    const influencers = rows.slice(1).map((row) =>
+      Object.fromEntries(headers.map((header, index) => [header, row[index] || ""]))
+    );
+
+    res.json({ influencers });
+  } catch (error) {
+    console.error('Error reading influencer sheet:', error);
+    res.status(500).json({ error: 'Error reading influencer sheet' });
+  }
+});
+
+/* ========== End Google Sheets API Endpoint ========== */
+
 // 8) Mount all routes
 app.use('/api/auth', authRoutes);
 app.use('/api/brand', brandRoutes);
@@ -84,4 +124,3 @@ const server = app.listen(PORT, () => {
 // 10) Increase server timeout to handle very long requests (e.g. large AI calls).
 //     The value here is in milliseconds. Example: 600000 => 10 minutes.
 server.setTimeout(600000);  // 10 minutes
-
