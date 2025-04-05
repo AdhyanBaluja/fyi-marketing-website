@@ -151,7 +151,7 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
 
     // ========== (C) Call GPT-4 ==========
     const textResponse = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: '01',
       messages: [
         { role: 'system', content: 'You are a marketing strategy wizard. Output JSON only.' },
         { role: 'system', content: instructions },
