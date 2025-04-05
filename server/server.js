@@ -65,53 +65,6 @@ app.get('/', (req, res) => {
   res.send('Hello from the backend!');
 });
 
-/* ========== Google Sheets API Endpoint ========== */
-const { google } = require('googleapis');
-
-// Use credentials from the environment variable instead of a local JSON file
-const base64Credentials = process.env.GOOGLE_CREDENTIALS_B64;
-if (!base64Credentials) {
-  console.error('Missing GOOGLE_CREDENTIALS_B64 environment variable');
-  process.exit(1);
-}
-const credentialsString = Buffer.from(base64Credentials, 'base64').toString('utf8');
-const credentials = JSON.parse(credentialsString);
-
-const sheetsAuth = new google.auth.GoogleAuth({
-  credentials: credentials,
-  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-});
-
-app.get('/api/influencers-from-sheet', async (req, res) => {
-  try {
-    const client = await sheetsAuth.getClient();
-    const sheets = google.sheets({ version: 'v4', auth: client });
-    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-    
-    // Adjust the range if needed (here "Sheet1" reads the entire first sheet)
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range: 'Sheet1',
-    });
-
-    const rows = response.data.values;
-    if (!rows || rows.length === 0) {
-      return res.status(404).json({ error: 'No data found in sheet' });
-    }
-    // Assume the first row contains headers
-    const headers = rows[0];
-    const influencers = rows.slice(1).map((row) =>
-      Object.fromEntries(headers.map((header, index) => [header, row[index] || ""]))
-    );
-
-    res.json({ influencers });
-  } catch (error) {
-    console.error('Error reading influencer sheet:', error);
-    res.status(500).json({ error: 'Error reading influencer sheet' });
-  }
-});
-/* ========== End Google Sheets API Endpoint ========== */
-
 // 8) Mount all routes
 app.use('/api/auth', authRoutes);
 app.use('/api/brand', brandRoutes);
@@ -125,7 +78,7 @@ app.use('/api/users', userRoutes);
 // 9) Start the server
 const PORT = process.env.PORT || 4000;
 const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(Server running on port ${PORT});
 });
 
 // 10) Increase server timeout to handle very long requests (e.g. large AI calls).
