@@ -68,9 +68,17 @@ app.get('/', (req, res) => {
 /* ========== Google Sheets API Endpoint ========== */
 const { google } = require('googleapis');
 
-// Create a GoogleAuth instance using your service account credentials
+// Use credentials from the environment variable instead of a local JSON file
+const base64Credentials = process.env.GOOGLE_CREDENTIALS_B64;
+if (!base64Credentials) {
+  console.error('Missing GOOGLE_CREDENTIALS_B64 environment variable');
+  process.exit(1);
+}
+const credentialsString = Buffer.from(base64Credentials, 'base64').toString('utf8');
+const credentials = JSON.parse(credentialsString);
+
 const sheetsAuth = new google.auth.GoogleAuth({
-  keyFile: path.join(__dirname, 'google-credentials.json'),
+  credentials: credentials,
   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
 
@@ -102,7 +110,6 @@ app.get('/api/influencers-from-sheet', async (req, res) => {
     res.status(500).json({ error: 'Error reading influencer sheet' });
   }
 });
-
 /* ========== End Google Sheets API Endpoint ========== */
 
 // 8) Mount all routes

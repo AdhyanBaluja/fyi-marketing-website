@@ -28,6 +28,9 @@ Thumbs.db
 .env
 .env.*  # If you use .env.development, etc.
 
+# Add your Google credentials here
+google-credentials.json
+
 # Optional: Mac system files
 ._*
 
