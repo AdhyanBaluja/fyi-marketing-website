@@ -78,7 +78,7 @@ app.use('/api/users', userRoutes);
 // 9) Start the server
 const PORT = process.env.PORT || 4000;
 const server = app.listen(PORT, () => {
-  console.log(Server running on port ${PORT});
+  console.log(`Server running on port ${PORT}`);
 });
 
 // 10) Increase server timeout to handle very long requests (e.g. large AI calls).
