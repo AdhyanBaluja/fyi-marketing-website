@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './NavBar.css';
 
 import logoBird from '../assets/newLogo.png';
@@ -17,15 +17,38 @@ import logoBird from '../assets/newLogo.png';
 
 function NavBar({ isLoggedIn, userType, scrolled }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showLoadingEffect, setShowLoadingEffect] = useState(true);
+  const [authState, setAuthState] = useState({ isLoggedIn, userType });
   const navbarRef = useRef(null);
   const buttonsRef = useRef([]);
 
+  // Update authentication state when props change or on route change
+  useEffect(() => {
+    // Check if user is logged in by either props or based on current route
+    const isLoggedInByRoute = location.pathname.includes('/brand/') || 
+                             location.pathname.includes('/influencer/') ||
+                             location.pathname.includes('/plans');
+    
+    // Determine user type from route if not provided by props
+    let detectedUserType = userType;
+    if (!detectedUserType && location.pathname.includes('/brand/')) {
+      detectedUserType = 'brand';
+    } else if (!detectedUserType && location.pathname.includes('/influencer/')) {
+      detectedUserType = 'influencer';
+    }
+
+    setAuthState({
+      isLoggedIn: isLoggedIn || isLoggedInByRoute,
+      userType: detectedUserType
+    });
+  }, [isLoggedIn, userType, location.pathname]);
+
   // Handle clicking on the brand logo/title
   const handleTitleClick = () => {
-    if (!isLoggedIn) {
+    if (!authState.isLoggedIn) {
       navigate('/signin');
-    } else if (userType === 'brand') {
+    } else if (authState.userType === 'brand') {
       navigate('/brand/dashboard');
     } else {
       navigate('/influencer/dashboard');
@@ -39,7 +62,7 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
 
   // Handle clicking on the profile circle
   const handleProfileClick = () => {
-    if (userType === 'brand') navigate('/brand/dashboard');
+    if (authState.userType === 'brand') navigate('/brand/dashboard');
     else navigate('/influencer/dashboard');
   };
 
@@ -104,15 +127,15 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
       <div className="navbar-pattern"></div>
       
       <div className="navbar-left" onClick={handleTitleClick}>
-  <div className="logo-container">
-    <img src={logoBird} alt="FYI logo" className="navbar-logo" />
-  </div>
-  <h1 className="navbar-title typing-animation">Let'sFYI</h1>
-</div>
+        <div className="logo-container">
+          <img src={logoBird} alt="FYI logo" className="navbar-logo" />
+        </div>
+        <h1 className="navbar-title typing-animation">Let'sFYI</h1>
+      </div>
 
       <div className="navbar-right">
         {/* Show "Buy Premium Plan" button only if user is logged in as a brand */}
-        {isLoggedIn && userType === 'brand' && (
+        {authState.isLoggedIn && authState.userType === 'brand' && (
           <button 
             ref={el => buttonsRef.current[0] = el}
             className="navbar-btn plan-btn clip-animation" 
@@ -123,7 +146,7 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
         )}
 
         {/* Show profile circle if user is logged in */}
-        {isLoggedIn && (
+        {authState.isLoggedIn && (
           <div
             className="profile-circle"
             onClick={handleProfileClick}
@@ -140,7 +163,7 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
         )}
         
         {/* Show Sign In / Sign Up buttons when not logged in */}
-        {!isLoggedIn && (
+        {!authState.isLoggedIn && (
           <>
             <button 
               ref={el => buttonsRef.current[1] = el}

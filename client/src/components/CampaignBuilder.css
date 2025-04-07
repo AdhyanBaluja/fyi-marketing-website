@@ -23,13 +23,24 @@ body {
 /* NavBar Styling */
 nav.navbar {
   width: 100%;
-  
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: #FFECD1;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  margin-bottom: 1.5rem; /* Added to provide spacing between navbar and content */
+}
+
+/* Logo and nav items spacing */
+.navbar-brand {
+  margin-right: 1.5rem; /* Add space after logo */
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Add spacing between navbar elements */
 }
 
 /* Main panel (like a big modal) */
@@ -41,7 +52,7 @@ nav.navbar {
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   padding: 1.5rem;
   margin: auto; /* Added to center the panel after changing flex-direction */
-  margin-top: 2rem; /* Added space below navbar */
+  margin-top: 1rem; /* Reduced spacing as we added margin to navbar */
 }
 
 /* Header content */
@@ -179,6 +190,30 @@ nav.navbar {
   background-color: #78290F; 
 }
 
+/* User profile styles */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #15616D;
+  color: #FFECD1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.user-name {
+  font-size: 0.9rem;
+  color: #FFECD1;
+}
+
 /* ===================== MEDIA QUERIES ===================== */
 
 /* Tablets and down */
@@ -188,7 +223,7 @@ nav.navbar {
   }
 
   .campaign-builder-panel {
-    margin: 1.5rem auto;
+    margin: 1rem auto;
     max-width: 95%;
     padding: 1rem;
   }
@@ -216,7 +251,7 @@ nav.navbar {
   }
 
   .campaign-builder-panel {
-    margin: 1rem auto;
+    margin: 0.5rem auto;
     width: 95%;
     padding: 1rem;
   }

@@ -13,6 +13,8 @@ function CampaignBuilder() {
   // 1) Store membership plan to block usage if it's "Free"
   const [membershipPlan, setMembershipPlan] = useState('');
   const [loadingPlan, setLoadingPlan] = useState(true);
+  // Add user info state
+  const [userInfo, setUserInfo] = useState({});
 
   // 2) Selected Goals
   const [selectedGoals, setSelectedGoals] = useState([]);
@@ -39,6 +41,8 @@ function CampaignBuilder() {
       });
       const plan = res.data.user.membershipPlan || 'Free';
       setMembershipPlan(plan);
+      // Also store user info for the NavBar
+      setUserInfo(res.data.user);
       setLoadingPlan(false);
 
       // If plan is "Free", block usage & redirect
@@ -137,7 +141,7 @@ function CampaignBuilder() {
   if (loadingPlan) {
     return (
       <div className="campaign-builder-full-page">
-        <p style={{ textAlign: 'center', marginTop: '2rem' }}>
+        <p style={{ textAlign: 'center', marginTop: '2rem', color: '#FFECD1' }}>
           Verifying your plan...
         </p>
       </div>
@@ -146,7 +150,7 @@ function CampaignBuilder() {
 
   return (
     <div className="campaign-builder-full-page">
-      <NavBar/>
+      <NavBar userInfo={userInfo} isAuthenticated={!!token} />
       <div className="campaign-builder-panel">
         <div className="campaign-builder-header">
           <h2>

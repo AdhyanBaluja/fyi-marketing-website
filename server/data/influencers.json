@@ -1,0 +1,222 @@
+[
+    {
+      "industry": "Food",
+      "name": "influencer 1",
+      "handle": "@eatingwithlod",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "1.7M",
+      "engagementRate": "1%",
+      "status": "Top"
+    },
+    {
+      "industry": "Food",
+      "name": "influencer 2",
+      "handle": "@dejashu",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "50K",
+      "engagementRate": "1%",
+      "status": ""
+    },
+    {
+      "industry": "Food",
+      "name": "influencer 3",
+      "handle": "@taste_a_bit",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "30K",
+      "engagementRate": "1%",
+      "status": ""
+    },
+    {
+      "industry": "Food",
+      "name": "influencer 4",
+      "handle": "@RachelAma",
+      "platform": "YouTube",
+      "location": "London",
+      "estimatedFollowers": "700K",
+      "engagementRate": "1%",
+      "status": "Top"
+    },
+    {
+      "industry": "Beauty",
+      "name": "Abibat (Natural Hair)",
+      "handle": "@abs.tract_",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "43k",
+      "engagementRate": "6%",
+      "status": ""
+    },
+    {
+      "industry": "Beauty",
+      "name": "Romy Morris",
+      "handle": "@romymorris.x",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "41.2k",
+      "engagementRate": "3%",
+      "status": "Top"
+    },
+    {
+      "industry": "Beauty",
+      "name": "Dane Pemberton",
+      "handle": "@danepemberton",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "35.3k",
+      "engagementRate": "2%",
+      "status": ""
+    },
+    {
+      "industry": "Beauty",
+      "name": "Milly Mason",
+      "handle": "@millymason_",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "19k",
+      "engagementRate": "6%",
+      "status": "Top"
+    },
+    {
+      "industry": "Beauty",
+      "name": "Lucy Partington",
+      "handle": "@lucyparts",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "17.5k",
+      "engagementRate": "2%",
+      "status": ""
+    },
+    {
+      "industry": "Beauty",
+      "name": "Nev Sashi",
+      "handle": "@allurebyney",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "15.2k",
+      "engagementRate": "3%",
+      "status": "Top"
+    },
+    {
+      "industry": "Beauty",
+      "name": "Andréa Zoe",
+      "handle": "@andreasinflucencingyou",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "13.9k",
+      "engagementRate": "8%",
+      "status": ""
+    },
+    {
+      "industry": "Beauty",
+      "name": "Nellie Faith Eden",
+      "handle": "@nellie.eden",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "13.1k",
+      "engagementRate": "4%",
+      "status": ""
+    },
+    {
+      "industry": "Technology",
+      "name": "Tiff in Tech",
+      "handle": "@tiffintech",
+      "platform": "Instagram",
+      "location": "UK",
+      "estimatedFollowers": "618k",
+      "engagementRate": "",
+      "status": "Top"
+    },
+    {
+      "industry": "Technology",
+      "name": "Miss Techy",
+      "handle": "@misstechy",
+      "platform": "Instagram",
+      "location": "UK",
+      "estimatedFollowers": "266k",
+      "engagementRate": "",
+      "status": ""
+    },
+    {
+      "industry": "Fitness",
+      "name": "Kimberley",
+      "handle": "@kim_grisdale",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "73.1k",
+      "engagementRate": "3.31%",
+      "status": ""
+    },
+    {
+      "industry": "Fitness",
+      "name": "Kayla",
+      "handle": "@kaylaawaylaaxx",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "30.2k",
+      "engagementRate": "4.34%",
+      "status": ""
+    },
+    {
+      "industry": "Fitness",
+      "name": "Gabby Allen",
+      "handle": "@shapeupwithgabby",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "35.2k",
+      "engagementRate": "5.51%",
+      "status": "Top"
+    },
+    {
+      "industry": "Fitness",
+      "name": "Lisa Clements",
+      "handle": "@its.lisa.c",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "18.2k",
+      "engagementRate": "2.59%",
+      "status": ""
+    },
+    {
+      "industry": "Fitness",
+      "name": "Niklas Liljesand",
+      "handle": "@niklas.liljesand",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "16.3k",
+      "engagementRate": "2.32%",
+      "status": "Top"
+    },
+    {
+      "industry": "Fitness",
+      "name": "Jagpal Singh",
+      "handle": "@jst__fitness",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "15.3k",
+      "engagementRate": "3.47%",
+      "status": ""
+    },
+    {
+      "industry": "Fitness",
+      "name": "Miks",
+      "handle": "@bodybymiks",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "15.3k",
+      "engagementRate": "9.22%",
+      "status": "Top"
+    },
+    {
+      "industry": "Fitness",
+      "name": "Victoria Elston",
+      "handle": "@victoria_elston",
+      "platform": "Instagram",
+      "location": "London",
+      "estimatedFollowers": "12.3k",
+      "engagementRate": "2.17%",
+      "status": ""
+    }
+  ]

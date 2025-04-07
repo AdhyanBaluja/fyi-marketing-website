@@ -2,6 +2,7 @@ require('dotenv').config();
 const axios = require('axios');
 const { default: OpenAI } = require('openai');
 const Campaign = require('../models/Campaign');
+const { getInfluencersByIndustry } = require('../utils/influencerUtil');
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -56,8 +57,7 @@ Use this JSON structure EXACTLY:
   "influencerCollaboration": "...",
   "aboutCampaign": "...",
   "calendarEvents": [...],
-  "bingoSuggestions": [...],
-  "moreAdvice": [...]
+  "bingoSuggestions": [...]
 }
 
 - "calendarEvents": Include a minimum of 10 objects, each with:
@@ -70,8 +70,6 @@ Use this JSON structure EXACTLY:
 - "bingoSuggestions": Exactly 5 objects, each with:
    "suggestion",
    "strategy"
-
-- "moreAdvice": 
 
 Return valid JSON only.
 ----
@@ -144,7 +142,7 @@ Focus on event-based marketing strategies.
       instructions += 
 `\n[GENERAL CAMPAIGN]
 Create an advanced social media marketing plan:
-Produce 10-20 "calendarEvents", EXACTLY 5 "bingoSuggestions", and 3+ "moreAdvice".
+Produce 10-20 "calendarEvents", EXACTLY 5 "bingoSuggestions".
 Fill top-level fields: objective, targetAudience, duration, budget, influencerCollaboration, aboutCampaign.
 `;
     }
@@ -180,7 +178,15 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
 
     const calendarEvents = parsed.calendarEvents || [];
     let bingoSuggestions = parsed.bingoSuggestions || [];
-    const moreAdvice = parsed.moreAdvice || [];
+    
+    // ========== (NEW) Get relevant influencers based on industry ==========
+    const moreAdvice = getInfluencersByIndustry(industry || '', 5, true).map(influencer => {
+      return {
+        type: 'Influencer Recommendation',
+        title: `Connect with ${influencer.name}`,
+        description: `${influencer.name} (${influencer.handle}) has ${influencer.followers} followers on ${influencer.platform} with ${influencer.engagementRate} engagement. Consider collaborating for your campaign.`
+      };
+    });
 
     // ========== (E) Generate Ephemeral DALL-E Images ==========
     const updatedSuggestions = [];
@@ -192,7 +198,7 @@ Fill top-level fields: objective, targetAudience, duration, budget, influencerCo
 
       // ----------- New prompt as requested -----------
       const promptForImage = 
-`Generate a high-resolution, photorealistic image for the social media marketing campaign of ${describeBusiness} in the ${industry} sector. The composition must be optimized for ${platforms}, with an engaging and authentic setting that reflects ${brandUSP} or showcases ${product}, capturing the attention of ${targetAudience}. Ensure professional realism—never cartoonish—while conveying the brand’s essence to spark immediate viewer interest. The final image should measure 1024x1024 for maximum shareability and be ready for posting on all relevant social platforms.
+`Generate a high-resolution, photorealistic image for the social media marketing campaign of ${describeBusiness} in the ${industry} sector. The composition must be optimized for ${platforms}, with an engaging and authentic setting that reflects ${brandUSP} or showcases ${product}, capturing the attention of ${targetAudience}. Ensure professional realism—never cartoonish—while conveying the brand's essence to spark immediate viewer interest. The final image should measure 1024x1024 for maximum shareability and be ready for posting on all relevant social platforms.
 Don't add any text to images.
 Less but sufficient focus on: "${suggestionObj.suggestion || 'marketing suggestion'}"
 `;
