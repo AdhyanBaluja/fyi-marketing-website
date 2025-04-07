@@ -563,7 +563,7 @@ const CampaignDetail = () => {
                     </div>
                   </div>
                 </div>
-                <button className="collaborate-button">Connect 🔗</button>
+                
               </div>
             </div>
           );
