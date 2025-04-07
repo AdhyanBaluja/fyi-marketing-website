@@ -12,15 +12,18 @@
   background-size: 200% 100%;
   animation: gradientShift 8s ease infinite;
   color: white;
-  position: sticky;
+  position: fixed; /* Changed from sticky to fixed */
   top: 0;
+  left: 0;        /* Ensure it spans from the left edge */
+  width: 100%;    /* Full width */
   z-index: 1000;
   transition: all 0.3s ease;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  margin-bottom: 0;
+  margin-bottom: 20px; /* Increased spacing between the navbar and the rest of the page */
   font-family: "Poppins", sans-serif;
   backdrop-filter: blur(0px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box; /* Add this to ensure padding is included in width */
 }
 
 .navbar-scrolled {
@@ -36,11 +39,25 @@ body[data-page="campaign-builder"] .navbar {
   margin-bottom: 0;
 }
 
+/* Add space between the navbar and page content */
+body {
+  padding-top: 80px; /* Adjust this value based on the height of your navbar */
+}
+
+/* For pages with special data attributes, adjust the padding accordingly */
+body[data-page="campaign-results"],
+body[data-page="campaign-builder"] {
+  padding-top: 60px; /* Slightly less padding for these pages */
+}
+
 .navbar-left {
   display: flex;
   align-items: center;
   cursor: pointer;
   position: relative;
+  flex-grow: 1; /* Make this take available space */
+  justify-content: flex-start; /* Explicitly left-align content */
+  max-width: 50%; /* Prevent it from pushing other elements too far */
 }
 
 .navbar-left::before {
@@ -62,14 +79,14 @@ body[data-page="campaign-builder"] .navbar {
   height: 40px;
   margin-right: 0.8rem;
   animation: logoPulse 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5)) 
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5))
           drop-shadow(0 0 5px rgba(0, 82, 102, 0.7));
   border-radius: 50%;
   transition: all 0.3s ease;
 }
 
 .navbar-logo:hover {
-  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5)) 
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5))
           drop-shadow(0 0 8px rgba(0, 82, 102, 0.9))
           brightness(1.1);
 }
@@ -85,6 +102,8 @@ body[data-page="campaign-builder"] .navbar {
   position: relative;
   overflow: hidden;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  text-align: left; /* Ensure text is aligned to the left */
+  white-space: nowrap; /* Prevent wrapping */
 }
 
 .navbar-title::after {
@@ -108,6 +127,7 @@ body[data-page="campaign-builder"] .navbar {
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-content: flex-end; /* Ensure right alignment */
 }
 
 .navbar-right > * {
@@ -246,7 +266,7 @@ body[data-page="campaign-builder"] .navbar {
   border-bottom: 1px solid #ffd180;
 }
 
-/* Ensure proper spacing for the main content */
+/* Main content spacing - adjusted to work with body padding */
 .main-content {
   padding-top: 1rem;
 }
@@ -299,7 +319,8 @@ body[data-page="campaign-builder"] .navbar {
   position: relative;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Ensure left alignment */
+  margin-right: 10px; /* Add spacing between logo and text */
 }
 
 .logo-container::before {
@@ -325,35 +346,51 @@ body[data-page="campaign-builder"] .navbar {
   animation: notificationPulse 2s infinite;
 }
 
+/* Add this class to remove any auto-margin behavior */
+.navbar-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* Remove any center alignment from the navbar */
+.typing-animation {
+  text-align: left !important;
+}
+
 /* ========== KEYFRAMES ANIMATIONS ========== */
 
 @keyframes gradientShift {
-  0% {background-position: 0% 50%}
-  50% {background-position: 100% 50%}
-  100% {background-position: 0% 50%}
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes logoPulse {
   0%, 100% {
     transform: scale(1) rotate(0deg);
-    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5)) 
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5))
             drop-shadow(0 0 5px rgba(0, 82, 102, 0.7));
   }
   50% {
     transform: scale(1.08) rotate(2deg);
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.6)) 
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.6))
             drop-shadow(0 0 8px rgba(0, 82, 102, 0.9));
   }
 }
 
 @keyframes textReveal {
-  0% {transform: translateX(0%);}
-  100% {transform: translateX(101%);}
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(101%); }
 }
 
 @keyframes float {
-  0%, 100% {transform: translateY(0px);}
-  50% {transform: translateY(-4px);}
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
 }
 
 @keyframes ripple {
@@ -368,24 +405,33 @@ body[data-page="campaign-builder"] .navbar {
 }
 
 @keyframes profileSpin {
-  0% {transform: rotate(0deg);}
-  100% {transform: rotate(360deg);}
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes borderRotate {
-  0% {transform: rotate(0deg);}
-  100% {transform: rotate(360deg);}
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes loadingBar {
-  0% {transform: scaleX(0);}
-  100% {transform: scaleX(1);}
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
 }
 
 @keyframes notificationPulse {
-  0% {transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);}
-  70% {transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);}
-  100% {transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);}
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+  }
 }
 
 /* ========== MEDIA QUERIES ========== */
@@ -394,6 +440,10 @@ body[data-page="campaign-builder"] .navbar {
 @media (max-width: 768px) {
   .navbar {
     padding: 0.6rem 1rem;
+  }
+
+  body {
+    padding-top: 70px; /* Adjusted for smaller navbar on tablets */
   }
 
   .navbar-title {
@@ -417,12 +467,15 @@ body[data-page="campaign-builder"] .navbar {
 /* Mobile screens and down */
 @media (max-width: 480px) {
   .navbar {
-    flex-direction: column;
-    align-items: flex-start;
+    /* Removed flex-direction: column and align-items: flex-start
+       so the logo/title remain in a single row aligned left. */
+    /* flex-direction: column; */
+    /* align-items: flex-start; */
+    padding: 0.6rem 1rem;
   }
 
-  .navbar-left {
-    margin-bottom: 0.5rem;
+  body {
+    padding-top: 65px; /* Adjusted for smaller navbar on mobile */
   }
 
   .navbar-title {

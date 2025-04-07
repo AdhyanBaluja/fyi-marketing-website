@@ -6,13 +6,12 @@ import logoBird from '../assets/newLogo.png';
 
 /**
  * Enhanced NavBar component with animations and interactive effects:
- * - Shows letFYI logo + brand name with animations
- * - Dynamic background with gradient shift
- * - Interactive elements with hover and click effects
+ * - Shows Let'sFYI logo + brand name with animations
+ * - Dynamic background with transparency effect on scroll
+ * - Interactive elements with hover and magnetic button effects
  * - Responsive design with mobile adaptations
- * - If user is logged in & is a brand, shows "Buy Premium Plan" button
- * - If user is logged in (brand or influencer), shows a profile circle
- * - Clicking on the brand name or logo navigates accordingly
+ * - Shows "Buy Premium Plan" for brand users and a profile circle for logged-in users
+ * - Clicking on the logo/title navigates to appropriate dashboard or sign in
  */
 
 function NavBar({ isLoggedIn, userType, scrolled }) {
@@ -23,9 +22,8 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
   const navbarRef = useRef(null);
   const buttonsRef = useRef([]);
 
-  // Update authentication state when props change or on route change
+  // Update authentication state when props or route change
   useEffect(() => {
-    // Check if user is logged in by either props or based on current route
     const protectedRoutes = [
       '/brand/',
       '/influencer/',
@@ -38,7 +36,6 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
       location.pathname.includes(route)
     );
     
-    // Determine user type from route if not provided by props
     let detectedUserType = userType;
     if (!detectedUserType && location.pathname.includes('/brand/')) {
       detectedUserType = 'brand';
@@ -48,7 +45,7 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
       location.pathname.includes('/campaign-results') || 
       location.pathname.includes('/campaign-builder')
     )) {
-      detectedUserType = 'brand'; // Assuming campaign pages are for brands
+      detectedUserType = 'brand';
     }
 
     setAuthState({
@@ -57,7 +54,7 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
     });
   }, [isLoggedIn, userType, location.pathname]);
 
-  // Handle clicking on the brand logo/title
+  // Navigate based on user authentication state when clicking the logo/title
   const handleTitleClick = () => {
     if (!authState.isLoggedIn) {
       navigate('/signin');
@@ -68,18 +65,18 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
     }
   };
 
-  // Handle "Buy Premium Plan" button click for brand users
+  // Navigate to plans for brand users
   const handleBuyPremium = () => {
     navigate('/plans');
   };
 
-  // Handle clicking on the profile circle
+  // Navigate to the appropriate dashboard when clicking the profile circle
   const handleProfileClick = () => {
     if (authState.userType === 'brand') navigate('/brand/dashboard');
     else navigate('/influencer/dashboard');
   };
 
-  // Magnetic button effect
+  // Magnetic button effect handlers
   const handleButtonMouseMove = (e, index) => {
     const button = buttonsRef.current[index];
     if (!button) return;
@@ -103,30 +100,32 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
     button.style.transform = 'translate(0, 0)';
   };
 
-  // Initialize animations and effects on component mount
+  // Initialize loading effect and magnetic button event listeners
   useEffect(() => {
-    // Remove loading effect after animation completes
     const timer = setTimeout(() => {
       setShowLoadingEffect(false);
     }, 2000);
 
-    // Add event listeners for magnetic effect
+    // Store event handlers to remove them later
+    const mouseMoveHandlers = [];
+    const mouseLeaveHandlers = [];
+    
     buttonsRef.current.forEach((button, index) => {
       if (!button) return;
-      
-      button.addEventListener('mousemove', (e) => handleButtonMouseMove(e, index));
-      button.addEventListener('mouseleave', () => handleButtonMouseLeave(index));
+      const mouseMoveHandler = (e) => handleButtonMouseMove(e, index);
+      const mouseLeaveHandler = () => handleButtonMouseLeave(index);
+      mouseMoveHandlers[index] = mouseMoveHandler;
+      mouseLeaveHandlers[index] = mouseLeaveHandler;
+      button.addEventListener('mousemove', mouseMoveHandler);
+      button.addEventListener('mouseleave', mouseLeaveHandler);
     });
 
     return () => {
       clearTimeout(timer);
-      
-      // Clean up event listeners
       buttonsRef.current.forEach((button, index) => {
         if (!button) return;
-        
-        button.removeEventListener('mousemove', (e) => handleButtonMouseMove(e, index));
-        button.removeEventListener('mouseleave', () => handleButtonMouseLeave(index));
+        button.removeEventListener('mousemove', mouseMoveHandlers[index]);
+        button.removeEventListener('mouseleave', mouseLeaveHandlers[index]);
       });
     };
   }, []);
@@ -135,11 +134,12 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
     <nav 
       ref={navbarRef}
       className={`navbar ${scrolled ? 'navbar-scrolled' : ''} ${showLoadingEffect ? 'loading' : ''}`}
+      style={{ justifyContent: 'space-between' }} // Force space-between layout
     >
       {/* Background pattern for extra visual interest */}
       <div className="navbar-pattern"></div>
       
-      <div className="navbar-left" onClick={handleTitleClick}>
+      <div className="navbar-left" onClick={handleTitleClick} style={{ margin: 0 }}>
         <div className="logo-container">
           <img src={logoBird} alt="FYI logo" className="navbar-logo" />
         </div>
@@ -147,7 +147,6 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
       </div>
 
       <div className="navbar-right">
-        {/* Show "Buy Premium Plan" button only if user is logged in as a brand */}
         {authState.isLoggedIn && authState.userType === 'brand' && (
           <button 
             ref={el => buttonsRef.current[0] = el}
@@ -158,7 +157,6 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
           </button>
         )}
 
-        {/* Show profile circle if user is logged in */}
         {authState.isLoggedIn && (
           <div
             className="profile-circle"
@@ -170,12 +168,9 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
               alt="Profile"
               className="profile-img"
             />
-            {/* Uncomment for notification indicator */}
-            {/* <span className="notification-badge"></span> */}
           </div>
         )}
         
-        {/* Show Sign In / Sign Up buttons when not logged in */}
         {!authState.isLoggedIn && (
           <>
             <button 
