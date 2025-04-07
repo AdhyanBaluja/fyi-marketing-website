@@ -30,9 +30,12 @@ import PaymentSuccess from './components/paymentSuccess';
 import PaymentError from './components/paymentError';
 import InfluencerProfile from './components/InfluencerProfile';
 
+import PageDetection from './components/PageDetection'; // Added import for page detection
+
 function App() {
   return (
     <Router>
+      <PageDetection /> {/* Added PageDetection component for page tracking */}
       <Routes>
         {/* Landing */}
         <Route path="/" element={<LandingPage />} />

@@ -26,9 +26,17 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
   // Update authentication state when props change or on route change
   useEffect(() => {
     // Check if user is logged in by either props or based on current route
-    const isLoggedInByRoute = location.pathname.includes('/brand/') || 
-                             location.pathname.includes('/influencer/') ||
-                             location.pathname.includes('/plans');
+    const protectedRoutes = [
+      '/brand/',
+      '/influencer/',
+      '/plans',
+      '/campaign-results',
+      '/campaign-builder'
+    ];
+    
+    const isLoggedInByRoute = protectedRoutes.some(route => 
+      location.pathname.includes(route)
+    );
     
     // Determine user type from route if not provided by props
     let detectedUserType = userType;
@@ -36,6 +44,11 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
       detectedUserType = 'brand';
     } else if (!detectedUserType && location.pathname.includes('/influencer/')) {
       detectedUserType = 'influencer';
+    } else if (!detectedUserType && (
+      location.pathname.includes('/campaign-results') || 
+      location.pathname.includes('/campaign-builder')
+    )) {
+      detectedUserType = 'brand'; // Assuming campaign pages are for brands
     }
 
     setAuthState({
