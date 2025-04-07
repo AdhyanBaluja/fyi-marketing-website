@@ -350,29 +350,218 @@
   transform: translateY(-5px);
 }
 
-/* MORE ADVICE SECTION */
+/* MORE ADVICE SECTION - ENHANCED */
 .more-advice-section {
   margin-top: 30px;
-  padding: 1rem;
-  background: rgba(255,236,209,0.4);
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  background: rgba(255,236,209,0.5);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+/* Decorative elements */
+.more-advice-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #FF7D00, #15616D);
+  border-radius: 12px 12px 0 0;
+}
+
+.more-advice-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+}
+
+.more-advice-section .section-title {
+  font-size: 1.5rem;
+  color: #001524;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  position: relative;
+  padding-left: 1rem;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.more-advice-section .section-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 80%;
+  background-color: #FF7D00;
+  border-radius: 4px;
 }
 
 .advice-list {
   background: #FFECD1;
-  border-radius: 8px;
-  padding: 1rem 1rem 1rem 2.5rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  padding: 1.5rem 1.5rem 1.5rem 3rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  position: relative;
+  transition: all 0.3s ease;
+  counter-reset: advice-counter;
 }
 
 .advice-list li {
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
   color: #001524;
+  position: relative;
+  padding-left: 0.5rem;
+  line-height: 1.6;
+  font-size: 1.05rem;
+  transition: transform 0.2s ease;
+  counter-increment: advice-counter;
+}
+
+.advice-list li::before {
+  content: counter(advice-counter);
+  position: absolute;
+  left: -2rem;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  background: #15616D;
+  color: #FFECD1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.advice-list li:hover {
+  transform: translateX(5px);
+}
+
+.advice-list li:hover::before {
+  background: #FF7D00;
+  transform: scale(1.2);
+  transition: all 0.3s ease;
 }
 
 .advice-list li:last-child {
   margin-bottom: 0;
+}
+
+/* JSON styling for structured advice */
+.advice-list li[data-type="json"] {
+  background: rgba(21, 97, 109, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 3px solid #15616D;
+}
+
+/* Add pulse animation for interactive elements */
+@keyframes softPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 125, 0, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 125, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 125, 0, 0);
+  }
+}
+
+.advice-highlight {
+  font-weight: 600;
+  color: #15616D;
+  position: relative;
+  display: inline-block;
+}
+
+.advice-highlight::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #FF7D00;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.advice-list li:hover .advice-highlight::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Button to expand collapsed advice items */
+.show-more-advice {
+  background: transparent;
+  border: 2px solid #15616D;
+  color: #15616D;
+  padding: 0.6rem 1.2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.9rem;
+}
+
+.show-more-advice:hover {
+  background: #15616D;
+  color: #FFECD1;
+  transform: translateY(-3px);
+}
+
+/* Influencer recommendation styling */
+.influencer-recommendation {
+  background: linear-gradient(135deg, rgba(255,236,209,0.8), rgba(255,236,209,0.95));
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  border-left: 4px solid #FF7D00;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+.influencer-recommendation:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.influencer-recommendation strong {
+  color: #15616D;
+  font-weight: 700;
+}
+
+.influencer-platform {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-right: 0.5rem;
+  font-weight: 600;
+}
+
+.platform-instagram {
+  background: #E1306C;
+  color: white;
+}
+
+.platform-youtube {
+  background: #FF0000;
+  color: white;
 }
 
 /* ACTION BUTTONS */
@@ -480,6 +669,21 @@
     min-width: 180px;
   }
   
+  /* More Advice Section responsive adjustments */
+  .more-advice-section {
+    padding: 1rem;
+  }
+  
+  .advice-list {
+    padding: 1rem 1rem 1rem 2.5rem;
+  }
+  
+  .advice-list li::before {
+    left: -1.8rem;
+    width: 20px;
+    height: 20px;
+  }
+  
   /* Action buttons responsiveness */
   .action-buttons {
     flex-direction: column;
@@ -538,6 +742,27 @@
   .bingo-card {
     width: 100%;
     min-width: auto;
+  }
+  
+  /* More Advice Section mobile adjustments */
+  .more-advice-section .section-title {
+    font-size: 1.3rem;
+  }
+  
+  .advice-list {
+    padding: 1rem 0.5rem 1rem 2rem;
+  }
+  
+  .advice-list li {
+    font-size: 0.95rem;
+    padding-left: 0;
+  }
+  
+  .advice-list li::before {
+    left: -1.5rem;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
   }
   
   /* Action buttons for mobile */

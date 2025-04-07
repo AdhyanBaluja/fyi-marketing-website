@@ -1,425 +1,314 @@
-/* Root Container Styling */
-.campaign-detail-container {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(to right, #FFECD1, #FF7D00, #FFECD1);
-    padding: 40px;
+/* Enhanced Additional Advice Section */
+.campaign-detail-box.advice-section {
+    background: linear-gradient(to bottom right, #FFECD1, #FFF8E8);
     border-radius: 20px;
-    max-width: 1200px;
-    margin: auto;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
-    animation: fadeInPage 1.5s ease-in-out;
-}
-
-/* Keyframes for page fade-in */
-@keyframes fadeInPage {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-/* Header Section */
-.campaign-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+    padding: 40px;
     margin-bottom: 40px;
-    text-align: center;
-}
-
-.image-wrapper {
-    border-radius: 50%;
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
+    position: relative;
     overflow: hidden;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-    animation: floating 3s ease-in-out infinite;
 }
 
-.campaign-image {
-    width: 200px;
-    height: 200px;
+.campaign-detail-box.advice-section::before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 125, 0, 0.2);
+    border-radius: 50%;
+    z-index: 0;
+    animation: floating-circle 8s ease-in-out infinite;
 }
 
-.campaign-title {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #001524; 
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+.campaign-detail-box.advice-section::after {
+    content: "";
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 125, 0, 0.1);
+    border-radius: 50%;
+    z-index: 0;
+    animation: floating-circle 6s ease-in-out infinite reverse;
 }
 
-.campaign-subtitle {
-    font-size: 1.2rem;
-    color: #15616D; 
-    margin-top: 10px;
-}
-
-/* Floating Animation */
-@keyframes floating {
+@keyframes floating-circle {
     0% {
-        transform: translateY(0px);
+        transform: translate(0, 0);
     }
     50% {
-        transform: translateY(-15px);
+        transform: translate(15px, -15px);
     }
     100% {
-        transform: translateY(0px);
+        transform: translate(0, 0);
     }
 }
 
-/* Campaign Edit Form */
-.campaign-edit-form {
-    background: #FFECD1;
-    border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 40px;
-    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
-    animation: fadeInPage 1.5s ease-in-out;
-}
-
-.campaign-edit-form h2 {
-    font-size: 2rem;
-    color: #001524;
-    margin-bottom: 1rem;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.1);
-}
-
-.campaign-edit-form label {
-    display: block;
-    margin-top: 1rem;
-    font-weight: 600;
-    color: #001524;
-}
-
-.campaign-edit-form input,
-.campaign-edit-form textarea,
-.campaign-edit-form select {
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 8px;
-    margin-top: 0.5rem;
-    font-size: 1rem;
-    outline: none;
-    font-family: 'Poppins', sans-serif;
-    resize: vertical;
-    box-sizing: border-box;
-}
-
-.campaign-edit-form button {
-    margin-top: 1.5rem;
-    margin-right: 10px;
-    background: linear-gradient(to right, #FF7D00, #78290F);
-    border: none;
-    border-radius: 30px;
-    color: #FFECD1;
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-}
-
-.campaign-edit-form button:hover {
-    transform: translateY(-3px);
-    background: linear-gradient(to right, #78290F, #FF7D00);
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.campaign-edit-form button:active {
-    transform: translateY(0px);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Campaign Details Section */
-.campaign-detail-box {
-    background: #FFECD1;
-    border-radius: 20px;
-    padding: 30px;
-    margin-bottom: 40px;
-    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
-}
-
-.detail-title {
-    font-size: 2rem;
-    color: #001524; 
-    margin-bottom: 20px;
-    border-bottom: 3px solid #FF7D00; 
+.advice-title {
+    font-size: 2.2rem;
+    color: #78290F;
+    margin-bottom: 30px;
+    position: relative;
     display: inline-block;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    font-weight: 700;
+    z-index: 1;
 }
 
-.detail-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
+.advice-title::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right, #FF7D00, rgba(255, 125, 0, 0.2));
+    border-radius: 2px;
 }
 
-.detail-item {
-    background: linear-gradient(to bottom right, #FFECD1, #FFECD1);
+.influencer-recommendation {
+    background: white;
     border-radius: 15px;
     padding: 25px;
-    text-align: center;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.05);
     position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+    border-left: 5px solid #FF7D00;
     overflow: hidden;
 }
 
-/* Slow Filling Hover Effect */
-.detail-item.slow-fill-hover::after {
+.influencer-recommendation:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
+}
+
+.influencer-recommendation::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
-    width: 0%;
     height: 100%;
-    background: rgba(255, 125, 0, 0.4);
-    transition: width 0.5s ease-in-out;
-    z-index: 0;
+    width: 0;
+    background: linear-gradient(to right, rgba(255, 125, 0, 0.03), transparent);
+    transition: width 0.5s ease;
+    z-index: -1;
 }
 
-.detail-item.slow-fill-hover:hover::after {
+.influencer-recommendation:hover::before {
     width: 100%;
 }
 
-.detail-item.slow-fill-hover h3,
-.detail-item.slow-fill-hover p {
-    position: relative;
-    z-index: 1;
+.recommendation-title {
+    font-size: 1.4rem;
+    color: #001524;
+    margin-bottom: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
 }
 
-/* Campaign Description Section */
-.campaign-description {
-    margin-top: 40px;
-    background: #FFECD1;
+.recommendation-title .icon {
+    margin-right: 12px;
+    font-size: 1.6rem;
+    color: #FF7D00;
+}
+
+.recommendation-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #15616D;
+    padding-left: 30px;
+    border-left: 2px dashed rgba(255, 125, 0, 0.2);
+    margin: 15px 0 15px 3px;
+}
+
+.influencer-stats {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.influencer-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #FF7D00, #78290F);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 15px;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.influencer-details {
+    flex-grow: 1;
+}
+
+.influencer-handle {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #001524;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.platform-icon {
+    margin-right: 8px;
+    font-size: 1.2rem;
+    color: #15616D;
+}
+
+.influencer-metrics {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: #15616D;
+}
+
+.metric {
+    display: flex;
+    align-items: center;
+}
+
+.metric-value {
+    font-weight: 600;
+    color: #FF7D00;
+    margin-right: 5px;
+}
+
+.collaborate-button {
+    background: linear-gradient(to right, #FF7D00, #78290F);
+    color: white;
+    border: none;
     border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.collaborate-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(to right, #78290F, #FF7D00);
+}
+
+/* Pulse animation for new recommendations */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 125, 0, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 125, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 125, 0, 0);
+    }
+}
+
+.new-recommendation {
+    position: relative;
+}
+
+.new-recommendation::after {
+    content: "New";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #FF7D00;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 20px;
+    animation: pulse 2s infinite;
+}
+
+/* Empty state styling */
+.no-recommendations {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
     padding: 40px;
     text-align: center;
-    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease-in-out;
+    border: 2px dashed rgba(255, 125, 0, 0.3);
 }
 
-.campaign-description:hover {
-    transform: scale(1.05);
+.no-recommendations-icon {
+    font-size: 3rem;
+    color: rgba(255, 125, 0, 0.5);
+    margin-bottom: 15px;
 }
 
-.description-title {
-    font-size: 2rem;
-    color: #FF7D00;
-    margin-bottom: 20px;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
-}
-
-.description-text {
+.no-recommendations-text {
     font-size: 1.2rem;
-    line-height: 1.8;
     color: #15616D;
-    animation: fadeIn 1.5s ease-in-out, slideIn 1.5s ease-in-out;
-}
-
-/* About Section Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateY(20px);
-    }
-    to {
-        transform: translateY(0px);
-    }
-}
-
-/* Buttons Container (Edit, Find) */
-.action-buttons {
-    text-align: center;
-    margin-top: 1rem;
-}
-
-.action-buttons button {
-    margin: 0 0.5rem;
-    background: linear-gradient(to right, #FF7D00, #78290F);
-    border: none;
-    border-radius: 30px;
-    color: #FFECD1;
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-}
-
-.action-buttons button:hover {
-    transform: translateY(-3px);
-    background: linear-gradient(to right, #78290F, #FF7D00);
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.action-buttons button:active {
-    transform: translateY(0px);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Joined Influencers List */
-.joined-influencers-list {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-
-.joined-influencers-list li {
-    margin-bottom: 1rem;
     font-weight: 500;
-    color: #001524;
 }
 
-.joined-influencers-list li strong {
-    color: #001524;
-}
-
-.joined-influencers-list li ul {
-    margin-left: 1.5rem;
-    list-style: circle;
-    margin-top: 0.5rem;
-    color: #15616D;
-    line-height: 1.5;
-}
-
-/* If the campaign doc itself has tasks, 
-   we can style that list too inside .campaign-detail-box */
-.campaign-detail-box ul {
-    list-style: disc;
-    margin-left: 1.5rem;
-    color: #15616D;
-    line-height: 1.6;
-}
-
-/* Find Influencer Button (if used separately) */
-.find-influencer-btn {
-    display: inline-block;
-    margin: 30px auto 0 auto;
-    padding: 15px 40px;
-    background: linear-gradient(to right, #FF7D00, #78290F);
-    color: #FFECD1;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    border: none;
-    border-radius: 30px;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-}
-
-.find-influencer-btn:hover {
-    transform: translateY(-5px);
-    background: linear-gradient(to right, #78290F, #FF7D00);
-    box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.3);
-}
-
-.find-influencer-btn:active {
-    transform: translateY(0px);
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
-}
-
-/* =============== Responsive Design =============== */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    /* Reduce padding and switch detail grid to single column if needed */
-    .campaign-detail-container {
-        padding: 20px;
+    .campaign-detail-box.advice-section {
+        padding: 30px;
     }
-
-    .campaign-header {
-        flex-direction: column;
-        gap: 15px;
-        margin-bottom: 30px;
+    
+    .advice-title {
+        font-size: 1.8rem;
     }
-
-    .campaign-image {
-        width: 150px;
-        height: 150px;
+    
+    .recommendation-title {
+        font-size: 1.2rem;
     }
-
-    .campaign-title {
-        font-size: 2rem;
-    }
-
-    .campaign-subtitle {
+    
+    .recommendation-description {
         font-size: 1rem;
+        padding-left: 20px;
     }
-
-    .campaign-edit-form,
-    .campaign-detail-box,
-    .campaign-description {
-        padding: 20px;
-        margin-bottom: 30px;
-    }
-
-    .campaign-edit-form h2,
-    .detail-title {
-        font-size: 1.6rem;
-    }
-
-    .detail-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .find-influencer-btn {
-        font-size: 1rem;
-        padding: 12px 30px;
+    
+    .influencer-avatar {
+        width: 40px;
+        height: 40px;
     }
 }
 
 @media (max-width: 480px) {
-    .campaign-detail-container {
-        padding: 15px;
+    .campaign-detail-box.advice-section {
+        padding: 20px;
     }
-
-    .campaign-header {
-        margin-bottom: 20px;
-    }
-
-    .campaign-title {
-        font-size: 1.8rem;
-    }
-
-    .campaign-edit-form,
-    .campaign-detail-box,
-    .campaign-description {
-        padding: 15px;
-        margin-bottom: 20px;
-    }
-
-    .campaign-edit-form h2,
-    .detail-title {
-        font-size: 1.4rem;
-    }
-
-    .description-title {
+    
+    .advice-title {
         font-size: 1.6rem;
     }
-
-    .description-text {
-        font-size: 1rem;
+    
+    .influencer-recommendation {
+        padding: 20px;
     }
-
-    .action-buttons button {
-        font-size: 0.9rem;
-        padding: 8px 15px;
+    
+    .influencer-stats {
+        flex-direction: column;
+        align-items: flex-start;
     }
-
-    .find-influencer-btn {
-        font-size: 0.9rem;
-        padding: 10px 20px;
+    
+    .influencer-avatar {
+        margin-bottom: 10px;
+    }
+    
+    .influencer-metrics {
+        margin-top: 10px;
+        flex-wrap: wrap;
     }
 }

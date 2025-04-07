@@ -519,28 +519,92 @@ const CampaignDetail = () => {
           )}
 
           {/* More Advice (from AI) */}
-          {campaign.moreAdvice && campaign.moreAdvice.length > 0 && (
-            <div className="campaign-detail-box">
-              <h2 className="detail-title">Additional Advice</h2>
-              <ul>
-                {campaign.moreAdvice.map((advice, idx) => {
-                  if (typeof advice === 'object') {
-                    return (
-                      <li key={idx} style={{ marginBottom: '0.5rem' }}>
-                        {JSON.stringify(advice)}
-                      </li>
-                    );
-                  }
-                  return (
-                    <li key={idx} style={{ marginBottom: '0.5rem' }}>
-                      {advice}
-                    </li>
-                  );
-                })}
-              </ul>
+{campaign.moreAdvice && campaign.moreAdvice.length > 0 && (
+  <div className="campaign-detail-box advice-section">
+    <h2 className="advice-title">Additional Advice</h2>
+    
+    {campaign.moreAdvice.map((advice, idx) => {
+      // Handle JSON object advice
+      if (typeof advice === 'object') {
+        // Parse influencer recommendations
+        if (advice.type === "Influencer Recommendation") {
+          return (
+            <div key={idx} className={`influencer-recommendation ${idx === 0 ? 'new-recommendation' : ''}`}>
+              <div className="recommendation-title">
+                <span className="icon">★</span>
+                {advice.title || "Connect with influencer"}
+              </div>
+              <div className="recommendation-description">
+                {advice.description || "Consider collaborating for your campaign."}
+              </div>
+              
+              <div className="influencer-stats">
+                <div className="influencer-avatar">
+                  {advice.title?.split(' ')?.pop()?.charAt(0) || "I"}
+                </div>
+                <div className="influencer-details">
+                  <div className="influencer-handle">
+                    <span className="platform-icon">
+                      {advice.description?.includes('Instagram') ? '📱' : 
+                       advice.description?.includes('YouTube') ? '📺' : '🌐'}
+                    </span>
+                    {advice.description?.match(/@[\w]+/) || "Influencer"}
+                  </div>
+                  <div className="influencer-metrics">
+                    <div className="metric">
+                      <span className="metric-value">
+                        {advice.description?.match(/(\d+(\.\d+)?(K|M)?)/) || ""}
+                      </span>
+                      <span>followers</span>
+                    </div>
+                    <div className="metric">
+                      <span className="metric-value">~1%</span>
+                      <span>engagement</span>
+                    </div>
+                  </div>
+                </div>
+                <button className="collaborate-button">Connect 🔗</button>
+              </div>
             </div>
-          )}
-
+          );
+        }
+        
+        // Generic object display
+        return (
+          <div key={idx} className="influencer-recommendation">
+            <div className="recommendation-title">
+              <span className="icon">💡</span>
+              Advice
+            </div>
+            <div className="recommendation-description">
+              {JSON.stringify(advice)}
+            </div>
+          </div>
+        );
+      }
+      
+      // Simple text advice
+      return (
+        <div key={idx} className="influencer-recommendation">
+          <div className="recommendation-title">
+            <span className="icon">💡</span>
+            Tip
+          </div>
+          <div className="recommendation-description">
+            {advice}
+          </div>
+        </div>
+      );
+    })}
+    
+    {campaign.moreAdvice.length === 0 && (
+      <div className="no-recommendations">
+        <div className="no-recommendations-icon">📋</div>
+        <div className="no-recommendations-text">No advice available yet</div>
+      </div>
+    )}
+  </div>
+)}
           {/* Joined Influencers Section */}
           <div className="campaign-detail-box">
             <h2 className="detail-title">Joined Influencers</h2>
