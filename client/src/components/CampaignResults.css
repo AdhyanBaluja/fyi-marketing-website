@@ -354,29 +354,28 @@
 .more-advice-section {
   margin-top: 30px;
   padding: 1.5rem;
-  background: rgba(255,236,209,0.5);
+  background: rgba(255, 236, 209, 0.5);
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
-  transition: all 0.4s ease;
+  transition: transform 0.3s ease;
 }
 
-/* Decorative elements */
 .more-advice-section::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 5px;
+  height: 6px;
   background: linear-gradient(90deg, #FF7D00, #15616D);
   border-radius: 12px 12px 0 0;
 }
 
 .more-advice-section:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 .more-advice-section .section-title {
@@ -384,184 +383,115 @@
   color: #001524;
   margin-bottom: 1.5rem;
   font-weight: 700;
-  position: relative;
   padding-left: 1rem;
-  letter-spacing: 0.5px;
+  border-left: 5px solid #FF7D00;
   display: inline-block;
-}
-
-.more-advice-section .section-title::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 5px;
-  height: 80%;
-  background-color: #FF7D00;
-  border-radius: 4px;
 }
 
 .advice-list {
   background: #FFECD1;
   border-radius: 10px;
-  padding: 1.5rem 1.5rem 1.5rem 3rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  position: relative;
-  transition: all 0.3s ease;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   counter-reset: advice-counter;
 }
 
-.advice-list li {
-  margin-bottom: 1.25rem;
-  color: #001524;
+.advice-item {
+  background: #FFFFFF;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   position: relative;
-  padding-left: 0.5rem;
-  line-height: 1.6;
-  font-size: 1.05rem;
-  transition: transform 0.2s ease;
-  counter-increment: advice-counter;
 }
 
-.advice-list li::before {
+.advice-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.advice-item::before {
   content: counter(advice-counter);
+  counter-increment: advice-counter;
   position: absolute;
-  left: -2rem;
-  top: 0;
-  width: 24px;
-  height: 24px;
+  left: -1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
   background: #15616D;
   color: #FFECD1;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
   font-weight: bold;
 }
 
-.advice-list li:hover {
-  transform: translateX(5px);
+.advice-item h4 {
+  color: #15616D;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
 }
 
-.advice-list li:hover::before {
-  background: #FF7D00;
-  transform: scale(1.2);
-  transition: all 0.3s ease;
+.advice-item p {
+  color: #001524;
+  font-size: 1rem;
 }
 
-.advice-list li:last-child {
-  margin-bottom: 0;
-}
-
-/* JSON styling for structured advice */
-.advice-list li[data-type="json"] {
-  background: rgba(21, 97, 109, 0.05);
-  padding: 1rem;
-  border-radius: 8px;
-  border-left: 3px solid #15616D;
-}
-
-/* Add pulse animation for interactive elements */
-@keyframes softPulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 125, 0, 0.4);
+/* RESPONSIVE ADVICE SECTION */
+@media (max-width: 768px) {
+  .advice-list {
+    padding: 1rem;
   }
-  70% {
-    box-shadow: 0 0 0 10px rgba(255, 125, 0, 0);
+  
+  .advice-item {
+    padding: 0.8rem;
   }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 125, 0, 0);
+  
+  .advice-item::before {
+    left: -1.2rem;
+    width: 26px;
+    height: 26px;
+  }
+
+  .more-advice-section .section-title {
+    font-size: 1.3rem;
   }
 }
 
-.advice-highlight {
-  font-weight: 600;
-  color: #15616D;
-  position: relative;
-  display: inline-block;
-}
+@media (max-width: 480px) {
+  .advice-list {
+    padding: 0.8rem;
+  }
+  
+  .advice-item {
+    padding: 0.7rem;
+  }
+  
+  .advice-item h4 {
+    font-size: 1rem;
+  }
+  
+  .advice-item p {
+    font-size: 0.9rem;
+  }
+  
+  .advice-item::before {
+    left: -1rem;
+    width: 24px;
+    height: 24px;
+    font-size: 0.85rem;
+  }
 
-.advice-highlight::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: #FF7D00;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s ease;
-}
-
-.advice-list li:hover .advice-highlight::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-/* Button to expand collapsed advice items */
-.show-more-advice {
-  background: transparent;
-  border: 2px solid #15616D;
-  color: #15616D;
-  padding: 0.6rem 1.2rem;
-  border-radius: 30px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 1rem;
-  transition: all 0.3s ease;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 0.9rem;
-}
-
-.show-more-advice:hover {
-  background: #15616D;
-  color: #FFECD1;
-  transform: translateY(-3px);
-}
-
-/* Influencer recommendation styling */
-.influencer-recommendation {
-  background: linear-gradient(135deg, rgba(255,236,209,0.8), rgba(255,236,209,0.95));
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  position: relative;
-  border-left: 4px solid #FF7D00;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  transition: all 0.3s ease;
-}
-
-.influencer-recommendation:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-}
-
-.influencer-recommendation strong {
-  color: #15616D;
-  font-weight: 700;
-}
-
-.influencer-platform {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  margin-right: 0.5rem;
-  font-weight: 600;
-}
-
-.platform-instagram {
-  background: #E1306C;
-  color: white;
-}
-
-.platform-youtube {
-  background: #FF0000;
-  color: white;
+  .more-advice-section {
+    padding: 1rem;
+  }
+  
+  .more-advice-section .section-title {
+    font-size: 1.2rem;
+  }
 }
 
 /* ACTION BUTTONS */

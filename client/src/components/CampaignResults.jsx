@@ -176,7 +176,8 @@ function CampaignResults() {
 
   return (
     <div className="campaign-results-container">
-      <NavBar/>
+      <NavBar />
+
       {/* Ephemeral images notice */}
       {showImageNotice && (
         <div
@@ -379,11 +380,46 @@ function CampaignResults() {
           <p>No additional advice found.</p>
         ) : (
           <ul className="advice-list">
-            {moreAdvice.map((advice, i) => (
-              <li key={i} style={{ marginBottom: '0.5rem' }}>
-                {typeof advice === 'object' ? JSON.stringify(advice) : advice}
-              </li>
-            ))}
+            {moreAdvice.map((advice, i) => {
+              // Attempt to parse advice if it's a JSON string
+              let adviceData = null;
+
+              if (typeof advice === 'string') {
+                try {
+                  adviceData = JSON.parse(advice);
+                } catch {
+                  // Not valid JSON, ignore
+                }
+              } else if (typeof advice === 'object') {
+                adviceData = advice;
+              }
+
+              // If we have valid JSON/object with a title or description
+              if (
+                adviceData &&
+                typeof adviceData === 'object' &&
+                (adviceData.title || adviceData.description)
+              ) {
+                return (
+                  <li key={i} className="advice-item">
+                    <h4>{adviceData.title || 'Untitled Advice'}</h4>
+                    <p>{adviceData.description || 'No description provided.'}</p>
+                  </li>
+                );
+              } else {
+                // Fallback: show as plain text or stringified
+                return (
+                  <li key={i} className="advice-item">
+                    <h4>Note</h4>
+                    <p>
+                      {typeof advice === 'object'
+                        ? JSON.stringify(advice)
+                        : advice}
+                    </p>
+                  </li>
+                );
+              }
+            })}
           </ul>
         )}
       </div>
