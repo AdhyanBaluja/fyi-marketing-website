@@ -47,7 +47,7 @@ body {
 /* For pages with special data attributes, adjust the padding accordingly */
 body[data-page="campaign-results"],
 body[data-page="campaign-builder"] {
-  padding-top: 60px; /* Slightly less padding for these pages */
+  padding-top: 90px; /* Slightly less padding for these pages */
 }
 
 .navbar-left {
