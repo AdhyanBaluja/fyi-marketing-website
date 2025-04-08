@@ -295,10 +295,11 @@ function BrandDashboard() {
       }
     });
 
+    // Default style for calendar days - use the design color instead of blue
     if (platformSet.size === 0) {
       return {
-        backgroundColor: '#B7D4D2',
-        color: '#001524',
+        backgroundColor: '#0E1D24', // Matching the dark teal theme from CSS
+        color: '#F8F1E5',
       };
     }
 
@@ -308,7 +309,7 @@ function BrandDashboard() {
     if (colors.length === 1) {
       return {
         backgroundColor: colors[0],
-        color: '#333',
+        color: '#F8F1E5', // Updated to match theme's text color
       };
     } else {
       const step = 100 / (colors.length - 1);
@@ -316,7 +317,7 @@ function BrandDashboard() {
       const gradientStr = `linear-gradient(135deg, ${gradientParts.join(', ')})`;
       return {
         background: gradientStr,
-        color: '#333',
+        color: '#F8F1E5', // Updated to match theme's text color
       };
     }
   };
@@ -387,15 +388,15 @@ function BrandDashboard() {
       <section className="stats-section fade-in-up">
         <div className="stats-card hover-scale">
           <h3>Total Campaigns</h3>
-          <p>{totalCampaigns}</p>
+          <p className="stats-value">{totalCampaigns}</p>
         </div>
         <div className="stats-card hover-scale">
           <h3>Active Campaigns</h3>
-          <p>{activeCampaigns}</p>
+          <p className="stats-value">{activeCampaigns}</p>
         </div>
         <div className="stats-card hover-scale">
           <h3>Draft/Paused</h3>
-          <p>{draftPaused}</p>
+          <p className="stats-value">{draftPaused}</p>
         </div>
       </section>
 
@@ -403,11 +404,11 @@ function BrandDashboard() {
       <section className="requests-section fade-in-up">
         <div className="requests-card hover-scale">
           <h3>Active Requests Sent</h3>
-          <p>{activeRequests}</p>
+          <p className="stats-value">{activeRequests}</p>
         </div>
         <div className="requests-card hover-scale">
           <h3>Pending Requests (From Influencers)</h3>
-          <p>{pendingRequests}</p>
+          <p className="stats-value">{pendingRequests}</p>
         </div>
       </section>
 
@@ -415,16 +416,16 @@ function BrandDashboard() {
       <section className="applications-section fade-in-up">
         <h2>Influencer Applications</h2>
         {influencerApplications.length === 0 ? (
-          <p>No influencer applications at the moment.</p>
+          <p className="empty-state-message">No influencer applications at the moment.</p>
         ) : (
           <div className="applications-container">
             {influencerApplications.map((app) => (
               <div className="application-card" key={app.requestId}>
                 <h3>{app.campaignName}</h3>
-                <p>
+                <p className="app-detail">
                   <strong>Influencer:</strong> {app.influencer}
                 </p>
-                <p>Status: {app.status}</p>
+                <p className="app-detail">Status: {app.status}</p>
                 <button onClick={() => handleAcceptInfluencerRequest(app.requestId)} className="accept-btn">
                   Accept
                 </button>
@@ -438,9 +439,9 @@ function BrandDashboard() {
       <section id="allCampaigns" className="campaigns-section bounce-in" ref={campaignsRef}>
         <h2>All Campaigns</h2>
         {loadingCampaigns ? (
-          <p>Loading campaigns...</p>
+          <p className="loading-message">Loading campaigns...</p>
         ) : campaigns.length === 0 ? (
-          <p>No campaigns found</p>
+          <p className="empty-state-message">No campaigns found</p>
         ) : (
           <table className="campaigns-table">
             <thead>
@@ -543,34 +544,34 @@ function BrandDashboard() {
 
               return (
                 <div key={i} className="day-event-card">
-                  <p>
+                  <p className="event-detail">
                     <strong>Date:</strong> {ev.date}
                   </p>
-                  <p>
+                  <p className="event-detail">
                     <strong>Event:</strong> {ev.event || 'No event'}
                   </p>
                   {ev.platforms && (
-                    <p>
+                    <p className="event-detail">
                       <strong>Platforms:</strong> {platformsStr}
                     </p>
                   )}
                   {ev.campaignName && (
-                    <p>
+                    <p className="event-detail">
                       <strong>Campaign:</strong> {ev.campaignName}
                     </p>
                   )}
                   {ev.cta && (
-                    <p>
+                    <p className="event-detail">
                       <strong>CTA:</strong> {ev.cta}
                     </p>
                   )}
                   {ev.captions && (
-                    <p>
+                    <p className="event-detail">
                       <strong>Captions:</strong> {ev.captions}
                     </p>
                   )}
                   {ev.kpis && (
-                    <p>
+                    <p className="event-detail">
                       <strong>KPIs:</strong> {kpisStr}
                     </p>
                   )}
@@ -588,7 +589,7 @@ function BrandDashboard() {
           <div key={camp.campaignId} className="joined-influencers-card">
             <h3>{camp.campaignName}</h3>
             {camp.joinedInfluencers.length === 0 ? (
-              <p>No joined influencers yet.</p>
+              <p className="empty-state-message">No joined influencers yet.</p>
             ) : (
               <div className="joined-influencers-list">
                 {camp.joinedInfluencers.map((inf, idx) => (
@@ -606,7 +607,6 @@ function BrandDashboard() {
                     <button
                       className="remove-influencer-btn"
                       onClick={() => handleRemoveInfluencer(camp.campaignId, inf.influencerId)}
-                      style={{ marginLeft: '10px', color: 'red', cursor: 'pointer' }}
                     >
                       Remove
                     </button>

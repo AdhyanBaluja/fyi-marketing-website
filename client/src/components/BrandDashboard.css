@@ -10,8 +10,11 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Remove generic p styling and only apply specific styles where needed */
-/* This prevents conflicts with other paragraph styles */
+/* Reset default paragraph styling */
+.brand-dashboard-container p {
+  margin: 0;
+  padding: 0;
+}
 
 /* Overall Background: Deep Navy */
 .brand-dashboard-container {
@@ -29,11 +32,19 @@ body {
 }
 
 /* Campaign cards empty state message styling */
-.joined-influencers-card p,
-.amplify-plan-card p {
+.empty-state-message {
   color: rgba(0, 219, 187, 0.55); /* Teal color with opacity */
   font-size: 14px;
   margin-bottom: 10px;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+/* Loading message styling */
+.loading-message {
+  color: rgba(248, 241, 229, 0.75);
+  text-align: center;
+  padding: 1rem;
 }
 
 /* NAVBAR - Midnight Charcoal */
@@ -141,7 +152,7 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.stats-card p {
+.stats-value {
   font-size: 1.4rem;
   font-weight: 700;
   color: #F8F1E5;
@@ -175,13 +186,6 @@ body {
   color: #F8F1E5;
   margin-bottom: 0.5rem;
   font-weight: 600;
-}
-
-.requests-card p {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #F8F1E5;
-  margin-bottom: 0;
 }
 
 /* Influencer Applications Section */
@@ -226,8 +230,8 @@ body {
   font-weight: 600;
 }
 
-.application-card p {
-  margin-bottom: 0.3rem;
+.app-detail {
+  margin-bottom: 0.5rem;
   color: rgba(248, 241, 229, 0.75);
 }
 
@@ -449,6 +453,12 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
+.event-detail {
+  margin-bottom: 0.5rem;
+  color: rgba(248, 241, 229, 0.85);
+  font-size: 14px;
+}
+
 /* Joined Influencers */
 .influencer-requests-section {
   animation: fade-in-up 1s ease forwards;
@@ -487,13 +497,6 @@ body {
   margin-bottom: 1rem;
   font-size: 1.2rem;
   font-weight: 600;
-}
-
-/* "No joined influencers yet" message styling */
-.amplify-plan-card p {
-  color: rgba(0, 219, 187, 0.55); /* Teal color for empty state messages */
-  font-size: 14px;
-  margin-bottom: 0;
 }
 
 .joined-influencers-card {
@@ -549,11 +552,30 @@ body {
 .inf-name {
   font-weight: 600;
   color: #F8F1E5;
+  margin: 0;
+  font-size: 14px;
 }
 
 .join-source {
   font-size: 0.8rem;
   color: #bbb;
+}
+
+/* Remove button for joined influencers */
+.remove-influencer-btn {
+  background-color: #FF5252;
+  border: none;
+  color: #F8F1E5;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: auto;
+  font-size: 0.8rem;
+  transition: background-color 0.3s;
+}
+
+.remove-influencer-btn:hover {
+  background-color: #e83c3c;
 }
 
 /* KEYFRAME ANIMATIONS */
