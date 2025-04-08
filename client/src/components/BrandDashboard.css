@@ -66,11 +66,20 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
+.campaigns-table tbody tr:hover {
+  background-color: #D26506; /* Highlight with the dark teal on hover */
+  color: #F8F1E5;
+}
 
 .brand-dash-header h1 {
   font-size: 1.8rem;
   color: #F8F1E5; /* Cool Cream text */
   font-weight: 700;
+}
+.p {
+  color: rgba(248, 241, 229, 0.75);
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
 /* AI Campaign Button => Vivid Orange (#FF7D08) */
