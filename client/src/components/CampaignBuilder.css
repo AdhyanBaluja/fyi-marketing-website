@@ -1,3 +1,6 @@
+/* CampaignBuilder.css */
+
+/* Import the Poppins font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 * {
@@ -10,136 +13,141 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Full-page background using dark palette color */
+/* Full-page dark background (Deep Navy) */
 .campaign-builder-full-page {
-  background-color: #001524; /* replaced #151515 */
+  background-color: #001524; 
   width: 100vw; 
   height: 100vh;
   display: flex;
-  flex-direction: column; /* Changed to column to accommodate NavBar */
-  justify-content: flex-start; /* Changed from center to align from top */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  flex-direction: column; /* NavBar on top */
+  justify-content: flex-start;
+  overflow-x: hidden;
 }
 
-/* NavBar Styling */
+/* NavBar Styling 
+   (If you're referencing a separate NavBar.css, 
+   these styles can remain or be removed as needed.)
+*/
 nav.navbar {
   width: 100%;
-  padding: 1.2rem 2.5rem; /* Increased padding for better spacing */
+  padding: 1.2rem 2.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: #FFECD1;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  position: fixed; /* Updated from relative to fixed */
-  top: 0;         /* Added to fix at top */
-  left: 0;        /* Added to align with left edge */
-  z-index: 10;    /* Ensure navbar is above other content */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
 }
 
-/* Logo and nav items spacing */
+/* Logo + nav items */
 .navbar-brand {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Ensures left alignment */
+  justify-content: flex-start;
 }
-
 .navbar-brand h1 {
   font-size: 1.8rem;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
-
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* Increased spacing between navbar elements */
+  gap: 1.5rem;
 }
 
-/* Main panel (like a big modal) */
+/* Main panel (dark card) - narrower width and bigger corner radius for a modern look */
 .campaign-builder-panel {
-  background-color: #FFECD1; /* replaced #fff */
-  width: 90%;
-  max-width: 800px;
-  border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-  padding: 1.5rem;
-  margin: 2.5rem auto 0; /* Increased top margin for spacing from navbar */
+  background-color: #0D1B2A; /* Dark slate */
+  width: 100%;
+  max-width: 460px; /* Narrower to match the reference image sizing */
+  border-radius: 12px; 
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  padding: 1.5rem 1.5rem 2rem; /* Extra bottom padding for buttons */
+  margin: 4rem auto 0; /* 4rem top to accommodate NavBar and be visually centered */
+  color: #FFECD1; /* Light text for contrast */
 }
 
-/* Header content */
+/* Header content inside the panel */
+.campaign-builder-header {
+  margin-bottom: 1.5rem;
+}
 .campaign-builder-header h2 {
-  font-size: 1.6rem;
-  margin-bottom: 0.3rem;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
   font-weight: 600;
   display: inline-block;
   margin-right: 0.5rem;
+  color: #FFECD1; 
 }
 
 .new-badge {
-  background-color: #FFECD1; /* replaced #e2d3ff */
-  color: #15616D;           /* replaced #8b6df4 */
-  font-size: 0.8rem;
+  background-color: #FF7D00;
+  color: #ffffff;
+  font-size: 0.75rem;
   padding: 0.25rem 0.4rem;
   border-radius: 4px;
 }
 
 .campaign-builder-header p {
-  color: #15616D; /* replaced #666 */
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
+  color: #c0d6e4; /* Soft secondary color for subtext */
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
-/* Top + More Goals Layout */
-.top-goals-section,
+/* Top Goals Section */
+.top-goals-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* More Goals Title */
+.more-goals-title {
+  font-size: 1.1rem;
+  color: #FFECD1;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* More Goals Section */
 .more-goals-section {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1rem;
 }
 
-.more-goals-title {
-  font-size: 1rem;
-  color: #15616D; /* replaced #888 */
-  margin: 1rem 0 0.5rem 0;
-}
-
-/* Each goal box */
+/* Each Goal Box: bigger rounding, consistent box sizing */
 .goal-box {
   flex: 1 1 160px;
-  min-width: 140px;
-  max-width: 180px;
-  padding: 1rem;
-  border-radius: 8px;
+  min-width: 150px;
+  max-width: 200px;
+  padding: 1.2rem;
+  border-radius: 12px;
   position: relative;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   text-align: left;
-  border: 1px solid #FFECD1; /* replaced #eee */
+  background-color: inherit; /* The tinted background is set inline via JSX */
+  border: 1px solid #1F2C3D; /* Subtle dark border */
 }
 
+/* Hover + selected states */
 .goal-box:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 .goal-box.selected {
-  border-color: #FF7D00; 
+  border-color: #FF7D00;
   box-shadow: 0 3px 8px rgba(255,125,0,0.2);
 }
 
-/* Recommended badge top-right corner */
-.recommended-badge {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  font-size: 0.7rem;
-  background-color: #FFECD1; /* replaced #f2e2ff */
-  color: #15616D;
-  padding: 2px 5px;
-  border-radius: 4px;
-}
-
+/* Goal Icon */
 .goal-icon {
   margin-bottom: 0.5rem;
   display: flex; 
@@ -148,186 +156,92 @@ nav.navbar {
 }
 
 .goal-icon img {
-  width: 36px; 
-  height: 36px;
+  width: 40px; 
+  height: 40px;
   object-fit: contain;
 }
 
 .goal-box h3 {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.3rem;
-  color: #001524; /* replaced #333 */
+  margin-bottom: 0.4rem;
+  color: #FFECD1;
 }
 
 .goal-box p {
-  font-size: 0.85rem;
-  color: #15616D; /* replaced #666 */
+  font-size: 0.9rem;
+  color: #c0d6e4;
   line-height: 1.4;
 }
 
-/* Bottom buttons */
+/* Bottom Buttons - bigger, with consistent rounding */
 .campaign-builder-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .cancel-btn,
 .continue-btn {
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   padding: 0.6rem 1.2rem;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 1rem; /* Slightly bigger text for clarity */
 }
 
 .cancel-btn {
   background-color: transparent;
-  color: #15616D;             
+  color: #FFECD1;
   border: 1px solid #FFECD1;
 }
 .cancel-btn:hover {
-  background-color: #FFECD1; 
+  background-color: rgba(255, 236, 209, 0.15);
 }
 
 .continue-btn {
-  background-color: #FF7D00; 
-  color: #FFECD1;            
+  background-color: #FF7D00;
+  color: #FFECD1;
 }
 .continue-btn:hover {
-  background-color: #78290F; 
-}
-
-/* User profile styles */
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem; /* Increased gap between avatar and username */
-  margin-left: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 2rem;
-  transition: background-color 0.2s;
-}
-
-.user-profile:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.user-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #15616D;
-  color: #FFECD1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.user-name {
-  font-size: 1rem;
-  color: #FFECD1;
-  font-weight: 500;
-}
-
-/* Link styles for nav */
-.nav-link {
-  color: #FFECD1;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.nav-button {
-  color: #FFECD1;
-  text-decoration: none;
-  padding: 0.5rem 1.25rem;
-  border-radius: 4px;
-  border: 1px solid #FFECD1;
-  transition: all 0.2s;
-  font-weight: 500;
-  margin-left: 1rem;
-}
-
-.nav-button:hover {
-  background-color: #FFECD1;
-  color: #001524;
+  background-color: #78290F;
 }
 
 /* ===================== MEDIA QUERIES ===================== */
 
 /* Tablets and down */
 @media (max-width: 768px) {
-  nav.navbar {
-    padding: 1rem 1.5rem;
-  }
-
-  .navbar-brand h1 {
-    font-size: 1.6rem;
-  }
-
   .campaign-builder-panel {
-    margin: 2rem auto 0;
-    max-width: 95%;
-    padding: 1rem;
+    margin-top: 6rem; /* More top spacing if needed for mobile nav */
+    max-width: 90%;
+    padding: 1.2rem;
   }
 
   .campaign-builder-header h2 {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
 
-  .goal-box {
-    flex: 1 1 140px;
-  }
-
-  .goal-box h3 {
+  .campaign-builder-header p {
     font-size: 0.95rem;
-  }
-  .goal-box p {
-    font-size: 0.8rem;
   }
 }
 
 /* Mobile screens and down */
 @media (max-width: 480px) {
-  nav.navbar {
-    padding: 0.8rem 1rem;
-  }
-
-  .navbar-brand h1 {
-    font-size: 1.4rem;
-  }
-
-  .user-avatar {
-    width: 32px;
-    height: 32px;
-  }
-
-  .user-name {
-    font-size: 0.9rem;
-  }
-
   .campaign-builder-panel {
-    margin: 1.5rem auto 0;
-    width: 95%;
+    margin-top: 5rem;
     padding: 1rem;
   }
 
   .campaign-builder-header h2 {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
+
   .campaign-builder-header p {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   .goal-box {
@@ -335,9 +249,11 @@ nav.navbar {
     max-width: 150px;
     padding: 0.8rem;
   }
+
   .goal-box h3 {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
+
   .goal-box p {
     font-size: 0.75rem;
   }
