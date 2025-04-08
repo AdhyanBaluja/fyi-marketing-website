@@ -8,7 +8,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #001524;
@@ -149,14 +148,28 @@ nav.navbar {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  color: #FF7D00; /* Vivid Orange for SVG icons */
+  font-size: 2rem;
 }
 
-.goal-icon img {
+/* For SVG icons */
+.goal-icon svg {
   width: 35px;
   height: 35px;
-  object-fit: contain;
-  /* Updated filter to match the Vivid Orange #FF7D00 */
-  filter: invert(50%) sepia(50%) saturate(3500%) hue-rotate(360deg) brightness(100%) contrast(100%);
+  color: #FF7D00; /* Vivid Orange */
+}
+
+/* For backup icon display */
+.goal-icon .icon-fallback {
+  width: 35px;
+  height: 35px;
+  background-color: #FF7D00; /* Vivid Orange */
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
 }
 
 /* Goal Title */
