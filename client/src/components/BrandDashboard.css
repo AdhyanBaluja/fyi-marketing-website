@@ -10,10 +10,10 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Smooth gradient background with teal + peach */
+/* Dark-themed dashboard container with a gradient that transitions from dark teal to dark orange */
 .brand-dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FFECD1, #15616D);
+  background: linear-gradient(135deg, #0d3b3a, #a74400);
   background-size: 400% 400%;
   animation: gradientFlow 18s ease infinite;
   padding: 2rem;
@@ -25,29 +25,33 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: rgba(0, 21, 36, 0.9);
+  background-color: rgba(13, 59, 58, 0.95);
   padding: 1rem 2rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   animation: fade-in-down 1s ease forwards;
 }
+
 .brand-logo {
   font-size: 1.5rem;
   font-weight: 700;
   color: #FFECD1;
 }
+
 .nav-links {
   list-style: none;
   display: flex;
   gap: 1.5rem;
 }
+
 .nav-links li {
   color: #FFECD1;
   cursor: pointer;
   font-weight: 600;
   transition: color 0.3s, transform 0.3s;
 }
+
 .nav-links li:hover {
   color: #FF7D00;
   transform: scale(1.08);
@@ -59,18 +63,21 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  background-color: rgba(255, 236, 209, 0.8);
+  background-color: rgba(13, 59, 58, 0.8);
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
+
 .brand-dash-header h1 {
   font-size: 1.8rem;
-  color: #001524;
+  color: #FFECD1;
   font-weight: 700;
 }
+
+/* AI Campaign Button */
 .ai-campaign-btn {
-  background-color: #FF7D00;
+  background-color: #a74400;
   color: #FFECD1;
   border: none;
   padding: 0.8rem 1.5rem;
@@ -79,10 +86,12 @@ body {
   font-weight: 600;
   transition: background-color 0.3s, transform 0.3s;
 }
+
 .ai-campaign-btn:hover {
-  background-color: #78290F;
+  background-color: #FF7D00;
   transform: scale(1.05);
 }
+
 .disabled-btn {
   opacity: 0.6;
   cursor: not-allowed;
@@ -94,27 +103,26 @@ body {
   gap: 1rem;
   margin-bottom: 2rem;
 }
+
 .stats-card {
-  background-color: #FFECD1;
+  background-color: #0d3b3a;
   flex: 1;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   padding: 1.5rem;
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
 }
-.hover-scale:hover {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-}
+
 .stats-card h3 {
-  color: #001524;
+  color: #FFECD1;
   margin-bottom: 0.5rem;
 }
+
 .stats-card p {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #001524;
+  color: #FFECD1;
 }
 
 /* Requests area */
@@ -123,169 +131,193 @@ body {
   gap: 1rem;
   margin-bottom: 2rem;
 }
+
 .requests-card {
-  background-color: #FFECD1;
+  background-color: #0d3b3a;
   flex: 1;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   padding: 1.5rem;
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
   animation: fade-in-up 1s ease forwards;
 }
+
 .requests-card:hover {
   transform: translateY(-4px) scale(1.03);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
+
 .requests-card h3 {
-  color: #001524;
+  color: #FFECD1;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
+
 .requests-card p {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #001524;
+  color: #FFECD1;
 }
 
-/* NEW: Influencer Applications */
+/* Influencer Applications Section */
 .applications-section {
-  background-color: #FFECD1;
+  background-color: #0d3b3a;
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
   animation: fade-in-up 1s ease forwards;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
+
 .applications-section h2 {
-  color: #001524;
+  color: #FFECD1;
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
+
 .applications-container {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
+
 .application-card {
-  background-color: #fff;
+  background-color: #0a2f2d;
   flex: 1 1 280px;
   padding: 1rem;
   border-radius: 6px;
-  border-left: 4px solid #FF7D00;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-left: 4px solid #a74400;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   transition: transform 0.3s;
 }
+
 .application-card:hover {
   transform: scale(1.02);
 }
+
 .application-card h3 {
   margin-bottom: 0.5rem;
-  color: #001524;
+  color: #FFECD1;
   font-weight: 600;
 }
+
 .application-card p {
   margin-bottom: 0.3rem;
-  color: #001524;
+  color: #FFECD1;
 }
+
 .accept-btn {
   margin-top: 0.5rem;
   padding: 0.4rem 0.8rem;
   border: none;
-  background-color: #15616D;
+  background-color: #a74400;
   color: #FFECD1;
   border-radius: 4px;
   cursor: pointer;
 }
+
 .accept-btn:hover {
-  background-color: #0e4650;
+  background-color: #FF7D00;
 }
 
-/* Campaigns table */
+/* Campaigns Section */
 .campaigns-section {
-  background-color: #FFECD1;
+  background-color: #0d3b3a;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   margin-bottom: 2rem;
 }
+
 .campaigns-section h2 {
   margin-bottom: 1rem;
-  color: #001524;
+  color: #FFECD1;
   font-size: 1.4rem;
 }
+
 .campaigns-table {
   width: 100%;
   border-collapse: collapse;
   animation: fade-in-up 1.2s ease forwards;
-  /* Allow horizontal scroll on very small screens */
   overflow-x: auto;
   display: block;
 }
+
 .campaigns-table thead tr {
-  background-color: #FFECD1;
+  background-color: #0d3b3a;
 }
+
 .campaigns-table th,
 .campaigns-table td {
   text-align: left;
   padding: 0.8rem;
-  border-bottom: 1px solid #FFECD1;
+  border-bottom: 1px solid #0a2f2d;
 }
+
 .campaigns-table th {
-  color: #001524;
+  color: #FFECD1;
   font-weight: 600;
 }
+
 .campaigns-table tbody tr {
   transition: background-color 0.3s;
-  background-color: #FFECD1;
+  background-color: #0d3b3a;
 }
+
 .campaigns-table tbody tr:hover {
-  background-color: #15616D;
+  background-color: #a74400;
   color: #FFECD1;
 }
-/* For the status select and delete button in Actions */
+
+/* Status select and delete button */
 .status-select {
-  background-color: #fff3e0; /* light peach */
-  border: 1px solid #ffb977; 
+  background-color: #172c2a;
+  border: 1px solid #2a4c4a;
   border-radius: 4px;
   padding: 0.4rem;
   cursor: pointer;
   margin-right: 6px;
   font-weight: 600;
   transition: background-color 0.3s;
+  color: #FFECD1;
 }
+
 .status-select:hover {
-  background-color: #ffe4c7;
+  background-color: #203d3b;
 }
+
 .delete-btn {
-  background-color: #ffeaea; 
-  border: 1px solid #ff9a9a;
-  color: #aa0000;
+  background-color: #4a1f1f;
+  border: 1px solid #652525;
+  color: #ffb3b3;
   padding: 0.4rem 0.6rem;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
   font-weight: 600;
 }
+
 .delete-btn:hover {
-  background-color: #ffd7d7;
+  background-color: #5a2727;
 }
 
 /* Calendar section */
 .calendar-section {
-  background-color: #FFECD1;
+  background-color: #0d3b3a;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
   margin-bottom: 2rem;
   animation: fade-in-up 1s ease forwards;
 }
+
 .calendar-section h2 {
   margin-bottom: 1rem;
-  color: #001524;
+  color: #FFECD1;
   font-size: 1.4rem;
 }
-/* We center the month text with absolutely positioned arrow buttons */
+
 .calendar-controls {
   position: relative;
   margin-bottom: 1rem;
@@ -294,18 +326,20 @@ body {
   align-items: center;
   justify-content: center;
 }
+
 .calendar-controls h3 {
   margin: 0;
   font-size: 1.2rem;
-  color: #001524;
+  color: #FFECD1;
   font-weight: 600;
   text-align: center;
 }
-/* pastel arrow buttons */
+
+/* Pastel arrow buttons re-styled for dark theme */
 .arrow-btn {
-  background-color: #c3d6d6;
+  background-color: #203d3b;
   border: none;
-  color: #001524;
+  color: #FFECD1;
   font-weight: 600;
   padding: 0.3rem 0.6rem;
   border-radius: 4px;
@@ -316,13 +350,16 @@ body {
   bottom: 0;
   margin: auto 0;
 }
+
 .arrow-btn:hover {
-  background-color: #a7c4c2;
+  background-color: #2a4c4a;
   transform: scale(1.04);
 }
+
 .prev-arrow {
   left: 0.5rem;
 }
+
 .next-arrow {
   right: 0.5rem;
 }
@@ -332,6 +369,7 @@ body {
   grid-template-columns: repeat(7, 1fr);
   gap: 0.5rem;
 }
+
 .calendar-day {
   height: 90px;
   border-radius: 4px;
@@ -341,34 +379,42 @@ body {
   align-items: center;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #0d3b3a;
 }
+
 .calendar-day:hover {
   transform: scale(1.03);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
+
 .day-number {
   font-weight: 600;
   font-size: 1.1rem;
   margin-bottom: 4px;
+  color: #FFECD1;
 }
+
 .event-title {
   font-size: 0.9rem;
   font-weight: 500;
+  color: #FFECD1;
 }
+
 .day-details {
   margin-top: 1.5rem;
-  background-color: #FFECD1;
+  background-color: #0d3b3a;
   padding: 1rem;
   border-radius: 6px;
-  color: #001524;
+  color: #FFECD1;
   animation: fade-in-up 0.8s ease forwards;
 }
+
 .day-event-card {
-  background-color: #fefaf5;
+  background-color: #10252b;
   margin-bottom: 1rem;
   padding: 0.75rem;
   border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
 /* Joined influencers */
@@ -376,34 +422,39 @@ body {
   animation: fade-in-up 1s ease forwards;
   margin-bottom: 2rem;
 }
+
 .influencer-requests-section h2 {
   margin-top: 2rem;
   margin-bottom: 1rem;
-  color: #001524;
+  color: #FFECD1;
   font-size: 1.4rem;
 }
+
 .joined-influencers-card {
-  background-color: #FFECD1;
+  background-color: #0d3b3a;
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
 }
+
 .joined-influencers-card h3 {
-  color: #001524;
+  color: #FFECD1;
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
   font-weight: 600;
 }
+
 .joined-influencers-list {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
   margin-top: 0.5rem;
 }
+
 .joined-influencer-item {
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: #172c2a;
+  border: 1px solid #2a4c4a;
   padding: 0.5rem;
   border-radius: 6px;
   display: flex;
@@ -411,27 +462,32 @@ body {
   gap: 0.5rem;
   transition: transform 0.3s;
 }
+
 .joined-influencer-item:hover {
   transform: scale(1.03);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
+
 .influencer-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
 }
+
 .inf-details {
   display: flex;
   flex-direction: column;
 }
+
 .inf-name {
   font-weight: 600;
-  color: #001524;
+  color: #FFECD1;
 }
+
 .join-source {
   font-size: 0.8rem;
-  color: #444;
+  color: #bbb;
 }
 
 /* KEYFRAME ANIMATIONS */
@@ -446,6 +502,7 @@ body {
     background-position: 0% 50%;
   }
 }
+
 @keyframes fade-in-down {
   0% {
     opacity: 0;
@@ -456,6 +513,7 @@ body {
     transform: translateY(0);
   }
 }
+
 @keyframes fade-in-up {
   0% {
     opacity: 0;
@@ -466,6 +524,7 @@ body {
     transform: translateY(0);
   }
 }
+
 @keyframes bounceIn {
   0% {
     transform: scale(0.8);
@@ -480,12 +539,15 @@ body {
     opacity: 1;
   }
 }
+
 .fade-in-down {
   animation: fade-in-down 1s ease forwards;
 }
+
 .fade-in-up {
   animation: fade-in-up 1s ease forwards;
 }
+
 .bounce-in {
   animation: bounceIn 1.2s ease-in-out forwards;
 }
@@ -510,6 +572,7 @@ body {
     gap: 1rem;
     text-align: center;
   }
+
   .brand-dash-header h1 {
     font-size: 1.6rem;
   }
@@ -531,6 +594,7 @@ body {
   .calendar-grid {
     grid-template-columns: repeat(7, minmax(40px, 1fr));
   }
+
   .calendar-day {
     height: 70px;
   }
@@ -549,6 +613,7 @@ body {
   .nav-links {
     gap: 0.4rem;
   }
+
   .nav-links li {
     font-size: 0.9rem;
   }
@@ -556,6 +621,7 @@ body {
   .brand-dash-header h1 {
     font-size: 1.4rem;
   }
+
   .ai-campaign-btn {
     font-size: 0.9rem;
     padding: 0.6rem 1rem;
@@ -579,12 +645,15 @@ body {
     grid-template-columns: repeat(7, 1fr);
     gap: 0.3rem;
   }
+
   .calendar-day {
     height: 60px;
   }
+
   .day-number {
     font-size: 0.9rem;
   }
+
   .event-title {
     font-size: 0.75rem;
   }

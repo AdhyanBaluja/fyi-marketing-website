@@ -271,16 +271,16 @@ function BrandDashboard() {
 
   // PLATFORM COLORS for calendar
   const platformColors = {
-    instagram: '#FFC0CC',
-    facebook: '#AFC2FF',
-    twitter: '#A0E2FF',
-    youtube: '#FFB0B0',
-    linkedin: '#A5CCE8',
-    tiktok: '#CFCFCF',
-    snapchat: '#FFF66E',
-    reddit: '#FFBA9E',
-    twitch: '#C8ACFF',
-    default: '#CCCCCC',
+    instagram: '#008080',   // Teal
+    facebook:  '#007070',    // Darker teal
+    twitter:   '#006666',    // Even darker teal
+    youtube:   '#FF8C00',    // Dark orange
+    linkedin:  '#009688',    // Teal variant
+    tiktok:    '#FF7F00',    // Bright orange
+    snapchat:  '#FFA726',    // Orange variant
+    reddit:    '#FF7043',    // Warm orange
+    twitch:    '#008B8B',    // Teal variant
+    default:   '#004d40',    // Dark teal fallback
   };
 
   const getDayStyle = (dayEvents) => {
