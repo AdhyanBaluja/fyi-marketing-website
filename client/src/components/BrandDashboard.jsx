@@ -295,11 +295,11 @@ function BrandDashboard() {
       }
     });
 
-    // Default style for calendar days - use the design color instead of blue
+    // Default style for calendar days with no events - cream color
     if (platformSet.size === 0) {
       return {
-        backgroundColor: '#0E1D24', // Matching the dark teal theme from CSS
-        color: '#F8F1E5',
+        backgroundColor: '#F8F1E5', // Cream color for days with no events
+        color: '#0E1D24',           // Dark text for contrast
       };
     }
 
@@ -309,7 +309,7 @@ function BrandDashboard() {
     if (colors.length === 1) {
       return {
         backgroundColor: colors[0],
-        color: '#F8F1E5', // Updated to match theme's text color
+        color: '#F8F1E5', // Light text for contrast
       };
     } else {
       const step = 100 / (colors.length - 1);
@@ -317,7 +317,7 @@ function BrandDashboard() {
       const gradientStr = `linear-gradient(135deg, ${gradientParts.join(', ')})`;
       return {
         background: gradientStr,
-        color: '#F8F1E5', // Updated to match theme's text color
+        color: '#F8F1E5', // Light text for contrast
       };
     }
   };
@@ -480,24 +480,63 @@ function BrandDashboard() {
         )}
       </section>
 
-      {/* BRAND-LEVEL CALENDAR => All Active Campaign Events */}
-      <section className="calendar-section fade-in-up">
-        <h2>All Active Campaign Events</h2>
-        <div className="calendar-controls">
-          <button className="arrow-btn prev-arrow" onClick={handlePrevMonth}>
+      {/* IMPROVED BRAND-LEVEL CALENDAR => All Active Campaign Events */}
+      <section className="calendar-section fade-in-up" style={{ backgroundColor: '#0E1D24', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}>
+        <h2 style={{ color: '#F8F1E5', fontSize: '28px', textAlign: 'center', marginBottom: '24px' }}>All Active Campaign Events</h2>
+        
+        <div className="calendar-controls" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
+          <button 
+            className="arrow-btn prev-arrow" 
+            onClick={handlePrevMonth}
+            style={{ 
+              backgroundColor: '#007070', 
+              color: '#F8F1E5', 
+              border: 'none', 
+              borderRadius: '50%', 
+              width: '40px', 
+              height: '40px', 
+              fontSize: '18px',
+              cursor: 'pointer' 
+            }}
+          >
             &lt;
           </button>
-          <h3>
+          <h3 style={{ 
+            color: '#F8F1E5', 
+            fontSize: '32px',
+            margin: '0 40px',
+            fontWeight: 'bold' 
+          }}>
             {new Date(calendarYear, calendarMonth).toLocaleString('default', {
               month: 'long',
               year: 'numeric',
             })}
           </h3>
-          <button className="arrow-btn next-arrow" onClick={handleNextMonth}>
+          <button 
+            className="arrow-btn next-arrow" 
+            onClick={handleNextMonth}
+            style={{ 
+              backgroundColor: '#007070', 
+              color: '#F8F1E5', 
+              border: 'none', 
+              borderRadius: '50%', 
+              width: '40px', 
+              height: '40px', 
+              fontSize: '18px',
+              cursor: 'pointer' 
+            }}
+          >
             &gt;
           </button>
         </div>
-        <div className="calendar-grid">
+        
+        <div className="calendar-grid" style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(7, 1fr)', 
+          gap: '10px', 
+          maxWidth: '1000px', 
+          margin: '0 auto' 
+        }}>
           {Array.from({
             length: new Date(calendarYear, calendarMonth + 1, 0).getDate(),
           }).map((_, idx) => {
@@ -509,75 +548,116 @@ function BrandDashboard() {
               <div
                 key={day}
                 className="calendar-day"
-                style={styleForDay}
+                style={{
+                  ...styleForDay,
+                  borderRadius: '8px',
+                  padding: '12px',
+                  minHeight: '80px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                  ':hover': {
+                    transform: 'scale(1.03)',
+                    boxShadow: '0 5px 15px rgba(0,0,0,0.3)'
+                  }
+                }}
                 onClick={() => setSelectedCalendarEvents(dayEvents)}
               >
-                <span className="day-number">{day}</span>
-                {dayEvents.length > 1 && <div className="event-title">{dayEvents.length} events</div>}
+                <span className="day-number" style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '5px' }}>
+                  {day}
+                </span>
+                {dayEvents.length > 1 && (
+                  <div className="event-title" style={{ fontSize: '14px', textAlign: 'center', marginTop: 'auto' }}>
+                    {dayEvents.length} events
+                  </div>
+                )}
                 {dayEvents.length === 1 && (
-                  <div className="event-title">{dayEvents[0].event || 'No Title'}</div>
+                  <div className="event-title" style={{ fontSize: '14px', textAlign: 'center', marginTop: 'auto' }}>
+                    {dayEvents[0].event || 'No Title'}
+                  </div>
                 )}
               </div>
             );
           })}
         </div>
+        
         {selectedCalendarEvents && selectedCalendarEvents.length > 0 && (
-          <div className="day-details">
-            <h3>Day Details</h3>
-            {selectedCalendarEvents.map((ev, i) => {
-              let platformsStr = '';
-              if (ev.platforms) {
-                if (Array.isArray(ev.platforms)) {
-                  platformsStr = ev.platforms.join(', ');
-                } else {
-                  platformsStr = String(ev.platforms);
+          <div className="day-details" style={{ 
+            backgroundColor: '#F8F1E5', 
+            borderRadius: '8px', 
+            padding: '20px', 
+            marginTop: '24px',
+            color: '#0E1D24',
+            maxWidth: '900px',
+            margin: '24px auto 0'
+          }}>
+            <h3 style={{ fontSize: '24px', textAlign: 'center', marginBottom: '16px' }}>Day Details</h3>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center' }}>
+              {selectedCalendarEvents.map((ev, i) => {
+                let platformsStr = '';
+                if (ev.platforms) {
+                  if (Array.isArray(ev.platforms)) {
+                    platformsStr = ev.platforms.join(', ');
+                  } else {
+                    platformsStr = String(ev.platforms);
+                  }
                 }
-              }
-              let kpisStr = '';
-              if (ev.kpis) {
-                if (Array.isArray(ev.kpis)) {
-                  kpisStr = ev.kpis.join(', ');
-                } else {
-                  kpisStr = String(ev.kpis);
+                let kpisStr = '';
+                if (ev.kpis) {
+                  if (Array.isArray(ev.kpis)) {
+                    kpisStr = ev.kpis.join(', ');
+                  } else {
+                    kpisStr = String(ev.kpis);
+                  }
                 }
-              }
 
-              return (
-                <div key={i} className="day-event-card">
-                  <p className="event-detail">
-                    <strong>Date:</strong> {ev.date}
-                  </p>
-                  <p className="event-detail">
-                    <strong>Event:</strong> {ev.event || 'No event'}
-                  </p>
-                  {ev.platforms && (
-                    <p className="event-detail">
-                      <strong>Platforms:</strong> {platformsStr}
+                return (
+                  <div key={i} className="day-event-card" style={{ 
+                    backgroundColor: '#ffffff', 
+                    borderRadius: '8px', 
+                    padding: '16px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                    width: 'calc(50% - 16px)',
+                    minWidth: '300px',
+                    border: '1px solid #e0e0e0'
+                  }}>
+                    <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: '#008080', marginBottom: '12px' }}>
+                      {ev.event || 'Event'}
+                    </h4>
+                    <p className="event-detail" style={{ margin: '8px 0', fontSize: '14px' }}>
+                      <strong>Date:</strong> {ev.date}
                     </p>
-                  )}
-                  {ev.campaignName && (
-                    <p className="event-detail">
-                      <strong>Campaign:</strong> {ev.campaignName}
-                    </p>
-                  )}
-                  {ev.cta && (
-                    <p className="event-detail">
-                      <strong>CTA:</strong> {ev.cta}
-                    </p>
-                  )}
-                  {ev.captions && (
-                    <p className="event-detail">
-                      <strong>Captions:</strong> {ev.captions}
-                    </p>
-                  )}
-                  {ev.kpis && (
-                    <p className="event-detail">
-                      <strong>KPIs:</strong> {kpisStr}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
+                    {ev.platforms && (
+                      <p className="event-detail" style={{ margin: '8px 0', fontSize: '14px' }}>
+                        <strong>Platforms:</strong> {platformsStr}
+                      </p>
+                    )}
+                    {ev.campaignName && (
+                      <p className="event-detail" style={{ margin: '8px 0', fontSize: '14px' }}>
+                        <strong>Campaign:</strong> {ev.campaignName}
+                      </p>
+                    )}
+                    {ev.cta && (
+                      <p className="event-detail" style={{ margin: '8px 0', fontSize: '14px' }}>
+                        <strong>CTA:</strong> {ev.cta}
+                      </p>
+                    )}
+                    {ev.captions && (
+                      <p className="event-detail" style={{ margin: '8px 0', fontSize: '14px' }}>
+                        <strong>Captions:</strong> {ev.captions}
+                      </p>
+                    )}
+                    {ev.kpis && (
+                      <p className="event-detail" style={{ margin: '8px 0', fontSize: '14px' }}>
+                        <strong>KPIs:</strong> {kpisStr}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
       </section>
