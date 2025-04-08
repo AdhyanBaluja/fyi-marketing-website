@@ -13,7 +13,7 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Full-page dark background (Deep Navy) */
+/* Overall Background: Deep Navy */
 .campaign-builder-full-page {
   background-color: #001524; 
   width: 100vw; 
@@ -24,10 +24,7 @@ body {
   overflow-x: hidden;
 }
 
-/* NavBar Styling 
-   (If you're referencing a separate NavBar.css, 
-   these styles can remain or be removed as needed.)
-*/
+/* ===== NavBar (unchanged if you already have separate styling) ===== */
 nav.navbar {
   width: 100%;
   padding: 1.2rem 2.5rem;
@@ -42,58 +39,66 @@ nav.navbar {
   z-index: 10;
 }
 
-/* Logo + nav items */
 .navbar-brand {
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
+
 .navbar-brand h1 {
   font-size: 1.8rem;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
+
 .navbar-actions {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
 
-/* Main panel (dark card) - narrower width and bigger corner radius for a modern look */
+/* 
+  Main Card Container: Elegant Dark Teal (#812A36)
+  Slightly narrower + bigger corner radius for the modern look
+*/
 .campaign-builder-panel {
-  background-color: #0D1B2A; /* Dark slate */
+  background-color: #812A36; /* Elegant Dark Teal */
   width: 100%;
-  max-width: 460px; /* Narrower to match the reference image sizing */
+  max-width: 460px;
   border-radius: 12px; 
   box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-  padding: 1.5rem 1.5rem 2rem; /* Extra bottom padding for buttons */
-  margin: 4rem auto 0; /* 4rem top to accommodate NavBar and be visually centered */
-  color: #FFECD1; /* Light text for contrast */
+  padding: 1.5rem 1.5rem 2rem; /* extra bottom padding for buttons */
+  margin: 4rem auto 0; /* allow space for the NavBar */
+  color: #F8F1E5; /* default text color (Cool Cream) for strong contrast */
 }
 
 /* Header content inside the panel */
 .campaign-builder-header {
   margin-bottom: 1.5rem;
 }
+
+/* Heading: #F8F1E5 (Cool Cream) */
 .campaign-builder-header h2 {
   font-size: 1.8rem;
   margin-bottom: 0.5rem;
   font-weight: 600;
   display: inline-block;
   margin-right: 0.5rem;
-  color: #FFECD1; 
+  color: #F8F1E5; 
 }
 
+/* "New" badge if needed */
 .new-badge {
-  background-color: #FF7D00;
+  background-color: #FF7D08; /* Vivid Orange highlight */
   color: #ffffff;
   font-size: 0.75rem;
   padding: 0.25rem 0.4rem;
   border-radius: 4px;
 }
 
+/* Subheading text: #F8F1E5 at 75% */
 .campaign-builder-header p {
-  color: #c0d6e4; /* Soft secondary color for subtext */
+  color: rgba(248,241,229, 0.75);
   font-size: 1rem;
   line-height: 1.4;
 }
@@ -105,23 +110,27 @@ nav.navbar {
   gap: 1rem;
 }
 
-/* More Goals Title */
+/* "More goals" label */
 .more-goals-title {
   font-size: 1.1rem;
-  color: #FFECD1;
+  color: #F8F1E5;
   margin-top: 2rem;
   margin-bottom: 1rem;
   font-weight: 500;
 }
 
-/* More Goals Section */
+/* More Goals Section container */
 .more-goals-section {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-/* Each Goal Box: bigger rounding, consistent box sizing */
+/* 
+  Each Goal Box: 
+  - Fill with Midnight Charcoal (#0E1217).
+  - Title ~ 75% opacity, Description ~ 40% opacity 
+*/
 .goal-box {
   flex: 1 1 160px;
   min-width: 150px;
@@ -132,49 +141,52 @@ nav.navbar {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   text-align: left;
-  background-color: inherit; /* The tinted background is set inline via JSX */
-  border: 1px solid #1F2C3D; /* Subtle dark border */
+  background-color: #0E1217; /* Midnight Charcoal */
+  border: 1px solid rgba(0,0,0,0.4); /* Subtle border, optional */
 }
 
-/* Hover + selected states */
 .goal-box:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 .goal-box.selected {
-  border-color: #FF7D00;
+  border-color: #FF7D08; /* Vivid Orange highlight */
   box-shadow: 0 3px 8px rgba(255,125,0,0.2);
 }
 
-/* Goal Icon */
+/* Icon region. 
+   If icons are images, recoloring them in CSS may not be possible.
+   If they're SVG, you can color with fill: #FF7D08 or the icon's own color. 
+*/
 .goal-icon {
   margin-bottom: 0.5rem;
   display: flex; 
   justify-content: center;
   align-items: center;
 }
-
 .goal-icon img {
   width: 40px; 
   height: 40px;
   object-fit: contain;
 }
 
+/* Goal Title => #F8F1E5 at ~75% => alpha ~ 0.75 */
 .goal-box h3 {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.4rem;
-  color: #FFECD1;
+  color: rgba(248,241,229, 0.75);
 }
 
+/* Goal Description => #F8F1E5 at ~40% => alpha ~ 0.4 */
 .goal-box p {
   font-size: 0.9rem;
-  color: #c0d6e4;
+  color: rgba(248,241,229, 0.4);
   line-height: 1.4;
 }
 
-/* Bottom Buttons - bigger, with consistent rounding */
+/* Bottom Buttons (Cancel/Continue) */
 .campaign-builder-buttons {
   display: flex;
   justify-content: flex-end;
@@ -182,6 +194,10 @@ nav.navbar {
   margin-top: 2rem;
 }
 
+/* 
+   Cancel => transparent with a light border 
+   Continue => #0E1217 (Midnight Charcoal), as table suggests a subtle secondary CTA
+*/
 .cancel-btn,
 .continue-btn {
   border: none;
@@ -190,24 +206,26 @@ nav.navbar {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-size: 1rem; /* Slightly bigger text for clarity */
+  font-size: 1rem;
 }
 
+/* Cancel: text-based button */
 .cancel-btn {
   background-color: transparent;
-  color: #FFECD1;
-  border: 1px solid #FFECD1;
+  color: #F8F1E5;
+  border: 1px solid rgba(248,241,229,0.75);
 }
 .cancel-btn:hover {
-  background-color: rgba(255, 236, 209, 0.15);
+  background-color: rgba(248,241,229,0.15);
 }
 
+/* Continue: midnight charcoal with light text */
 .continue-btn {
-  background-color: #FF7D00;
-  color: #FFECD1;
+  background-color: #0E1217; 
+  color: #F8F1E5; 
 }
 .continue-btn:hover {
-  background-color: #78290F;
+  background-color: rgba(14, 18, 23, 0.8);
 }
 
 /* ===================== MEDIA QUERIES ===================== */
@@ -215,15 +233,13 @@ nav.navbar {
 /* Tablets and down */
 @media (max-width: 768px) {
   .campaign-builder-panel {
-    margin-top: 6rem; /* More top spacing if needed for mobile nav */
+    margin-top: 6rem; 
     max-width: 90%;
     padding: 1.2rem;
   }
-
   .campaign-builder-header h2 {
     font-size: 1.6rem;
   }
-
   .campaign-builder-header p {
     font-size: 0.95rem;
   }
@@ -235,29 +251,23 @@ nav.navbar {
     margin-top: 5rem;
     padding: 1rem;
   }
-
   .campaign-builder-header h2 {
     font-size: 1.4rem;
   }
-
   .campaign-builder-header p {
     font-size: 0.85rem;
   }
-
   .goal-box {
     min-width: 120px;
     max-width: 150px;
     padding: 0.8rem;
   }
-
   .goal-box h3 {
     font-size: 0.9rem;
   }
-
   .goal-box p {
     font-size: 0.75rem;
   }
-
   .cancel-btn,
   .continue-btn {
     font-size: 0.9rem;
