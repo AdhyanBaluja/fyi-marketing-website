@@ -7,7 +7,7 @@ import NavBar from './NavBar';
 // Use the environment variable for the API base URL, falling back to localhost if not set
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
-// Add inline SVG components to replace the external icon URLs
+// Inline SVG components to replace external icon URLs
 const MegaphoneIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="m3 11 18-5v12L3 13"></path>
@@ -16,7 +16,10 @@ const MegaphoneIcon = () => (
 );
 
 const ShoppingBagIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+  >
     <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
     <path d="M16 10a4 4 0 0 1-8 0"></path>
     <path d="M3 6h18"></path>
@@ -24,7 +27,10 @@ const ShoppingBagIcon = () => (
 );
 
 const BarChartIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+  >
     <line x1="18" y1="20" x2="18" y2="10"></line>
     <line x1="12" y1="20" x2="12" y2="4"></line>
     <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -32,14 +38,20 @@ const BarChartIcon = () => (
 );
 
 const MapPinIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+  >
     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
     <circle cx="12" cy="10" r="3"></circle>
   </svg>
 );
 
 const CalendarHeartIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+  >
     <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5Z"></path>
     <line x1="16" y1="2" x2="16" y2="6"></line>
     <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -51,20 +63,21 @@ const CalendarHeartIcon = () => (
 function CampaignBuilder() {
   const navigate = useNavigate();
 
-  // 1) Store membership plan to block usage if it's "Free"
+  // Membership plan and loading state
   const [membershipPlan, setMembershipPlan] = useState('');
   const [loadingPlan, setLoadingPlan] = useState(true);
-  // Add user info state
+
+  // User info state (for NavBar, etc.)
   const [userInfo, setUserInfo] = useState({});
 
-  // 2) Selected Goals
+  // Selected goals
   const [selectedGoals, setSelectedGoals] = useState([]);
 
-  // 3) Read user info from localStorage
+  // Read user/token from localStorage
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
 
-  // 4) On mount, check user and fetch membership plan
+  // Check user plan on mount
   useEffect(() => {
     if (!token || !userId) {
       navigate('/signin');
@@ -82,8 +95,10 @@ function CampaignBuilder() {
       });
       const plan = res.data.user.membershipPlan || 'Free';
       setMembershipPlan(plan);
-      // Also store user info for the NavBar
+
+      // Also store user info for NavBar usage
       setUserInfo(res.data.user);
+
       setLoadingPlan(false);
 
       // If plan is "Free", block usage & redirect
@@ -98,7 +113,7 @@ function CampaignBuilder() {
     }
   };
 
-  // 5) Define available goals with inline SVG components instead of external URLs
+  // Available goals, each with an inline SVG icon
   const goals = [
     {
       id: 'amplify-brand-awareness',
@@ -144,33 +159,41 @@ function CampaignBuilder() {
     );
   };
 
+  // Reset selected goals
   const handleCancel = () => {
     setSelectedGoals([]);
   };
 
-  // On continue, ensure exactly one goal is selected and navigate accordingly
+  // Continue => Ensure exactly one selected goal => navigate
   const handleContinue = () => {
     if (selectedGoals.length === 1) {
       const selectedGoal = goals.find((g) => g.id === selectedGoals[0]);
-      if (selectedGoal.id === 'amplify-brand-awareness') {
-        navigate('/amplify', { state: { selectedGoal } });
-      } else if (selectedGoal.id === 'market-a-product') {
-        navigate('/market-product', { state: { selectedGoal } });
-      } else if (selectedGoal.id === 'drive-sales') {
-        navigate('/drive-sales', { state: { selectedGoal } });
-      } else if (selectedGoal.id === 'find-new-customers') {
-        navigate('/find-new-customers', { state: { selectedGoal } });
-      } else if (selectedGoal.id === 'drive-event-awareness') {
-        navigate('/drive-event-awareness', { state: { selectedGoal } });
-      } else {
-        alert(`Navigation for "${selectedGoal.label}" is not yet implemented.`);
+      switch (selectedGoal.id) {
+        case 'amplify-brand-awareness':
+          navigate('/amplify', { state: { selectedGoal } });
+          break;
+        case 'market-a-product':
+          navigate('/market-product', { state: { selectedGoal } });
+          break;
+        case 'drive-sales':
+          navigate('/drive-sales', { state: { selectedGoal } });
+          break;
+        case 'find-new-customers':
+          navigate('/find-new-customers', { state: { selectedGoal } });
+          break;
+        case 'drive-event-awareness':
+          navigate('/drive-event-awareness', { state: { selectedGoal } });
+          break;
+        default:
+          alert(`Navigation for "${selectedGoal.label}" is not yet implemented.`);
+          break;
       }
     } else {
       alert('Please select exactly one goal to continue.');
     }
   };
 
-  // Split goals into top vs. more categories
+  // Split goals by category
   const topGoals = goals.filter((g) => g.category === 'top');
   const moreGoals = goals.filter((g) => g.category === 'more');
 
@@ -201,9 +224,7 @@ function CampaignBuilder() {
               className={`goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
               onClick={() => handleToggleGoal(goal.id)}
             >
-              <div className="goal-icon">
-                {goal.icon}
-              </div>
+              <div className="goal-icon">{goal.icon}</div>
               <h3>{goal.label}</h3>
               <p>{goal.description}</p>
             </div>
@@ -218,9 +239,7 @@ function CampaignBuilder() {
               className={`goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
               onClick={() => handleToggleGoal(goal.id)}
             >
-              <div className="goal-icon">
-                {goal.icon}
-              </div>
+              <div className="goal-icon">{goal.icon}</div>
               <h3>{goal.label}</h3>
               <p>{goal.description}</p>
             </div>

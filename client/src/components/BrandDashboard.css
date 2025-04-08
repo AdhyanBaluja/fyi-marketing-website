@@ -9,6 +9,11 @@
 body {
   font-family: 'Poppins', sans-serif;
 }
+p {
+  color: rgba(248, 241, 229, 0.75);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
 
 /* Overall Background: Deep Navy */
 .brand-dashboard-container {
@@ -76,7 +81,7 @@ body {
   color: #F8F1E5; /* Cool Cream text */
   font-weight: 700;
 }
-.p {
+p {
   color: rgba(248, 241, 229, 0.75);
   font-size: 14px;
   margin-bottom: 20px;
