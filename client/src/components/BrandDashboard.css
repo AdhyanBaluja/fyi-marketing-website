@@ -14,6 +14,7 @@ body {
 .brand-dashboard-container p {
   margin: 0;
   padding: 0;
+  
 }
 
 /* Overall Background: Deep Navy */
@@ -33,7 +34,7 @@ body {
 
 /* Campaign cards empty state message styling */
 .empty-state-message {
-  color: rgba(0, 219, 187, 0.55); /* Teal color with opacity */
+  color: rgba(248, 241, 229, 0.75)  ; /* Teal color with opacity */
   font-size: 14px;
   margin-bottom: 10px;
   text-align: center;
