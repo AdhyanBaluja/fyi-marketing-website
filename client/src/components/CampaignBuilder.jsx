@@ -57,47 +57,42 @@ function CampaignBuilder() {
     }
   };
 
-  // 5) Define available goals
+  // 5) Define available goals with updated icons but original text
   const goals = [
     {
       id: 'amplify-brand-awareness',
       label: 'Amplify Awareness',
       description: "Boost my brand's presence and make it top of mind for audiences.",
-      icon: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+      icon: 'https://cdn.jsdelivr.net/npm/lucide-icons@0.193.0/svg/megaphone.svg',
       category: 'top',
-      tint: '#ffeff3',
     },
     {
       id: 'market-a-product',
       label: 'Market a Product',
       description: 'Showcase my product to attract more customers and increase sales.',
-      icon: 'https://cdn-icons-png.flaticon.com/512/2910/2910795.png',
+      icon: 'https://cdn.jsdelivr.net/npm/lucide-icons@0.193.0/svg/shopping-bag.svg',
       category: 'top',
-      tint: '#eafcff',
     },
     {
       id: 'drive-sales',
       label: 'Drive Sales',
       description: 'Accelerate my sales efforts and push for higher conversion rates.',
-      icon: 'https://cdn-icons-png.flaticon.com/512/1170/1170576.png',
+      icon: 'https://cdn.jsdelivr.net/npm/lucide-icons@0.193.0/svg/bar-chart-2.svg',
       category: 'top',
-      tint: '#f1eeff',
     },
     {
       id: 'find-new-customers',
       label: 'Find New Customers',
       description: 'Reach untapped markets and expand my customer base.',
-      icon: 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
+      icon: 'https://cdn.jsdelivr.net/npm/lucide-icons@0.193.0/svg/map-pin.svg',
       category: 'more',
-      tint: '#fff3e6',
     },
     {
       id: 'drive-event-awareness',
       label: 'Drive Event Awareness',
       description: 'Increase visibility and excitement for my event.',
-      icon: 'https://cdn-icons-png.flaticon.com/512/921/921347.png',
+      icon: 'https://cdn.jsdelivr.net/npm/lucide-icons@0.193.0/svg/calendar-heart.svg',
       category: 'more',
-      tint: '#ffeef1',
     },
   ];
 
@@ -153,9 +148,8 @@ function CampaignBuilder() {
       <NavBar userInfo={userInfo} isAuthenticated={!!token} />
       <div className="campaign-builder-panel">
         <div className="campaign-builder-header">
-          <h2>
-            Campaign Builder <span className="new-badge">New</span>
-          </h2>
+          <h2>Campaign Builder</h2>
+          <span className="new-badge">New</span>
           <p>Choose one and get a multi-channel campaign to meet your goal.</p>
         </div>
 
@@ -164,7 +158,6 @@ function CampaignBuilder() {
             <div
               key={goal.id}
               className={`goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
-              style={{ backgroundColor: goal.tint }}
               onClick={() => handleToggleGoal(goal.id)}
             >
               <div className="goal-icon">
@@ -182,7 +175,6 @@ function CampaignBuilder() {
             <div
               key={goal.id}
               className={`goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
-              style={{ backgroundColor: goal.tint }}
               onClick={() => handleToggleGoal(goal.id)}
             >
               <div className="goal-icon">

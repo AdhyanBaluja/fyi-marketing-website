@@ -1,7 +1,7 @@
 /* CampaignBuilder.css */
 
 /* Import the Poppins font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 * {
   margin: 0;
@@ -15,23 +15,24 @@ body {
 
 /* Overall Background: Deep Navy */
 .campaign-builder-full-page {
-  background-color: #001524; 
+  background-color: #001524; /* Updated to exact hex from image 3 */
   width: 100vw; 
   height: 100vh;
   display: flex;
-  flex-direction: column; /* NavBar on top */
-  justify-content: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   overflow-x: hidden;
 }
 
-/* ===== NavBar (unchanged if you already have separate styling) ===== */
+/* ===== NavBar styling ===== */
 nav.navbar {
   width: 100%;
   padding: 1.2rem 2.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #FFECD1;
+  color: #F8F1E5; /* Updated to match the Cool Cream color */
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   position: fixed;
   top: 0;
@@ -39,238 +40,224 @@ nav.navbar {
   z-index: 10;
 }
 
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.navbar-brand h1 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-/* 
-  Main Card Container: Elegant Dark Teal (#812A36)
-  Slightly narrower + bigger corner radius for the modern look
-*/
+/* Main Card Container */
 .campaign-builder-panel {
-  background-color: #812A36; /* Elegant Dark Teal */
+  background-color: #012A36; /* Updated to elegant dark teal */
   width: 100%;
-  max-width: 460px;
-  border-radius: 12px; 
-  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-  padding: 1.5rem 1.5rem 2rem; /* extra bottom padding for buttons */
-  margin: 4rem auto 0; /* allow space for the NavBar */
-  color: #F8F1E5; /* default text color (Cool Cream) for strong contrast */
+  max-width: 800px;
+  border-radius: 12px; /* Updated to match design spec of 12px */
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5); /* Enhanced shadow for depth */
+  padding: 2.5rem 2.5rem 2rem;
+  margin: 4rem auto 0;
+  color: white;
 }
 
 /* Header content inside the panel */
 .campaign-builder-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
 }
 
-/* Heading: #F8F1E5 (Cool Cream) */
+/* Heading */
 .campaign-builder-header h2 {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: #F8F1E5; /* Updated to Cool Cream */
   display: inline-block;
   margin-right: 0.5rem;
-  color: #F8F1E5; 
 }
 
-/* "New" badge if needed */
+/* "New" badge */
 .new-badge {
-  background-color: #FF7D08; /* Vivid Orange highlight */
+  background-color: #FF7D00; /* Updated to Vivid Orange */
   color: #ffffff;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.4rem;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 4px;
+  vertical-align: top;
+  margin-left: 0.5rem;
+  position: relative;
+  top: 0.5rem;
 }
 
-/* Subheading text: #F8F1E5 at 75% */
+/* Subheading text */
 .campaign-builder-header p {
-  color: rgba(248,241,229, 0.75);
-  font-size: 1rem;
+  color: rgba(248, 241, 229, 0.75); /* Cool Cream at 75% opacity */
+  font-size: 1.25rem;
   line-height: 1.4;
+  margin-top: 0.5rem;
 }
 
 /* Top Goals Section */
 .top-goals-section {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 /* "More goals" label */
 .more-goals-title {
-  font-size: 1.1rem;
-  color: #F8F1E5;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #F8F1E5; /* Cool Cream */
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
   font-weight: 500;
 }
 
 /* More Goals Section container */
 .more-goals-section {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 1rem;
 }
 
-/* 
-  Each Goal Box: 
-  - Fill with Midnight Charcoal (#0E1217).
-  - Title ~ 75% opacity, Description ~ 40% opacity 
-*/
+/* Goal boxes */
 .goal-box {
-  flex: 1 1 160px;
-  min-width: 150px;
-  max-width: 200px;
-  padding: 1.2rem;
-  border-radius: 12px;
+  flex: 1;
+  background-color: #0E1217; /* Midnight Charcoal */
+  border-radius: 12px; /* Updated to 12px per design spec */
+  padding: 1.5rem;
   position: relative;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   text-align: left;
-  background-color: #0E1217; /* Midnight Charcoal */
-  border: 1px solid rgba(0,0,0,0.4); /* Subtle border, optional */
+  color: #F8F1E5; /* Cool Cream */
+  min-width: 200px;
+  max-width: 280px;
+  border: 1px solid #0E1217;
+  /* Added shadow for depth */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
 .goal-box:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transform: scale(1.03); /* Added subtle scale effect on hover */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
 }
 
 .goal-box.selected {
-  border-color: #FF7D08; /* Vivid Orange highlight */
-  box-shadow: 0 3px 8px rgba(255,125,0,0.2);
+  border-color: #FF7D00; /* Vivid Orange */
+  box-shadow: 0 3px 8px rgba(255,125,0,0.3);
 }
 
-/* Icon region. 
-   If icons are images, recoloring them in CSS may not be possible.
-   If they're SVG, you can color with fill: #FF7D08 or the icon's own color. 
-*/
+/* Icon styling */
 .goal-icon {
-  margin-bottom: 0.5rem;
-  display: flex; 
-  justify-content: center;
+  margin-bottom: 1rem;
+  display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
+
 .goal-icon img {
-  width: 40px; 
-  height: 40px;
+  width: 35px;
+  height: 35px;
   object-fit: contain;
+  /* Updated filter to match the Vivid Orange #FF7D00 */
+  filter: invert(50%) sepia(50%) saturate(3500%) hue-rotate(360deg) brightness(100%) contrast(100%);
 }
 
-/* Goal Title => #F8F1E5 at ~75% => alpha ~ 0.75 */
+/* Goal Title */
 .goal-box h3 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.4rem;
-  color: rgba(248,241,229, 0.75);
+  font-size: 1.2rem;
+  font-weight: 700; /* Inter Bold 700 */
+  margin-bottom: 0.5rem;
+  color: #F8F1E5; /* Cool Cream */
 }
 
-/* Goal Description => #F8F1E5 at ~40% => alpha ~ 0.4 */
+/* Goal Description */
 .goal-box p {
   font-size: 0.9rem;
-  color: rgba(248,241,229, 0.4);
-  line-height: 1.4;
+  color: rgba(248, 241, 229, 0.75); /* Cool Cream at 75% opacity */
+  line-height: 1.5;
+  font-weight: 400; /* Inter Regular 400 */
 }
 
-/* Bottom Buttons (Cancel/Continue) */
+/* Bottom Buttons */
 .campaign-builder-buttons {
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
+  justify-content: space-between;
+  margin-top: 2.5rem;
 }
 
-/* 
-   Cancel => transparent with a light border 
-   Continue => #0E1217 (Midnight Charcoal), as table suggests a subtle secondary CTA
-*/
+/* Cancel & Continue buttons */
 .cancel-btn,
 .continue-btn {
   border: none;
-  border-radius: 12px;
-  padding: 0.6rem 1.2rem;
-  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.8rem 1.5rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
   font-size: 1rem;
 }
 
-/* Cancel: text-based button */
+/* Cancel: text button */
 .cancel-btn {
-  background-color: transparent;
-  color: #F8F1E5;
-  border: 1px solid rgba(248,241,229,0.75);
+  background-color: #0E1217; /* Midnight Charcoal */
+  color: #F8F1E5; /* Cool Cream */
 }
+
 .cancel-btn:hover {
-  background-color: rgba(248,241,229,0.15);
+  background-color: #1a1f2a;
+  transform: translateY(-2px);
 }
 
-/* Continue: midnight charcoal with light text */
+/* Continue: orange button */
 .continue-btn {
-  background-color: #0E1217; 
-  color: #F8F1E5; 
+  background-color: #FF7D00; /* Vivid Orange */
+  color: white;
+  padding: 0.8rem 2rem;
+  box-shadow: 0 3px 6px rgba(255,125,0,0.2);
 }
+
 .continue-btn:hover {
-  background-color: rgba(14, 18, 23, 0.8);
+  background-color: #e86c00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255,125,0,0.3);
 }
 
-/* ===================== MEDIA QUERIES ===================== */
-
-/* Tablets and down */
+/* Media Queries */
 @media (max-width: 768px) {
   .campaign-builder-panel {
-    margin-top: 6rem; 
+    margin: 3rem 1rem;
+    padding: 1.5rem;
     max-width: 90%;
-    padding: 1.2rem;
   }
+  
   .campaign-builder-header h2 {
-    font-size: 1.6rem;
+    font-size: 2rem;
   }
-  .campaign-builder-header p {
-    font-size: 0.95rem;
+  
+  .top-goals-section, .more-goals-section {
+    flex-wrap: wrap;
+  }
+  
+  .goal-box {
+    min-width: 45%;
+    max-width: 100%;
   }
 }
 
-/* Mobile screens and down */
 @media (max-width: 480px) {
   .campaign-builder-panel {
-    margin-top: 5rem;
     padding: 1rem;
   }
+  
   .campaign-builder-header h2 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
   }
-  .campaign-builder-header p {
-    font-size: 0.85rem;
-  }
+  
   .goal-box {
-    min-width: 120px;
-    max-width: 150px;
-    padding: 0.8rem;
+    min-width: 100%;
   }
-  .goal-box h3 {
-    font-size: 0.9rem;
+  
+  .campaign-builder-buttons {
+    flex-direction: column;
+    gap: 1rem;
   }
-  .goal-box p {
-    font-size: 0.75rem;
-  }
-  .cancel-btn,
-  .continue-btn {
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
+  
+  .cancel-btn, .continue-btn {
+    width: 100%;
   }
 }
