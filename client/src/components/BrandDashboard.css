@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 * {
   box-sizing: border-box;
@@ -10,215 +10,302 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Full-page background using dark palette color */
-.campaign-builder-full-page {
-  background-color: #001524; /* replaced #151515 */
-  width: 100vw; 
-  height: 100vh;
-  display: flex;
-  flex-direction: column; /* Changed to column to accommodate NavBar */
-  justify-content: flex-start; /* Changed from center to align from top */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+/* Overall Background: Deep Navy */
+.brand-dashboard-container {
+  min-height: 100vh;
+  background-color: #001524; /* Removed gradient in favor of deep navy */
+  padding: 2rem;
+  overflow-x: hidden;
 }
 
-/* NavBar Styling */
-nav.navbar {
-  width: 100%;
-  padding: 1.2rem 2.5rem; /* Increased padding for better spacing */
+/* NAVBAR - Midnight Charcoal */
+.brand-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #012A36; /* Midnight Charcoal */
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  animation: fade-in-down 1s ease forwards;
+}
+
+.brand-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #F8F1E5; /* Cool Cream for contrast */
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links li {
+  color: #F8F1E5;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.nav-links li:hover {
+  color: #FF7D08; /* Vivid Orange highlight */
+  transform: scale(1.08);
+}
+
+/* HEADER - Dashboard heading background: Elegant Dark Teal */
+.brand-dash-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #FFECD1;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  position: fixed; /* Updated from relative to fixed */
-  top: 0;         /* Added to fix at top */
-  left: 0;        /* Added to align with left edge */
-  z-index: 10;    /* Ensure navbar is above other content */
-}
-
-/* Logo and nav items spacing */
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* Ensures left alignment */
-}
-
-.navbar-brand h1 {
-  font-size: 1.8rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem; /* Increased spacing between navbar elements */
-}
-
-/* Main panel (like a big modal) */
-.campaign-builder-panel {
-  background-color: #FFECD1; /* replaced #fff */
-  width: 90%;
-  max-width: 800px;
+  margin-bottom: 2rem;
+  background-color: #012A36; /* Elegant Dark Teal */
+  padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-  padding: 1.5rem;
-  margin: 2.5rem auto 0; /* Increased top margin for spacing from navbar */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
-/* Header content */
-.campaign-builder-header h2 {
-  font-size: 1.6rem;
-  margin-bottom: 0.3rem;
+.brand-dash-header h1 {
+  font-size: 1.8rem;
+  color: #F8F1E5; /* Cool Cream text */
+  font-weight: 700;
+}
+
+/* AI Campaign Button => Vivid Orange (#FF7D08) */
+.ai-campaign-btn {
+  background-color: #FF7D08;
+  color: #F8F1E5;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
   font-weight: 600;
-  display: inline-block;
-  margin-right: 0.5rem;
-  color: #15616D; /* For header text, if needed adjust later */
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.new-badge {
-  background-color: #FFECD1; /* replaced #e2d3ff */
-  color: #15616D;           /* replaced #8b6df4 */
-  font-size: 0.8rem;
-  padding: 0.25rem 0.4rem;
-  border-radius: 4px;
+.ai-campaign-btn:hover {
+  background-color: #D26506; /* Slightly darker orange on hover */
+  transform: scale(1.05);
 }
 
-.campaign-builder-header p {
-  color: #15616D; /* replaced #666 */
+.disabled-btn {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Stats area */
+.stats-section {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Cards & Panels => Midnight Charcoal (#012A36) */
+.stats-card {
+  background-color: #012A36;
+  flex: 1;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stats-card h3 {
+  color: #F8F1E5;
+  margin-bottom: 0.5rem;
+}
+
+.stats-card p {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #F8F1E5;
+}
+
+/* Requests area */
+.requests-section {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.requests-card {
+  background-color: #012A36;
+  flex: 1;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fade-in-up 1s ease forwards;
+}
+
+.requests-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.requests-card h3 {
+  color: #F8F1E5;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.requests-card p {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #F8F1E5;
+}
+
+/* Influencer Applications Section */
+.applications-section {
+  background-color: #012A36;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  animation: fade-in-up 1s ease forwards;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.applications-section h2 {
+  color: #F8F1E5;
   margin-bottom: 1rem;
-  font-size: 0.95rem;
+  font-size: 1.2rem;
 }
 
-/* Top + More Goals Layout */
-.top-goals-section,
-.more-goals-section {
+.applications-container {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1rem;
 }
 
-.more-goals-title {
-  font-size: 1rem;
-  color: #15616D; /* replaced #888 */
-  margin: 1rem 0 0.5rem 0;
-}
-
-/* Each goal box */
-.goal-box {
-  flex: 1 1 160px;
-  min-width: 140px;
-  max-width: 180px;
+.application-card {
+  background-color: #012A36;
+  flex: 1 1 280px;
   padding: 1rem;
-  border-radius: 8px;
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  text-align: left;
-  border: 1px solid #FFECD1; /* replaced #eee */
+  border-radius: 6px;
+  border-left: 4px solid #FF7D08; /* Vivid Orange highlight on the left edge */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s;
 }
 
-.goal-box:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+.application-card:hover {
+  transform: scale(1.02);
 }
 
-.goal-box.selected {
-  border-color: #FF7D00; 
-  box-shadow: 0 3px 8px rgba(255,125,0,0.2);
-}
-
-/* Recommended badge top-right corner */
-.recommended-badge {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  font-size: 0.7rem;
-  background-color: #FFECD1; /* replaced #f2e2ff */
-  color: #15616D;
-  padding: 2px 5px;
-  border-radius: 4px;
-}
-
-.goal-icon {
+.application-card h3 {
   margin-bottom: 0.5rem;
-  display: flex; 
-  justify-content: center;
-  align-items: center;
-}
-
-.goal-icon img {
-  width: 36px; 
-  height: 36px;
-  object-fit: contain;
-}
-
-.goal-box h3 {
-  font-size: 1rem;
+  color: #F8F1E5;
   font-weight: 600;
+}
+
+.application-card p {
   margin-bottom: 0.3rem;
-  /* Title text at 100% opacity */
   color: #F8F1E5;
 }
 
-.goal-box p {
-  font-size: 0.85rem;
-  /* Sub-title text at 75% opacity of F8F1E5 */
-  color: rgba(248,241,229, 0.75);
-  line-height: 1.4;
-}
-
-/* Bottom buttons */
-.campaign-builder-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.cancel-btn,
-.continue-btn {
+.accept-btn {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
   border: none;
+  background-color: #FF7D08;
+  color: #F8F1E5;
   border-radius: 4px;
-  padding: 0.6rem 1.2rem;
-  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 1rem;
 }
 
-.cancel-btn {
-  background-color: transparent;
+.accept-btn:hover {
+  background-color: #D26506;
+}
+
+/* Campaigns Section */
+.campaigns-section {
+  background-color: #012A36;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  margin-bottom: 2rem;
+}
+
+.campaigns-section h2 {
+  margin-bottom: 1rem;
   color: #F8F1E5;
-  border: 1px solid #FFECD1;
-}
-.cancel-btn:hover {
-  background-color: rgba(255, 236, 209, 0.2);
+  font-size: 1.4rem;
 }
 
-.continue-btn {
-  background-color: #FF7D00;
+.campaigns-table {
+  width: 100%;
+  border-collapse: collapse;
+  animation: fade-in-up 1.2s ease forwards;
+  overflow-x: auto;
+  display: block;
+}
+
+.campaigns-table thead tr {
+  background-color: #012A36;
+}
+
+.campaigns-table th,
+.campaigns-table td {
+  text-align: left;
+  padding: 0.8rem;
+  border-bottom: 1px solid #1B2429;
+}
+
+.campaigns-table th {
   color: #F8F1E5;
-}
-.continue-btn:hover {
-  background-color: #78290F;
+  font-weight: 600;
 }
 
-/* Campaigns table and text opacity rules */
-/* All rows use 75% opacity text by default */
+/* Set default opacity for non-title text to 75% */
 .campaigns-table tbody tr {
   transition: background-color 0.3s;
-  background-color: #0E1217;
-  color: rgba(248,241,229,0.75);
+  background-color: #012A36;
+  color: rgba(248,241,229,0.75); /* 75% opacity of Cool Cream */
 }
-/* When a cell is marked as a title, force 100% opacity */
+
+/* Force full opacity for titles (campaign names, etc.) */
 .campaigns-table td.title {
   color: #F8F1E5;
 }
 
+/* Status select => midnight background, white text, slight border */
+.status-select {
+  background-color: #1B2429;
+  border: 1px solid #2a4c4a;
+  border-radius: 4px;
+  padding: 0.4rem;
+  cursor: pointer;
+  margin-right: 6px;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  color: #F8F1E5;
+}
+
+.status-select:hover {
+  background-color: #203036;
+}
+
+/* Delete button => Soft Red (#FF5252) for destructive action */
+.delete-btn {
+  background-color: #FF5252;
+  border: 1px solid #FF4040;
+  color: #ffffff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: 600;
+}
+
+.delete-btn:hover {
+  background-color: #e83c3c;
+}
+
 /* Calendar Section */
-/* Calendar Container Background - Cool Cream */
+/* Container Background: Cool Cream (#F8F1E5) */
 .calendar-section {
   background-color: #F8F1E5;
   padding: 1.5rem;
@@ -228,7 +315,7 @@ nav.navbar {
   animation: fade-in-up 1s ease forwards;
 }
 
-/* Calendar Heading Text & Month - Elegant Teal (#012A36) */
+/* Heading Text & Month: Elegant Teal (#012A36) */
 .calendar-section h2 {
   margin-bottom: 1rem;
   color: #012A36;
@@ -252,9 +339,9 @@ nav.navbar {
   text-align: center;
 }
 
-/* Pastel arrow buttons re-styled for dark theme */
+/* Pastel arrow buttons for dark theme */
 .arrow-btn {
-  background-color: #203d3b;
+  background-color: #203036;
   border: none;
   color: #F8F1E5;
   font-weight: 600;
@@ -269,7 +356,7 @@ nav.navbar {
 }
 
 .arrow-btn:hover {
-  background-color: #2a4c4a;
+  background-color: #2b4240;
   transform: scale(1.04);
 }
 
@@ -288,7 +375,7 @@ nav.navbar {
 }
 
 /* Day Cells */
-/* If no event, use Midnight Charcoal */
+/* No Event: Midnight Charcoal (#0E1217) */
 .calendar-day {
   height: 90px;
   border-radius: 4px;
@@ -321,7 +408,7 @@ nav.navbar {
 
 .day-details {
   margin-top: 1.5rem;
-  background-color: #0E1217;
+  background-color: #012A36;
   padding: 1rem;
   border-radius: 6px;
   color: #F8F1E5;
@@ -336,7 +423,7 @@ nav.navbar {
   box-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
-/* Joined influencers */
+/* Joined Influencers */
 .influencer-requests-section {
   animation: fade-in-up 1s ease forwards;
   margin-bottom: 2rem;
@@ -350,7 +437,7 @@ nav.navbar {
 }
 
 .joined-influencers-card {
-  background-color: #0E1217;
+  background-color: #012A36;
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 6px;
@@ -372,7 +459,7 @@ nav.navbar {
 }
 
 .joined-influencer-item {
-  background-color: #172c2a;
+  background-color: #18232a;
   border: 1px solid #2a4c4a;
   padding: 0.5rem;
   border-radius: 6px;
