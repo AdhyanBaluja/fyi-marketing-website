@@ -1,9 +1,16 @@
-/* 
-   CampaignResults.css
-   Styles specifically for the CampaignResults component.
-*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-/* Container: subtle gradient for this page only */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Overall Background: Deep Navy */
 .campaign-results-container {
   font-family: "Poppins", sans-serif;
   padding: 20px;
@@ -151,24 +158,40 @@
 }
 
 /* CALENDAR SECTION */
+/* Calendar Container Background - Cool Cream (#F8F1E5) */
 .calendar-section {
-  margin-bottom: 30px;
-  background: rgba(255,236,209,0.4);
-  border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  background-color: #F8F1E5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  margin-bottom: 2rem;
+  animation: fade-in-up 1s ease forwards;
 }
-.calendar-header {
+
+/* Heading Text & Month - Elegant Teal (#012A36) */
+.calendar-section h2 {
+  margin-bottom: 1rem;
+  color: #012A36;
+  font-size: 1.4rem;
+}
+
+.calendar-controls {
+  position: relative;
+  margin-bottom: 1rem;
+  height: 40px; 
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
 }
-.calendar-header h3 {
-  font-size: 1.25rem;
-  color: #001524;
+
+.calendar-controls h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #012A36;
+  font-weight: 600;
+  text-align: center;
 }
+
 .month-btn {
   background-color: #FF7D00;
   color: #FFECD1;
@@ -182,13 +205,16 @@
 .month-btn:hover {
   background-color: #78290F;
 }
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 10px;
 }
+
+/* Day Cells (No Event) - Midnight Charcoal (#0E1217) */
 .calendar-day {
-  background: #FFECD1;
+  background-color: #0E1217;
   border-radius: 8px;
   height: 80px;
   position: relative;
@@ -354,7 +380,7 @@
 .more-advice-section {
   margin-top: 30px;
   padding: 1.5rem;
-  background: rgba(255, 236, 209, 0.5);
+  background: rgba(255,236,209,0.5);
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   position: relative;
@@ -699,4 +725,38 @@
   .add-button, .delete-button, .find-button {
     width: 100%;
   }
+}
+
+/* Additional Calendar and Campaigns adjustments for text opacity and colors in Calendar section */
+
+/* Campaigns Table: set row text to 75% opacity (Cool Cream 75%) */
+.campaigns-table tbody tr {
+  transition: background-color 0.3s;
+  background-color: #012A36;
+  color: rgba(248,241,229,0.75); /* 75% opacity of Cool Cream (#F8F1E5) */
+}
+
+/* Force full opacity for campaign titles */
+.campaigns-table td.title {
+  color: #F8F1E5;
+}
+
+/* Updated Calendar Section for new colors */
+/* Calendar Container Background - Cool Cream (#F8F1E5) is already set above in .calendar-section */
+/* Update heading text & month to Elegant Teal (#012A36) */
+.calendar-section h2 {
+  margin-bottom: 1rem;
+  color: #012A36;
+  font-size: 1.4rem;
+}
+.calendar-controls h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #012A36;
+  font-weight: 600;
+  text-align: center;
+}
+/* Update Day Cells (no event) to Midnight Charcoal (#0E1217) */
+.calendar-day {
+  background-color: #0E1217;
 }
