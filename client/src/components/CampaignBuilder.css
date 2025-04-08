@@ -49,7 +49,7 @@ nav.navbar {
   border-radius: 12px; /* Updated to match design spec of 12px */
   box-shadow: 0 8px 24px rgba(0,0,0,0.5); /* Enhanced shadow for depth */
   padding: 2.5rem 2.5rem 2rem;
-  margin: 4rem auto 0;
+  margin: 8rem auto 0;
   color: white;
 }
 

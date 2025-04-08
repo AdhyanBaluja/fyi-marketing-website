@@ -9,11 +9,9 @@
 body {
   font-family: 'Poppins', sans-serif;
 }
-p {
-  color: rgba(248, 241, 229, 0.75);
-  font-size: 14px;
-  margin-bottom: 20px;
-}
+
+/* Remove generic p styling and only apply specific styles where needed */
+/* This prevents conflicts with other paragraph styles */
 
 /* Overall Background: Deep Navy */
 .brand-dashboard-container {
@@ -21,6 +19,21 @@ p {
   background-color: #001524; /* Removed gradient in favor of deep navy */
   padding: 2rem;
   overflow-x: hidden;
+}
+
+/* Style for specific paragraphs that need the styling */
+.brand-dashboard-container .info-paragraph {
+  color: rgba(248, 241, 229, 0.75);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* Campaign cards empty state message styling */
+.joined-influencers-card p,
+.amplify-plan-card p {
+  color: rgba(0, 219, 187, 0.55); /* Teal color with opacity */
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 /* NAVBAR - Midnight Charcoal */
@@ -71,6 +84,7 @@ p {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
+
 .campaigns-table tbody tr:hover {
   background-color: #D26506; /* Highlight with the dark teal on hover */
   color: #F8F1E5;
@@ -80,11 +94,6 @@ p {
   font-size: 1.8rem;
   color: #F8F1E5; /* Cool Cream text */
   font-weight: 700;
-}
-p {
-  color: rgba(248, 241, 229, 0.75);
-  font-size: 14px;
-  margin-bottom: 20px;
 }
 
 /* AI Campaign Button => Vivid Orange (#FF7D08) */
@@ -136,6 +145,7 @@ p {
   font-size: 1.4rem;
   font-weight: 700;
   color: #F8F1E5;
+  margin-bottom: 0;
 }
 
 /* Requests area */
@@ -171,6 +181,7 @@ p {
   font-size: 1.4rem;
   font-weight: 700;
   color: #F8F1E5;
+  margin-bottom: 0;
 }
 
 /* Influencer Applications Section */
@@ -217,7 +228,7 @@ p {
 
 .application-card p {
   margin-bottom: 0.3rem;
-  color: #F8F1E5;
+  color: rgba(248, 241, 229, 0.75);
 }
 
 .accept-btn {
@@ -319,9 +330,9 @@ p {
 }
 
 /* Calendar Section */
-/* Container Background: Cool Cream (#F8F1E5) */
+/* Container Background: Dark Teal to match theme */
 .calendar-section {
-  background-color: #F8F1E5;
+  background-color: #012A36;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.4);
@@ -329,10 +340,10 @@ p {
   animation: fade-in-up 1s ease forwards;
 }
 
-/* Heading Text & Month: Elegant Teal (#012A36) */
+/* Heading Text & Month: Light color for dark theme */
 .calendar-section h2 {
   margin-bottom: 1rem;
-  color: #012A36;
+  color: #F8F1E5;
   font-size: 1.4rem;
 }
 
@@ -348,7 +359,7 @@ p {
 .calendar-controls h3 {
   margin: 0;
   font-size: 1.2rem;
-  color: #012A36;
+  color: #F8F1E5;
   font-weight: 600;
   text-align: center;
 }
@@ -388,8 +399,7 @@ p {
   gap: 0.5rem;
 }
 
-/* Day Cells */
-/* No Event: Midnight Charcoal (#0E1217) */
+/* Day Cells - Updated to match dark theme */
 .calendar-day {
   height: 90px;
   border-radius: 4px;
@@ -399,12 +409,14 @@ p {
   align-items: center;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  background-color: #0E1217;
+  background-color: #0E1D24; /* Dark teal shade instead of light blue */
+  border: 1px solid #18323C; /* Subtle border */
 }
 
 .calendar-day:hover {
   transform: scale(1.03);
   box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  background-color: #143641; /* Slightly lighter on hover */
 }
 
 .day-number {
@@ -448,6 +460,40 @@ p {
   margin-bottom: 1rem;
   color: #F8F1E5;
   font-size: 1.4rem;
+}
+
+/* Joined influencers section styling */
+.joined-influencers-section {
+  margin-bottom: 2rem;
+}
+
+.joined-influencers-section h2 {
+  color: #F8F1E5;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+}
+
+/* Campaign cards in the joined influencers section */
+.amplify-plan-card {
+  background-color: #012A36;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.amplify-plan-card h3 {
+  color: #F8F1E5;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* "No joined influencers yet" message styling */
+.amplify-plan-card p {
+  color: rgba(0, 219, 187, 0.55); /* Teal color for empty state messages */
+  font-size: 14px;
+  margin-bottom: 0;
 }
 
 .joined-influencers-card {
