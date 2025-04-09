@@ -1,44 +1,54 @@
 /* 
    InfluencerDashboard.css
-   Redesigned to match a dark theme with a background image and transparent overlays,
-   closely matching the look of the provided screenshot.
-   Font and color scheme: #FF7D00 (highlight), #e0e0e0 (text), #001524 (dark background).
-   Please ensure you have the InfluencerBack.jpg in your assets folder and have updated JSX accordingly.
+   Revised to:
+   1) Make the background image repeat and show at normal size (not overly zoomed).
+   2) Increase container transparency so the background is more visible.
+   3) Keep the dark theme with orange highlights (#FF7D00).
+   4) Refine fonts and ensure a coherent, polished look.
+   Please ensure you remove any inline style for the background from your JSX, 
+   so this CSS will take full effect.
 */
 
 /* FONT IMPORT */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-/* GLOBAL RESETS & BASE STYLES */
+/* =========================== GLOBAL RESETS & BASE STYLES =========================== */
 html, body {
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif;
   color: #e0e0e0;
   scroll-behavior: smooth;
-  background-color: #001524; /* Fallback color */
+  background-color: #001524; /* Fallback color if image doesn't load */
 }
 
-/* Dark Theme Gradient Background for the body (fallback if image fails) */
+/* We use a fallback gradient just in case the image is unavailable */
 body {
   background: linear-gradient(135deg, #00101d 0%, #001e2e 100%);
-  background-attachment: fixed;
   overflow-x: hidden;
 }
 
+/* =========================== BACKGROUND WRAPPER =========================== */
 /* 
-  WRAPPER FOR INFLUENCER DASHBOARD 
-  We no longer use .dashboard-container-big. Renamed to .influencer-dashboard-wrapper.
-  The actual background image is applied inline in JSX.
-  This pseudo-element adds a subtle darker overlay on top of the background image.
+   The background image is repeated so the full (normal-sized) image appears, 
+   and repeats vertically as the user scrolls.
 */
 .influencer-dashboard-wrapper {
   position: relative;
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
+  /* Background image fully controlled here (remove inline background from JSX) */
+  background: url('../assets/InfluencerBack.jpg') top center repeat-y;
+  background-size: contain; /* keep normal size, show the entire image */
+  background-attachment: scroll; /* it scrolls with the page */
+  z-index: 1;
 }
 
+/* 
+   This overlay is very subtle now, to show more of the background image 
+   (reduce darkness by lowering alpha).
+*/
 .influencer-dashboard-wrapper::before {
   content: '';
   position: absolute;
@@ -46,24 +56,24 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  /* Slightly dark overlay to make text stand out */
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.15); 
   z-index: -1;
 }
 
 /* 
-  If you need any specific styling for .influencer-dashboard (the inner container), 
-  you can add it here. 
+   .influencer-dashboard main container remains if you need any extra layout control. 
+   It can have additional spacing if desired.
 */
 .influencer-dashboard {
   position: relative;
-  z-index: 1; 
+  z-index: 2;
   min-height: 100vh;
+  /* Add padding if you want extra spacing around the content
+     padding-bottom: 2rem; 
+  */
 }
 
 /* =========================== ANIMATIONS =========================== */
-
-/* Generic fadeIn animation (used by .scroll-reveal and .page-title, etc.) */
 @keyframes fadeIn {
   from { 
     opacity: 0; 
@@ -74,63 +84,32 @@ body {
     transform: translateY(0); 
   }
 }
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInRight {
+  0% { opacity: 0; transform: translateX(20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInLeft {
+  0% { opacity: 0; transform: translateX(-20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInTask {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
-/* Optional: define separate keyframes for left, right, down fade-ins if needed */
 .fade-in-down {
   animation: fadeInDown 0.8s ease forwards;
 }
-@keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .fade-in-right {
   animation: fadeInRight 0.8s ease forwards;
 }
-@keyframes fadeInRight {
-  0% {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 .fade-in-left {
   animation: fadeInLeft 0.8s ease forwards;
 }
-@keyframes fadeInLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* For tasks fade-in */
-@keyframes fadeInTask {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* SCROLL REVEAL CLASS (used in cards) */
 .scroll-reveal {
   opacity: 1 !important;
   transform: translateY(0) !important;
@@ -138,7 +117,6 @@ body {
 }
 
 /* =========================== NOTIFICATION BANNER =========================== */
-
 .complete-profile-banner {
   background-color: rgba(20, 42, 61, 0.85);
   color: #e0e0e0;
@@ -149,6 +127,7 @@ body {
   margin-bottom: 20px;
   font-weight: 500;
   animation: fadeIn 0.5s ease forwards;
+  font-size: 0.95rem;
 }
 
 /* =========================== NAVIGATION BAR =========================== */
@@ -187,6 +166,7 @@ body {
   font-weight: 500;
   transition: color 0.2s;
   position: relative;
+  font-size: 1rem;
 }
 
 .main-nav ul li:after {
@@ -228,7 +208,7 @@ body {
 
 /* Container styles */
 .colored-container {
-  background: rgba(16, 39, 57, 0.7);
+  background: rgba(16, 39, 57, 0.5); /* More transparent than before (was .7) */
   border-radius: 15px;
   padding: 1.5rem;
   backdrop-filter: blur(5px);
@@ -269,14 +249,13 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Non-edit view */
 .profile-view {
   flex: 1;
 }
 
 .profile-view p {
   margin: 0.3rem 0;
-  font-size: 0.95rem;
+  font-size: 1rem; /* Slightly larger for readability */
   color: #c5c5c5;
   line-height: 1.5;
 }
@@ -359,6 +338,7 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
+  font-size: 0.9rem;
 }
 
 .save-btn {
@@ -420,7 +400,7 @@ body {
   padding: 1.2rem;
   opacity: 0;
   transform: translateY(50px);
-  background: rgba(16, 39, 57, 0.7);
+  background: rgba(16, 39, 57, 0.5); /* more transparent than before */
   border: 1px solid rgba(44, 84, 117, 0.5);
 }
 
@@ -550,7 +530,7 @@ body {
   position: relative;
   opacity: 0;
   transform: translateY(50px);
-  background: rgba(16, 39, 57, 0.7);
+  background: rgba(16, 39, 57, 0.5); /* more transparent than before */
   border: 1px solid rgba(44, 84, 117, 0.5);
 }
 
@@ -577,6 +557,7 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
+  font-size: 0.9rem;
 }
 
 .apply-btn:hover {
@@ -604,7 +585,7 @@ body {
 }
 
 .brand-request-card {
-  background: rgba(21, 54, 78, 0.7);
+  background: rgba(21, 54, 78, 0.5); /* more transparent than before */
   border-radius: 12px;
   padding: 1.2rem;
   width: 220px;
@@ -653,7 +634,6 @@ body {
   transform: scale(1.05);
 }
 
-/* Message for no requests */
 .brand-requests-section p {
   color: #c5c5c5;
   font-style: italic;
@@ -760,7 +740,7 @@ body {
   bottom: 2rem;
   right: 2rem;
   width: 320px;
-  background: rgba(21, 54, 78, 0.85);
+  background: rgba(21, 54, 78, 0.5); /* more transparent than before */
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -782,6 +762,8 @@ body {
 
 .ai-assistant-content {
   margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .ai-close-btn {
@@ -801,7 +783,7 @@ body {
 .amplify-card {
   position: static; 
   width: 100%; 
-  background: rgba(16, 39, 57, 0.7);
+  background: rgba(16, 39, 57, 0.5); /* more transparent */
   border-radius: 15px;
   padding: 1.2rem;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
@@ -823,12 +805,14 @@ body {
   font-size: 1.2rem;
   margin-top: 0;
   margin-bottom: 0.8rem;
+  font-weight: 600;
 }
 
 .amplify-card p {
   margin: 0.3rem 0;
   color: #c5c5c5;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .amplify-card strong {
@@ -883,8 +867,6 @@ body {
 }
 
 /* =========================== MEDIA QUERIES =========================== */
-
-/* Tablets and down */
 @media (max-width: 768px) {
   .main-nav {
     flex-direction: column;
@@ -929,7 +911,6 @@ body {
   }
 }
 
-/* Mobile screens and down */
 @media (max-width: 480px) {
   .nav-logo {
     font-size: 1.5rem;
