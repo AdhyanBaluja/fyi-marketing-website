@@ -1,12 +1,13 @@
 /* 
    InfluencerDashboard.css
-   Revised to:
-   1) Make the background image repeat and show at normal size (not overly zoomed).
-   2) Increase container transparency so the background is more visible.
-   3) Keep the dark theme with orange highlights (#FF7D00).
-   4) Refine fonts and ensure a coherent, polished look.
-   Please ensure you remove any inline style for the background from your JSX, 
-   so this CSS will take full effect.
+   =========================
+   This file is self-contained. Every element (from the nav bar down to the campaign cards,
+   brand requests, tasks, AI assistant, and the Amplify plan box) is styled here exclusively.
+   The design follows a dark theme with orange (#FF7D00) accents and uses the "Poppins" font.
+   
+   PLEASE VERIFY:
+   - The background image path "../assets/InfluencerBack.jpg" is correct.
+   - No other stylesheet is loaded afterward that could override these definitions.
 */
 
 /* FONT IMPORT */
@@ -22,33 +23,28 @@ html, body {
   background-color: #001524; /* Fallback color if image doesn't load */
 }
 
-/* We use a fallback gradient just in case the image is unavailable */
 body {
   background: linear-gradient(135deg, #00101d 0%, #001e2e 100%);
   overflow-x: hidden;
 }
 
 /* =========================== BACKGROUND WRAPPER =========================== */
-/* 
-   The background image is repeated so the full (normal-sized) image appears, 
-   and repeats vertically as the user scrolls.
+/*
+   The .influencer-dashboard-wrapper serves as the outermost container.
+   It applies a fixed, repeating background image that shows the entire image (contain)
+   and repeats vertically. A light overlay is added so that content remains legible.
 */
 .influencer-dashboard-wrapper {
   position: relative;
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
-  /* Background image fully controlled here (remove inline background from JSX) */
   background: url('../assets/InfluencerBack.jpg') top center repeat-y;
-  background-size: contain; /* keep normal size, show the entire image */
-  background-attachment: scroll; /* it scrolls with the page */
+  background-size: contain;
+  background-attachment: fixed;
   z-index: 1;
 }
 
-/* 
-   This overlay is very subtle now, to show more of the background image 
-   (reduce darkness by lowering alpha).
-*/
 .influencer-dashboard-wrapper::before {
   content: '';
   position: absolute;
@@ -56,64 +52,51 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.15); 
+  background-color: rgba(0, 0, 0, 0.15);
   z-index: -1;
 }
 
-/* 
-   .influencer-dashboard main container remains if you need any extra layout control. 
-   It can have additional spacing if desired.
-*/
+/* The main inner container */
 .influencer-dashboard {
   position: relative;
   z-index: 2;
   min-height: 100vh;
-  /* Add padding if you want extra spacing around the content
-     padding-bottom: 2rem; 
-  */
 }
 
 /* =========================== ANIMATIONS =========================== */
 @keyframes fadeIn {
-  from { 
-    opacity: 0; 
-    transform: translateY(20px); 
-  }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+
 @keyframes fadeInDown {
   0% { opacity: 0; transform: translateY(-20px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+
 @keyframes fadeInRight {
   0% { opacity: 0; transform: translateX(20px); }
   100% { opacity: 1; transform: translateX(0); }
 }
+
 @keyframes fadeInLeft {
   0% { opacity: 0; transform: translateX(-20px); }
   100% { opacity: 1; transform: translateX(0); }
 }
+
 @keyframes fadeInTask {
   0% { opacity: 0; transform: translateY(-10px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
-.fade-in-down {
-  animation: fadeInDown 0.8s ease forwards;
-}
-.fade-in-right {
-  animation: fadeInRight 0.8s ease forwards;
-}
-.fade-in-left {
-  animation: fadeInLeft 0.8s ease forwards;
-}
-.scroll-reveal {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-  transition: opacity 0.8s ease, transform 0.8s ease;
+/* Utility animation classes */
+.fade-in-down { animation: fadeInDown 0.8s ease forwards; }
+.fade-in-right { animation: fadeInRight 0.8s ease forwards; }
+.fade-in-left { animation: fadeInLeft 0.8s ease forwards; }
+.scroll-reveal { 
+  opacity: 1 !important; 
+  transform: translateY(0) !important; 
+  transition: opacity 0.8s ease, transform 0.8s ease; 
 }
 
 /* =========================== NOTIFICATION BANNER =========================== */
@@ -126,8 +109,8 @@ body {
   border-bottom: 1px solid #2c5475;
   margin-bottom: 20px;
   font-weight: 500;
-  animation: fadeIn 0.5s ease forwards;
   font-size: 0.95rem;
+  animation: fadeIn 0.5s ease forwards;
 }
 
 /* =========================== NAVIGATION BAR =========================== */
@@ -164,9 +147,9 @@ body {
   cursor: pointer;
   color: #e0e0e0;
   font-weight: 500;
-  transition: color 0.2s;
-  position: relative;
   font-size: 1rem;
+  position: relative;
+  transition: color 0.2s;
 }
 
 .main-nav ul li:after {
@@ -206,9 +189,9 @@ body {
   animation: fadeIn 1s ease forwards;
 }
 
-/* Container styles */
+/* =========================== CONTAINERS =========================== */
 .colored-container {
-  background: rgba(16, 39, 57, 0.5); /* More transparent than before (was .7) */
+  background: rgba(16, 39, 57, 0.5);  /* Increased transparency */
   border-radius: 15px;
   padding: 1.5rem;
   backdrop-filter: blur(5px);
@@ -255,7 +238,7 @@ body {
 
 .profile-view p {
   margin: 0.3rem 0;
-  font-size: 1rem; /* Slightly larger for readability */
+  font-size: 1rem;
   color: #c5c5c5;
   line-height: 1.5;
 }
@@ -266,12 +249,10 @@ body {
   margin-right: 5px;
 }
 
-/* Edit Info button */
 .edit-btn {
   position: absolute;
   top: 15px;
   right: 15px;
-  margin: 0;
   padding: 0.6rem 1.2rem;
   background-color: #FF7D00;
   color: #001524;
@@ -288,7 +269,7 @@ body {
   box-shadow: 0 4px 10px rgba(255, 125, 0, 0.4);
 }
 
-/* Edit form */
+/* =========================== EDIT FORM =========================== */
 .edit-form {
   display: flex;
   flex-direction: column;
@@ -337,8 +318,8 @@ body {
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.3s ease;
   font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
 .save-btn {
@@ -362,7 +343,7 @@ body {
 }
 
 /* =========================== CAMPAIGN & REQUEST SECTIONS =========================== */
-.campaign-section, 
+.campaign-section,
 .brand-requests-section {
   max-width: 1200px;
   margin: 3rem auto;
@@ -382,26 +363,25 @@ body {
   display: inline-block;
 }
 
-/* Active Campaigns wrapper */
+/* =========================== ACTIVE CAMPAIGNS =========================== */
 .campaigns {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
 }
 
-/* Single campaign card */
 .campaign-card {
   flex: 1;
   min-width: 280px;
   max-width: 350px;
   border-radius: 12px;
-  transition: all 0.4s ease;
-  position: relative;
   padding: 1.2rem;
+  position: relative;
   opacity: 0;
   transform: translateY(50px);
-  background: rgba(16, 39, 57, 0.5); /* more transparent than before */
+  background: rgba(16, 39, 57, 0.5);
   border: 1px solid rgba(44, 84, 117, 0.5);
+  transition: all 0.4s ease;
 }
 
 .hover-rise:hover {
@@ -435,7 +415,6 @@ body {
   color: #e0e0e0;
 }
 
-/* Progress bar on Active Campaigns */
 .progress-bar {
   width: 100%;
   height: 8px;
@@ -458,7 +437,6 @@ body {
   color: #c5c5c5;
 }
 
-/* Update progress container */
 .progress-update {
   display: flex;
   align-items: center;
@@ -493,7 +471,6 @@ body {
   transform: scale(1.05);
 }
 
-/* "Leave Campaign" button */
 .leave-btn {
   background-color: rgba(255, 97, 80, 0.8);
   color: #fff;
@@ -511,7 +488,7 @@ body {
   transform: scale(1.05);
 }
 
-/* ALL CAMPAIGNS (bigger cards) */
+/* =========================== ALL CAMPAIGNS (LARGER CARDS) =========================== */
 .big-campaigns {
   display: flex;
   flex-direction: column;
@@ -530,7 +507,7 @@ body {
   position: relative;
   opacity: 0;
   transform: translateY(50px);
-  background: rgba(16, 39, 57, 0.5); /* more transparent than before */
+  background: rgba(16, 39, 57, 0.5);
   border: 1px solid rgba(44, 84, 117, 0.5);
 }
 
@@ -547,7 +524,6 @@ body {
   border: 2px solid rgba(255, 125, 0, 0.6);
 }
 
-/* Apply button */
 .apply-btn {
   background-color: #FF7D00;
   color: #001524;
@@ -556,8 +532,8 @@ body {
   padding: 0.6rem 1.2rem;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.3s ease;
   font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
 .apply-btn:hover {
@@ -573,7 +549,7 @@ body {
   box-shadow: none;
 }
 
-/* BRAND REQUESTS SECTION */
+/* =========================== BRAND REQUESTS SECTION =========================== */
 .brand-requests-section {
   margin-top: 3rem;
 }
@@ -585,7 +561,7 @@ body {
 }
 
 .brand-request-card {
-  background: rgba(21, 54, 78, 0.5); /* more transparent than before */
+  background: rgba(21, 54, 78, 0.5);
   border-radius: 12px;
   padding: 1.2rem;
   width: 220px;
@@ -740,7 +716,7 @@ body {
   bottom: 2rem;
   right: 2rem;
   width: 320px;
-  background: rgba(21, 54, 78, 0.5); /* more transparent than before */
+  background: rgba(21, 54, 78, 0.5);
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -779,11 +755,11 @@ body {
   color: #FF7D00;
 }
 
-/* =========================== AMPLIFY PLAN CARD =========================== */
+/* =========================== AMPLIFY PLAN CARD (AI BOX) =========================== */
 .amplify-card {
-  position: static; 
-  width: 100%; 
-  background: rgba(16, 39, 57, 0.5); /* more transparent */
+  position: static;
+  width: 100%;
+  background: rgba(16, 39, 57, 0.5);
   border-radius: 15px;
   padding: 1.2rem;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
@@ -803,8 +779,7 @@ body {
 .amplify-card h3 {
   color: #FF7D00;
   font-size: 1.2rem;
-  margin-top: 0;
-  margin-bottom: 0.8rem;
+  margin: 0 0 0.8rem 0;
   font-weight: 600;
 }
 
@@ -880,16 +855,16 @@ body {
     gap: 1rem;
     justify-content: flex-start;
   }
-
+  
   .profile-section {
     flex-direction: column;
     align-items: center;
   }
-
+  
   .profile-pic-container {
     margin-bottom: 1.5rem;
   }
-
+  
   .campaigns {
     justify-content: center;
   }
@@ -915,28 +890,28 @@ body {
   .nav-logo {
     font-size: 1.5rem;
   }
-
+  
   .main-nav ul li {
     font-size: 0.9rem;
   }
-
+  
   .page-title {
     font-size: 1.8rem;
   }
-
+  
   .top-section {
     padding: 0.5rem 1rem;
   }
-
+  
   .colored-container {
     padding: 1rem;
   }
-
+  
   .profile-pic {
     width: 100px;
     height: 100px;
   }
-
+  
   .edit-form label {
     font-size: 0.8rem;
   }
@@ -945,12 +920,12 @@ body {
   .edit-form textarea {
     font-size: 0.85rem;
   }
-
+  
   .campaign-section h2,
   .brand-requests-section h2 {
     font-size: 1.2rem;
   }
-
+  
   .campaign-info h3 {
     font-size: 1rem;
   }
@@ -958,11 +933,11 @@ body {
   .campaign-info p {
     font-size: 0.85rem;
   }
-
+  
   .brand-request-card {
     width: 100%;
   }
-
+  
   .requests-list {
     justify-content: center;
   }
