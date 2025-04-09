@@ -6,7 +6,7 @@ import useScrollReveal from '../hooks/useScrollReveal';
 import AiChatbot from './AiChatbot.jsx';
 import brandLogo from '../assets/bird_2.jpg';
 import influencerBack from '../assets/InfluencerBack.png'; // Used for profile placeholder & background
-import CosmicNebulaLoader from './CosmicNebulaLoader';
+import CosmicNebulaLoader from './CosmicNebulaLoader'; // Your (or new) loader component
 
 // ==================== Environment Variable ====================
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
@@ -82,11 +82,12 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   return (
     <div
       ref={cardRef}
-      className={`${styles['campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${cardRevealed ? styles['scroll-reveal'] : ''}`}
+      className={`${styles['campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} tilt-effect ${cardRevealed ? styles['scroll-reveal'] : ''}`}
+      data-peek="More info: Progress details & tasks"
     >
-      <img src={brandLogo} alt={brandName} className={styles['campaign-logo']} />
+      <img src={brandLogo} alt={brandName} className={`${styles['campaign-logo']} elastic-pop`} />
       <div className={styles['campaign-info']}>
-        <h3>{campaignName}</h3>
+        <h3 className="animated-underline">{campaignName}</h3>
         <p><strong>Brand:</strong> {brandName}</p>
         <p><strong>Budget:</strong> {campaign.budget || realCampaign.budget || 'N/A'}</p>
         <p><strong>Platform:</strong> {campaign.platform || 'N/A'}</p>
@@ -108,13 +109,13 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
             value={tempProgress}
             onChange={(e) => setTempProgress(e.target.value)}
           />
-          <button onClick={handleSaveProgress}>Save Progress</button>
+          <button className="pulse-wave" onClick={handleSaveProgress}>Save Progress</button>
         </div>
 
         {/* Leave Campaign */}
         {campaign.status === 'active' && (
           <div style={{ marginTop: '10px' }}>
-            <button onClick={handleLeave} className={styles['leave-btn']}>Leave Campaign</button>
+            <button className={`${styles['leave-btn']} pulse-wave`} onClick={handleLeave}>Leave Campaign</button>
           </div>
         )}
 
@@ -177,18 +178,19 @@ function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds
   } else if (isApplied) {
     actionButton = <button className={styles['apply-btn']} disabled>Pending</button>;
   } else {
-    actionButton = <button className={styles['apply-btn']} onClick={handleApply}>Apply</button>;
+    actionButton = <button className={`${styles['apply-btn']} pulse-wave`} onClick={handleApply}>Apply</button>;
   }
 
   return (
     <div
       ref={bigRef}
-      className={`${styles['big-campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${bigRevealed ? styles['scroll-reveal'] : ''}`}
+      className={`${styles['big-campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} tilt-effect ${bigRevealed ? styles['scroll-reveal'] : ''}`}
+      data-peek="More campaign details available"
     >
       <div className={styles['big-card-left']}>
-        <img src={brandLogo} alt={brandName} className={`${styles['campaign-logo']} ${styles['big-logo']}`} />
+        <img src={brandLogo} alt={brandName} className={`${styles['campaign-logo']} ${styles['big-logo']} elastic-pop`} />
         <div className={styles['campaign-info']}>
-          <h3>{campaign.name || 'Untitled Campaign'}</h3>
+          <h3 className="animated-underline">{campaign.name || 'Untitled Campaign'}</h3>
           <p><strong>Brand:</strong> {brandName}</p>
           <p><strong>Budget:</strong> {campaign.budget || 'N/A'}</p>
           <p><strong>Target Audience:</strong> {campaign.targetAudience || 'N/A'}</p>
@@ -207,14 +209,15 @@ function BrandRequestCard({ request, onAccept }) {
   return (
     <div
       ref={reqRef}
-      className={`${styles['brand-request-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${reqRevealed ? styles['scroll-reveal'] : ''}`}
+      className={`${styles['brand-request-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} tilt-effect ${reqRevealed ? styles['scroll-reveal'] : ''}`}
+      data-peek="Hover to reveal request details"
     >
-      <h3>{request.campaignName}</h3>
+      <h3 className="animated-underline">{request.campaignName}</h3>
       <p><strong>Brand:</strong> {request.brandName || 'Unknown Brand'}</p>
       <p><strong>Budget:</strong> {request.budget || 'N/A'}</p>
       <p><strong>Status:</strong> {request.status}</p>
       {request.status === 'pending' && (
-        <button className={styles['accept-btn']} onClick={() => onAccept(request._id)}>Accept</button>
+        <button className={`${styles['accept-btn']} pulse-wave`} onClick={() => onAccept(request._id)}>Accept</button>
       )}
     </div>
   );
@@ -223,7 +226,7 @@ function BrandRequestCard({ request, onAccept }) {
 function AmplifyPlanCard() {
   return (
     <div className={styles['amplify-card']}>
-      <h3>amplify Plan (AI)</h3>
+      <h3 className="animated-underline">amplify Plan (AI)</h3>
       <p><strong>Brand:</strong> LetS FYI</p>
       <p><strong>Budget:</strong> undefined</p>
       <p><strong>Platform:</strong> Instagram</p>
@@ -459,18 +462,7 @@ function InfluencerDashboard() {
 
   return (
     <>
-      {/* Loading Screen */}
-      {/* {isLoading && (
-        <div className="loading-screen">
-          <div className="loader">
-            <svg viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="45" fill="none" stroke="#FF7D00" strokeWidth="5" />
-              <path className="loader-path" d="M50 5 C77.6 5 95 22.4 95 50 C95 77.6 77.6 95 50 95 C22.4 95 5 77.6 5 50 C5 22.4 22.4 5 50 5 Z" fill="none" stroke="#FF7D00" strokeWidth="5" />
-            </svg>
-            <div className="loader-text">InfluencerDashboard</div>
-          </div>
-        </div>
-      )} */}
+      {/* Loading Screen using the CosmicNebulaLoader component */}
       {isLoading && <CosmicNebulaLoader />}
 
       {/* Particle Background & Animated Shapes */}
@@ -481,7 +473,7 @@ function InfluencerDashboard() {
         <div className="shape shape3"></div>
       </div>
       
-      {/* Optional Vignette Overlay - add this div in your index.html or here */}
+      {/* Optional Vignette Overlay - you can uncomment if needed */}
       {/* <div className="vignette-overlay"></div> */}
 
       {/* Outer Wrapper with Background */}
@@ -500,7 +492,7 @@ function InfluencerDashboard() {
           {/* NAVIGATION BAR */}
           <nav className={`${styles['main-nav']} ${styles['fade-in-down']}`}>
             <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-              <h2 className={styles['nav-logo']}>letsFYI</h2>
+              <h2 className={`${styles['nav-logo']} animated-underline`}>letsFYI</h2>
               {/* Mobile Menu Toggle */}
               <div className="mobile-menu-toggle" onClick={toggleMobileNav}>
                 <span></span>
@@ -527,7 +519,7 @@ function InfluencerDashboard() {
           {/* TOP SECTION - Influencer Profile */}
           <div className={`${styles['top-section']} ${styles['fade-in-right']}`}>
             <h1 className={styles['page-title']}>Influencer Dashboard</h1>
-            <div className={`${styles['influencer-details']} ${styles['colored-container']} ${styles['shadow-effect']}`}>
+            <div className={`${styles['influencer-details']} ${styles['colored-container']} ${styles['shadow-effect']} card-peek`} data-peek="Click to reveal more profile details">
               {isEditing ? (
                 <div className={styles['edit-form']}>
                   <div className={styles['profile-pic-container']}>
@@ -614,8 +606,8 @@ function InfluencerDashboard() {
                     }
                   />
                   <div className={styles['edit-form-buttons']}>
-                    <button className={styles['save-btn']} onClick={handleSaveClick}>Save</button>
-                    <button className={styles['cancel-btn']} onClick={handleCancelClick}>Cancel</button>
+                    <button className={`${styles['save-btn']} elastic-pop`} onClick={handleSaveClick}>Save</button>
+                    <button className={`${styles['cancel-btn']} elastic-pop`} onClick={handleCancelClick}>Cancel</button>
                   </div>
                 </div>
               ) : (
@@ -638,7 +630,7 @@ function InfluencerDashboard() {
                     <p><strong>Gender:</strong> {influencerInfo.gender}</p>
                     <p><strong>Industry:</strong> {Array.isArray(influencerInfo.industries) ? influencerInfo.industries.join(', ') : ''}</p>
                     <p><strong>Niche Platforms:</strong> {Array.isArray(influencerInfo.nichePlatforms) ? influencerInfo.nichePlatforms.join(', ') : ''}</p>
-                    <button className={styles['edit-btn']} onClick={handleEditClick}>Edit Info</button>
+                    <button className={`${styles['edit-btn']} elastic-pop`} onClick={handleEditClick}>Edit Info</button>
                   </div>
                 </div>
               )}
@@ -650,7 +642,7 @@ function InfluencerDashboard() {
 
           {/* BRAND REQUESTS SECTION */}
           <section id="brandRequests" className={`${styles['brand-requests-section']} ${styles['fade-in-left']}`}>
-            <h2>Brand Requests</h2>
+            <h2 className="animated-underline">Brand Requests</h2>
             <div className={styles['requests-list']}>
               {brandRequests.length === 0 ? (
                 <p>No brand requests at the moment.</p>
@@ -664,7 +656,7 @@ function InfluencerDashboard() {
 
           {/* Active Campaigns Section */}
           <section id="activeCampaigns" className={`${styles['campaign-section']} ${styles['fade-in-left']}`}>
-            <h2>ACTIVE CAMPAIGNS</h2>
+            <h2 className="animated-underline">ACTIVE CAMPAIGNS</h2>
             <div className={styles.campaigns}>
               {activeCampaigns.length > 0 ? (
                 activeCampaigns.map((campaign) => (
@@ -683,7 +675,7 @@ function InfluencerDashboard() {
 
           {/* All Campaigns Section */}
           <section id="allCampaigns" className={`${styles['campaign-section']} ${styles['fade-in-right']}`}>
-            <h2>All Campaigns</h2>
+            <h2 className="animated-underline">All Campaigns</h2>
             <div className={styles['big-campaigns']}>
               {allCampaigns.map((campaign) => (
                 <AllCampaignCard
