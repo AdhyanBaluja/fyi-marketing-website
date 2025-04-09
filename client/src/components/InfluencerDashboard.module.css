@@ -225,7 +225,7 @@ label {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAI0lEQVQoU2Nk+M+ACzDgwMjIw/7AwMDAwMzAwMDABDgAoaEkEhxQINQAAAABJRU5ErkJggg==');
+  background: url('../assets/noise.png'); /* Updated: noise.png from assets folder */
   opacity: 0.05;
   pointer-events: none;
   mix-blend-mode: overlay;
@@ -424,7 +424,7 @@ label {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('path/to/noise.png'); /* Replace with your noise texture file */
+  background: url('../assets/noise.png'); /* Updated: noise.png from assets folder */
   opacity: 0.05;
   pointer-events: none;
   mix-blend-mode: overlay;
