@@ -1,11 +1,9 @@
 /* 
    InfluencerDashboard.css
    =========================
-   Final version – fully self-contained.
-   This file uses a dark theme with orange (#FF7D00) accents 
-   and the "Poppins" font. All containers use increased transparency 
-   (lower alpha values) so the background shows through, and WebKit 
-   prefixes are included where needed.
+   Final version – fully updated and enhanced with advanced visual effects,
+   dynamic animations, intricate interactions, and micro-animations.
+   It preserves the dark theme with #FF7D00 accents and the "Poppins" font.
 */
 
 /* FONT IMPORT */
@@ -22,29 +20,31 @@ html, body {
 }
 
 body {
-  background: linear-gradient(135deg, #00101d 0%, #001e2e 100%);
+  background: linear-gradient(135deg, var(--bg-gradient-start, #00101d) 0%, var(--bg-gradient-end, #001e2e) 100%);
   overflow-x: hidden;
 }
 
-/* =========================== BACKGROUND WRAPPER =========================== */
-/*
-   The outer wrapper (.influencer-dashboard-wrapper) now:
-   - Uses the background image from "../assets/InfluencerBack.jpg"
-   - Is fixed and repeats vertically (repeat-y) with background-size set to contain,
-     so the full image is visible.
-   - Has a light overlay (via ::before) with low opacity.
-*/
+label {
+  color: #e0e0e0;
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+/* =========================== BACKGROUND WRAPPER & EFFECTS =========================== */
 .influencer-dashboard-wrapper {
   position: relative;
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
   background: url('../assets/InfluencerBack.jpg') top center repeat-y;
-  background-size: contain;
+  background-size: cover; /* Changed from contain to cover */
   background-attachment: fixed;
   z-index: 1;
 }
 
+/* Animated Gradient Overlay for Depth */
 .influencer-dashboard-wrapper::before {
   content: '';
   position: absolute;
@@ -52,11 +52,64 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, 
+    rgba(0, 13, 23, 0.7) 0%, 
+    rgba(0, 21, 36, 0.5) 50%,
+    rgba(21, 54, 78, 0.6) 100%);
   z-index: -1;
+  animation: gradientShift 15s ease infinite alternate;
 }
 
-/* The main inner container */
+@keyframes gradientShift {
+  0% { opacity: 0.5; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0.5; }
+}
+
+/* Particle Background Container */
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Animated Background Shapes */
+.animated-shapes {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.shape {
+  position: absolute;
+  background: rgba(255, 125, 0, 0.03);
+  border: 1px solid rgba(255, 125, 0, 0.1);
+  border-radius: 50%;
+}
+.shape1 {
+  width: 400px;
+  height: 400px;
+  top: -100px;
+  right: -100px;
+  animation: floatAnimation 25s infinite alternate ease-in-out;
+}
+@keyframes floatAnimation {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(50px, 25px) rotate(5deg); }
+  50% { transform: translate(25px, 50px) rotate(10deg); }
+  75% { transform: translate(-25px, 25px) rotate(5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* =========================== MAIN CONTAINER =========================== */
 .influencer-dashboard {
   position: relative;
   z-index: 2;
@@ -65,23 +118,55 @@ body {
 
 /* =========================== ANIMATIONS =========================== */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+    filter: blur(5px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 @keyframes fadeInDown {
-  0% { opacity: 0; transform: translateY(-20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { 
+    opacity: 0; 
+    transform: translateY(-30px); 
+    filter: blur(3px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 @keyframes fadeInRight {
-  0% { opacity: 0; transform: translateX(20px); }
-  100% { opacity: 1; transform: translateX(0); }
+  0% { 
+    opacity: 0; 
+    transform: translateX(40px) scale(0.95);
+    filter: blur(5px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
 }
 
 @keyframes fadeInLeft {
-  0% { opacity: 0; transform: translateX(-20px); }
-  100% { opacity: 1; transform: translateX(0); }
+  0% { 
+    opacity: 0; 
+    transform: translateX(-40px) scale(0.95);
+    filter: blur(5px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
 }
 
 @keyframes fadeInTask {
@@ -89,7 +174,21 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Utility animation classes */
+/* Progress Bar Pulse Animation */
+@keyframes progressPulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 125, 0, 0.4); }
+  70% { box-shadow: 0 0 0 5px rgba(255, 125, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 125, 0, 0); }
+}
+
+/* Wave Animation for Dividers */
+@keyframes waveMove {
+  0% { d: path("M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"); }
+  50% { d: path("M421.39,56.44c58-18.79,94.16-20.13,172-41.86,82.39-10.72,108.19-27.73,200.45-10.39C873.78,21,956.67,72,995.66,82.83c50.05,13.48,106.53,26.09,204.34,13V0H0V27.35A600.21,600.21,0,0,0,421.39,56.44Z"); }
+  100% { d: path("M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"); }
+}
+
+/* =========================== UTILITY CLASSES =========================== */
 .fade-in-down { animation: fadeInDown 0.8s ease forwards; }
 .fade-in-right { animation: fadeInRight 0.8s ease forwards; }
 .fade-in-left { animation: fadeInLeft 0.8s ease forwards; }
@@ -128,7 +227,7 @@ body {
   border-bottom: 1px solid rgba(44, 84, 117, 0.5);
 }
 
-.main-nav .nav-logo {
+.nav-logo {
   font-size: 1.8rem;
   font-weight: 700;
   color: #FF7D00;
@@ -144,32 +243,71 @@ body {
   padding: 0;
 }
 
+/* Enhanced Navigation Hover Underline */
 .main-nav ul li {
-  cursor: pointer;
-  color: #e0e0e0;
-  font-weight: 500;
-  font-size: 1rem;
   position: relative;
+  cursor: pointer;
+  padding: 5px 0;
   transition: color 0.2s;
 }
-
-.main-nav ul li:after {
+.main-nav ul li::after {
   content: '';
   position: absolute;
+  bottom: -2px;
+  left: 50%;
   width: 0;
   height: 2px;
-  bottom: -5px;
-  left: 0;
   background-color: #FF7D00;
-  transition: width 0.3s ease;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
 }
-
+.main-nav ul li:hover::after {
+  width: 100%;
+}
 .main-nav ul li:hover {
   color: #FF7D00;
 }
 
-.main-nav ul li:hover:after {
+/* Mobile Navigation Toggle Style */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+.mobile-menu-toggle span {
+  display: block;
+  height: 3px;
   width: 100%;
+  background-color: #FF7D00;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+@media (max-width: 768px) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  .main-nav ul {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    height: 100vh;
+    background: rgba(0, 13, 23, 0.95);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    transition: all 0.5s ease;
+    z-index: 999;
+  }
+  .main-nav ul.active {
+    left: 0;
+  }
 }
 
 /* =========================== PAGE TITLE =========================== */
@@ -190,19 +328,36 @@ body {
   animation: fadeIn 1s ease forwards;
 }
 
-/* =========================== CONTAINERS =========================== */
-/* This container class is used widely as a “card” background. */
+/* =========================== CONTAINERS (CARDS & MODALS) =========================== */
 .colored-container {
-  background: rgba(16, 39, 57, 0.2);  /* Lower alpha: more transparent */
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
+  background: rgba(16, 39, 57, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 15px;
-  border: 1px solid #2c5475;
+  border: 1px solid rgba(44, 84, 117, 0.3);
   padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
-
-.shadow-effect {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+.colored-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 125, 0, 0.08) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.colored-container:hover::before {
+  opacity: 1;
 }
 
 /* =========================== PROFILE SECTION =========================== */
@@ -252,6 +407,7 @@ body {
   margin-right: 5px;
 }
 
+/* Animated Edit Button */
 .edit-btn {
   position: absolute;
   top: 15px;
@@ -264,8 +420,8 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
-
 .edit-btn:hover {
   background-color: #ff9a40;
   transform: translateY(-2px);
@@ -323,6 +479,7 @@ body {
   font-weight: 600;
   font-size: 0.9rem;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .save-btn {
@@ -386,13 +543,10 @@ body {
   border: 1px solid rgba(44, 84, 117, 0.5);
   transition: all 0.4s ease;
 }
-
-.hover-rise:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 125, 0, 0.6);
+.campaign-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 125, 0, 0.3);
 }
-
 .campaign-logo {
   width: 60px;
   height: 60px;
@@ -401,23 +555,21 @@ body {
   margin-bottom: 0.8rem;
   border: 2px solid rgba(255, 125, 0, 0.6);
 }
-
 .campaign-info h3 {
   margin: 0.5rem 0;
   font-size: 1.1rem;
   color: #FF7D00;
 }
-
 .campaign-info p {
   margin: 0.25rem 0;
   font-size: 0.95rem;
   color: #c5c5c5;
 }
-
 .campaign-info strong {
   color: #e0e0e0;
 }
 
+/* Progress Bar & Update */
 .progress-bar {
   width: 100%;
   height: 8px;
@@ -427,26 +579,23 @@ body {
   overflow: hidden;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
-
 .progress-fill {
   height: 8px;
   background: linear-gradient(90deg, #FF7D00, #ff9a40);
   border-radius: 4px;
-  transition: width 0.6s ease;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: progressPulse 2s infinite;
 }
-
 .progress-text {
   font-size: 0.85rem;
   color: #c5c5c5;
 }
-
 .progress-update {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.8rem;
 }
-
 .progress-update input {
   width: 60px;
   padding: 0.4rem;
@@ -457,7 +606,6 @@ body {
   font-weight: 500;
   text-align: center;
 }
-
 .progress-update button {
   background-color: #15616D;
   color: #e0e0e0;
@@ -468,12 +616,12 @@ body {
   font-weight: 600;
   transition: all 0.3s ease;
 }
-
 .progress-update button:hover {
   background-color: #1a7585;
   transform: scale(1.05);
 }
 
+/* Leave Campaign Button */
 .leave-btn {
   background-color: rgba(255, 97, 80, 0.8);
   color: #fff;
@@ -485,20 +633,18 @@ body {
   margin-top: 0.8rem;
   transition: all 0.3s ease;
 }
-
 .leave-btn:hover {
   background-color: #ff6150;
   transform: scale(1.05);
 }
 
-/* =========================== ALL CAMPAIGNS (LARGER CARDS) =========================== */
+/* =========================== ALL CAMPAIGNS (Larger Cards) =========================== */
 .big-campaigns {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   margin-top: 1rem;
 }
-
 .big-campaign-card {
   border-radius: 12px;
   padding: 1.5rem;
@@ -513,20 +659,17 @@ body {
   background: rgba(16, 39, 57, 0.5);
   border: 1px solid rgba(44, 84, 117, 0.5);
 }
-
 .big-card-left {
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
 }
-
 .big-logo {
   width: 80px;
   height: 80px;
   border-radius: 8px;
   border: 2px solid rgba(255, 125, 0, 0.6);
 }
-
 .apply-btn {
   background-color: #FF7D00;
   color: #001524;
@@ -537,14 +680,13 @@ body {
   font-weight: 600;
   font-size: 0.9rem;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
-
 .apply-btn:hover {
   background-color: #ff9a40;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(255, 125, 0, 0.4);
 }
-
 .apply-btn:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
@@ -556,13 +698,11 @@ body {
 .brand-requests-section {
   margin-top: 3rem;
 }
-
 .requests-list {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
 }
-
 .brand-request-card {
   background: rgba(21, 54, 78, 0.5);
   border-radius: 12px;
@@ -573,29 +713,24 @@ body {
   border: 1px solid rgba(44, 84, 117, 0.5);
   transition: all 0.4s ease;
 }
-
 .brand-request-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px);
   box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
   border-color: rgba(255, 125, 0, 0.6);
 }
-
 .brand-request-card h3 {
   margin: 0.5rem 0;
   font-size: 1.1rem;
   color: #FF7D00;
 }
-
 .brand-request-card p {
   margin: 0.3rem 0;
   font-size: 0.9rem;
   color: #c5c5c5;
 }
-
 .brand-request-card strong {
   color: #e0e0e0;
 }
-
 .accept-btn {
   background-color: #FF7D00;
   color: #001524;
@@ -606,13 +741,12 @@ body {
   font-weight: 600;
   margin-top: 0.5rem;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
-
 .accept-btn:hover {
   background-color: #ff9a40;
   transform: scale(1.05);
 }
-
 .brand-requests-section p {
   color: #c5c5c5;
   font-style: italic;
@@ -624,20 +758,17 @@ body {
   border-top: 2px dashed #2c5475;
   padding-top: 1rem;
 }
-
 .tasks-section h4 {
   font-size: 1rem;
   margin-bottom: 0.5rem;
   color: #FF7D00;
   font-weight: 600;
 }
-
 .task-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-
 .task-item {
   display: flex;
   align-items: center;
@@ -649,13 +780,11 @@ body {
   border: 1px solid #2c5475;
   animation: fadeInTask 0.4s ease forwards;
 }
-
 .task-item span {
   color: #e0e0e0;
   font-size: 0.9rem;
   font-weight: 500;
 }
-
 .remove-task-btn {
   background-color: rgba(255, 97, 80, 0.8);
   border: none;
@@ -666,18 +795,15 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .remove-task-btn:hover {
   background-color: #ff6150;
   transform: scale(1.05);
 }
-
 .add-task-form {
   display: flex;
   align-items: center;
   margin-top: 0.8rem;
 }
-
 .add-task-form input {
   flex: 1;
   padding: 0.5rem 0.8rem;
@@ -689,12 +815,10 @@ body {
   margin-right: 0.5rem;
   transition: border-color 0.3s;
 }
-
 .add-task-form input:focus {
   border-color: #FF7D00;
   outline: none;
 }
-
 .add-task-btn {
   background-color: #FF7D00;
   color: #001524;
@@ -707,7 +831,6 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
 }
-
 .add-task-btn:hover {
   background-color: #ff9a40;
   transform: scale(1.1);
@@ -729,7 +852,6 @@ body {
   z-index: 100;
   transition: all 0.4s ease;
 }
-
 .ai-assistant-header {
   display: flex;
   justify-content: space-between;
@@ -739,13 +861,11 @@ body {
   font-weight: 600;
   font-size: 1.1rem;
 }
-
 .ai-assistant-content {
   margin-bottom: 0.8rem;
   font-size: 0.95rem;
   line-height: 1.4;
 }
-
 .ai-close-btn {
   background: none;
   border: none;
@@ -754,7 +874,6 @@ body {
   font-size: 1.2rem;
   transition: color 0.3s;
 }
-
 .ai-close-btn:hover {
   color: #FF7D00;
 }
@@ -774,32 +893,28 @@ body {
   transition: all 0.4s ease;
   margin-bottom: 1rem;
 }
-
 .amplify-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
   border-color: #FF7D00;
 }
-
 .amplify-card h3 {
   color: #FF7D00;
   font-size: 1.2rem;
   margin: 0 0 0.8rem 0;
   font-weight: 600;
 }
-
 .amplify-card p {
   margin: 0.3rem 0;
   color: #c5c5c5;
   font-size: 0.95rem;
   line-height: 1.4;
 }
-
 .amplify-card strong {
   color: #e0e0e0;
 }
 
-/* =========================== CUSTOM NAV MENU (IF USED) =========================== */
+/* =========================== CUSTOM NAV MENU =========================== */
 .letsFYI {
   font-size: 1.8rem;
   font-weight: 700;
@@ -807,7 +922,6 @@ body {
   padding: 1rem 2rem;
   display: block;
 }
-
 .nav-menu {
   display: flex;
   justify-content: flex-end;
@@ -815,27 +929,22 @@ body {
   gap: 2rem;
   background-color: rgba(0, 13, 23, 0.8);
 }
-
 .nav-menu a {
   color: #e0e0e0;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
 }
-
 .nav-menu a:hover {
   color: #FF7D00;
 }
-
 .nav-menu a.logout {
   color: #FF6150;
 }
-
 .nav-menu a.active {
   color: #FF7D00;
   position: relative;
 }
-
 .nav-menu a.active::after {
   content: '';
   position: absolute;
@@ -846,110 +955,151 @@ body {
   background-color: #FF7D00;
 }
 
-/* =========================== MEDIA QUERIES =========================== */
-@media (max-width: 768px) {
-  .main-nav {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .main-nav ul {
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: flex-start;
-  }
-  
-  .profile-section {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .profile-pic-container {
-    margin-bottom: 1.5rem;
-  }
-  
-  .campaigns {
-    justify-content: center;
-  }
-  
-  .big-campaign-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .big-card-right {
-    margin-top: 1rem;
-  }
-  
-  .amplify-card {
-    position: static;
-    width: auto;
-    margin: 2rem auto;
-    max-width: 80%;
-  }
+/* =========================== TOOLTIP SYSTEM =========================== */
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  background: rgba(16, 39, 57, 0.9);
+  color: #e0e0e0;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 125, 0, 0.3);
+}
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
-@media (max-width: 480px) {
-  .nav-logo {
-    font-size: 1.5rem;
-  }
-  
-  .main-nav ul li {
-    font-size: 0.9rem;
-  }
-  
-  .page-title {
-    font-size: 1.8rem;
-  }
-  
-  .top-section {
-    padding: 0.5rem 1rem;
-  }
-  
-  .colored-container {
-    padding: 1rem;
-  }
-  
-  .profile-pic {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .edit-form label {
-    font-size: 0.8rem;
-  }
-  
-  .edit-form input,
-  .edit-form textarea {
-    font-size: 0.85rem;
-  }
-  
-  .campaign-section h2,
-  .brand-requests-section h2 {
-    font-size: 1.2rem;
-  }
-  
-  .campaign-info h3 {
-    font-size: 1rem;
-  }
-  
-  .campaign-info p {
-    font-size: 0.85rem;
-  }
-  
-  .brand-request-card {
-    width: 100%;
-  }
-  
-  .requests-list {
-    justify-content: center;
-  }
-  
-  .ai-assistant-container {
-    width: 85%;
-    right: 50%;
-    transform: translateX(50%);
-  }
+/* =========================== TASK COMPLETION ANIMATION =========================== */
+.task-item.completed {
+  animation: taskComplete 0.5s ease forwards;
 }
+@keyframes taskComplete {
+  0% { background-color: rgba(0, 21, 36, 0.5); }
+  50% { background-color: rgba(255, 125, 0, 0.3); }
+  100% { background-color: rgba(0, 21, 36, 0.5); opacity: 0.6; }
+}
+
+/* =========================== TEXT HIGHLIGHTING & FOCUS EFFECTS =========================== */
+.campaign-info h3, .profile-view strong {
+  position: relative;
+  transition: all 0.3s ease;
+}
+.campaign-info h3:hover, .profile-view strong:hover {
+  text-shadow: 0 0 8px rgba(255, 125, 0, 0.4);
+  letter-spacing: 0.5px;
+}
+
+/* =========================== AI ASSISTANT INTERACTIONS =========================== */
+.ai-assistant-container {
+  transform: translateY(100%);
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.ai-assistant-container.active {
+  transform: translateY(0);
+}
+.ai-assistant-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FF7D00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 101;
+  transition: all 0.3s ease;
+}
+.ai-assistant-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* =========================== LOADING SCREEN ANIMATION =========================== */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #001524;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease, visibility 0.5s;
+}
+.loader {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.loader svg {
+  width: 100%;
+  height: 100%;
+  animation: rotate 2s linear infinite;
+}
+.loader-path {
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  animation: dash 2s ease-in-out infinite alternate;
+}
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes dash {
+  0% { stroke-dashoffset: 283; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 283; }
+}
+.loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* =========================== DYNAMIC COLOR THEME =========================== */
+/* These variables are updated via JavaScript based on time-of-day */
+:root {
+  --accent-color: #FF7D00;
+  --bg-gradient-start: #00101d;
+  --bg-gradient-end: #001e2e;
+}
+
+/* =========================== SVG PROGRESS INDICATOR =========================== */
+.circle-progress {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.circle-progress-path {
+  stroke-dasharray: 100, 100;
+  transition: stroke-dasharray 0.8s ease;
+}
+.circle-progress svg {
+  transform: rotate(-90deg);
+}
+
+/* =========================== END OF CSS FILE =========================== */
