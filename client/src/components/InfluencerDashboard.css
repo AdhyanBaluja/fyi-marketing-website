@@ -40,7 +40,7 @@ body {
   background-image: url('../assets/InfluencerBack.jpg');
   background-size: cover;
   background-position: center;
-  opacity: 0.18;
+  opacity: 0.3; /* Increased opacity to make background more visible */
   z-index: -1;
 }
 
@@ -332,6 +332,8 @@ body {
   padding: 1.2rem;
   opacity: 0;
   transform: translateY(50px);
+  background: rgba(16, 39, 57, 0.7); /* Added background color to match image */
+  border: 1px solid rgba(44, 84, 117, 0.5); /* Added border to match image */
 }
 
 .hover-rise:hover {
@@ -460,6 +462,8 @@ body {
   position: relative;
   opacity: 0;
   transform: translateY(50px);
+  background: rgba(16, 39, 57, 0.7); /* Added background color to match image */
+  border: 1px solid rgba(44, 84, 117, 0.5); /* Added border to match image */
 }
 
 .big-card-left {
@@ -712,20 +716,19 @@ body {
   color: #FF7D00;
 }
 
-/* Amplify Plan Card */
+/* Amplify Plan Card - Updated to match image */
 .amplify-card {
-  position: absolute;
-  top: 0;
-  right: -320px;
-  width: 280px;
-  background: rgba(16, 39, 57, 0.8);
+  position: static; /* Changed from absolute to static */
+  width: 100%; /* Changed to 100% width */
+  background: rgba(16, 39, 57, 0.7);
   border-radius: 15px;
   padding: 1.2rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 125, 0, 0.6);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(44, 84, 117, 0.5);
   backdrop-filter: blur(5px);
   animation: fadeIn 1.2s ease forwards;
   transition: all 0.4s ease;
+  margin-bottom: 1rem; /* Added margin to separate from other elements */
 }
 
 .amplify-card:hover {
@@ -760,6 +763,53 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* New styles to match the image shown */
+.letsFYI {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #FF7D00;
+  padding: 1rem 2rem;
+  display: block;
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 2rem;
+  gap: 2rem;
+  background-color: rgba(0, 13, 23, 0.8);
+}
+
+.nav-menu a {
+  color: #e0e0e0;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+  color: #FF7D00;
+}
+
+.nav-menu a.logout {
+  color: #FF6150;
+}
+
+.nav-menu a.active {
+  color: #FF7D00;
+  position: relative;
+}
+
+.nav-menu a.active::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: #FF7D00;
 }
 
 /* =========== MEDIA QUERIES =========== */
