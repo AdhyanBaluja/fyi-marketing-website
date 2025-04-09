@@ -22,6 +22,12 @@ html, body {
 body {
   background: linear-gradient(135deg, var(--bg-gradient-start, #00101d) 0%, var(--bg-gradient-end, #001e2e) 100%);
   overflow-x: hidden;
+  /* Custom cursor for a premium feel */
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23FF7D00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>') 12 12, auto;
+}
+
+a, button, .campaign-card, .big-campaign-card, .brand-request-card {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23FF7D00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>') 12 12, pointer;
 }
 
 label {
@@ -42,6 +48,7 @@ label {
   background-size: cover; /* Changed from contain to cover */
   background-attachment: fixed;
   z-index: 1;
+  perspective: 1000px; /* For advanced parallax and 3D effects */
 }
 
 /* Animated Gradient Overlay for Depth */
@@ -186,6 +193,54 @@ label {
   0% { d: path("M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"); }
   50% { d: path("M421.39,56.44c58-18.79,94.16-20.13,172-41.86,82.39-10.72,108.19-27.73,200.45-10.39C873.78,21,956.67,72,995.66,82.83c50.05,13.48,106.53,26.09,204.34,13V0H0V27.35A600.21,600.21,0,0,0,421.39,56.44Z"); }
   100% { d: path("M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"); }
+}
+
+/* =========================== EXTRA ARTISTIC ENHANCEMENTS =========================== */
+
+/* Interactive 3D Effects on Cards */
+.campaign-card, .big-campaign-card, .brand-request-card {
+  transform-style: preserve-3d;
+}
+
+/* Glitch/Distortion on Hover for Images */
+.campaign-logo:hover {
+  filter: contrast(1.2) drop-shadow(0 0 2px #FF7D00);
+}
+
+/* Organic Fluid Transitions for Containers */
+@keyframes containerMorph {
+  0% { background: rgba(16, 39, 57, 0.2); }
+  50% { background: rgba(16, 39, 57, 0.25); }
+  100% { background: rgba(16, 39, 57, 0.2); }
+}
+.colored-container {
+  animation: containerMorph 10s ease-in-out infinite;
+}
+
+/* Animated Noise & Texture Overlay (requires noise.png asset) */
+.colored-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('path/to/noise.png'); /* Replace with actual noise texture */
+  opacity: 0.05;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* Scroll-Responsive Vignette Overlay */
+.vignette-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.6) 100%);
+  z-index: 5;
 }
 
 /* =========================== UTILITY CLASSES =========================== */
@@ -360,6 +415,20 @@ label {
   opacity: 1;
 }
 
+/* Animated Noise & Texture Overlay */
+.colored-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('path/to/noise.png'); /* Replace with your noise texture file */
+  opacity: 0.05;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
 /* =========================== PROFILE SECTION =========================== */
 .influencer-details {
   max-width: 900px;
@@ -435,13 +504,11 @@ label {
   gap: 0.75rem;
   width: 100%;
 }
-
 .edit-form label {
   font-size: 0.9rem;
   font-weight: 600;
   color: #FF7D00;
 }
-
 .edit-form input,
 .edit-form textarea {
   padding: 0.6rem;
@@ -452,24 +519,20 @@ label {
   color: #e0e0e0;
   transition: border-color 0.3s;
 }
-
 .edit-form input:focus,
 .edit-form textarea:focus {
   border-color: #FF7D00;
   outline: none;
 }
-
 .edit-form textarea {
   min-height: 80px;
   resize: vertical;
 }
-
 .edit-form-buttons {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
 }
-
 .save-btn,
 .cancel-btn {
   padding: 0.6rem 1.2rem;
@@ -481,22 +544,18 @@ label {
   transition: all 0.3s ease;
   overflow: hidden;
 }
-
 .save-btn {
   background-color: #FF7D00;
   color: #001524;
 }
-
 .save-btn:hover {
   background-color: #ff9a40;
   transform: translateY(-2px);
 }
-
 .cancel-btn {
   background-color: #15616D;
   color: #e0e0e0;
 }
-
 .cancel-btn:hover {
   background-color: #1a7585;
   transform: translateY(-2px);
@@ -510,7 +569,6 @@ label {
   padding: 0 1rem;
   animation: fadeIn 1s ease forwards;
 }
-
 .campaign-section h2,
 .brand-requests-section h2 {
   color: #e0e0e0;
@@ -529,7 +587,6 @@ label {
   flex-wrap: wrap;
   gap: 1.5rem;
 }
-
 .campaign-card {
   flex: 1;
   min-width: 280px;
@@ -543,9 +600,10 @@ label {
   border: 1px solid rgba(44, 84, 117, 0.5);
   transition: all 0.4s ease;
 }
+/* Interactive 3D Hover Effect on Cards */
 .campaign-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 125, 0, 0.3);
+  transform: rotateY(3deg) translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255,125,0,0.3);
 }
 .campaign-logo {
   width: 60px;
@@ -657,7 +715,7 @@ label {
   opacity: 0;
   transform: translateY(50px);
   background: rgba(16, 39, 57, 0.5);
-  border: 1px solid rgba(44, 84, 117, 0.5);
+  border: 1px solid rgba(44,84,117,0.5);
 }
 .big-card-left {
   display: flex;
@@ -668,7 +726,7 @@ label {
   width: 80px;
   height: 80px;
   border-radius: 8px;
-  border: 2px solid rgba(255, 125, 0, 0.6);
+  border: 2px solid rgba(255,125,0,0.6);
 }
 .apply-btn {
   background-color: #FF7D00;
@@ -685,7 +743,7 @@ label {
 .apply-btn:hover {
   background-color: #ff9a40;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(255, 125, 0, 0.4);
+  box-shadow: 0 4px 10px rgba(255,125,0,0.4);
 }
 .apply-btn:disabled {
   background-color: #6c757d;
@@ -704,19 +762,19 @@ label {
   gap: 1.5rem;
 }
 .brand-request-card {
-  background: rgba(21, 54, 78, 0.5);
+  background: rgba(21,54,78,0.5);
   border-radius: 12px;
   padding: 1.2rem;
   width: 220px;
   position: relative;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(44, 84, 117, 0.5);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  border: 1px solid rgba(44,84,117,0.5);
   transition: all 0.4s ease;
 }
 .brand-request-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 125, 0, 0.6);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+  border-color: rgba(255,125,0,0.6);
 }
 .brand-request-card h3 {
   margin: 0.5rem 0;
@@ -773,7 +831,7 @@ label {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: rgba(0, 21, 36, 0.5);
+  background-color: rgba(0,21,36,0.5);
   padding: 0.5rem 0.8rem;
   margin-bottom: 0.5rem;
   border-radius: 4px;
@@ -786,7 +844,7 @@ label {
   font-weight: 500;
 }
 .remove-task-btn {
-  background-color: rgba(255, 97, 80, 0.8);
+  background-color: rgba(255,97,80,0.8);
   border: none;
   color: #fff;
   padding: 0.3rem 0.6rem;
@@ -810,7 +868,7 @@ label {
   border: 1px solid #2c5475;
   border-radius: 4px;
   font-size: 0.85rem;
-  background-color: rgba(0, 21, 36, 0.5);
+  background-color: rgba(0,21,36,0.5);
   color: #e0e0e0;
   margin-right: 0.5rem;
   transition: border-color 0.3s;
@@ -842,11 +900,11 @@ label {
   bottom: 2rem;
   right: 2rem;
   width: 320px;
-  background: rgba(21, 54, 78, 0.5);
+  background: rgba(21,54,78,0.5);
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 125, 0, 0.4);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,125,0,0.4);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   z-index: 100;
@@ -882,11 +940,11 @@ label {
 .amplify-card {
   position: static;
   width: 100%;
-  background: rgba(16, 39, 57, 0.5);
+  background: rgba(16,39,57,0.5);
   border-radius: 15px;
   padding: 1.2rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(44, 84, 117, 0.5);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  border: 1px solid rgba(44,84,117,0.5);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   animation: fadeIn 1.2s ease forwards;
@@ -895,7 +953,7 @@ label {
 }
 .amplify-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.4);
   border-color: #FF7D00;
 }
 .amplify-card h3 {
@@ -927,7 +985,7 @@ label {
   justify-content: flex-end;
   padding: 1rem 2rem;
   gap: 2rem;
-  background-color: rgba(0, 13, 23, 0.8);
+  background-color: rgba(0,13,23,0.8);
 }
 .nav-menu a {
   color: #e0e0e0;
@@ -966,7 +1024,7 @@ label {
   bottom: 125%;
   left: 50%;
   transform: translateX(-50%) scale(0.8);
-  background: rgba(16, 39, 57, 0.9);
+  background: rgba(16,39,57,0.9);
   color: #e0e0e0;
   padding: 5px 10px;
   border-radius: 6px;
@@ -976,8 +1034,8 @@ label {
   pointer-events: none;
   transition: all 0.3s ease;
   z-index: 100;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 125, 0, 0.3);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,125,0,0.3);
 }
 [data-tooltip]:hover::after {
   opacity: 1;
@@ -989,9 +1047,9 @@ label {
   animation: taskComplete 0.5s ease forwards;
 }
 @keyframes taskComplete {
-  0% { background-color: rgba(0, 21, 36, 0.5); }
-  50% { background-color: rgba(255, 125, 0, 0.3); }
-  100% { background-color: rgba(0, 21, 36, 0.5); opacity: 0.6; }
+  0% { background-color: rgba(0,21,36,0.5); }
+  50% { background-color: rgba(255,125,0,0.3); }
+  100% { background-color: rgba(0,21,36,0.5); opacity: 0.6; }
 }
 
 /* =========================== TEXT HIGHLIGHTING & FOCUS EFFECTS =========================== */
@@ -1000,14 +1058,14 @@ label {
   transition: all 0.3s ease;
 }
 .campaign-info h3:hover, .profile-view strong:hover {
-  text-shadow: 0 0 8px rgba(255, 125, 0, 0.4);
+  text-shadow: 0 0 8px rgba(255,125,0,0.4);
   letter-spacing: 0.5px;
 }
 
 /* =========================== AI ASSISTANT INTERACTIONS =========================== */
 .ai-assistant-container {
   transform: translateY(100%);
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
 }
 .ai-assistant-container.active {
   transform: translateY(0);
@@ -1024,7 +1082,7 @@ label {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   z-index: 101;
   transition: all 0.3s ease;
 }
@@ -1079,7 +1137,6 @@ label {
 }
 
 /* =========================== DYNAMIC COLOR THEME =========================== */
-/* These variables are updated via JavaScript based on time-of-day */
 :root {
   --accent-color: #FF7D00;
   --bg-gradient-start: #00101d;
@@ -1100,6 +1157,35 @@ label {
 }
 .circle-progress svg {
   transform: rotate(-90deg);
+}
+
+/* =========================== EXTRA ARTISTIC ENHANCEMENTS =========================== */
+
+/* Interactive 3D Effects on Cards */
+.campaign-card, .big-campaign-card, .brand-request-card {
+  transform-style: preserve-3d;
+}
+
+/* Organic Fluid Transitions for Containers */
+@keyframes containerMorph {
+  0% { background: rgba(16, 39, 57, 0.2); }
+  50% { background: rgba(16, 39, 57, 0.25); }
+  100% { background: rgba(16, 39, 57, 0.2); }
+}
+.colored-container {
+  animation: containerMorph 10s ease-in-out infinite;
+}
+
+/* Scroll-Responsive Vignette Overlay */
+.vignette-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.6) 100%);
+  z-index: 5;
 }
 
 /* =========================== END OF CSS FILE =========================== */

@@ -81,9 +81,7 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   return (
     <div
       ref={cardRef}
-      className={`${styles['campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${
-        cardRevealed ? styles['scroll-reveal'] : ''
-      }`}
+      className={`${styles['campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${cardRevealed ? styles['scroll-reveal'] : ''}`}
     >
       <img src={brandLogo} alt={brandName} className={styles['campaign-logo']} />
       <div className={styles['campaign-info']}>
@@ -184,9 +182,7 @@ function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds
   return (
     <div
       ref={bigRef}
-      className={`${styles['big-campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${
-        bigRevealed ? styles['scroll-reveal'] : ''
-      }`}
+      className={`${styles['big-campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${bigRevealed ? styles['scroll-reveal'] : ''}`}
     >
       <div className={styles['big-card-left']}>
         <img src={brandLogo} alt={brandName} className={`${styles['campaign-logo']} ${styles['big-logo']}`} />
@@ -210,9 +206,7 @@ function BrandRequestCard({ request, onAccept }) {
   return (
     <div
       ref={reqRef}
-      className={`${styles['brand-request-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${
-        reqRevealed ? styles['scroll-reveal'] : ''
-      }`}
+      className={`${styles['brand-request-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${reqRevealed ? styles['scroll-reveal'] : ''}`}
     >
       <h3>{request.campaignName}</h3>
       <p><strong>Brand:</strong> {request.brandName || 'Unknown Brand'}</p>
@@ -306,7 +300,7 @@ function InfluencerDashboard() {
     updateThemeByTime();
   }, []);
 
-  // Loader: hide loading screen after 1.5 seconds
+  // Hide loading screen after 1.5 seconds
   useEffect(() => {
     const timer = setTimeout(() => { setIsLoading(false); }, 1500);
     return () => clearTimeout(timer);
@@ -459,7 +453,7 @@ function InfluencerDashboard() {
 
   // Mobile navigation toggle handler
   const toggleMobileNav = () => {
-    setIsMobileNavActive(!isMobileNavActive);
+    setIsMobileNavActive((prev) => !prev);
   };
 
   return (
@@ -484,6 +478,9 @@ function InfluencerDashboard() {
         <div className="shape shape2"></div>
         <div className="shape shape3"></div>
       </div>
+      
+      {/* Optional Vignette Overlay - add this div in your index.html or here */}
+      {/* <div className="vignette-overlay"></div> */}
 
       {/* Outer Wrapper with Background */}
       <div
