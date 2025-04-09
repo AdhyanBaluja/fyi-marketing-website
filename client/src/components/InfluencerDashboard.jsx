@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './InfluencerDashboard.css';
+import styles from './InfluencerDashboard.module.css';
 import useScrollReveal from '../hooks/useScrollReveal';
 import AiChatbot from './AiChatbot.jsx';
 import brandLogo from '../assets/bird_2.jpg';
@@ -98,12 +98,12 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   return (
     <div
       ref={cardRef}
-      className={`campaign-card hover-rise colored-container shadow-effect ${
-        cardRevealed ? 'scroll-reveal' : ''
+      className={`${styles['campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${
+        cardRevealed ? styles['scroll-reveal'] : ''
       }`}
     >
-      <img src={brandLogo} alt={brandName} className="campaign-logo" />
-      <div className="campaign-info">
+      <img src={brandLogo} alt={brandName} className={styles['campaign-logo']} />
+      <div className={styles['campaign-info']}>
         <h3>{campaignName}</h3>
         <p><strong>Brand:</strong> {brandName}</p>
         <p><strong>Budget:</strong> {campaign.budget || realCampaign.budget || 'N/A'}</p>
@@ -111,13 +111,13 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
         <p><strong>Target Audience:</strong> {realCampaign.targetAudience || 'N/A'}</p>
 
         {/* Progress Bar */}
-        <div className="progress-bar">
-          <div className="progress-fill" style={{ width: `${campaign.progress || 0}%` }}></div>
+        <div className={styles['progress-bar']}>
+          <div className={styles['progress-fill']} style={{ width: `${campaign.progress || 0}%` }}></div>
         </div>
-        <p className="progress-text">Progress: {campaign.progress || 0}%</p>
+        <p className={styles['progress-text']}>Progress: {campaign.progress || 0}%</p>
 
         {/* Update Progress */}
-        <div className="progress-update">
+        <div className={styles['progress-update']}>
           <label>Update Progress (%): </label>
           <input
             type="number"
@@ -132,29 +132,29 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
         {/* Leave Campaign */}
         {campaign.status === 'active' && (
           <div style={{ marginTop: '10px' }}>
-            <button onClick={handleLeave} className="leave-btn">Leave Campaign</button>
+            <button onClick={handleLeave} className={styles['leave-btn']}>Leave Campaign</button>
           </div>
         )}
 
         {/* Tasks Section */}
-        <div className="tasks-section">
+        <div className={styles['tasks-section']}>
           <h4>My To-Do List</h4>
-          <ul className="task-list">
+          <ul className={styles['task-list']}>
             {tasks.map((task) => (
-              <li key={task._id} className="task-item">
+              <li key={task._id} className={styles['task-item']}>
                 <span>{task.text}</span>
-                <button className="remove-task-btn" onClick={() => handleRemoveTask(task._id)}>✕</button>
+                <button className={styles['remove-task-btn']} onClick={() => handleRemoveTask(task._id)}>✕</button>
               </li>
             ))}
           </ul>
-          <form onSubmit={handleAddTask} className="add-task-form">
+          <form onSubmit={handleAddTask} className={styles['add-task-form']}>
             <input
               type="text"
               placeholder="Add a new task..."
               value={newTaskText}
               onChange={(e) => setNewTaskText(e.target.value)}
             />
-            <button type="submit" className="add-task-btn">+</button>
+            <button type="submit" className={styles['add-task-btn']}>+</button>
           </form>
         </div>
       </div>
@@ -193,30 +193,30 @@ function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds
 
   let actionButton = null;
   if (isActive) {
-    actionButton = <button className="apply-btn" disabled>Active</button>;
+    actionButton = <button className={styles['apply-btn']} disabled>Active</button>;
   } else if (isApplied) {
-    actionButton = <button className="apply-btn" disabled>Pending</button>;
+    actionButton = <button className={styles['apply-btn']} disabled>Pending</button>;
   } else {
-    actionButton = <button className="apply-btn" onClick={handleApply}>Apply</button>;
+    actionButton = <button className={styles['apply-btn']} onClick={handleApply}>Apply</button>;
   }
 
   return (
     <div
       ref={bigRef}
-      className={`big-campaign-card hover-rise colored-container shadow-effect ${
-        bigRevealed ? 'scroll-reveal' : ''
+      className={`${styles['big-campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${
+        bigRevealed ? styles['scroll-reveal'] : ''
       }`}
     >
-      <div className="big-card-left">
-        <img src={brandLogo} alt={brandName} className="campaign-logo big-logo" />
-        <div className="campaign-info">
+      <div className={styles['big-card-left']}>
+        <img src={brandLogo} alt={brandName} className={`${styles['campaign-logo']} ${styles['big-logo']}`} />
+        <div className={styles['campaign-info']}>
           <h3>{campaign.name || 'Untitled Campaign'}</h3>
           <p><strong>Brand:</strong> {brandName}</p>
           <p><strong>Budget:</strong> {campaign.budget || 'N/A'}</p>
           <p><strong>Target Audience:</strong> {campaign.targetAudience || 'N/A'}</p>
         </div>
       </div>
-      <div className="big-card-right">{actionButton}</div>
+      <div className={styles['big-card-right']}>{actionButton}</div>
     </div>
   );
 }
@@ -228,8 +228,8 @@ function BrandRequestCard({ request, onAccept }) {
   return (
     <div
       ref={reqRef}
-      className={`brand-request-card hover-rise colored-container shadow-effect ${
-        reqRevealed ? 'scroll-reveal' : ''
+      className={`${styles['brand-request-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} ${
+        reqRevealed ? styles['scroll-reveal'] : ''
       }`}
     >
       <h3>{request.campaignName}</h3>
@@ -237,7 +237,7 @@ function BrandRequestCard({ request, onAccept }) {
       <p><strong>Budget:</strong> {request.budget || 'N/A'}</p>
       <p><strong>Status:</strong> {request.status}</p>
       {request.status === 'pending' && (
-        <button className="accept-btn" onClick={() => onAccept(request._id)}>Accept</button>
+        <button className={styles['accept-btn']} onClick={() => onAccept(request._id)}>Accept</button>
       )}
     </div>
   );
@@ -246,7 +246,7 @@ function BrandRequestCard({ request, onAccept }) {
 // ==================== AmplifyPlanCard ====================
 function AmplifyPlanCard() {
   return (
-    <div className="amplify-card">
+    <div className={styles['amplify-card']}>
       <h3>amplify Plan (AI)</h3>
       <p><strong>Brand:</strong> LetS FYI</p>
       <p><strong>Budget:</strong> undefined</p>
@@ -473,7 +473,7 @@ function InfluencerDashboard() {
   return (
     // Outer wrapper with background
     <div
-      className="influencer-dashboard-wrapper"
+      className={styles['influencer-dashboard-wrapper']}
       style={{
         backgroundImage: `url(${influencerBack})`,
         backgroundSize: 'cover',
@@ -483,10 +483,10 @@ function InfluencerDashboard() {
       }}
     >
       {/* Main container renamed for clarity */}
-      <div className="influencer-dashboard" id="top">
+      <div className={styles['influencer-dashboard']} id="top">
         {/* NAVIGATION BAR */}
-        <nav className="main-nav fade-in-down">
-          <h2 className="nav-logo">letsFYI</h2>
+        <nav className={`${styles['main-nav']} ${styles['fade-in-down']}`}>
+          <h2 className={styles['nav-logo']}>letsFYI</h2>
           <ul>
             <li onClick={() => scrollToSection('top')}>Dashboard</li>
             <li onClick={() => scrollToSection('brandRequests')}>Brand Requests</li>
@@ -500,22 +500,22 @@ function InfluencerDashboard() {
 
         {/* COMPLETE PROFILE BANNER */}
         {showProfileBanner && (
-          <div className="complete-profile-banner">
+          <div className={styles['complete-profile-banner']}>
             Please add your profile photo in the Edit Info section.
           </div>
         )}
 
         {/* TOP SECTION - Influencer Profile */}
-        <div className="top-section fade-in-right">
-          <h1 className="page-title">Influencer Dashboard</h1>
-          <div className="influencer-details colored-container shadow-effect">
+        <div className={`${styles['top-section']} ${styles['fade-in-right']}`}>
+          <h1 className={styles['page-title']}>Influencer Dashboard</h1>
+          <div className={`${styles['influencer-details']} ${styles['colored-container']} ${styles['shadow-effect']}`}>
             {isEditing ? (
-              <div className="edit-form">
-                <div className="profile-pic-container">
+              <div className={styles['edit-form']}>
+                <div className={styles['profile-pic-container']}>
                   <img
                     src={tempInfo.profileImage || influencerBack}
                     alt="Profile"
-                    className="profile-pic"
+                    className={styles['profile-pic']}
                   />
                 </div>
                 <label>Profile Image (URL):</label>
@@ -612,25 +612,25 @@ function InfluencerDashboard() {
                     })
                   }
                 />
-                <div className="edit-form-buttons">
-                  <button className="save-btn" onClick={handleSaveClick}>
+                <div className={styles['edit-form-buttons']}>
+                  <button className={styles['save-btn']} onClick={handleSaveClick}>
                     Save
                   </button>
-                  <button className="cancel-btn" onClick={handleCancelClick}>
+                  <button className={styles['cancel-btn']} onClick={handleCancelClick}>
                     Cancel
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="profile-section">
-                <div className="profile-pic-container">
+              <div className={styles['profile-section']}>
+                <div className={styles['profile-pic-container']}>
                   <img
                     src={influencerInfo.profileImage || influencerBack}
                     alt="Profile"
-                    className="profile-pic"
+                    className={styles['profile-pic']}
                   />
                 </div>
-                <div className="profile-view">
+                <div className={styles['profile-view']}>
                   <p><strong>Name:</strong> {influencerInfo.name}</p>
                   <p><strong>Experience:</strong> {influencerInfo.experience} year</p>
                   <p><strong>Number of Followers:</strong> {influencerInfo.numFollowers}</p>
@@ -641,7 +641,7 @@ function InfluencerDashboard() {
                   <p><strong>Gender:</strong> {influencerInfo.gender}</p>
                   <p><strong>Industry:</strong> {Array.isArray(influencerInfo.industries) ? influencerInfo.industries.join(', ') : ''}</p>
                   <p><strong>Niche Platforms:</strong> {Array.isArray(influencerInfo.nichePlatforms) ? influencerInfo.nichePlatforms.join(', ') : ''}</p>
-                  <button className="edit-btn" onClick={handleEditClick}>
+                  <button className={styles['edit-btn']} onClick={handleEditClick}>
                     Edit Info
                   </button>
                 </div>
@@ -654,9 +654,9 @@ function InfluencerDashboard() {
         <AmplifyPlanCard />
 
         {/* BRAND REQUESTS SECTION */}
-        <section id="brandRequests" className="brand-requests-section fade-in-left">
+        <section id="brandRequests" className={`${styles['brand-requests-section']} ${styles['fade-in-left']}`}>
           <h2>Brand Requests</h2>
-          <div className="requests-list">
+          <div className={styles['requests-list']}>
             {brandRequests.length === 0 ? (
               <p>No brand requests at the moment.</p>
             ) : (
@@ -668,9 +668,9 @@ function InfluencerDashboard() {
         </section>
 
         {/* Active Campaigns Section */}
-        <section id="activeCampaigns" className="campaign-section fade-in-left">
+        <section id="activeCampaigns" className={`${styles['campaign-section']} ${styles['fade-in-left']}`}>
           <h2>ACTIVE CAMPAIGNS</h2>
-          <div className="campaigns">
+          <div className={styles.campaigns}>
             {activeCampaigns.length > 0 ? (
               activeCampaigns.map((campaign) => (
                 <ActiveCampaignCard
@@ -687,9 +687,9 @@ function InfluencerDashboard() {
         </section>
 
         {/* All Campaigns Section */}
-        <section id="allCampaigns" className="campaign-section fade-in-right">
+        <section id="allCampaigns" className={`${styles['campaign-section']} ${styles['fade-in-right']}`}>
           <h2>All Campaigns</h2>
-          <div className="big-campaigns">
+          <div className={styles['big-campaigns']}>
             {allCampaigns.map((campaign) => (
               <AllCampaignCard
                 key={campaign._id}

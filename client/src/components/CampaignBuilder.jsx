@@ -113,44 +113,62 @@ function CampaignBuilder() {
     }
   };
 
-  // Available goals, each with an inline SVG icon
+  // Available goals - defined without React components in the objects
   const goals = [
     {
       id: 'amplify-brand-awareness',
       label: 'Amplify Awareness',
       description: "Boost my brand's presence and make it top of mind for audiences.",
-      icon: <MegaphoneIcon />,
+      iconType: 'megaphone',
       category: 'top',
     },
     {
       id: 'market-a-product',
       label: 'Market a Product',
       description: 'Showcase my product to attract more customers and increase sales.',
-      icon: <ShoppingBagIcon />,
+      iconType: 'shopping-bag',
       category: 'top',
     },
     {
       id: 'drive-sales',
       label: 'Drive Sales',
       description: 'Accelerate my sales efforts and push for higher conversion rates.',
-      icon: <BarChartIcon />,
+      iconType: 'bar-chart',
       category: 'top',
     },
     {
       id: 'find-new-customers',
       label: 'Find New Customers',
       description: 'Reach untapped markets and expand my customer base.',
-      icon: <MapPinIcon />,
+      iconType: 'map-pin',
       category: 'more',
     },
     {
       id: 'drive-event-awareness',
       label: 'Drive Event Awareness',
       description: 'Increase visibility and excitement for my event.',
-      icon: <CalendarHeartIcon />,
+      iconType: 'calendar-heart',
       category: 'more',
     },
   ];
+
+  // Function to render the right icon based on the iconType
+  const renderIcon = (iconType) => {
+    switch (iconType) {
+      case 'megaphone':
+        return <MegaphoneIcon />;
+      case 'shopping-bag':
+        return <ShoppingBagIcon />;
+      case 'bar-chart':
+        return <BarChartIcon />;
+      case 'map-pin':
+        return <MapPinIcon />;
+      case 'calendar-heart':
+        return <CalendarHeartIcon />;
+      default:
+        return null;
+    }
+  };
 
   // Toggle goal selection
   const handleToggleGoal = (id) => {
@@ -167,22 +185,33 @@ function CampaignBuilder() {
   // Continue => Ensure exactly one selected goal => navigate
   const handleContinue = () => {
     if (selectedGoals.length === 1) {
-      const selectedGoal = goals.find((g) => g.id === selectedGoals[0]);
-      switch (selectedGoal.id) {
+      const selectedGoalId = selectedGoals[0];
+      const selectedGoal = goals.find((g) => g.id === selectedGoalId);
+      
+      // Pass only serializable data (no React components or functions)
+      const goalData = {
+        id: selectedGoal.id,
+        label: selectedGoal.label,
+        description: selectedGoal.description,
+        iconType: selectedGoal.iconType,
+        category: selectedGoal.category
+      };
+
+      switch (selectedGoalId) {
         case 'amplify-brand-awareness':
-          navigate('/amplify', { state: { selectedGoal } });
+          navigate('/amplify', { state: { selectedGoal: goalData } });
           break;
         case 'market-a-product':
-          navigate('/market-product', { state: { selectedGoal } });
+          navigate('/market-product', { state: { selectedGoal: goalData } });
           break;
         case 'drive-sales':
-          navigate('/drive-sales', { state: { selectedGoal } });
+          navigate('/drive-sales', { state: { selectedGoal: goalData } });
           break;
         case 'find-new-customers':
-          navigate('/find-new-customers', { state: { selectedGoal } });
+          navigate('/find-new-customers', { state: { selectedGoal: goalData } });
           break;
         case 'drive-event-awareness':
-          navigate('/drive-event-awareness', { state: { selectedGoal } });
+          navigate('/drive-event-awareness', { state: { selectedGoal: goalData } });
           break;
         default:
           alert(`Navigation for "${selectedGoal.label}" is not yet implemented.`);
@@ -224,7 +253,7 @@ function CampaignBuilder() {
               className={`goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
               onClick={() => handleToggleGoal(goal.id)}
             >
-              <div className="goal-icon">{goal.icon}</div>
+              <div className="goal-icon">{renderIcon(goal.iconType)}</div>
               <h3>{goal.label}</h3>
               <p>{goal.description}</p>
             </div>
@@ -239,7 +268,7 @@ function CampaignBuilder() {
               className={`goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
               onClick={() => handleToggleGoal(goal.id)}
             >
-              <div className="goal-icon">{goal.icon}</div>
+              <div className="goal-icon">{renderIcon(goal.iconType)}</div>
               <h3>{goal.label}</h3>
               <p>{goal.description}</p>
             </div>
