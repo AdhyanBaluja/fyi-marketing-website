@@ -5,7 +5,7 @@ import './InfluencerDashboard.css';
 import useScrollReveal from '../hooks/useScrollReveal';
 import AiChatbot from './AiChatbot.jsx';
 import brandLogo from '../assets/bird_2.jpg';
-import profileLogo from '../assets/InfluencerBack.jpg'; // Using this for profile placeholder
+import influencerBack from '../assets/InfluencerBack.jpg'; // Using this for profile placeholder & background
 
 // ==================== Environment Variable ====================
 // Use environment variable for API base URL; fallback to localhost for development
@@ -16,7 +16,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:400
   1) ActiveCampaignCard
   2) AllCampaignCard
   3) BrandRequestCard
-  4) AmplifyPlanCard - Added based on screenshot
+  4) AmplifyPlanCard
 */
 
 // ==================== ActiveCampaignCard ====================
@@ -471,226 +471,239 @@ function InfluencerDashboard() {
   };
 
   return (
-    <div className="dashboard-container-big" id="top">
-      {/* NAVIGATION BAR */}
-      <nav className="main-nav fade-in-down">
-        <h2 className="nav-logo">letsFYI</h2>
-        <ul>
-          <li onClick={() => scrollToSection('top')}>Dashboard</li>
-          <li onClick={() => scrollToSection('brandRequests')}>Brand Requests</li>
-          <li onClick={() => scrollToSection('activeCampaigns')}>Active Campaigns</li>
-          <li onClick={() => scrollToSection('allCampaigns')}>All Campaigns</li>
-          <li onClick={handleLogout} style={{ color: 'red', cursor: 'pointer' }}>
-            Logout
-          </li>
-        </ul>
-      </nav>
+    // Outer wrapper with background
+    <div
+      className="influencer-dashboard-wrapper"
+      style={{
+        backgroundImage: `url(${influencerBack})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100vh'
+      }}
+    >
+      {/* Main container renamed for clarity */}
+      <div className="influencer-dashboard" id="top">
+        {/* NAVIGATION BAR */}
+        <nav className="main-nav fade-in-down">
+          <h2 className="nav-logo">letsFYI</h2>
+          <ul>
+            <li onClick={() => scrollToSection('top')}>Dashboard</li>
+            <li onClick={() => scrollToSection('brandRequests')}>Brand Requests</li>
+            <li onClick={() => scrollToSection('activeCampaigns')}>Active Campaigns</li>
+            <li onClick={() => scrollToSection('allCampaigns')}>All Campaigns</li>
+            <li onClick={handleLogout} style={{ color: 'red', cursor: 'pointer' }}>
+              Logout
+            </li>
+          </ul>
+        </nav>
 
-      {/* COMPLETE PROFILE BANNER */}
-      {showProfileBanner && (
-        <div className="complete-profile-banner">
-          Please add your profile photo in the Edit Info section.
-        </div>
-      )}
+        {/* COMPLETE PROFILE BANNER */}
+        {showProfileBanner && (
+          <div className="complete-profile-banner">
+            Please add your profile photo in the Edit Info section.
+          </div>
+        )}
 
-      {/* TOP SECTION - Influencer Profile */}
-      <div className="top-section fade-in-right">
-        <h1 className="page-title">Influencer Dashboard</h1>
-        <div className="influencer-details colored-container shadow-effect">
-          {isEditing ? (
-            <div className="edit-form">
-              <div className="profile-pic-container">
-                <img
-                  src={tempInfo.profileImage || profileLogo}
-                  alt="Profile"
-                  className="profile-pic"
+        {/* TOP SECTION - Influencer Profile */}
+        <div className="top-section fade-in-right">
+          <h1 className="page-title">Influencer Dashboard</h1>
+          <div className="influencer-details colored-container shadow-effect">
+            {isEditing ? (
+              <div className="edit-form">
+                <div className="profile-pic-container">
+                  <img
+                    src={tempInfo.profileImage || influencerBack}
+                    alt="Profile"
+                    className="profile-pic"
+                  />
+                </div>
+                <label>Profile Image (URL):</label>
+                <input
+                  type="text"
+                  value={tempInfo.profileImage}
+                  onChange={(e) =>
+                    setTempInfo({ ...tempInfo, profileImage: e.target.value })
+                  }
                 />
-              </div>
-              <label>Profile Image (URL):</label>
-              <input
-                type="text"
-                value={tempInfo.profileImage}
-                onChange={(e) =>
-                  setTempInfo({ ...tempInfo, profileImage: e.target.value })
-                }
-              />
-              <label>Name:</label>
-              <input
-                type="text"
-                value={tempInfo.name}
-                onChange={(e) =>
-                  setTempInfo({ ...tempInfo, name: e.target.value })
-                }
-              />
-              <label>Experience (Years):</label>
-              <input
-                type="number"
-                value={tempInfo.experience}
-                onChange={(e) =>
-                  setTempInfo({ ...tempInfo, experience: e.target.value })
-                }
-              />
-              <label>Number of Followers:</label>
-              <input
-                type="number"
-                value={tempInfo.numFollowers}
-                onChange={(e) =>
-                  setTempInfo({ ...tempInfo, numFollowers: e.target.value })
-                }
-              />
-              <label>Influencer Location:</label>
-              <input
-                type="text"
-                value={tempInfo.influencerLocation}
-                onChange={(e) =>
-                  setTempInfo({ ...tempInfo, influencerLocation: e.target.value })
-                }
-              />
-              <label>Majority Audience Location:</label>
-              <input
-                type="text"
-                value={tempInfo.majorityAudienceLocation}
-                onChange={(e) =>
-                  setTempInfo({ ...tempInfo, majorityAudienceLocation: e.target.value })
-                }
-              />
-              <label>Audience Age Group:</label>
-              <input
-                type="text"
-                value={tempInfo.audienceAgeGroup}
-                onChange={(e) =>
-                  setTempInfo({ ...tempInfo, audienceAgeGroup: e.target.value })
-                }
-              />
-              <label>Audience Gender Demographics:</label>
-              <input
-                type="text"
-                value={tempInfo.audienceGenderDemographics}
-                onChange={(e) =>
-                  setTempInfo({ ...tempInfo, audienceGenderDemographics: e.target.value })
-                }
-              />
-              <label>Gender:</label>
-              <input
-                type="text"
-                value={tempInfo.gender}
-                onChange={(e) =>
-                  setTempInfo({ ...tempInfo, gender: e.target.value })
-                }
-              />
-              <label>Industries (comma-separated):</label>
-              <input
-                type="text"
-                value={Array.isArray(tempInfo.industries) ? tempInfo.industries.join(', ') : ''}
-                onChange={(e) =>
-                  setTempInfo({
-                    ...tempInfo,
-                    industries: e.target.value.split(',').map(item => item.trim()),
-                  })
-                }
-              />
-              <label>Niche Platforms (comma-separated):</label>
-              <input
-                type="text"
-                value={Array.isArray(tempInfo.nichePlatforms) ? tempInfo.nichePlatforms.join(', ') : ''}
-                onChange={(e) =>
-                  setTempInfo({
-                    ...tempInfo,
-                    nichePlatforms: e.target.value.split(',').map(item => item.trim()),
-                  })
-                }
-              />
-              <div className="edit-form-buttons">
-                <button className="save-btn" onClick={handleSaveClick}>
-                  Save
-                </button>
-                <button className="cancel-btn" onClick={handleCancelClick}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="profile-section">
-              <div className="profile-pic-container">
-                <img
-                  src={influencerInfo.profileImage || profileLogo}
-                  alt="Profile"
-                  className="profile-pic"
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={tempInfo.name}
+                  onChange={(e) =>
+                    setTempInfo({ ...tempInfo, name: e.target.value })
+                  }
                 />
+                <label>Experience (Years):</label>
+                <input
+                  type="number"
+                  value={tempInfo.experience}
+                  onChange={(e) =>
+                    setTempInfo({ ...tempInfo, experience: e.target.value })
+                  }
+                />
+                <label>Number of Followers:</label>
+                <input
+                  type="number"
+                  value={tempInfo.numFollowers}
+                  onChange={(e) =>
+                    setTempInfo({ ...tempInfo, numFollowers: e.target.value })
+                  }
+                />
+                <label>Influencer Location:</label>
+                <input
+                  type="text"
+                  value={tempInfo.influencerLocation}
+                  onChange={(e) =>
+                    setTempInfo({ ...tempInfo, influencerLocation: e.target.value })
+                  }
+                />
+                <label>Majority Audience Location:</label>
+                <input
+                  type="text"
+                  value={tempInfo.majorityAudienceLocation}
+                  onChange={(e) =>
+                    setTempInfo({ ...tempInfo, majorityAudienceLocation: e.target.value })
+                  }
+                />
+                <label>Audience Age Group:</label>
+                <input
+                  type="text"
+                  value={tempInfo.audienceAgeGroup}
+                  onChange={(e) =>
+                    setTempInfo({ ...tempInfo, audienceAgeGroup: e.target.value })
+                  }
+                />
+                <label>Audience Gender Demographics:</label>
+                <input
+                  type="text"
+                  value={tempInfo.audienceGenderDemographics}
+                  onChange={(e) =>
+                    setTempInfo({ ...tempInfo, audienceGenderDemographics: e.target.value })
+                  }
+                />
+                <label>Gender:</label>
+                <input
+                  type="text"
+                  value={tempInfo.gender}
+                  onChange={(e) =>
+                    setTempInfo({ ...tempInfo, gender: e.target.value })
+                  }
+                />
+                <label>Industries (comma-separated):</label>
+                <input
+                  type="text"
+                  value={Array.isArray(tempInfo.industries) ? tempInfo.industries.join(', ') : ''}
+                  onChange={(e) =>
+                    setTempInfo({
+                      ...tempInfo,
+                      industries: e.target.value.split(',').map(item => item.trim()),
+                    })
+                  }
+                />
+                <label>Niche Platforms (comma-separated):</label>
+                <input
+                  type="text"
+                  value={Array.isArray(tempInfo.nichePlatforms) ? tempInfo.nichePlatforms.join(', ') : ''}
+                  onChange={(e) =>
+                    setTempInfo({
+                      ...tempInfo,
+                      nichePlatforms: e.target.value.split(',').map(item => item.trim()),
+                    })
+                  }
+                />
+                <div className="edit-form-buttons">
+                  <button className="save-btn" onClick={handleSaveClick}>
+                    Save
+                  </button>
+                  <button className="cancel-btn" onClick={handleCancelClick}>
+                    Cancel
+                  </button>
+                </div>
               </div>
-              <div className="profile-view">
-                <p><strong>Name:</strong> {influencerInfo.name}</p>
-                <p><strong>Experience:</strong> {influencerInfo.experience} year</p>
-                <p><strong>Number of Followers:</strong> {influencerInfo.numFollowers}</p>
-                <p><strong>Location:</strong> {influencerInfo.influencerLocation}</p>
-                <p><strong>Majority Audience Location:</strong> {influencerInfo.majorityAudienceLocation}</p>
-                <p><strong>Audience Age Group:</strong> {influencerInfo.audienceAgeGroup}</p>
-                <p><strong>Audience Gender Demographics:</strong> {influencerInfo.audienceGenderDemographics}</p>
-                <p><strong>Gender:</strong> {influencerInfo.gender}</p>
-                <p><strong>Industry:</strong> {Array.isArray(influencerInfo.industries) ? influencerInfo.industries.join(', ') : ''}</p>
-                <p><strong>Niche Platforms:</strong> {Array.isArray(influencerInfo.nichePlatforms) ? influencerInfo.nichePlatforms.join(', ') : ''}</p>
-                <button className="edit-btn" onClick={handleEditClick}>
-                  Edit Info
-                </button>
+            ) : (
+              <div className="profile-section">
+                <div className="profile-pic-container">
+                  <img
+                    src={influencerInfo.profileImage || influencerBack}
+                    alt="Profile"
+                    className="profile-pic"
+                  />
+                </div>
+                <div className="profile-view">
+                  <p><strong>Name:</strong> {influencerInfo.name}</p>
+                  <p><strong>Experience:</strong> {influencerInfo.experience} year</p>
+                  <p><strong>Number of Followers:</strong> {influencerInfo.numFollowers}</p>
+                  <p><strong>Location:</strong> {influencerInfo.influencerLocation}</p>
+                  <p><strong>Majority Audience Location:</strong> {influencerInfo.majorityAudienceLocation}</p>
+                  <p><strong>Audience Age Group:</strong> {influencerInfo.audienceAgeGroup}</p>
+                  <p><strong>Audience Gender Demographics:</strong> {influencerInfo.audienceGenderDemographics}</p>
+                  <p><strong>Gender:</strong> {influencerInfo.gender}</p>
+                  <p><strong>Industry:</strong> {Array.isArray(influencerInfo.industries) ? influencerInfo.industries.join(', ') : ''}</p>
+                  <p><strong>Niche Platforms:</strong> {Array.isArray(influencerInfo.nichePlatforms) ? influencerInfo.nichePlatforms.join(', ') : ''}</p>
+                  <button className="edit-btn" onClick={handleEditClick}>
+                    Edit Info
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* AmplifyPlanCard - Positioned as shown in screenshot */}
-      <AmplifyPlanCard />
+        {/* AmplifyPlanCard - Positioned as shown in screenshot */}
+        <AmplifyPlanCard />
 
-      {/* BRAND REQUESTS SECTION */}
-      <section id="brandRequests" className="brand-requests-section fade-in-left">
-        <h2>Brand Requests</h2>
-        <div className="requests-list">
-          {brandRequests.length === 0 ? (
-            <p>No brand requests at the moment.</p>
-          ) : (
-            brandRequests.map((req) => (
-              <BrandRequestCard key={req._id} request={req} onAccept={handleAcceptRequest} />
-            ))
-          )}
-        </div>
-      </section>
+        {/* BRAND REQUESTS SECTION */}
+        <section id="brandRequests" className="brand-requests-section fade-in-left">
+          <h2>Brand Requests</h2>
+          <div className="requests-list">
+            {brandRequests.length === 0 ? (
+              <p>No brand requests at the moment.</p>
+            ) : (
+              brandRequests.map((req) => (
+                <BrandRequestCard key={req._id} request={req} onAccept={handleAcceptRequest} />
+              ))
+            )}
+          </div>
+        </section>
 
-      {/* Active Campaigns Section */}
-      <section id="activeCampaigns" className="campaign-section fade-in-left">
-        <h2>ACTIVE CAMPAIGNS</h2>
-        <div className="campaigns">
-          {activeCampaigns.length > 0 ? (
-            activeCampaigns.map((campaign) => (
-              <ActiveCampaignCard
-                key={campaign._id || campaign.campaignId?._id}
+        {/* Active Campaigns Section */}
+        <section id="activeCampaigns" className="campaign-section fade-in-left">
+          <h2>ACTIVE CAMPAIGNS</h2>
+          <div className="campaigns">
+            {activeCampaigns.length > 0 ? (
+              activeCampaigns.map((campaign) => (
+                <ActiveCampaignCard
+                  key={campaign._id || campaign.campaignId?._id}
+                  campaign={campaign}
+                  onUpdateProgress={handleUpdateProgress}
+                  onRefresh={fetchDashboardData}
+                />
+              ))
+            ) : (
+              <p>No active campaigns at the moment.</p>
+            )}
+          </div>
+        </section>
+
+        {/* All Campaigns Section */}
+        <section id="allCampaigns" className="campaign-section fade-in-right">
+          <h2>All Campaigns</h2>
+          <div className="big-campaigns">
+            {allCampaigns.map((campaign) => (
+              <AllCampaignCard
+                key={campaign._id}
                 campaign={campaign}
-                onUpdateProgress={handleUpdateProgress}
-                onRefresh={fetchDashboardData}
+                influencerId={influencerInfo._id}
+                onApplied={fetchDashboardData}
+                appliedCampaignIds={appliedCampaignIds}
+                activeCampaignIds={activeCampaignIds}
               />
-            ))
-          ) : (
-            <p>No active campaigns at the moment.</p>
-          )}
-        </div>
-      </section>
-
-      {/* All Campaigns Section */}
-      <section id="allCampaigns" className="campaign-section fade-in-right">
-        <h2>All Campaigns</h2>
-        <div className="big-campaigns">
-          {allCampaigns.map((campaign) => (
-            <AllCampaignCard
-              key={campaign._id}
-              campaign={campaign}
-              influencerId={influencerInfo._id}
-              onApplied={fetchDashboardData}
-              appliedCampaignIds={appliedCampaignIds}
-              activeCampaignIds={activeCampaignIds}
-            />
-          ))}
-        </div>
-      </section>
-      <AiChatbot />
+            ))}
+          </div>
+        </section>
+        <AiChatbot />
+      </div>
     </div>
   );
 }

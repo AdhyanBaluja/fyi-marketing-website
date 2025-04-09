@@ -1,56 +1,144 @@
 /* 
    InfluencerDashboard.css
-   Redesigned to match the dark theme with gradient background as shown in the image
+   Redesigned to match a dark theme with a background image and transparent overlays,
+   closely matching the look of the provided screenshot.
+   Font and color scheme: #FF7D00 (highlight), #e0e0e0 (text), #001524 (dark background).
+   Please ensure you have the InfluencerBack.jpg in your assets folder and have updated JSX accordingly.
 */
 
 /* FONT IMPORT */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
+/* GLOBAL RESETS & BASE STYLES */
 html, body {
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif;
   color: #e0e0e0;
   scroll-behavior: smooth;
-  background-color: #001524;
+  background-color: #001524; /* Fallback color */
 }
 
-/* Dark Theme Gradient Background */
+/* Dark Theme Gradient Background for the body (fallback if image fails) */
 body {
   background: linear-gradient(135deg, #00101d 0%, #001e2e 100%);
   background-attachment: fixed;
   overflow-x: hidden;
 }
 
-/* Background with overlay */
-.dashboard-container-big {
+/* 
+  WRAPPER FOR INFLUENCER DASHBOARD 
+  We no longer use .dashboard-container-big. Renamed to .influencer-dashboard-wrapper.
+  The actual background image is applied inline in JSX.
+  This pseudo-element adds a subtle darker overlay on top of the background image.
+*/
+.influencer-dashboard-wrapper {
+  position: relative;
   min-height: 100vh;
   width: 100%;
-  position: relative;
   overflow: hidden;
 }
 
-.dashboard-container-big::before {
+.influencer-dashboard-wrapper::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../assets/InfluencerBack.jpg');
-  background-size: cover;
-  background-position: center;
-  opacity: 0.3; /* Increased opacity to make background more visible */
+  /* Slightly dark overlay to make text stand out */
+  background-color: rgba(0, 0, 0, 0.3);
   z-index: -1;
 }
 
-/* Animation for content fade-in */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+/* 
+  If you need any specific styling for .influencer-dashboard (the inner container), 
+  you can add it here. 
+*/
+.influencer-dashboard {
+  position: relative;
+  z-index: 1; 
+  min-height: 100vh;
 }
 
-/* NOTIFICATION BANNER */
+/* =========================== ANIMATIONS =========================== */
+
+/* Generic fadeIn animation (used by .scroll-reveal and .page-title, etc.) */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* Optional: define separate keyframes for left, right, down fade-ins if needed */
+.fade-in-down {
+  animation: fadeInDown 0.8s ease forwards;
+}
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-right {
+  animation: fadeInRight 0.8s ease forwards;
+}
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fade-in-left {
+  animation: fadeInLeft 0.8s ease forwards;
+}
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* For tasks fade-in */
+@keyframes fadeInTask {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* SCROLL REVEAL CLASS (used in cards) */
+.scroll-reveal {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+/* =========================== NOTIFICATION BANNER =========================== */
+
 .complete-profile-banner {
   background-color: rgba(20, 42, 61, 0.85);
   color: #e0e0e0;
@@ -63,7 +151,7 @@ body {
   animation: fadeIn 0.5s ease forwards;
 }
 
-/* NAVIGATION BAR */
+/* =========================== NAVIGATION BAR =========================== */
 .main-nav {
   display: flex;
   align-items: center;
@@ -120,7 +208,7 @@ body {
   width: 100%;
 }
 
-/* PAGE TITLE */
+/* =========================== PAGE TITLE =========================== */
 .page-title {
   font-size: 2.5rem;
   margin: 1.5rem 0;
@@ -131,7 +219,7 @@ body {
   animation: fadeIn 0.8s ease forwards;
 }
 
-/* TOP SECTION (Personal Info) */
+/* =========================== TOP SECTION =========================== */
 .top-section {
   padding: 1rem 2rem;
   margin-bottom: 2rem;
@@ -151,7 +239,7 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-/* PROFILE SECTION */
+/* =========================== PROFILE SECTION =========================== */
 .influencer-details {
   max-width: 900px;
   margin: 0 auto;
@@ -293,7 +381,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* CAMPAIGN SECTIONS */
+/* =========================== CAMPAIGN & REQUEST SECTIONS =========================== */
 .campaign-section, 
 .brand-requests-section {
   max-width: 1200px;
@@ -332,8 +420,8 @@ body {
   padding: 1.2rem;
   opacity: 0;
   transform: translateY(50px);
-  background: rgba(16, 39, 57, 0.7); /* Added background color to match image */
-  border: 1px solid rgba(44, 84, 117, 0.5); /* Added border to match image */
+  background: rgba(16, 39, 57, 0.7);
+  border: 1px solid rgba(44, 84, 117, 0.5);
 }
 
 .hover-rise:hover {
@@ -367,7 +455,7 @@ body {
   color: #e0e0e0;
 }
 
-/* For the progress bar */
+/* Progress bar on Active Campaigns */
 .progress-bar {
   width: 100%;
   height: 8px;
@@ -390,7 +478,7 @@ body {
   color: #c5c5c5;
 }
 
-/* "progress-update" container for Save Progress button */
+/* Update progress container */
 .progress-update {
   display: flex;
   align-items: center;
@@ -443,7 +531,7 @@ body {
   transform: scale(1.05);
 }
 
-/* All Campaigns (bigger) */
+/* ALL CAMPAIGNS (bigger cards) */
 .big-campaigns {
   display: flex;
   flex-direction: column;
@@ -462,8 +550,8 @@ body {
   position: relative;
   opacity: 0;
   transform: translateY(50px);
-  background: rgba(16, 39, 57, 0.7); /* Added background color to match image */
-  border: 1px solid rgba(44, 84, 117, 0.5); /* Added border to match image */
+  background: rgba(16, 39, 57, 0.7);
+  border: 1px solid rgba(44, 84, 117, 0.5);
 }
 
 .big-card-left {
@@ -504,7 +592,7 @@ body {
   box-shadow: none;
 }
 
-/* Brand Requests Section */
+/* BRAND REQUESTS SECTION */
 .brand-requests-section {
   margin-top: 3rem;
 }
@@ -571,14 +659,7 @@ body {
   font-style: italic;
 }
 
-/* SCROLL REVEAL CLASS */
-.scroll-reveal {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-/* ============= TASKS SECTION ============= */
+/* =========================== TASKS SECTION =========================== */
 .tasks-section {
   margin-top: 1rem;
   border-top: 2px dashed #2c5475;
@@ -673,7 +754,7 @@ body {
   transform: scale(1.1);
 }
 
-/* AI Assistant Card */
+/* =========================== AI ASSISTANT =========================== */
 .ai-assistant-container {
   position: fixed;
   bottom: 2rem;
@@ -716,10 +797,10 @@ body {
   color: #FF7D00;
 }
 
-/* Amplify Plan Card - Updated to match image */
+/* =========================== AMPLIFY PLAN CARD =========================== */
 .amplify-card {
-  position: static; /* Changed from absolute to static */
-  width: 100%; /* Changed to 100% width */
+  position: static; 
+  width: 100%; 
   background: rgba(16, 39, 57, 0.7);
   border-radius: 15px;
   padding: 1.2rem;
@@ -728,7 +809,7 @@ body {
   backdrop-filter: blur(5px);
   animation: fadeIn 1.2s ease forwards;
   transition: all 0.4s ease;
-  margin-bottom: 1rem; /* Added margin to separate from other elements */
+  margin-bottom: 1rem;
 }
 
 .amplify-card:hover {
@@ -754,18 +835,7 @@ body {
   color: #e0e0e0;
 }
 
-@keyframes fadeInTask {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* New styles to match the image shown */
+/* =========================== CUSTOM NAV MENU (IF USED) =========================== */
 .letsFYI {
   font-size: 1.8rem;
   font-weight: 700;
@@ -812,7 +882,7 @@ body {
   background-color: #FF7D00;
 }
 
-/* =========== MEDIA QUERIES =========== */
+/* =========================== MEDIA QUERIES =========================== */
 
 /* Tablets and down */
 @media (max-width: 768px) {
