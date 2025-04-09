@@ -10,11 +10,11 @@ const CosmicNebulaLoader = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setLoadingProgress(prev => {
-        const newValue = prev + 1;
+        const newValue = prev + 0.5; // Reduced from 1 to 0.5 (half speed)
         return newValue > 100 ? 100 : newValue;
       });
-    }, 50);
-
+    }, 100); // Increased from 50ms to 100ms (half speed)
+  
     return () => clearInterval(interval);
   }, []);
 
