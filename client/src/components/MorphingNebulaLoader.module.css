@@ -1,25 +1,96 @@
+/* MorphingNebulaLoader.module.css
+   ================================
+   Ultra-high-impact, artistically enhanced loader CSS.
+*/
+
+/* Loader wrapper with subtle animated noise overlay */
 .loaderWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-    background: #001524; /* Matches your dark theme */
     position: fixed;
     top: 0;
     left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #00101d, #001e2e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 9999;
+    overflow: hidden;
+    /* Optional: add a subtle noise overlay animation */
   }
   
+  .loaderWrapper::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAI0lEQVQoU2Nk+M+ACzDgwMjIw/7AwMDAwMzAwMDABDgAoaEkEhxQINQAAAABJRU5ErkJggg==") repeat;
+    opacity: 0.03;
+    animation: noiseAnim 5s linear infinite;
+  }
+  
+  @keyframes noiseAnim {
+    0% { transform: translate(0,0); }
+    10% { transform: translate(-5px, -5px); }
+    20% { transform: translate(5px, -5px); }
+    30% { transform: translate(-5px, 5px); }
+    40% { transform: translate(5px, 5px); }
+    50% { transform: translate(0, -5px); }
+    60% { transform: translate(-5px, 5px); }
+    70% { transform: translate(5px, -5px); }
+    80% { transform: translate(0, 5px); }
+    90% { transform: translate(-5px, 0); }
+    100% { transform: translate(0,0); }
+  }
+  
+  /* Loader SVG settings with multi-layered animations */
   .loaderSvg {
-    width: 100px;
-    height: 100px;
-    /* Continuous rotation animation */
-    animation: rotateLoader 3s linear infinite;
+    width: 180px;
+    height: 180px;
+    /* Combine a subtle pulse with a long slow rotation */
+    animation: subtlePulse 3s ease-in-out infinite, rotateLoader 20s linear infinite;
   }
   
+  /* Subtle pulse to simulate a breathing effect */
+  @keyframes subtlePulse {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.02) rotate(2deg); }
+    50% { transform: scale(1.05) rotate(0deg); }
+    75% { transform: scale(1.02) rotate(-2deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+  
+  /* Slow continuous rotation */
   @keyframes rotateLoader {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+  
+  /* Enhance all SVG shapes with smooth stroke properties */
+  .loaderSvg path {
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  
+  /* Animated loading text below the loader – optional for extra visual flair */
+  .loaderSvg text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    fill: #FF7D00;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    opacity: 0.9;
+    text-shadow: 0 0 4px rgba(255,125,0,0.6);
+    animation: textFlicker 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes textFlicker {
+    0% { opacity: 1; filter: brightness(1); }
+    100% { opacity: 0.8; filter: brightness(1.2); }
+  }
+  
+  /* OPTIONAL: Additional hover-based effects can be added when used in other contexts */
+  /* For instance, if you decide to make the loader interactive on hover, additional transforms could be triggered. */
   
