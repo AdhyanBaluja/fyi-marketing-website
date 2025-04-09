@@ -6,6 +6,7 @@ import useScrollReveal from '../hooks/useScrollReveal';
 import AiChatbot from './AiChatbot.jsx';
 import brandLogo from '../assets/bird_2.jpg';
 import influencerBack from '../assets/InfluencerBack.png'; // Used for profile placeholder & background
+import MorphingNebulaLoader from './MorphingNebulaLoader';
 
 // ==================== Environment Variable ====================
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
@@ -459,7 +460,7 @@ function InfluencerDashboard() {
   return (
     <>
       {/* Loading Screen */}
-      {isLoading && (
+      {/* {isLoading && (
         <div className="loading-screen">
           <div className="loader">
             <svg viewBox="0 0 100 100">
@@ -469,7 +470,8 @@ function InfluencerDashboard() {
             <div className="loader-text">InfluencerDashboard</div>
           </div>
         </div>
-      )}
+      )} */}
+      {isLoading && <MorphingNebulaLoader />}
 
       {/* Particle Background & Animated Shapes */}
       <div id="particles-js" className="particles-container"></div>
