@@ -1,85 +1,519 @@
-/* MorphingNebulaLoader.module.css
-   Ultra-high impact, artistically enhanced CSS for the Morphing Nebula Loader.
-*/
+/* CosmicNebulaLoader.module.css */
+/* Cosmic Nebula Loader - Advanced Visual Effects */
 
-.loaderWrapper {
+:root {
+    --primary-glow: #FF7D00;
+    --secondary-glow: #FF5500;
+    --tertiary-glow: #ff9a40;
+    --highlight: #ffcc88;
+    --dark-bg: #06001a;
+    --deep-space: #010014;
+  }
+  
+  .loaderWrapper {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(135deg, #00101d, #001e2e);
+    width: 100%;
+    height: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
-    z-index: 9999;
+    align-items: center;
+    background: radial-gradient(circle at center, var(--dark-bg), var(--deep-space));
     overflow: hidden;
+    perspective: 1000px;
   }
   
-  /* Noise overlay animated on the wrapper */
-  .loaderWrapper::after {
-    content: "";
+  .particleCanvas {
     position: absolute;
     top: 0;
     left: 0;
-    width: 200%;
-    height: 200%;
-    background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAI0lEQVQoU2Nk+M+ACzDgwMjIw/7AwMDAwMzAwMDABDgAoaEkEhxQINQAAAABJRU5ErkJggg==") repeat;
-    opacity: 0.03;
-    animation: noiseAnim 5s linear infinite;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
   }
   
-  @keyframes noiseAnim {
-    0% { transform: translate(0, 0); }
-    10% { transform: translate(-5px, -5px); }
-    20% { transform: translate(5px, -5px); }
-    30% { transform: translate(-5px, 5px); }
-    40% { transform: translate(5px, 5px); }
-    50% { transform: translate(0, -5px); }
-    60% { transform: translate(-5px, 5px); }
-    70% { transform: translate(5px, -5px); }
-    80% { transform: translate(0, 5px); }
-    90% { transform: translate(-5px, 0); }
-    100% { transform: translate(0, 0); }
+  .svgContainer {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    z-index: 10;
+    animation: pulsate 8s infinite ease-in-out, rotate3D 20s infinite linear;
+    transform-style: preserve-3d;
+  }
+  
+  @keyframes pulsate {
+    0%, 100% { transform: scale(1) rotate3d(1, 1, 1, 0deg); }
+    50% { transform: scale(1.05) rotate3d(1, 1, 1, 10deg); }
+  }
+  
+  @keyframes rotate3D {
+    0% { transform: rotate3d(0.5, 1, 0.5, 0deg); }
+    100% { transform: rotate3d(0.5, 1, 0.5, 360deg); }
   }
   
   .loaderSvg {
-    width: 180px;
-    height: 180px;
-    /* Combine a subtle breathing pulse and a slow background rotation */
-    animation: subtlePulse 3s ease-in-out infinite, rotateLoader 20s linear infinite;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 10px var(--primary-glow));
   }
   
-  @keyframes subtlePulse {
-    0% { transform: scale(1) rotate(0deg); }
-    20% { transform: scale(1.03) rotate(2deg); }
-    40% { transform: scale(1.05) rotate(0deg); }
-    60% { transform: scale(1.03) rotate(-2deg); }
-    80% { transform: scale(1.02) rotate(1deg); }
-    100% { transform: scale(1) rotate(0deg); }
+  /* Cosmic Flares System */
+  .cosmicFlares {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
   }
   
-  @keyframes rotateLoader {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  .cosmicFlare {
+    position: absolute;
+    background: radial-gradient(ellipse at center, 
+      rgba(255, 125, 0, 0.5) 0%, 
+      rgba(255, 125, 0, 0.2) 40%, 
+      rgba(255, 85, 0, 0) 70%);
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+    animation: flareAnimation 12s infinite;
   }
   
-  /* Flickering animated loading text inside SVG */
-  .loaderSvg text {
-    font-family: 'Poppins', sans-serif;
+  .flare1 {
+    width: 400px;
+    height: 300px;
+    left: 60%;
+    top: 30%;
+    animation-delay: 0s;
+  }
+  
+  .flare2 {
+    width: 350px;
+    height: 350px;
+    left: 30%;
+    top: 60%;
+    animation-delay: 2s;
+  }
+  
+  .flare3 {
+    width: 250px;
+    height: 250px;
+    left: 70%;
+    top: 70%;
+    animation-delay: 4s;
+  }
+  
+  .flare4 {
+    width: 200px;
+    height: 250px;
+    left: 20%;
+    top: 20%;
+    animation-delay: 6s;
+  }
+  
+  .flare5 {
+    width: 300px;
+    height: 200px;
+    left: 50%;
+    top: 50%;
+    animation-delay: 8s;
+  }
+  
+  @keyframes flareAnimation {
+    0%, 100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    }
+    20%, 80% {
+      opacity: 0.7;
+      transform: translate(-50%, -50%) scale(1) rotate(180deg);
+    }
+  }
+  
+  /* Orbital System */
+  .orbitSystem {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+  }
+  
+  .orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid rgba(255, 125, 0, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotateOrbit 30s linear infinite;
+  }
+  
+  .orbit1 {
+    width: 200px;
+    height: 200px;
+    animation-duration: 15s;
+    transform: translate(-50%, -50%) rotate(0deg) rotateX(70deg);
+  }
+  
+  .orbit2 {
+    width: 280px;
+    height: 280px;
+    animation-duration: 25s;
+    transform: translate(-50%, -50%) rotate(45deg) rotateX(60deg);
+  }
+  
+  .orbit3 {
+    width: 360px;
+    height: 360px;
+    animation-duration: 35s;
+    transform: translate(-50%, -50%) rotate(90deg) rotateX(65deg);
+  }
+  
+  @keyframes rotateOrbit {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  
+  .satellite {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--tertiary-glow);
+    border-radius: 50%;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 
+      0 0 10px var(--primary-glow),
+      0 0 20px var(--primary-glow),
+      0 0 30px var(--tertiary-glow);
+    animation: pulseSatellite 3s infinite alternate;
+  }
+  
+  @keyframes pulseSatellite {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  }
+  
+  /* Progress Ring */
+  .progressRing {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 8;
+  }
+  
+  .progressRing::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 125, 0, 0.2);
+    box-shadow: 0 0 20px rgba(255, 125, 0, 0.5) inset;
+  }
+  
+  .progressCircle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    clip-path: polygon(50% 50%, 50% 0, 100% 0, 100% 100%, 0 100%, 0 0, 50% 0);
+    transform: rotate(-90deg);
+    background: conic-gradient(
+      from 0deg,
+      var(--primary-glow) 0%,
+      var(--tertiary-glow) 30%,
+      var(--highlight) 50%,
+      var(--tertiary-glow) 70%,
+      var(--primary-glow) 100%
+    );
+    opacity: 0.8;
+    animation: progressAnimation 5s infinite linear;
+    filter: blur(4px);
+  }
+  
+  @keyframes progressAnimation {
+    0% { clip-path: polygon(50% 50%, 50% 0, 50% 0, 50% 0, 50% 0, 50% 0, 50% 0); }
+    100% { clip-path: polygon(50% 50%, 50% 0, 100% 0, 100% 100%, 0 100%, 0 0, 50% 0); }
+  }
+  
+  /* Status Text */
+  .statusText {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    text-align: center;
+    font-family: 'Orbitron', 'Arial', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--tertiary-glow);
+    text-shadow: 0 0 10px var(--primary-glow);
+  }
+  
+  .statusLine {
     font-size: 14px;
-    fill: #FF7D00;
-    text-anchor: middle;
-    dominant-baseline: middle;
-    opacity: 0.9;
-    text-shadow: 0 0 4px rgba(255,125,0,0.6);
-    animation: textFlicker 2s ease-in-out infinite alternate;
+    margin-bottom: 5px;
+    opacity: 0.8;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      var(--tertiary-glow) 20%, 
+      var(--tertiary-glow) 80%, 
+      transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmerText 2s infinite linear;
+    padding: 3px 10px;
+    border-radius: 5px;
   }
   
-  @keyframes textFlicker {
-    0% { opacity: 1; filter: brightness(1); }
-    100% { opacity: 0.7; filter: brightness(1.2); }
+  .statusPercent {
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
-  /* Optional: Additional hover effects if the loader is made interactive */
+  .percentValue {
+    display: inline-block;
+    width: 30px;
+    animation: countUp 5s infinite;
+  }
   
+  @keyframes countUp {
+    0% { content: '0'; }
+    20% { content: '20'; }
+    40% { content: '40'; }
+    60% { content: '60'; }
+    80% { content: '80'; }
+    100% { content: '100'; }
+  }
+  
+  @keyframes shimmerText {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  
+  /* Energy Field Effects */
+  .loaderWrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 30% 20%, rgba(255, 125, 0, 0.1) 0%, transparent 25%),
+      radial-gradient(circle at 70% 60%, rgba(255, 85, 0, 0.1) 0%, transparent 25%),
+      radial-gradient(circle at 50% 50%, rgba(255, 154, 64, 0.05) 0%, transparent 50%);
+    animation: pulseBackground 10s infinite alternate;
+    z-index: 0;
+  }
+  
+  .loaderWrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%23000000' width='100' height='100'/%3E%3Ccircle fill='%23FF7D00' opacity='0.05' cx='50' cy='50' r='1'/%3E%3Ccircle fill='%23FF7D00' opacity='0.05' cx='25' cy='25' r='0.5'/%3E%3Ccircle fill='%23FF7D00' opacity='0.05' cx='75' cy='75' r='0.5'/%3E%3Ccircle fill='%23FF7D00' opacity='0.05' cx='75' cy='25' r='0.5'/%3E%3Ccircle fill='%23FF7D00' opacity='0.05' cx='25' cy='75' r='0.5'/%3E%3C/svg%3E");
+    animation: moveStars 100s infinite linear;
+    z-index: 0;
+  }
+  
+  @keyframes pulseBackground {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+  }
+  
+  @keyframes moveStars {
+    0% { background-position: 0 0; }
+    100% { background-position: 1000px 1000px; }
+  }
+  
+  /* Cosmic Dust Particles */
+  .loaderWrapper .dustParticle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--tertiary-glow);
+    border-radius: 50%;
+    animation: floatParticle var(--duration, 10s) infinite linear;
+    box-shadow: 0 0 5px var(--primary-glow);
+    opacity: var(--opacity, 0.5);
+    z-index: 3;
+  }
+  
+  @keyframes floatParticle {
+    0% {
+      transform: translate(var(--start-x, 0), var(--start-y, 0)) scale(1);
+      opacity: var(--opacity, 0.5);
+    }
+    50% {
+      opacity: var(--mid-opacity, 0.8);
+    }
+    100% {
+      transform: translate(var(--end-x, 100px), var(--end-y, 100px)) scale(0.5);
+      opacity: 0;
+    }
+  }
+  
+  /* Energy Wave Effect */
+  .energyWave {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 204, 136, 0.3) 0%,
+      rgba(255, 125, 0, 0.2) 30%,
+      rgba(255, 85, 0, 0.1) 60%,
+      transparent 70%
+    );
+    z-index: 7;
+    animation: energyWaveExpand 4s infinite;
+  }
+  
+  @keyframes energyWaveExpand {
+    0%, 100% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+    60% { opacity: 0; }
+    99% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+  }
+  
+  /* Advanced Media Queries for Responsiveness */
+  @media (max-width: 768px) {
+    .svgContainer {
+      width: 250px;
+      height: 250px;
+    }
+    
+    .progressRing {
+      width: 180px;
+      height: 180px;
+    }
+    
+    .orbit1 { width: 150px; height: 150px; }
+    .orbit2 { width: 210px; height: 210px; }
+    .orbit3 { width: 270px; height: 270px; }
+    
+    .statusText {
+      bottom: 10%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .svgContainer {
+      width: 200px;
+      height: 200px;
+    }
+    
+    .progressRing {
+      width: 140px;
+      height: 140px;
+    }
+    
+    .orbit1 { width: 100px; height: 100px; }
+    .orbit2 { width: 140px; height: 140px; }
+    .orbit3 { width: 180px; height: 180px; }
+    
+    .cosmicFlare {
+      transform: scale(0.7);
+    }
+    
+    .statusText {
+      bottom: 15%;
+      font-size: 12px;
+    }
+    
+    .statusLine {
+      font-size: 10px;
+    }
+    
+    .statusPercent {
+      font-size: 18px;
+    }
+  }
+  
+  /* Dynamic glow effects with CSS variables */
+  .loaderWrapper {
+    --glow-animation: glowPulse 5s infinite alternate;
+  }
+  
+  @keyframes glowPulse {
+    0% { --primary-glow: #FF7D00; --secondary-glow: #FF5500; }
+    50% { --primary-glow: #FF5500; --secondary-glow: #FF7D00; }
+    100% { --primary-glow: #FF7D00; --secondary-glow: #FF5500; }
+  }
+  
+  /* Create dynamic dust particles with JS companion */
+  /* Add these particles dynamically in JS:
+  for (let i = 0; i < 20; i++) {
+    const particle = document.createElement('div');
+    particle.classList.add('dustParticle');
+    particle.style.setProperty('--start-x', `${Math.random() * 100}vw`);
+    particle.style.setProperty('--start-y', `${Math.random() * 100}vh`);
+    particle.style.setProperty('--end-x', `${Math.random() * 100}vw`);
+    particle.style.setProperty('--end-y', `${Math.random() * 100}vh`);
+    particle.style.setProperty('--duration', `${Math.random() * 10 + 5}s`);
+    particle.style.setProperty('--opacity', `${Math.random() * 0.5 + 0.2}`);
+    particle.style.setProperty('--mid-opacity', `${Math.random() * 0.3 + 0.6}`);
+    document.querySelector('.loaderWrapper').appendChild(particle);
+  }
+  */
+  
+  /* Energy burst animations */
+  .energyBurst {
+    position: absolute;
+    z-index: 4;
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(to top, var(--primary-glow), transparent);
+    transform-origin: bottom center;
+    animation: burstOut 3s infinite;
+    opacity: 0;
+  }
+  
+  @keyframes burstOut {
+    0% { transform: translateY(0) scaleY(0.1); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translateY(-80px) scaleY(1.5); opacity: 0; }
+  }
+  
+  /* Add these dynamically in JS for 360-degree burst effect:
+  for (let i = 0; i < 36; i++) {
+    const burst = document.createElement('div');
+    burst.classList.add('energyBurst');
+    burst.style.top = '50%';
+    burst.style.left = '50%';
+    burst.style.transform = `rotate(${i * 10}deg)`;
+    burst.style.animationDelay = `${Math.random() * 3}s`;
+    document.querySelector('.loaderWrapper').appendChild(burst);
+  }
+  */
+  
+  /* Add energy wave element:
+  const wave = document.createElement('div');
+  wave.classList.add('energyWave');
+  document.querySelector('.loaderWrapper').appendChild(wave);
+  */
