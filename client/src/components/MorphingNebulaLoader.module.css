@@ -1,9 +1,7 @@
 /* MorphingNebulaLoader.module.css
-   ================================
-   Ultra-high-impact, artistically enhanced loader CSS.
+   Ultra-high impact, artistically enhanced CSS for the Morphing Nebula Loader.
 */
 
-/* Loader wrapper with subtle animated noise overlay */
 .loaderWrapper {
     position: fixed;
     top: 0;
@@ -16,9 +14,9 @@
     justify-content: center;
     z-index: 9999;
     overflow: hidden;
-    /* Optional: add a subtle noise overlay animation */
   }
   
+  /* Noise overlay animated on the wrapper */
   .loaderWrapper::after {
     content: "";
     position: absolute;
@@ -32,7 +30,7 @@
   }
   
   @keyframes noiseAnim {
-    0% { transform: translate(0,0); }
+    0% { transform: translate(0, 0); }
     10% { transform: translate(-5px, -5px); }
     20% { transform: translate(5px, -5px); }
     30% { transform: translate(-5px, 5px); }
@@ -42,42 +40,34 @@
     70% { transform: translate(5px, -5px); }
     80% { transform: translate(0, 5px); }
     90% { transform: translate(-5px, 0); }
-    100% { transform: translate(0,0); }
+    100% { transform: translate(0, 0); }
   }
   
-  /* Loader SVG settings with multi-layered animations */
   .loaderSvg {
     width: 180px;
     height: 180px;
-    /* Combine a subtle pulse with a long slow rotation */
+    /* Combine a subtle breathing pulse and a slow background rotation */
     animation: subtlePulse 3s ease-in-out infinite, rotateLoader 20s linear infinite;
   }
   
-  /* Subtle pulse to simulate a breathing effect */
   @keyframes subtlePulse {
     0% { transform: scale(1) rotate(0deg); }
-    25% { transform: scale(1.02) rotate(2deg); }
-    50% { transform: scale(1.05) rotate(0deg); }
-    75% { transform: scale(1.02) rotate(-2deg); }
+    20% { transform: scale(1.03) rotate(2deg); }
+    40% { transform: scale(1.05) rotate(0deg); }
+    60% { transform: scale(1.03) rotate(-2deg); }
+    80% { transform: scale(1.02) rotate(1deg); }
     100% { transform: scale(1) rotate(0deg); }
   }
   
-  /* Slow continuous rotation */
   @keyframes rotateLoader {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
   
-  /* Enhance all SVG shapes with smooth stroke properties */
-  .loaderSvg path {
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  
-  /* Animated loading text below the loader – optional for extra visual flair */
+  /* Flickering animated loading text inside SVG */
   .loaderSvg text {
     font-family: 'Poppins', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     fill: #FF7D00;
     text-anchor: middle;
     dominant-baseline: middle;
@@ -88,9 +78,8 @@
   
   @keyframes textFlicker {
     0% { opacity: 1; filter: brightness(1); }
-    100% { opacity: 0.8; filter: brightness(1.2); }
+    100% { opacity: 0.7; filter: brightness(1.2); }
   }
   
-  /* OPTIONAL: Additional hover-based effects can be added when used in other contexts */
-  /* For instance, if you decide to make the loader interactive on hover, additional transforms could be triggered. */
+  /* Optional: Additional hover effects if the loader is made interactive */
   
