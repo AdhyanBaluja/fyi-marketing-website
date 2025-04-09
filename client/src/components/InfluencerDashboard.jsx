@@ -5,7 +5,7 @@ import styles from './InfluencerDashboard.module.css';
 import useScrollReveal from '../hooks/useScrollReveal';
 import AiChatbot from './AiChatbot.jsx';
 import brandLogo from '../assets/bird_2.jpg';
-import influencerBack from '../assets/influencerBack.png'; // Used for profile placeholder & background
+import influencerBack from '../assets/InfluencerBack.png'; // Used for profile placeholder & background
 
 // ==================== Environment Variable ====================
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
