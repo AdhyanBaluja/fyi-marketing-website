@@ -17,7 +17,7 @@ html, body {
 
 /* Dark Theme Gradient Background */
 body {
-  background: linear-gradient(135deg, #001524 0%, #15364e 50%, #001524 100%);
+  background: linear-gradient(135deg, #00101d 0%, #001e2e 100%);
   background-attachment: fixed;
   overflow-x: hidden;
 }
@@ -40,7 +40,7 @@ body {
   background-image: url('../assets/InfluencerBack.jpg');
   background-size: cover;
   background-position: center;
-  opacity: 0.15;
+  opacity: 0.18;
   z-index: -1;
 }
 
@@ -68,7 +68,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: rgba(0, 21, 36, 0.8);
+  background-color: rgba(0, 13, 23, 0.8);
   backdrop-filter: blur(10px);
   padding: 0.75rem 1.5rem;
   position: sticky;
@@ -140,7 +140,7 @@ body {
 
 /* Container styles */
 .colored-container {
-  background: rgba(21, 54, 78, 0.7);
+  background: rgba(16, 39, 57, 0.7);
   border-radius: 15px;
   padding: 1.5rem;
   backdrop-filter: blur(5px);
@@ -153,8 +153,9 @@ body {
 
 /* PROFILE SECTION */
 .influencer-details {
-  max-width: 1000px;
+  max-width: 900px;
   margin: 0 auto;
+  position: relative;
 }
 
 .profile-section {
@@ -189,11 +190,35 @@ body {
   margin: 0.3rem 0;
   font-size: 0.95rem;
   color: #c5c5c5;
+  line-height: 1.5;
 }
 
 .profile-view strong {
   color: #FF7D00;
   font-weight: 600;
+  margin-right: 5px;
+}
+
+/* Edit Info button */
+.edit-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  margin: 0;
+  padding: 0.6rem 1.2rem;
+  background-color: #FF7D00;
+  color: #001524;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: #ff9a40;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(255, 125, 0, 0.4);
 }
 
 /* Edit form */
@@ -266,24 +291,6 @@ body {
 .cancel-btn:hover {
   background-color: #1a7585;
   transform: translateY(-2px);
-}
-
-.edit-btn {
-  margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-  background-color: #FF7D00;
-  color: #001524;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.edit-btn:hover {
-  background-color: #ff9a40;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(255, 125, 0, 0.4);
 }
 
 /* CAMPAIGN SECTIONS */
@@ -708,11 +715,11 @@ body {
 /* Amplify Plan Card */
 .amplify-card {
   position: absolute;
-  top: 340px;
-  right: 40px;
+  top: 0;
+  right: -320px;
   width: 280px;
-  background: rgba(255, 125, 0, 0.1);
-  border-radius: 12px;
+  background: rgba(16, 39, 57, 0.8);
+  border-radius: 15px;
   padding: 1.2rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 125, 0, 0.6);
