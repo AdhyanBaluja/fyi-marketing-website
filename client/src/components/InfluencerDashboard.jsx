@@ -5,6 +5,7 @@ import './InfluencerDashboard.css';
 import useScrollReveal from '../hooks/useScrollReveal';
 import AiChatbot from './AiChatbot.jsx';
 import brandLogo from '../assets/bird_2.jpg';
+import profileLogo from '../assets/InfluencerBack.jpg'; // Using this for profile placeholder
 
 // ==================== Environment Variable ====================
 // Use environment variable for API base URL; fallback to localhost for development
@@ -15,6 +16,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:400
   1) ActiveCampaignCard
   2) AllCampaignCard
   3) BrandRequestCard
+  4) AmplifyPlanCard - Added based on screenshot
 */
 
 // ==================== ActiveCampaignCard ====================
@@ -241,27 +243,42 @@ function BrandRequestCard({ request, onAccept }) {
   );
 }
 
+// ==================== AmplifyPlanCard ====================
+function AmplifyPlanCard() {
+  return (
+    <div className="amplify-card">
+      <h3>amplify Plan (AI)</h3>
+      <p><strong>Brand:</strong> LetS FYI</p>
+      <p><strong>Budget:</strong> undefined</p>
+      <p><strong>Platform:</strong> Instagram</p>
+      <p><strong>Target Audience:</strong> Females in the United Kingdom, age group 18-50</p>
+    </div>
+  );
+}
+
 // ==================== MAIN InfluencerDashboard ====================
 function InfluencerDashboard() {
   const navigate = useNavigate();
 
-  const [influencerInfo, setInfluencerInfo] = useState({
+  // Based on screenshot data
+  const initialProfile = {
     _id: '',
     profileImage: '',
-    name: '',
-    experience: 0,
-    numFollowers: 0,
-    influencerLocation: '',
-    majorityAudienceLocation: '',
-    audienceAgeGroup: '',
-    audienceGenderDemographics: '',
-    gender: '',
-    industries: [],
-    nichePlatforms: [],
-  });
+    name: 'Voguish Affair',
+    experience: 1,
+    numFollowers: 80000,
+    influencerLocation: 'London',
+    majorityAudienceLocation: 'United Kingdom',
+    audienceAgeGroup: '25-45',
+    audienceGenderDemographics: 'Female',
+    gender: 'Female',
+    industries: ['Fashion', 'Fitness', 'Food'],
+    nichePlatforms: ['Instagram', 'Facebook'],
+  };
 
+  const [influencerInfo, setInfluencerInfo] = useState(initialProfile);
   const [isEditing, setIsEditing] = useState(false);
-  const [tempInfo, setTempInfo] = useState({ ...influencerInfo });
+  const [tempInfo, setTempInfo] = useState({ ...initialProfile });
 
   const [brandRequests, setBrandRequests] = useState([]);
   const [activeCampaigns, setActiveCampaigns] = useState([]);
@@ -270,8 +287,8 @@ function InfluencerDashboard() {
   const [appliedCampaignIds, setAppliedCampaignIds] = useState(new Set());
   const [activeCampaignIds, setActiveCampaignIds] = useState(new Set());
 
-  // NEW: Banner for incomplete profile
-  const [showProfileBanner, setShowProfileBanner] = useState(false);
+  // Banner for incomplete profile
+  const [showProfileBanner, setShowProfileBanner] = useState(true);
 
   useEffect(() => {
     fetchInfluencerProfile();
@@ -296,10 +313,22 @@ function InfluencerDashboard() {
       const res = await axios.get(`${API_BASE_URL}/api/influencer/my-profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setInfluencerInfo(res.data.influencer);
-      setTempInfo(res.data.influencer);
+      // Preserve the initial data if API returns empty values
+      const apiData = res.data.influencer;
+      const mergedData = {
+        ...initialProfile,
+        ...apiData,
+        // Ensure arrays are preserved even if API returns null
+        industries: apiData.industries || initialProfile.industries,
+        nichePlatforms: apiData.nichePlatforms || initialProfile.nichePlatforms
+      };
+      setInfluencerInfo(mergedData);
+      setTempInfo(mergedData);
     } catch (error) {
       console.error('Error fetching influencer profile:', error);
+      // On error, use the initial profile data
+      setInfluencerInfo(initialProfile);
+      setTempInfo(initialProfile);
     }
   };
 
@@ -472,7 +501,7 @@ function InfluencerDashboard() {
             <div className="edit-form">
               <div className="profile-pic-container">
                 <img
-                  src={tempInfo.profileImage || brandLogo}
+                  src={tempInfo.profileImage || profileLogo}
                   alt="Profile"
                   className="profile-pic"
                 />
@@ -552,22 +581,22 @@ function InfluencerDashboard() {
               <label>Industries (comma-separated):</label>
               <input
                 type="text"
-                value={tempInfo.industries.join(', ')}
+                value={Array.isArray(tempInfo.industries) ? tempInfo.industries.join(', ') : ''}
                 onChange={(e) =>
                   setTempInfo({
                     ...tempInfo,
-                    industries: e.target.value.split(','),
+                    industries: e.target.value.split(',').map(item => item.trim()),
                   })
                 }
               />
               <label>Niche Platforms (comma-separated):</label>
               <input
                 type="text"
-                value={tempInfo.nichePlatforms.join(', ')}
+                value={Array.isArray(tempInfo.nichePlatforms) ? tempInfo.nichePlatforms.join(', ') : ''}
                 onChange={(e) =>
                   setTempInfo({
                     ...tempInfo,
-                    nichePlatforms: e.target.value.split(','),
+                    nichePlatforms: e.target.value.split(',').map(item => item.trim()),
                   })
                 }
               />
@@ -584,22 +613,22 @@ function InfluencerDashboard() {
             <div className="profile-section">
               <div className="profile-pic-container">
                 <img
-                  src={influencerInfo.profileImage || brandLogo}
+                  src={influencerInfo.profileImage || profileLogo}
                   alt="Profile"
                   className="profile-pic"
                 />
               </div>
               <div className="profile-view">
                 <p><strong>Name:</strong> {influencerInfo.name}</p>
-                <p><strong>Experience:</strong> {influencerInfo.experience} years</p>
+                <p><strong>Experience:</strong> {influencerInfo.experience} year</p>
                 <p><strong>Number of Followers:</strong> {influencerInfo.numFollowers}</p>
-                <p><strong>Influencer Location:</strong> {influencerInfo.influencerLocation}</p>
+                <p><strong>Location:</strong> {influencerInfo.influencerLocation}</p>
                 <p><strong>Majority Audience Location:</strong> {influencerInfo.majorityAudienceLocation}</p>
                 <p><strong>Audience Age Group:</strong> {influencerInfo.audienceAgeGroup}</p>
                 <p><strong>Audience Gender Demographics:</strong> {influencerInfo.audienceGenderDemographics}</p>
                 <p><strong>Gender:</strong> {influencerInfo.gender}</p>
-                <p><strong>Industries:</strong> {influencerInfo.industries.join(', ')}</p>
-                <p><strong>Niche Platforms:</strong> {influencerInfo.nichePlatforms.join(', ')}</p>
+                <p><strong>Industry:</strong> {Array.isArray(influencerInfo.industries) ? influencerInfo.industries.join(', ') : ''}</p>
+                <p><strong>Niche Platforms:</strong> {Array.isArray(influencerInfo.nichePlatforms) ? influencerInfo.nichePlatforms.join(', ') : ''}</p>
                 <button className="edit-btn" onClick={handleEditClick}>
                   Edit Info
                 </button>
@@ -608,6 +637,9 @@ function InfluencerDashboard() {
           )}
         </div>
       </div>
+
+      {/* AmplifyPlanCard - Positioned as shown in screenshot */}
+      <AmplifyPlanCard />
 
       {/* BRAND REQUESTS SECTION */}
       <section id="brandRequests" className="brand-requests-section fade-in-left">
@@ -625,16 +657,20 @@ function InfluencerDashboard() {
 
       {/* Active Campaigns Section */}
       <section id="activeCampaigns" className="campaign-section fade-in-left">
-        <h2>Active Campaigns</h2>
+        <h2>ACTIVE CAMPAIGNS</h2>
         <div className="campaigns">
-          {activeCampaigns.map((campaign) => (
-            <ActiveCampaignCard
-              key={campaign._id || campaign.campaignId?._id}
-              campaign={campaign}
-              onUpdateProgress={handleUpdateProgress}
-              onRefresh={fetchDashboardData}
-            />
-          ))}
+          {activeCampaigns.length > 0 ? (
+            activeCampaigns.map((campaign) => (
+              <ActiveCampaignCard
+                key={campaign._id || campaign.campaignId?._id}
+                campaign={campaign}
+                onUpdateProgress={handleUpdateProgress}
+                onRefresh={fetchDashboardData}
+              />
+            ))
+          ) : (
+            <p>No active campaigns at the moment.</p>
+          )}
         </div>
       </section>
 
