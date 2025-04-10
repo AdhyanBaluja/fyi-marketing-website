@@ -276,7 +276,7 @@ function InfluencerSignUpForm() {
     e.preventDefault();
   
     // Scroll to top immediately
-    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
   
     // Indicate submission in progress
     setIsSubmitting(true);
