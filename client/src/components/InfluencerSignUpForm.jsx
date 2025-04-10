@@ -274,17 +274,21 @@ function InfluencerSignUpForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Scroll to top immediately
+    window.scrollTo(0, 0);
+  
+    // Indicate submission in progress
     setIsSubmitting(true);
-    
+    setErrorMessage('');
+    setSubmissionSuccess(false);
+  
     // Combine all data
     const finalData = {
-      // User account info
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
       password: userData.password,
-
-      // Influencer fields
       name: formData.name,
       experience: formData.experience,
       numFollowers: formData.numFollowers,
@@ -293,28 +297,26 @@ function InfluencerSignUpForm() {
       audienceAgeGroup: formData.audienceAgeGroup,
       audienceGenderDemographics: formData.audienceGenderDemographics,
       gender: formData.gender,
-
-      // Arrays
       industries: selectedIndustries,
       platforms: selectedPlatforms,
-
-      // Additional platform details
       platformDetails
     };
-
+  
     try {
-      const res = await axios.post(
-        `${API_BASE_URL}/api/auth/signup/influencer`,
-        finalData
-      );
+      // Make the API call
+      const res = await axios.post(`${API_BASE_URL}/api/auth/signup/influencer`, finalData);
       console.log('Influencer signup success:', res.data);
+  
+      // Only show success if the call truly succeeded
       setSubmissionSuccess(true);
-      
+  
       // Redirect after showing success animation
       setTimeout(() => {
         navigate('/signin');
-      }, 3000);
+      }, 4000);
+  
     } catch (error) {
+      // Handle error from API
       console.error('Error signing up influencer:', error);
       setErrorMessage(
         error.response?.data?.error || 'Influencer signup failed. Please try again.'
@@ -322,13 +324,7 @@ function InfluencerSignUpForm() {
       setIsSubmitting(false);
     }
   };
-
-  // Form step variants for animations
-  const formVariants = {
-    hidden: { opacity: 0, x: -100 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
-    exit: { opacity: 0, x: 100, transition: { duration: 0.3 } }
-  };
+  
 
   return (
     
@@ -791,7 +787,7 @@ function InfluencerSignUpForm() {
                             </div>
                             
                             <div className="audience-chart">
-                              <div className="chart-title">Our Influencers Average Audience Demographics</div>
+                              <div className="chart-title">Our Influencers Audience Demographics</div>
                               <div className="chart-visualization">
                                 {/* Interactive audience visualization */}
                                 <div className="demo-chart">
