@@ -791,7 +791,7 @@ function InfluencerSignUpForm() {
                             </div>
                             
                             <div className="audience-chart">
-                              <div className="chart-title">Your Audience Demographics</div>
+                              <div className="chart-title">Our Influencers Average Audience Demographics</div>
                               <div className="chart-visualization">
                                 {/* Interactive audience visualization */}
                                 <div className="demo-chart">
