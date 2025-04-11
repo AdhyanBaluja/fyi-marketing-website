@@ -138,18 +138,22 @@ function InfluencerSignUpForm() {
   const [platformDetails, setPlatformDetails] = useState({});
   const [showLottie, setShowLottie] = useState(false);
 
-  // Mouse cursor effect
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMouseCursor({ x: e.clientX, y: e.clientY });
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
+ // Mouse cursor effect with proper cleanup
+useEffect(() => {
+  const handleMouseMove = (e) => {
+    setMouseCursor({ x: e.clientX, y: e.clientY });
+  };
+  
+  // Only add listener if we're on this page
+  window.addEventListener('mousemove', handleMouseMove);
+  
+  // Crucial cleanup function to remove the event listener
+  return () => {
+    window.removeEventListener('mousemove', handleMouseMove);
+    // Reset cursor position on unmount
+    setMouseCursor({ x: 0, y: 0 });
+  };
+}, []);
   
   // Industry & Platform options
   const industryOptions = [

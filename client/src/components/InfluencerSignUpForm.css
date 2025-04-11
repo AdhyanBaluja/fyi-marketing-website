@@ -143,15 +143,13 @@ body, html {
   height: 40px;
   border-radius: 50%;
   border: 2px solid var(--primary-color);
-  pointer-events: none;
+  pointer-events: none; /* Important to prevent interaction issues */
   z-index: 9999;
   transform: translate(-50%, -50%);
-
-  backdrop-filter: invert(1);
-  box-shadow: 0 0 10px var(--primary-glow), inset 0 0 5px var(--primary-glow);
-  mix-blend-mode: overlay; /* Change from difference */
- 
-  will-change: transform;
+  opacity: 0.5;
+  /* Remove or simplify these properties if causing issues */
+  mix-blend-mode: difference;
+  backdrop-filter: none; /* Remove filters that might cause performance issues */
 }
 
 /* ================ PAGE CONTAINER ================ */
