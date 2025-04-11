@@ -131,11 +131,8 @@ body {
 }
 
 /* Stats area */
-.stats-section {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
+
+
 
 /* Cards & Panels => Midnight Charcoal (#012A36) */
 .stats-card {
@@ -780,7 +777,12 @@ body {
 }
 
 .stats-card {
-  flex: 1 1 250px; /* Each card gets at least 250px, then wraps as needed */
-  box-sizing: border-box;
+  position: relative;
+  z-index: 0; /* baseline */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.stats-card:hover {
+  transform: scale(1.03);
+  z-index: 10; /* ensures the hovered card is on top */
 }
 
