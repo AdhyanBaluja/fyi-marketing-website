@@ -2,18 +2,17 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './CampaignDetail.css';
-import './campaign-detail-animations.css';
 import demoImage from '../assets/demo.png';
-import './campaign-detail-animations.jsx';
+import lottie from 'lottie-web';
 
-// Import Lottie player
-import Lottie from 'react-lottie';
-
-// Import the lottie animations
-import campaignLottie from '../assets/animations/campaign-animation.json';
-import targetAudienceLottie from '../assets/animations/target-audience.json';
-import influencerLottie from '../assets/animations/influencer.json';
-import progressLottie from '../assets/animations/progress.json';
+// Importing animation JSON files
+import brandingAnimation from '../assets/animations/branding-lottie.json';
+import campaignAnimation from '../assets/animations/campaign-animation.json';
+import confettiAnimation from '../assets/animations/confetti.json';
+import progressAnimation from '../assets/animations/progress.json';
+import rocketAnimation from '../assets/animations/rocket.json';
+import targetAudienceAnimation from '../assets/animations/target-audience.json';
+import influencerAnimation from '../assets/animations/influencer.json';
 
 // Use environment variable for API base URL; fallback to localhost for development
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
@@ -21,96 +20,135 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:400
 const CampaignDetail = () => {
   const navigate = useNavigate();
   const { campaignId } = useParams();
-  const detailsRef = useRef(null);
 
   const [campaign, setCampaign] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeSection, setActiveSection] = useState(null);
-  const [animatedItems, setAnimatedItems] = useState([]);
-  const [scrollPosition, setScrollPosition] = useState(0);
-
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
-  const [saveAnimation, setSaveAnimation] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
-  // Lottie animation options
-  const defaultLottieOptions = {
-    loop: true,
-    autoplay: true,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice'
-    }
-  };
+  // Lottie animation refs
+  const headerAnimationRef = useRef(null);
+  const progressAnimationRef = useRef(null);
+  const influencerAnimationRef = useRef(null);
+  const confettiAnimationRef = useRef(null);
+  
+  // Section refs for scroll animations
+  const detailsRef = useRef(null);
+  const formRef = useRef(null);
+  const aboutRef = useRef(null);
+  const calendarRef = useRef(null);
+  const suggestionsRef = useRef(null);
+  const adviceRef = useRef(null);
+  const influencersRef = useRef(null);
+  const tasksRef = useRef(null);
 
-  // Create options for each Lottie animation
-  const campaignLottieOptions = {
-    ...defaultLottieOptions,
-    animationData: campaignLottie
-  };
-
-  const targetAudienceLottieOptions = {
-    ...defaultLottieOptions,
-    animationData: targetAudienceLottie
-  };
-
-  const influencerLottieOptions = {
-    ...defaultLottieOptions,
-    animationData: influencerLottie
-  };
-
-  const progressLottieOptions = {
-    ...defaultLottieOptions,
-    animationData: progressLottie
-  };
-
-  // Handle section hover
-  const handleSectionHover = (section) => {
-    setActiveSection(section);
-  };
-
-  // Parallax effect for campaign header
+  // Initialize animations
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+    if (!loading && campaign) {
+      // Header animation
+      const headerAnim = lottie.loadAnimation({
+        container: headerAnimationRef.current,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        animationData: campaignAnimation
+      });
+
+      // Progress animation
+      const progressAnim = lottie.loadAnimation({
+        container: progressAnimationRef.current,
+        renderer: 'svg',
+        loop: false,
+        autoplay: false,
+        animationData: progressAnimation
+      });
+
+      // Influencer animation
+      const influencerAnim = lottie.loadAnimation({
+        container: influencerAnimationRef.current,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        animationData: influencerAnimation
+      });
+
+      // Cleanup animations on unmount
+      return () => {
+        headerAnim.destroy();
+        progressAnim.destroy();
+        influencerAnim.destroy();
+      };
+    }
+  }, [loading, campaign]);
+
+  // Play confetti animation when campaign is loaded
+  useEffect(() => {
+    if (!loading && campaign && !showConfetti) {
+      setShowConfetti(true);
+      
+      // Set a timeout to load the confetti animation after the component is fully rendered
+      setTimeout(() => {
+        if (confettiAnimationRef.current) {
+          const confettiAnim = lottie.loadAnimation({
+            container: confettiAnimationRef.current,
+            renderer: 'svg',
+            loop: false,
+            autoplay: true,
+            animationData: confettiAnimation
+          });
+          
+          // Destroy the animation after it plays once
+          confettiAnim.addEventListener('complete', () => {
+            confettiAnim.destroy();
+          });
+        }
+      }, 500);
+    }
+  }, [loading, campaign, showConfetti]);
 
   // Intersection Observer for scroll animations
   useEffect(() => {
-    if (!detailsRef.current) return;
-    
-    const observer = new IntersectionObserver(
-      (entries) => {
+    if (!loading && campaign) {
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.3
+      };
+
+      const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            setAnimatedItems(prev => [...prev, entry.target.dataset.item]);
+            entry.target.classList.add('animate-in');
+            setActiveSection(entry.target.id);
           }
         });
-      },
-      { threshold: 0.1 }
-    );
-    
-    const items = detailsRef.current.querySelectorAll('.animate-on-scroll');
-    items.forEach(item => observer.observe(item));
-    
-    return () => {
-      items.forEach(item => observer.unobserve(item));
-    };
-  }, [campaign]);
+      }, options);
 
-  // 1) Fetch the campaign document on mount with enhanced loading animation
+      // Observe all section refs
+      const refs = [detailsRef, formRef, aboutRef, calendarRef, suggestionsRef, adviceRef, influencersRef, tasksRef];
+      refs.forEach(ref => {
+        if (ref.current) {
+          observer.observe(ref.current);
+        }
+      });
+
+      return () => {
+        refs.forEach(ref => {
+          if (ref.current) {
+            observer.unobserve(ref.current);
+          }
+        });
+      };
+    }
+  }, [loading, campaign]);
+
+  // 1) Fetch the campaign document on mount
   useEffect(() => {
     const fetchCampaign = async () => {
       try {
-        // Start with an artificial delay for the loading animation
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
         const token = localStorage.getItem('token');
         const response = await axios.get(
           `${API_BASE_URL}/api/campaigns/${campaignId}`,
@@ -163,7 +201,6 @@ const CampaignDetail = () => {
 
   // 3) Save updates (PATCH request)
   const handleSave = async () => {
-    setSaveAnimation(true);
     try {
       const token = localStorage.getItem('token');
 
@@ -192,9 +229,6 @@ const CampaignDetail = () => {
         },
       };
 
-      // Add artificial delay for save animation to show
-      await new Promise(resolve => setTimeout(resolve, 800));
-
       await axios.patch(
         `${API_BASE_URL}/api/campaigns/${campaignId}`,
         payload,
@@ -207,89 +241,45 @@ const CampaignDetail = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setCampaign(refreshed.data.campaign);
-      setSaveAnimation(false);
       setIsEditing(false);
+      
+      // Show confetti on successful save
+      setShowConfetti(true);
     } catch (err) {
       console.error('Error saving campaign edits:', err);
       setError('Failed to save changes.');
-      setSaveAnimation(false);
     }
   };
 
-  // Helper function to get status color
-  const getStatusStyles = (status) => {
-    switch(status) {
-      case 'Active':
-        return {
-          className: 'status-active',
-          icon: '●',
-          pulsate: true
-        };
-      case 'Paused':
-        return {
-          className: 'status-paused',
-          icon: '❙❙',
-          pulsate: false
-        };
-      case 'Completed':
-        return {
-          className: 'status-completed',
-          icon: '✓',
-          pulsate: false
-        };
-      default: // Draft
-        return {
-          className: 'status-draft',
-          icon: '◯',
-          pulsate: false
-        };
-    }
-  };
-
-  // Enhanced loading state with animation
+  // 4) Conditional rendering for loading, error, or no campaign found
   if (loading) {
     return (
-      <div className="cosmic-loading-container">
-        <div className="cosmic-loading-orbit">
-          <div className="cosmic-loading-planet"></div>
-          <div className="cosmic-loading-satellite"></div>
-        </div>
-        <p className="cosmic-loading-text">Loading campaign details<span className="dot-1">.</span><span className="dot-2">.</span><span className="dot-3">.</span></p>
+      <div className="loading-container">
+        <div className="loading-animation" ref={headerAnimationRef}></div>
+        <h2 className="loading-text">Loading campaign magic...</h2>
       </div>
     );
   }
-
-  // Enhanced error state with interactive elements
+  
   if (error) {
     return (
-      <div className="cosmic-error-container">
-        <div className="cosmic-error-icon">!</div>
-        <h2 className="cosmic-error-message">{error}</h2>
-        <button 
-          className="cosmic-retry-button"
-          onClick={() => window.location.reload()}
-        >
+      <div className="error-container">
+        <div className="error-icon"></div>
+        <h2 className="error-text">{error}</h2>
+        <button className="retry-button" onClick={() => window.location.reload()}>
           Try Again
         </button>
       </div>
     );
   }
-
-  // Enhanced not found state with stellar theme
+  
   if (!campaign) {
     return (
-      <div className="cosmic-notfound-container">
-        <div className="cosmic-notfound-visual">
-          <div className="cosmic-lost-planet"></div>
-          <div className="cosmic-asteroids"></div>
-        </div>
-        <h2 className="cosmic-notfound-message">Campaign not found</h2>
-        <p className="cosmic-notfound-subtitle">This campaign may have been removed or never existed</p>
-        <button 
-          className="cosmic-return-button"
-          onClick={() => navigate('/your-campaigns')}
-        >
-          Return to Your Campaigns
+      <div className="not-found-container">
+        <div className="not-found-icon"></div>
+        <h2 className="not-found-text">Campaign not found.</h2>
+        <button className="back-button" onClick={() => navigate('/')}>
+          Go Back
         </button>
       </div>
     );
@@ -297,618 +287,463 @@ const CampaignDetail = () => {
 
   // Display campaign image or fallback to demo image
   const displayedImage = campaign.campaignImage || demoImage;
-  const statusInfo = getStatusStyles(campaign.status || 'Draft');
+
+  // Calculate status color
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'Draft': return '#FFA500'; // Orange
+      case 'Active': return '#4CAF50'; // Green
+      case 'Paused': return '#FFC107'; // Amber
+      case 'Completed': return '#2196F3'; // Blue
+      default: return '#9E9E9E'; // Grey
+    }
+  };
 
   return (
-    <div 
-      className="campaign-detail-container cosmic-theme" 
-      ref={detailsRef}
-    >
-      {/* Animated Background Elements */}
-      <div className="cosmic-stars-container">
-        {[...Array(20)].map((_, i) => (
-          <div 
-            key={i}
-            className="cosmic-star"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${3 + Math.random() * 7}s`
-            }}
-          ></div>
-        ))}
-      </div>
-      
-      <div className="cosmic-nebula-container">
-        <div className="cosmic-nebula cosmic-nebula-1"></div>
-        <div className="cosmic-nebula cosmic-nebula-2"></div>
-        <div className="cosmic-nebula cosmic-nebula-3"></div>
-      </div>
-
-      {/* Enhanced Success Save Animation */}
-      {saveAnimation && (
-        <div className="cosmic-save-animation">
-          <div className="cosmic-save-circle"></div>
-          <div className="cosmic-save-checkmark">✓</div>
+    <div className="campaign-detail-container">
+      {/* Confetti overlay for celebrations */}
+      {showConfetti && (
+        <div className="confetti-overlay">
+          <div ref={confettiAnimationRef} className="confetti-animation"></div>
         </div>
       )}
-
-      {/* Enhanced Campaign Header with Parallax Effect */}
-      <div 
-        className="campaign-header cosmic-campaign-header"
-        style={{
-          transform: `translateY(${scrollPosition * 0.3}px)`
-        }}
-      >
-        <div className="cosmic-image-wrapper">
-          <div className="cosmic-image-glow"></div>
-          <div className="cosmic-image-container">
+      
+      <div className="campaign-header">
+        <div className="header-content">
+          <div className="image-wrapper">
             <img
-              className="cosmic-campaign-image"
+              className="campaign-image pulse-effect"
               src={displayedImage}
               alt="Campaign Visual"
             />
-            <div className="cosmic-image-reflection"></div>
+            <div className="image-overlay">
+              <div ref={headerAnimationRef} className="header-animation"></div>
+            </div>
+          </div>
+          <div className="title-content">
+            <h1 className="campaign-title">
+              {campaign.name || 'Untitled Campaign'}
+            </h1>
+            <p className="campaign-subtitle">
+              {campaign.objective || 'No objective provided yet.'}
+            </p>
+            <div className="campaign-status">
+              <span 
+                className="status-badge"
+                style={{ backgroundColor: getStatusColor(campaign.status) }}
+              >
+                {campaign.status || 'Draft'}
+              </span>
+            </div>
           </div>
         </div>
         
-        <div className="cosmic-campaign-intro">
-          <div className="cosmic-status-indicator">
-            <span className={`cosmic-status-dot ${statusInfo.className}`}>
-              {statusInfo.icon}
-            </span>
-            {campaign.status || 'Draft'}
+        <div className="campaign-metrics">
+          <div className="metric-card">
+            <div className="metric-icon progress-icon">
+              <div ref={progressAnimationRef}></div>
+            </div>
+            <div className="metric-content">
+              <h3>Progress</h3>
+              <div className="progress-bar-container">
+                <div 
+                  className="progress-bar" 
+                  style={{ width: `${campaign.progress || 0}%` }}
+                ></div>
+              </div>
+              <p className="metric-value">{campaign.progress || 0}%</p>
+            </div>
           </div>
           
-          <h1 className="cosmic-campaign-title">
-            {campaign.name || 'Untitled Campaign'}
-            <div className="cosmic-title-underline"></div>
-          </h1>
+          <div className="metric-card">
+            <div className="metric-icon clicks-icon"></div>
+            <div className="metric-content">
+              <h3>Clicks</h3>
+              <p className="metric-value">{campaign.clicks || 0}</p>
+            </div>
+          </div>
           
-          <p className="cosmic-campaign-subtitle">
-            {campaign.objective || 'No objective provided yet.'}
-          </p>
+          <div className="metric-card">
+            <div className="metric-icon conversions-icon"></div>
+            <div className="metric-content">
+              <h3>Conversions</h3>
+              <p className="metric-value">{campaign.conversions || 0}</p>
+            </div>
+          </div>
         </div>
       </div>
 
       {isEditing ? (
         /* ================== EDIT MODE ================== */
-        <div className="cosmic-campaign-edit-form">
-          <div className="cosmic-edit-header">
-            <h2 className="cosmic-edit-title">Edit Campaign</h2>
-            <div className="cosmic-edit-note">Make changes to your campaign details</div>
-          </div>
-          
-          <div className="cosmic-form-section">
-            <div className="cosmic-form-section-title">Campaign Basics</div>
-            
-            {/* Campaign Image field */}
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Campaign Image (URL)</label>
-              <input
-                className="cosmic-input"
-                type="text"
-                name="campaignImage"
-                value={editData.campaignImage}
-                onChange={handleChange}
-              />
-            </div>
-            
-            {/* Basic fields */}
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Name</label>
-              <input
-                className="cosmic-input"
-                type="text"
-                name="name"
-                value={editData.name}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Objective</label>
-              <input
-                className="cosmic-input"
-                type="text"
-                name="objective"
-                value={editData.objective}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Target Audience</label>
-              <input
-                className="cosmic-input"
-                type="text"
-                name="targetAudience"
-                value={editData.targetAudience}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="cosmic-two-column">
-              <div className="cosmic-input-group">
-                <label className="cosmic-label">Duration</label>
+        <div className="campaign-edit-form">
+          <h2 className="edit-title">Edit Campaign</h2>
+          <div className="edit-grid">
+            <div className="edit-column">
+              <h3 className="section-title">Basic Information</h3>
+              
+              <div className="form-group">
+                <label>Campaign Image (URL)</label>
                 <input
-                  className="cosmic-input"
+                  type="text"
+                  name="campaignImage"
+                  value={editData.campaignImage}
+                  onChange={handleChange}
+                  className="input-field"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={editData.name}
+                  onChange={handleChange}
+                  className="input-field"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Objective</label>
+                <input
+                  type="text"
+                  name="objective"
+                  value={editData.objective}
+                  onChange={handleChange}
+                  className="input-field"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Target Audience</label>
+                <input
+                  type="text"
+                  name="targetAudience"
+                  value={editData.targetAudience}
+                  onChange={handleChange}
+                  className="input-field"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Duration</label>
+                <input
                   type="text"
                   name="duration"
                   value={editData.duration}
                   onChange={handleChange}
+                  className="input-field"
                 />
               </div>
               
-              <div className="cosmic-input-group">
-                <label className="cosmic-label">Budget</label>
+              <div className="form-group">
+                <label>Budget</label>
                 <input
-                  className="cosmic-input"
                   type="text"
                   name="budget"
                   value={editData.budget}
                   onChange={handleChange}
+                  className="input-field"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Influencer Collaboration</label>
+                <input
+                  type="text"
+                  name="influencerCollaboration"
+                  value={editData.influencerCollaboration}
+                  onChange={handleChange}
+                  className="input-field"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>About Campaign</label>
+                <textarea
+                  name="aboutCampaign"
+                  rows="3"
+                  value={editData.aboutCampaign}
+                  onChange={handleChange}
+                  className="input-field textarea"
                 />
               </div>
             </div>
             
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Influencer Collaboration</label>
-              <input
-                className="cosmic-input"
-                type="text"
-                name="influencerCollaboration"
-                value={editData.influencerCollaboration}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">About Campaign</label>
-              <textarea
-                className="cosmic-textarea"
-                name="aboutCampaign"
-                rows="2"
-                value={editData.aboutCampaign}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          
-          <div className="cosmic-form-section">
-            <div className="cosmic-form-section-title">Campaign Metrics</div>
-            
-            <div className="cosmic-three-column">
-              <div className="cosmic-input-group">
-                <label className="cosmic-label">Progress (%)</label>
+            <div className="edit-column">
+              <h3 className="section-title">Performance & Status</h3>
+              
+              <div className="form-group">
+                <label>Progress</label>
                 <input
-                  className="cosmic-input"
                   type="number"
                   name="progress"
                   value={editData.progress}
                   onChange={handleChange}
-                  min="0"
-                  max="100"
+                  className="input-field"
                 />
-                <div className="cosmic-progress-visualizer" style={{width: `${editData.progress}%`}}></div>
               </div>
               
-              <div className="cosmic-input-group">
-                <label className="cosmic-label">Clicks</label>
+              <div className="form-group">
+                <label>Clicks</label>
                 <input
-                  className="cosmic-input"
                   type="number"
                   name="clicks"
                   value={editData.clicks}
                   onChange={handleChange}
-                  min="0"
+                  className="input-field"
                 />
               </div>
               
-              <div className="cosmic-input-group">
-                <label className="cosmic-label">Conversions</label>
+              <div className="form-group">
+                <label>Conversions</label>
                 <input
-                  className="cosmic-input"
                   type="number"
                   name="conversions"
                   value={editData.conversions}
                   onChange={handleChange}
-                  min="0"
-                />
-              </div>
-            </div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Status</label>
-              <select 
-                className="cosmic-select" 
-                name="status" 
-                value={editData.status} 
-                onChange={handleChange}
-              >
-                <option value="Draft">Draft</option>
-                <option value="Active">Active</option>
-                <option value="Paused">Paused</option>
-                <option value="Completed">Completed</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Original form fields (subdoc) */}
-          <div className="cosmic-form-section">
-            <div className="cosmic-form-section-title">Original Form Inputs</div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Business Description</label>
-              <textarea
-                className="cosmic-textarea"
-                name="businessDescription"
-                rows="2"
-                value={editData.businessDescription}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Industry</label>
-              <input
-                className="cosmic-input"
-                type="text"
-                name="industry"
-                value={editData.industry}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="cosmic-two-column">
-              <div className="cosmic-input-group">
-                <label className="cosmic-label">Timeframe Start</label>
-                <input
-                  className="cosmic-input"
-                  type="text"
-                  name="timeframeStart"
-                  value={editData.timeframeStart}
-                  onChange={handleChange}
+                  className="input-field"
                 />
               </div>
               
-              <div className="cosmic-input-group">
-                <label className="cosmic-label">Timeframe End</label>
-                <input
-                  className="cosmic-input"
-                  type="text"
-                  name="timeframeEnd"
-                  value={editData.timeframeEnd}
+              <div className="form-group">
+                <label>Status</label>
+                <select 
+                  name="status" 
+                  value={editData.status} 
                   onChange={handleChange}
+                  className="input-field select"
+                >
+                  <option value="Draft">Draft</option>
+                  <option value="Active">Active</option>
+                  <option value="Paused">Paused</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+              
+              <h3 className="section-title">Original Form Inputs</h3>
+              
+              <div className="form-group">
+                <label>Business Description</label>
+                <textarea
+                  name="businessDescription"
+                  rows="2"
+                  value={editData.businessDescription}
+                  onChange={handleChange}
+                  className="input-field textarea"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Industry</label>
+                <input
+                  type="text"
+                  name="industry"
+                  value={editData.industry}
+                  onChange={handleChange}
+                  className="input-field"
+                />
+              </div>
+              
+              <div className="form-row">
+                <div className="form-group half">
+                  <label>Timeframe Start</label>
+                  <input
+                    type="text"
+                    name="timeframeStart"
+                    value={editData.timeframeStart}
+                    onChange={handleChange}
+                    className="input-field"
+                  />
+                </div>
+                <div className="form-group half">
+                  <label>Timeframe End</label>
+                  <input
+                    type="text"
+                    name="timeframeEnd"
+                    value={editData.timeframeEnd}
+                    onChange={handleChange}
+                    className="input-field"
+                  />
+                </div>
+              </div>
+              
+              <div className="form-group">
+                <label>Platforms</label>
+                <textarea
+                  name="platforms"
+                  rows="2"
+                  value={editData.platforms}
+                  onChange={handleChange}
+                  className="input-field textarea"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Market Trends</label>
+                <textarea
+                  name="marketTrends"
+                  rows="2"
+                  value={editData.marketTrends}
+                  onChange={handleChange}
+                  className="input-field textarea"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Target Audience (Form)</label>
+                <textarea
+                  name="targetAudienceForm"
+                  rows="2"
+                  value={editData.targetAudienceForm}
+                  onChange={handleChange}
+                  className="input-field textarea"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Brand USP</label>
+                <textarea
+                  name="brandUSP"
+                  rows="2"
+                  value={editData.brandUSP}
+                  onChange={handleChange}
+                  className="input-field textarea"
                 />
               </div>
             </div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Platforms</label>
-              <textarea
-                className="cosmic-textarea"
-                name="platforms"
-                rows="2"
-                value={editData.platforms}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Market Trends</label>
-              <textarea
-                className="cosmic-textarea"
-                name="marketTrends"
-                rows="2"
-                value={editData.marketTrends}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Target Audience (Form)</label>
-              <textarea
-                className="cosmic-textarea"
-                name="targetAudienceForm"
-                rows="2"
-                value={editData.targetAudienceForm}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div className="cosmic-input-group">
-              <label className="cosmic-label">Brand USP</label>
-              <textarea
-                className="cosmic-textarea"
-                name="brandUSP"
-                rows="2"
-                value={editData.brandUSP}
-                onChange={handleChange}
-              />
-            </div>
           </div>
 
-          {/* Save / Cancel */}
-          <div className="cosmic-edit-actions">
-            <button 
-              className="cosmic-save-button"
-              onClick={handleSave}
-              disabled={saveAnimation}
-            >
-              {saveAnimation ? (
-                <>
-                  <span className="cosmic-save-spinner"></span>
-                  Saving...
-                </>
-              ) : 'Save Changes'}
+          <div className="edit-actions">
+            <button onClick={handleSave} className="save-button">
+              <span className="button-icon">✓</span> Save Changes
             </button>
-            
-            <button 
-              className="cosmic-cancel-button"
-              onClick={() => setIsEditing(false)}
-              disabled={saveAnimation}
-            >
-              Cancel
+            <button onClick={() => setIsEditing(false)} className="cancel-button">
+              <span className="button-icon">✕</span> Cancel
             </button>
           </div>
         </div>
       ) : (
         /* ================== VIEW MODE ================== */
         <>
-          {/* Campaign Dashboard Summary */}
-          <div className="cosmic-dashboard-summary animate-on-scroll" data-item="dashboard">
-            <div className="cosmic-summary-stat">
-              <div className="cosmic-summary-value">{campaign.progress || 0}%</div>
-              <div className="cosmic-summary-label">Progress</div>
-              <div className="cosmic-progress-bar">
-                <div 
-                  className="cosmic-progress-fill" 
-                  style={{width: `${campaign.progress || 0}%`}}
-                ></div>
-              </div>
-              <div className="cosmic-lottie-container">
-                <Lottie options={progressLottieOptions} height={40} width={40} />
-              </div>
-            </div>
-            
-            <div className="cosmic-summary-stat">
-              <div className="cosmic-summary-value">{campaign.clicks || 0}</div>
-              <div className="cosmic-summary-label">Clicks</div>
-              <div className="cosmic-stat-icon cosmic-clicks-icon"></div>
-              <div className="cosmic-lottie-container">
-                <Lottie options={campaignLottieOptions} height={40} width={40} />
-              </div>
-            </div>
-            
-            <div className="cosmic-summary-stat">
-              <div className="cosmic-summary-value">{campaign.conversions || 0}</div>
-              <div className="cosmic-summary-label">Conversions</div>
-              <div className="cosmic-stat-icon cosmic-conversions-icon"></div>
-            </div>
-            
-            <div className="cosmic-summary-stat">
-              <div className="cosmic-summary-value cosmic-budget-value">{campaign.budget || '$0'}</div>
-              <div className="cosmic-summary-label">Budget</div>
-              <div className="cosmic-stat-icon cosmic-budget-icon"></div>
-            </div>
-          </div>
-
           {/* Campaign Details Section */}
-          <div 
-            className="cosmic-campaign-detail-box animate-on-scroll" 
-            data-item="details"
-            onMouseEnter={() => handleSectionHover('details')}
-            onMouseLeave={() => handleSectionHover(null)}
-          >
-            <h2 className="cosmic-detail-title">
-              Campaign Details
-              <div className="cosmic-title-accent"></div>
-            </h2>
+          <div id="details" ref={detailsRef} className="campaign-detail-box section-fade-in">
+            <div className="section-header">
+              <h2 className="detail-title">Campaign Details</h2>
+              <div className="section-divider"></div>
+            </div>
             
-            <div className="cosmic-detail-grid">
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible' : ''}`}>
+            <div className="detail-grid">
+              <div className="detail-item glowing-card">
+                <div className="detail-icon name-icon"></div>
                 <h3>Name</h3>
                 <p>{campaign.name || 'N/A'}</p>
-                <div className="cosmic-detail-glow"></div>
               </div>
               
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-1' : ''}`}>
+              <div className="detail-item glowing-card">
+                <div className="detail-icon objective-icon"></div>
                 <h3>Objective</h3>
                 <p>{campaign.objective || 'N/A'}</p>
-                <div className="cosmic-detail-glow"></div>
               </div>
               
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-2' : ''}`}>
+              <div className="detail-item glowing-card">
+                <div className="detail-icon audience-icon"></div>
                 <h3>Target Audience</h3>
                 <p>{campaign.targetAudience || 'N/A'}</p>
-                <div className="cosmic-detail-glow"></div>
-                <div className="cosmic-lottie-container">
-                  <Lottie options={targetAudienceLottieOptions} height={40} width={40} />
-                </div>
               </div>
               
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-3' : ''}`}>
+              <div className="detail-item glowing-card">
+                <div className="detail-icon duration-icon"></div>
                 <h3>Duration</h3>
                 <p>{campaign.duration || 'N/A'}</p>
-                <div className="cosmic-detail-glow"></div>
               </div>
               
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-4' : ''}`}>
+              <div className="detail-item glowing-card">
+                <div className="detail-icon budget-icon"></div>
                 <h3>Budget</h3>
                 <p>{campaign.budget || 'N/A'}</p>
-                <div className="cosmic-detail-glow"></div>
               </div>
               
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-5' : ''}`}>
+              <div className="detail-item glowing-card">
+                <div className="detail-icon collab-icon"></div>
                 <h3>Influencer Collaboration</h3>
                 <p>{campaign.influencerCollaboration || 'N/A'}</p>
-                <div className="cosmic-detail-glow"></div>
-                <div className="cosmic-lottie-container">
-                  <Lottie options={influencerLottieOptions} height={40} width={40} />
-                </div>
-              </div>
-              
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-6' : ''}`}>
-                <h3>About Campaign</h3>
-                <p>{campaign.aboutCampaign || 'N/A'}</p>
-                <div className="cosmic-detail-glow"></div>
-              </div>
-              
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-7' : ''}`}>
-                <h3>Progress</h3>
-                <div className="cosmic-progress-container">
-                  <div className="cosmic-progress-indicator">
-                    <div 
-                      className="cosmic-progress-bar-detail" 
-                      style={{width: `${campaign.progress || 0}%`}}
-                    >
-                      <span className="cosmic-progress-text">{campaign.progress || 0}%</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="cosmic-detail-glow"></div>
-              </div>
-              
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-8' : ''}`}>
-                <h3>Clicks</h3>
-                <p>{campaign.clicks || 0}</p>
-                <div className="cosmic-detail-glow"></div>
-              </div>
-              
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-9' : ''}`}>
-                <h3>Conversions</h3>
-                <p>{campaign.conversions || 0}</p>
-                <div className="cosmic-detail-glow"></div>
-              </div>
-              
-              <div className={`cosmic-detail-item ${animatedItems.includes('details') ? 'cosmic-item-visible cosmic-item-delay-10' : ''}`}>
-                <h3>Status</h3>
-                <p className={`cosmic-status ${statusInfo.className}`}>
-                  <span className="cosmic-status-indicator-small">{statusInfo.icon}</span>
-                  {campaign.status || 'Draft'}
-                </p>
-                <div className="cosmic-detail-glow"></div>
               </div>
             </div>
           </div>
 
-          {/* Original Form Inputs */}
+          {/* About Campaign Section */}
+          <div id="about" ref={aboutRef} className="campaign-description section-fade-in">
+            <div className="section-header">
+              <h2 className="description-title">About the Campaign</h2>
+              <div className="section-divider"></div>
+            </div>
+            
+            <div className="description-content">
+              <p className="description-text">
+                {campaign.aboutCampaign || 'No further description provided.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Additional: Original Form Inputs */}
           {campaign.formInputs && (
-            <div 
-              className="cosmic-campaign-detail-box cosmic-form-inputs animate-on-scroll" 
-              data-item="formInputs"
-              onMouseEnter={() => handleSectionHover('formInputs')}
-              onMouseLeave={() => handleSectionHover(null)}
-            >
-              <h2 className="cosmic-detail-title">
-                Original Form Inputs
-                <div className="cosmic-title-accent cosmic-accent-alt"></div>
-              </h2>
+            <div id="form" ref={formRef} className="campaign-detail-box form-inputs-section section-fade-in">
+              <div className="section-header">
+                <h2 className="detail-title">Original Form Inputs</h2>
+                <div className="section-divider"></div>
+              </div>
               
-              <div className="cosmic-form-inputs-grid">
-                <div className={`cosmic-form-input-item ${animatedItems.includes('formInputs') ? 'cosmic-item-visible' : ''}`}>
-                  <div className="cosmic-form-input-icon cosmic-icon-business"></div>
-                  <div className="cosmic-form-input-content">
-                    <h3>Business Description</h3>
-                    <p>{campaign.formInputs.businessDescription || 'N/A'}</p>
-                  </div>
+              <div className="form-inputs-grid">
+                <div className="form-input-item">
+                  <h3>Business Description</h3>
+                  <p>{campaign.formInputs.businessDescription || 'N/A'}</p>
                 </div>
                 
-                <div className={`cosmic-form-input-item ${animatedItems.includes('formInputs') ? 'cosmic-item-visible cosmic-item-delay-1' : ''}`}>
-                  <div className="cosmic-form-input-icon cosmic-icon-industry"></div>
-                  <div className="cosmic-form-input-content">
-                    <h3>Industry</h3>
-                    <p>{campaign.formInputs.industry || 'N/A'}</p>
-                  </div>
+                <div className="form-input-item">
+                  <h3>Industry</h3>
+                  <p>{campaign.formInputs.industry || 'N/A'}</p>
                 </div>
                 
-                <div className={`cosmic-form-input-item ${animatedItems.includes('formInputs') ? 'cosmic-item-visible cosmic-item-delay-2' : ''}`}>
-                  <div className="cosmic-form-input-icon cosmic-icon-timeframe"></div>
-                  <div className="cosmic-form-input-content">
-                    <h3>Timeframe</h3>
-                    <p>
-                      {campaign.formInputs.timeframeStart ? (
-                        <>
-                          {campaign.formInputs.timeframeStart} 
-                          {campaign.formInputs.timeframeEnd ? ` to ${campaign.formInputs.timeframeEnd}` : ''}
-                        </>
-                      ) : 'N/A'}
-                    </p>
-                  </div>
+                <div className="form-input-item">
+                  <h3>Timeframe</h3>
+                  <p>
+                    {campaign.formInputs.timeframeStart || 'N/A'} to {campaign.formInputs.timeframeEnd || 'N/A'}
+                  </p>
                 </div>
                 
-                <div className={`cosmic-form-input-item ${animatedItems.includes('formInputs') ? 'cosmic-item-visible cosmic-item-delay-3' : ''}`}>
-                  <div className="cosmic-form-input-icon cosmic-icon-platforms"></div>
-                  <div className="cosmic-form-input-content">
-                    <h3>Platforms</h3>
-                    <p>{campaign.formInputs.platforms || 'N/A'}</p>
-                  </div>
+                <div className="form-input-item">
+                  <h3>Platforms</h3>
+                  <p>{campaign.formInputs.platforms || 'N/A'}</p>
                 </div>
                 
-                <div className={`cosmic-form-input-item ${animatedItems.includes('formInputs') ? 'cosmic-item-visible cosmic-item-delay-4' : ''}`}>
-                  <div className="cosmic-form-input-icon cosmic-icon-trends"></div>
-                  <div className="cosmic-form-input-content">
-                    <h3>Market Trends</h3>
-                    <p>{campaign.formInputs.marketTrends || 'N/A'}</p>
-                  </div>
+                <div className="form-input-item">
+                  <h3>Market Trends</h3>
+                  <p>{campaign.formInputs.marketTrends || 'N/A'}</p>
                 </div>
                 
-                <div className={`cosmic-form-input-item ${animatedItems.includes('formInputs') ? 'cosmic-item-visible cosmic-item-delay-5' : ''}`}>
-                  <div className="cosmic-form-input-icon cosmic-icon-audience"></div>
-                  <div className="cosmic-form-input-content">
-                    <h3>Target Audience (Form)</h3>
-                    <p>{campaign.formInputs.targetAudience || 'N/A'}</p>
-                  </div>
+                <div className="form-input-item">
+                  <h3>Target Audience</h3>
+                  <p>{campaign.formInputs.targetAudience || 'N/A'}</p>
                 </div>
                 
-                <div className={`cosmic-form-input-item ${animatedItems.includes('formInputs') ? 'cosmic-item-visible cosmic-item-delay-6' : ''}`}>
-                  <div className="cosmic-form-input-icon cosmic-icon-usp"></div>
-                  <div className="cosmic-form-input-content">
-                    <h3>Brand USP</h3>
-                    <p>{campaign.formInputs.brandUSP || 'N/A'}</p>
-                  </div>
+                <div className="form-input-item">
+                  <h3>Brand USP</h3>
+                  <p>{campaign.formInputs.brandUSP || 'N/A'}</p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* About Campaign Section with animated reveal */}
-          <div 
-            className="cosmic-campaign-description animate-on-scroll" 
-            data-item="description"
-          >
-            <h2 className="cosmic-description-title">
-              About the Campaign
-              <div className="cosmic-title-accent cosmic-accent-green"></div>
-            </h2>
-            
-            <div className={`cosmic-description-wrapper ${animatedItems.includes('description') ? 'cosmic-description-visible' : ''}`}>
-              <p className="cosmic-description-text">
-                {campaign.aboutCampaign || 'No further description provided.'}
-              </p>
-              
-              <div className="cosmic-description-decoration">
-                <div className="cosmic-decoration-item d1"></div>
-                <div className="cosmic-decoration-item d2"></div>
-                <div className="cosmic-decoration-item d3"></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Calendar Events with dynamic cards */}
+          {/* Calendar Events (from AI) */}
           {campaign.calendarEvents && campaign.calendarEvents.length > 0 && (
-            <div 
-              className="cosmic-calendar-events animate-on-scroll" 
-              data-item="calendarEvents"
-            >
-              <h2 className="cosmic-calendar-title">
-                Calendar Events
-                <div className="cosmic-title-accent cosmic-accent-blue"></div>
-              </h2>
+            <div id="calendar" ref={calendarRef} className="campaign-detail-box calendar-section section-fade-in">
+              <div className="section-header">
+                <h2 className="detail-title">Calendar Events</h2>
+                <div className="section-divider"></div>
+              </div>
               
-              <div className="cosmic-events-wrapper">
+              <div className="calendar-grid">
                 {campaign.calendarEvents.map((ev, idx) => {
                   let platformsString = '';
                   if (ev.platforms) {
@@ -918,6 +753,7 @@ const CampaignDetail = () => {
                       platformsString = String(ev.platforms);
                     }
                   }
+                  
                   let kpisString = '';
                   if (ev.kpis) {
                     if (Array.isArray(ev.kpis)) {
@@ -928,48 +764,29 @@ const CampaignDetail = () => {
                   }
                   
                   return (
-                    <div 
-                      key={idx} 
-                      className={`cosmic-event-card ${animatedItems.includes('calendarEvents') ? `cosmic-item-visible cosmic-item-delay-${idx}` : ''}`}
-                    >
-                      <div className="cosmic-event-date">
-                        <div className="cosmic-date-indicator"></div>
-                        {ev.date || 'N/A'}
-                      </div>
-                      
-                      <div className="cosmic-event-content">
-                        <h3 className="cosmic-event-title">{ev.event || 'No details'}</h3>
-                        
-                        {ev.platforms && (
-                          <div className="cosmic-event-detail">
-                            <span className="cosmic-detail-label">Platforms:</span> 
-                            <span className="cosmic-detail-value">{platformsString}</span>
-                          </div>
-                        )}
-                        
-                        {ev.cta && (
-                          <div className="cosmic-event-detail">
-                            <span className="cosmic-detail-label">CTA:</span> 
-                            <span className="cosmic-detail-value">{ev.cta}</span>
-                          </div>
-                        )}
-                        
-                        {ev.captions && (
-                          <div className="cosmic-event-detail">
-                            <span className="cosmic-detail-label">Captions:</span> 
-                            <span className="cosmic-detail-value">{ev.captions}</span>
-                          </div>
-                        )}
-                        
-                        {ev.kpis && (
-                          <div className="cosmic-event-detail">
-                            <span className="cosmic-detail-label">KPIs:</span> 
-                            <span className="cosmic-detail-value">{kpisString}</span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="cosmic-event-indicator"></div>
+                    <div key={idx} className="calendar-event-card">
+                      <div className="event-date">{ev.date || 'N/A'}</div>
+                      <div className="event-title">{ev.event || 'No details'}</div>
+                      {ev.platforms && (
+                        <div className="event-platforms">
+                          <span className="event-label">Platforms:</span> {platformsString}
+                        </div>
+                      )}
+                      {ev.cta && (
+                        <div className="event-cta">
+                          <span className="event-label">CTA:</span> {ev.cta}
+                        </div>
+                      )}
+                      {ev.captions && (
+                        <div className="event-captions">
+                          <span className="event-label">Captions:</span> {ev.captions}
+                        </div>
+                      )}
+                      {ev.kpis && (
+                        <div className="event-kpis">
+                          <span className="event-label">KPIs:</span> {kpisString}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -977,18 +794,15 @@ const CampaignDetail = () => {
             </div>
           )}
 
-          {/* Bingo Suggestions with hover effects */}
+          {/* Bingo Suggestions (from AI) */}
           {campaign.bingoSuggestions && campaign.bingoSuggestions.length > 0 && (
-            <div 
-              className="cosmic-campaign-suggestions animate-on-scroll" 
-              data-item="suggestions"
-            >
-              <h2 className="cosmic-suggestions-title">
-                Campaign Suggestions
-                <div className="cosmic-title-accent cosmic-accent-purple"></div>
-              </h2>
+            <div id="suggestions" ref={suggestionsRef} className="campaign-detail-box suggestions-section section-fade-in">
+              <div className="section-header">
+                <h2 className="detail-title">Campaign Suggestions</h2>
+                <div className="section-divider"></div>
+              </div>
               
-              <div className="cosmic-suggestions-grid">
+              <div className="suggestions-grid">
                 {campaign.bingoSuggestions.map((item, idx) => {
                   const suggestionVal =
                     typeof item.suggestion === 'object'
@@ -998,31 +812,25 @@ const CampaignDetail = () => {
                     typeof item.strategy === 'object'
                       ? JSON.stringify(item.strategy)
                       : item.strategy || 'No strategy';
-                  
+                      
                   return (
-                    <div 
-                      key={idx} 
-                      className={`cosmic-suggestion-card ${animatedItems.includes('suggestions') ? `cosmic-item-visible cosmic-item-delay-${idx % 4}` : ''}`}
-                    >
-                      <div className="cosmic-suggestion-bulb">
-                        <div className="cosmic-bulb-glow"></div>
+                    <div key={idx} className="suggestion-card">
+                      <div className="suggestion-content">
+                        <h3 className="suggestion-title">Idea #{idx + 1}</h3>
+                        <p className="suggestion-text">{suggestionVal}</p>
+                        <div className="suggestion-divider"></div>
+                        <h4 className="strategy-title">Strategy</h4>
+                        <p className="strategy-text">{strategyVal}</p>
                       </div>
                       
-                      <div className="cosmic-suggestion-content">
-                        <h3 className="cosmic-suggestion-idea">{suggestionVal}</h3>
-                        <p className="cosmic-suggestion-strategy">{strategyVal}</p>
-                        
-                        {item.imageUrl && (
-                          <div className="cosmic-suggestion-image-container">
-                            <img
-                              src={item.imageUrl}
-                              alt="Suggestion Visual"
-                              className="cosmic-suggestion-image"
-                            />
-                            <div className="cosmic-image-glow-effect"></div>
-                          </div>
-                        )}
-                      </div>
+                      {item.imageUrl && (
+                        <div className="suggestion-image">
+                          <img
+                            src={item.imageUrl}
+                            alt="Suggestion Visual"
+                          />
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -1030,71 +838,55 @@ const CampaignDetail = () => {
             </div>
           )}
 
-          {/* More Advice with advanced card effects */}
+          {/* More Advice (from AI) */}
           {campaign.moreAdvice && campaign.moreAdvice.length > 0 && (
-            <div 
-              className="cosmic-advice-section animate-on-scroll" 
-              data-item="advice"
-            >
-              <h2 className="cosmic-advice-title">
-                Additional Advice
-                <div className="cosmic-title-accent cosmic-accent-orange"></div>
-              </h2>
+            <div id="advice" ref={adviceRef} className="campaign-detail-box advice-section section-fade-in">
+              <div className="section-header">
+                <h2 className="advice-title">Additional Advice</h2>
+                <div className="section-divider"></div>
+              </div>
               
-              <div className="cosmic-advice-container">
+              <div className="advice-grid">
                 {campaign.moreAdvice.map((advice, idx) => {
                   // Handle JSON object advice
                   if (typeof advice === 'object') {
                     // Parse influencer recommendations
                     if (advice.type === "Influencer Recommendation") {
                       return (
-                        <div 
-                          key={idx} 
-                          className={`cosmic-influencer-recommendation ${idx === 0 ? 'cosmic-new-recommendation' : ''} ${animatedItems.includes('advice') ? `cosmic-item-visible cosmic-item-delay-${idx % 3}` : ''}`}
-                        >
-                          <div className="cosmic-recommendation-header">
-                            <span className="cosmic-icon-star">★</span>
-                            <h3>{advice.title || "Connect with influencer"}</h3>
+                        <div key={idx} className={`influencer-recommendation ${idx === 0 ? 'new-recommendation' : ''}`}>
+                          <div className="recommendation-title">
+                            <span className="icon">★</span>
+                            {advice.title || "Connect with influencer"}
+                          </div>
+                          <div className="recommendation-description">
+                            {advice.description || "Consider collaborating for your campaign."}
                           </div>
                           
-                          <div className="cosmic-recommendation-body">
-                            <p>{advice.description || "Consider collaborating for your campaign."}</p>
-                          </div>
-                          
-                          <div className="cosmic-influencer-profile">
-                            <div className="cosmic-influencer-avatar">
+                          <div className="influencer-stats">
+                            <div className="influencer-avatar">
                               {advice.title?.split(' ')?.pop()?.charAt(0) || "I"}
-                              <div className="cosmic-avatar-glow"></div>
                             </div>
-                            
-                            <div className="cosmic-influencer-details">
-                              <div className="cosmic-influencer-handle">
-                                <span className="cosmic-platform-icon">
+                            <div className="influencer-details">
+                              <div className="influencer-handle">
+                                <span className="platform-icon">
                                   {advice.description?.includes('Instagram') ? '📱' : 
                                   advice.description?.includes('YouTube') ? '📺' : '🌐'}
                                 </span>
                                 {advice.description?.match(/@[\w]+/) || "Influencer"}
                               </div>
-                              
-                              <div className="cosmic-influencer-metrics">
-                                <div className="cosmic-metric">
-                                  <span className="cosmic-metric-value">
+                              <div className="influencer-metrics">
+                                <div className="metric">
+                                  <span className="metric-value">
                                     {advice.description?.match(/(\d+(\.\d+)?(K|M)?)/) || ""}
                                   </span>
-                                  <span className="cosmic-metric-label">followers</span>
+                                  <span>followers</span>
                                 </div>
-                                
-                                <div className="cosmic-metric">
-                                  <span className="cosmic-metric-value">~1%</span>
-                                  <span className="cosmic-metric-label">engagement</span>
+                                <div className="metric">
+                                  <span className="metric-value">~1%</span>
+                                  <span>engagement</span>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          
-                          <div className="cosmic-recommendation-actions">
-                            <button className="cosmic-connect-button">Connect</button>
-                            <button className="cosmic-learn-button">Learn More</button>
                           </div>
                         </div>
                       );
@@ -1102,17 +894,11 @@ const CampaignDetail = () => {
                     
                     // Generic object display
                     return (
-                      <div 
-                        key={idx} 
-                        className={`cosmic-generic-recommendation ${animatedItems.includes('advice') ? `cosmic-item-visible cosmic-item-delay-${idx % 3}` : ''}`}
-                      >
-                        <div className="cosmic-recommendation-header">
-                          <span className="cosmic-icon-tip">💡</span>
-                          <h3>Advice</h3>
-                        </div>
-                        
-                        <div className="cosmic-recommendation-body">
-                          <p>{JSON.stringify(advice)}</p>
+                      <div key={idx} className="advice-card">
+                        <div className="advice-icon">💡</div>
+                        <div className="advice-content">
+                          <h3 className="advice-card-title">Strategic Advice</h3>
+                          <p className="advice-text">{JSON.stringify(advice)}</p>
                         </div>
                       </div>
                     );
@@ -1120,220 +906,124 @@ const CampaignDetail = () => {
                   
                   // Simple text advice
                   return (
-                    <div 
-                      key={idx}
-                      className={`cosmic-tip-recommendation ${animatedItems.includes('advice') ? `cosmic-item-visible cosmic-item-delay-${idx % 3}` : ''}`}
-                    >
-                      <div className="cosmic-recommendation-header">
-                        <span className="cosmic-icon-tip">💡</span>
-                        <h3>Tip</h3>
+                    <div key={idx} className="advice-card">
+                      <div className="advice-icon">💡</div>
+                      <div className="advice-content">
+                        <h3 className="advice-card-title">Tip #{idx + 1}</h3>
+                        <p className="advice-text">{advice}</p>
                       </div>
-                      
-                      <div className="cosmic-recommendation-body">
-                        <p>{advice}</p>
-                      </div>
-                      
-                      <div className="cosmic-tip-decoration"></div>
                     </div>
                   );
                 })}
-                
-                {campaign.moreAdvice.length === 0 && (
-                  <div className="cosmic-no-recommendations">
-                    <div className="cosmic-no-recommendations-icon">📋</div>
-                    <div className="cosmic-no-recommendations-text">No advice available yet</div>
-                  </div>
-                )}
               </div>
             </div>
           )}
-          
-          {/* Joined Influencers Section with advanced interactions */}
-          <div 
-            className="cosmic-influencers-section animate-on-scroll" 
-            data-item="influencers"
-          >
-            <h2 className="cosmic-influencers-title">
-              Joined Influencers
-              <div className="cosmic-title-accent cosmic-accent-yellow"></div>
-            </h2>
+
+          {/* Joined Influencers Section */}
+          <div id="influencers" ref={influencersRef} className="campaign-detail-box influencers-section section-fade-in">
+            <div className="section-header">
+              <h2 className="detail-title">Joined Influencers</h2>
+              <div className="section-divider"></div>
+              <div className="influencer-animation" ref={influencerAnimationRef}></div>
+            </div>
             
             {campaign.joinedInfluencers && campaign.joinedInfluencers.length > 0 ? (
-              <div className="cosmic-influencers-list">
-                {campaign.joinedInfluencers.map((inf, index) => (
-                  <div 
-                    key={inf._id} 
-                    className={`cosmic-influencer-card ${animatedItems.includes('influencers') ? `cosmic-item-visible cosmic-item-delay-${index % 4}` : ''}`}
-                  >
-                    <div className="cosmic-influencer-header">
-                      <div className="cosmic-influencer-profile-image">
+              <div className="influencers-grid">
+                {campaign.joinedInfluencers.map((inf) => (
+                  <div key={inf._id} className="influencer-card">
+                    <div className="influencer-header">
+                      <div className="influencer-image-container">
                         <img
                           src={inf.profileImage || 'https://via.placeholder.com/40'}
-                          alt="Influencer"
-                          className="cosmic-profile-img"
+                          alt={inf.name}
+                          className="influencer-image"
                         />
-                        <div className="cosmic-profile-glow"></div>
                       </div>
-                      
-                      <div className="cosmic-influencer-info">
-                        <h3 className="cosmic-influencer-name">{inf.name}</h3>
-                        <div className="cosmic-influencer-progress-container">
-                          <div className="cosmic-influencer-progress-text">{inf.progress}% complete</div>
-                          <div className="cosmic-influencer-progress-bar">
-                            <div 
-                              className="cosmic-influencer-progress-fill"
-                              style={{width: `${inf.progress}%`}}
-                            ></div>
-                          </div>
+                      <div className="influencer-info">
+                        <h3 className="influencer-name">{inf.name}</h3>
+                        <div className="influencer-progress-container">
+                          <div 
+                            className="influencer-progress-bar" 
+                            style={{ width: `${inf.progress}%` }}
+                          ></div>
                         </div>
+                        <span className="influencer-progress">{inf.progress}% complete</span>
                       </div>
                     </div>
                     
                     {inf.tasks && inf.tasks.length > 0 ? (
-                      <div className="cosmic-influencer-tasks">
-                        <h4 className="cosmic-tasks-title">Tasks</h4>
-                        <ul className="cosmic-tasks-list">
+                      <div className="influencer-tasks">
+                        <h4 className="tasks-title">Tasks</h4>
+                        <ul className="tasks-list">
                           {inf.tasks.map((task) => (
-                            <li 
-                              key={task._id} 
-                              className={`cosmic-task-item ${task.completed ? 'cosmic-task-completed' : ''}`}
-                            >
-                              <div className="cosmic-task-checkbox">
-                                {task.completed ? '✓' : ''}
-                              </div>
-                              <div className="cosmic-task-text">{task.text}</div>
+                            <li key={task._id} className={`task-item ${task.completed ? 'completed' : ''}`}>
+                              <span className="task-checkbox">
+                                {task.completed ? '✓' : '○'}
+                              </span>
+                              <span className="task-text">{task.text}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
                     ) : (
-                      <div className="cosmic-no-tasks">
-                        <p>No tasks assigned yet</p>
-                      </div>
+                      <div className="no-tasks">No tasks assigned yet.</div>
                     )}
-                    
-                    <div className="cosmic-influencer-actions">
-                      <button className="cosmic-message-button">Message</button>
-                      <button className="cosmic-assign-button">Assign Task</button>
-                    </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="cosmic-empty-influencers">
-                <div className="cosmic-empty-animation">
-                  <div className="cosmic-empty-planet"></div>
-                  <div className="cosmic-empty-satellite"></div>
-                </div>
-                <p className="cosmic-empty-message">No joined influencers yet</p>
+              <div className="no-influencers">
+                <p>No joined influencers yet.</p>
                 <button 
-                  className="cosmic-find-influencers-button"
+                  className="find-influencers-button" 
                   onClick={() => navigate('/find-influencer')}
                 >
-                  Find Influencers
+                  Find Influencers Now
                 </button>
               </div>
             )}
           </div>
 
-          {/* Campaign Tasks with interactive elements */}
+          {/* If the campaign doc itself has tasks */}
           {campaign.tasks && campaign.tasks.length > 0 && (
-            <div 
-              className="cosmic-tasks-section animate-on-scroll" 
-              data-item="tasks"
-            >
-              <h2 className="cosmic-tasks-section-title">
-                To-Do List
-                <div className="cosmic-title-accent cosmic-accent-pink"></div>
-              </h2>
+            <div id="tasks" ref={tasksRef} className="campaign-detail-box tasks-section section-fade-in">
+              <div className="section-header">
+                <h2 className="detail-title">To-Do List</h2>
+                <div className="section-divider"></div>
+              </div>
               
-              <div className="cosmic-tasks-container">
+              <div className="tasks-grid">
                 {campaign.tasks.map((task, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`cosmic-task-card ${task.completed ? 'cosmic-task-card-completed' : ''} ${animatedItems.includes('tasks') ? `cosmic-item-visible cosmic-item-delay-${idx % 5}` : ''}`}
-                  >
-                    <div className="cosmic-task-status">
-                      <div className="cosmic-task-checkbox-large">
-                        {task.completed ? '✓' : ''}
-                      </div>
+                  <div key={idx} className={`task-card ${task.completed ? 'completed' : ''}`}>
+                    <div className="task-status">
+                      {task.completed ? '✓' : ''}
                     </div>
-                    
-                    <div className="cosmic-task-content">
-                      <p className="cosmic-task-text-large">{task.text}</p>
-                      {task.completed && <div className="cosmic-task-completed-badge">Done</div>}
+                    <div className="task-content">
+                      <p className="task-text">{task.text}</p>
                     </div>
-                    
-                    <div className="cosmic-task-glow"></div>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Action Buttons with hover animations */}
-          <div className="cosmic-action-buttons animate-on-scroll" data-item="buttons">
+          {/* Action Buttons */}
+          <div className="action-buttons">
             <button 
-              className={`cosmic-edit-button ${animatedItems.includes('buttons') ? 'cosmic-item-visible' : ''}`}
               onClick={() => setIsEditing(true)}
+              className="edit-button pulse-button"
             >
-              <div className="cosmic-button-icon cosmic-edit-icon"></div>
-              <span className="cosmic-button-text">Edit Campaign</span>
-              <div className="cosmic-button-glow"></div>
+              <span className="button-icon">✏️</span> Edit Campaign
             </button>
-            
             <button 
-              className={`cosmic-find-button ${animatedItems.includes('buttons') ? 'cosmic-item-visible cosmic-item-delay-1' : ''}`}
               onClick={() => navigate('/find-influencer')}
+              className="find-button pulse-button"
             >
-              <div className="cosmic-button-icon cosmic-find-icon"></div>
-              <span className="cosmic-button-text">Find Influencers</span>
-              <div className="cosmic-button-glow"></div>
+              <span className="button-icon">🔍</span> Find Influencers
             </button>
           </div>
         </>
       )}
-      
-      {/* Quick Access Floating Action Button */}
-      <div className="cosmic-quick-actions">
-        <div className="cosmic-quick-action-button">
-          <span className="cosmic-quick-icon">+</span>
-          
-          <div className="cosmic-quick-menu">
-            <div 
-              className="cosmic-menu-item"
-              onClick={() => navigate('/your-campaigns')}
-            >
-              <span className="cosmic-menu-icon">🏠</span>
-              <span className="cosmic-menu-tooltip">Campaigns</span>
-            </div>
-            
-            <div 
-              className="cosmic-menu-item"
-              onClick={() => setIsEditing(true)}
-            >
-              <span className="cosmic-menu-icon">✏️</span>
-              <span className="cosmic-menu-tooltip">Edit</span>
-            </div>
-            
-            <div 
-              className="cosmic-menu-item"
-              onClick={() => navigate('/find-influencer')}
-            >
-              <span className="cosmic-menu-icon">👥</span>
-              <span className="cosmic-menu-tooltip">Find</span>
-            </div>
-            
-            <div 
-              className="cosmic-menu-item"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              <span className="cosmic-menu-icon">⬆️</span>
-              <span className="cosmic-menu-tooltip">Top</span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
