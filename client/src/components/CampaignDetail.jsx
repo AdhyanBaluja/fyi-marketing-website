@@ -284,28 +284,7 @@ const CampaignDetail = () => {
       </div>
 
       {/* Confetti overlay */}
-      {showConfetti && (
-        <div className={styles['confetti-container']}>
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className={styles.confetti}
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                backgroundColor: [
-                  '#FF5733',
-                  '#FFC300',
-                  '#DAF7A6',
-                  '#C70039',
-                  '#900C3F'
-                ][Math.floor(Math.random() * 5)]
-              }}
-            ></div>
-          ))}
-        </div>
-      )}
-
+      
       {/* Metrics */}
       <div
         className={styles['campaign-metrics']}

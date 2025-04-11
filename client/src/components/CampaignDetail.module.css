@@ -151,6 +151,7 @@
     justify-content: center;
     box-shadow: var(--shadow-lg);
     z-index: 1;
+    margin-bottom: 3rem;
   }
   
   /* Animated radial gradient background for hero */
@@ -383,6 +384,7 @@
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
     overflow: hidden;
     position: relative;
+    margin-top: 2rem;
   }
   .campaign-detail-box:hover {
     transform: translateY(-5px);
