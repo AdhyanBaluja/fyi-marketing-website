@@ -752,3 +752,23 @@ body {
     height: 30px;
   }
 }
+
+.stats-card,
+.requests-card {
+  position: relative;
+  z-index: 1; /* ensures each card is "on top" in normal state */
+}
+
+.stats-card:hover,
+.requests-card:hover {
+  z-index: 10; /* higher so it doesn’t get hidden by adjacent containers */
+}
+
+.brand-dash-header {
+  margin-bottom: 2rem; /* enough space below header */
+}
+.stats-section,
+.requests-section,
+.applications-section {
+  margin-bottom: 2rem; /* or whatever is needed so they don’t collide */
+}
