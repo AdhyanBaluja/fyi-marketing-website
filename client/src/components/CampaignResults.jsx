@@ -713,52 +713,6 @@ function CampaignResults() {
         )}
       </div>
 
-      {/* Connect with Influencers Section */}
-      <div className="fy-influencers-section fy-scroll-section">
-        <div className="fy-section-header">
-          <div className="fy-section-icon">👥</div>
-          <h2>Connect with Influencers</h2>
-          <div className="fy-section-divider"></div>
-        </div>
-        
-        <div className="fy-influencers-carousel">
-          <div className="fy-influencer-card">
-            <div className="fy-influencer-header">
-              <h3>Connect with Miks</h3>
-            </div>
-            <div className="fy-influencer-content">
-              <p>Miks (@bodybymiks) has 15.3k followers on Instagram with 9.22% engagement. Consider collaborating for your campaign.</p>
-            </div>
-          </div>
-          
-          <div className="fy-influencer-card">
-            <div className="fy-influencer-header">
-              <h3>Connect with Andréa Zoe</h3>
-            </div>
-            <div className="fy-influencer-content">
-              <p>Andréa Zoe (@andreasinfluencingyou) has 13.9k followers on Instagram with 8% engagement. Consider collaborating for your campaign.</p>
-            </div>
-          </div>
-          
-          <div className="fy-influencer-card">
-            <div className="fy-influencer-header">
-              <h3>Connect with Abibat</h3>
-            </div>
-            <div className="fy-influencer-content">
-              <p>Abibat (Natural Hair) (@abs.tract_) has 43k followers on Instagram with 6% engagement. Consider collaborating for your campaign.</p>
-            </div>
-          </div>
-          
-          <div className="fy-influencer-card">
-            <div className="fy-influencer-header">
-              <h3>Connect with Milly Mason</h3>
-            </div>
-            <div className="fy-influencer-content">
-              <p>Milly Mason (@millymason_) has 19k followers on Instagram with 6% engagement. Consider collaborating for your campaign.</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Action Buttons */}
       <div className="fy-action-buttons fy-scroll-section" ref={actionsRef}>
