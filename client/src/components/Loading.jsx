@@ -482,16 +482,17 @@ useEffect(() => {
       const multiplier = progress < 33 ? 1 : progress < 66 ? 2 : 3;
       
       return {
-        // Add larger increments and ensure they're never zero
-        dataPoints: prev.dataPoints + Math.floor(Math.random() * 1200 * multiplier + 200),
-        scenarios: prev.scenarios + Math.floor(Math.random() * 4 * multiplier + 2),
-        optimizations: prev.optimizations + Math.floor(Math.random() * 2 * multiplier + 2)
+        // More believable increments
+        dataPoints: prev.dataPoints + Math.floor(Math.random() * 200 * multiplier + 50),
+        scenarios: prev.scenarios + Math.floor(Math.random() * 2 * multiplier + 1),
+        optimizations: prev.optimizations + Math.floor(Math.random() * 3 * multiplier + 1)
       };
     });
-  }, 1200); // Faster update frequency (was 2000)
+  }, 1200); // Faster update frequency
   
   return () => clearInterval(metricsInterval);
 }, []);
+  
   // Check for micro-achievements
   useEffect(() => {
     const achievement = microAchievements.find(
