@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './CampaignResults.module.css';
+import './CampaignResults.css'; // Changed to regular CSS
 import NavBar from './NavBar';
 import Lottie from 'react-lottie';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Import your Lottie animations
+// Import animations
 import brandingAnimation from '../assets/animations/branding-lottie.json';
 import confettiAnimation from '../assets/animations/confetti.json';
 import rocketAnimation from '../assets/animations/rocket.json';
@@ -16,7 +16,7 @@ import errorAnimation from '../assets/animations/error-icon.json';
 import targetAnimation from '../assets/animations/target-audience.json';
 import guidanceAnimation from '../assets/animations/guidance.json';
 
-// Platform colors with enhanced palette - more vibrant for dark theme
+// Platform colors with enhanced palette
 const platformColors = {
   Instagram: '#E1306C',
   Facebook: '#4267B2',
@@ -25,6 +25,41 @@ const platformColors = {
   YouTube: '#FF0000',
   TikTok: '#EE1D52',
   Default: '#FF7D00', // Signature orange
+};
+
+// Animation variants for framer motion
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { 
+    y: 0, 
+    opacity: 1,
+    transition: { type: 'spring', stiffness: 100 }
+  }
+};
+
+const cardVariants = {
+  hidden: { scale: 0.9, opacity: 0 },
+  visible: { 
+    scale: 1, 
+    opacity: 1,
+    transition: { type: 'spring', stiffness: 100 }
+  },
+  hover: {
+    scale: 1.05,
+    boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.15)",
+    transition: { duration: 0.3 }
+  }
 };
 
 // Use environment variable for API base URL, fallback to localhost if not defined
@@ -259,41 +294,6 @@ function CampaignResults() {
     };
   };
 
-  // Animation variants for framer-motion
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { 
-      y: 0, 
-      opacity: 1,
-      transition: { type: 'spring', stiffness: 100 }
-    }
-  };
-
-  const cardVariants = {
-    hidden: { scale: 0.9, opacity: 0 },
-    visible: { 
-      scale: 1, 
-      opacity: 1,
-      transition: { type: 'spring', stiffness: 100 }
-    },
-    hover: {
-      scale: 1.05,
-      boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.15)",
-      transition: { duration: 0.3 }
-    }
-  };
-
   return (
     <div className="campaign-results-container">
       <NavBar />
@@ -316,7 +316,7 @@ function CampaignResults() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h1 className="campaign-title">{campaign.name || 'Campaign Results'}</h1>
+        <h1 className="campaign-title">{campaign.name || 'Amplify Plan (AI)'}</h1>
         <div className="campaign-brief">
           <p>{campaign.description || 'Your campaign insights and analytics'}</p>
         </div>

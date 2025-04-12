@@ -1,4 +1,4 @@
-/* CampaignResults.module.css */
+/* CampaignResults.css */
 /* Dark theme with orange, navy, blue and cream accents */
 
 :root {
@@ -62,6 +62,7 @@ h2.section-title {
   min-height: 50vh;
   text-align: center;
   padding: 2rem;
+  background: var(--primary-bg);
 }
 
 .loading-text {
