@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './SimplifiedCampaignResults.css';
+import './CampaignResults.css';
 import NavBar from './NavBar';
 
 // Platform colors with enhanced palette
@@ -18,7 +18,7 @@ const platformColors = {
 // Use environment variable for API base URL, fallback to localhost if not defined
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
-function SimplifiedCampaignResults() {
+function CampaignResults() {
   const navigate = useNavigate();
   const [campaign, setCampaign] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -611,4 +611,4 @@ function SimplifiedCampaignResults() {
   );
 }
 
-export default SimplifiedCampaignResults;
+export default CampaignResults;
