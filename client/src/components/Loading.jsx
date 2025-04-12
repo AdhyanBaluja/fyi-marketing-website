@@ -483,9 +483,9 @@ useEffect(() => {
       
       return {
         // Add larger increments and ensure they're never zero
-        dataPoints: prev.dataPoints + Math.floor(Math.random() * 12000 * multiplier + 2000),
-        scenarios: prev.scenarios + Math.floor(Math.random() * 40 * multiplier + 8),
-        optimizations: prev.optimizations + Math.floor(Math.random() * 95 * multiplier + 15)
+        dataPoints: prev.dataPoints + Math.floor(Math.random() * 1200 * multiplier + 200),
+        scenarios: prev.scenarios + Math.floor(Math.random() * 4 * multiplier + 2),
+        optimizations: prev.optimizations + Math.floor(Math.random() * 2 * multiplier + 2)
       };
     });
   }, 1200); // Faster update frequency (was 2000)
@@ -699,19 +699,19 @@ useEffect(() => {
     <div className="metric-value">{formatNumber(processingMetrics.dataPoints)}</div>
     <div className="metric-label">Data Points Analyzed</div>
     {/* Lower the denominator to make the bar fill faster */}
-    <div className="metric-bar" style={{width: `${Math.min(processingMetrics.dataPoints / 50000 * 100, 100)}%`}}></div>
+    <div className="metric-bar" style={{width: `${Math.min(processingMetrics.dataPoints / 500000 * 100, 100)}%`}}></div>
   </div>
   <div className="metric">
     <div className="metric-value">{formatNumber(processingMetrics.scenarios)}</div>
     <div className="metric-label">Scenarios Evaluated</div>
     {/* Lower the denominator to make the bar fill faster */}
-    <div className="metric-bar" style={{width: `${Math.min(processingMetrics.scenarios / 200 * 100, 100)}%`}}></div>
+    <div className="metric-bar" style={{width: `${Math.min(processingMetrics.scenarios / 2000 * 100, 100)}%`}}></div>
   </div>
   <div className="metric">
     <div className="metric-value">{formatNumber(processingMetrics.optimizations)}</div>
     <div className="metric-label">Optimizations Applied</div>
     {/* Lower the denominator to make the bar fill faster */}
-    <div className="metric-bar" style={{width: `${Math.min(processingMetrics.optimizations / 400 * 100, 100)}%`}}></div>
+    <div className="metric-bar" style={{width: `${Math.min(processingMetrics.optimizations / 4000 * 100, 100)}%`}}></div>
   </div>
 </div>
           
