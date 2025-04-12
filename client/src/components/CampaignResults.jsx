@@ -26,8 +26,10 @@ function CampaignResults() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
   const [notificationType, setNotificationType] = useState('');
+  const [animatedSections, setAnimatedSections] = useState({});
   
   // Refs for scroll animations
+  const heroRef = useRef(null);
   const metricsRef = useRef(null);
   const calendarRef = useRef(null);
   const bingoRef = useRef(null);
@@ -50,33 +52,55 @@ function CampaignResults() {
   // Setup intersection observer for scroll animations
   useEffect(() => {
     if (!loading && campaign) {
-      const options = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-      };
-      
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('fy-appear');
-          }
-        });
-      }, options);
-      
-      const sections = [metricsRef, calendarRef, bingoRef, adviceRef, actionsRef];
-      sections.forEach(section => {
-        if (section.current) {
-          observer.observe(section.current);
-        }
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setAnimatedSections(prev => ({
+                ...prev,
+                [entry.target.id]: true
+              }));
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -100px 0px" }
+      );
+
+      const sections = document.querySelectorAll('.animate-on-scroll');
+      sections.forEach((section) => {
+        observer.observe(section);
       });
-      
+
       return () => {
-        sections.forEach(section => {
-          if (section.current) {
-            observer.unobserve(section.current);
-          }
+        sections.forEach((section) => {
+          observer.unobserve(section);
         });
       };
+    }
+  }, [loading, campaign]);
+
+  // Background animation elements
+  useEffect(() => {
+    if (!loading && campaign) {
+      // Create particles
+      const container = document.querySelector('.campaign-results-background');
+      if (container) {
+        for (let i = 0; i < 50; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'background-particle';
+          
+          // Random position, size and animation delay
+          const size = Math.random() * 4 + 1;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.left = `${Math.random() * 100}vw`;
+          particle.style.top = `${Math.random() * 100}vh`;
+          particle.style.animationDelay = `${Math.random() * 10}s`;
+          particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+          
+          container.appendChild(particle);
+        }
+      }
     }
   }, [loading, campaign]);
 
@@ -196,41 +220,30 @@ function CampaignResults() {
 
   if (loading) {
     return (
-      <div className="fy-loading-container">
-        <div className="fy-pulse-loader">
-          <div className="fy-pulse-circle"></div>
-          <div className="fy-pulse-circle"></div>
-          <div className="fy-pulse-circle"></div>
+      <div className="loading-container">
+        <div className="loading-spinner">
+          <div className="spinner-circle"></div>
+          <div className="spinner-circle"></div>
+          <div className="spinner-circle"></div>
         </div>
-        <div className="fy-loading-text">
-          <span>L</span>
-          <span>o</span>
-          <span>a</span>
-          <span>d</span>
-          <span>i</span>
-          <span>n</span>
-          <span>g</span>
-          <span>.</span>
-          <span>.</span>
-          <span>.</span>
-        </div>
+        <h2 className="loading-text">Loading your campaign insights...</h2>
       </div>
     );
   }
   
   if (errorMsg) {
     return (
-      <div className="fy-error-container">
-        <div className="fy-error-icon">
+      <div className="error-container">
+        <div className="error-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="10" stroke="#f44336" strokeWidth="2"/>
             <path d="M12 7V13" stroke="#f44336" strokeWidth="2" strokeLinecap="round"/>
             <circle cx="12" cy="16" r="1" fill="#f44336"/>
           </svg>
         </div>
-        <p className="fy-error-message">{errorMsg}</p>
+        <p className="error-message">{errorMsg}</p>
         <button 
-          className="fy-retry-button"
+          className="retry-button"
           onClick={() => fetchCampaign(campaignId)}
         >
           Try Again
@@ -241,8 +254,8 @@ function CampaignResults() {
   
   if (!campaign) {
     return (
-      <div className="fy-no-campaign-container">
-        <div className="fy-empty-state-icon">
+      <div className="no-campaign-container">
+        <div className="empty-state-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#FF7D00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M2 17L12 22L22 17" stroke="#FF7D00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -251,7 +264,7 @@ function CampaignResults() {
         </div>
         <h2>No campaign found.</h2>
         <button 
-          className="fy-create-campaign-button"
+          className="create-campaign-button"
           onClick={() => navigate('/create-campaign')}
         >
           Create a New Campaign
@@ -292,13 +305,19 @@ function CampaignResults() {
   };
 
   return (
-    <div className="fy-campaign-results-container">
+    <div className="campaign-results-container">
       <NavBar />
       
+      {/* Animated Background */}
+      <div className="campaign-results-background">
+        <div className="bg-gradient-overlay"></div>
+        <div className="bg-grid"></div>
+      </div>
+      
       {/* Toast Notification */}
-      <div className={`fy-toast-notification ${showNotification ? 'show' : ''} ${notificationType}`}>
-        <div className="fy-toast-content">
-          <div className="fy-toast-icon">
+      <div className={`toast-notification ${showNotification ? 'show' : ''} ${notificationType}`}>
+        <div className="toast-content">
+          <div className="toast-icon">
             {notificationType === 'success' ? (
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
@@ -312,37 +331,37 @@ function CampaignResults() {
               </svg>
             )}
           </div>
-          <span className="fy-toast-message">{notificationMessage}</span>
+          <span className="toast-message">{notificationMessage}</span>
         </div>
       </div>
 
       {/* Hero Section with Campaign Title */}
-      <div className="fy-campaign-hero">
-        <div className="fy-hero-background">
-          <div className="fy-hero-wave"></div>
-          <div className="fy-hero-glow"></div>
-        </div>
-        <div className="fy-hero-content">
-          <h1 className="fy-campaign-title">
-            <span className="fy-title-word">amplify</span> 
-            <span className="fy-title-word">Plan</span> 
-            <span className="fy-title-word">(AI)</span>
+      <div id="hero-section" ref={heroRef} className="campaign-hero animate-on-scroll">
+        <div className="hero-content">
+          <h1 className="campaign-title">
+            <span className="title-gradient">amplify</span> 
+            <span className="title-gradient">Plan</span> 
+            <span className="title-gradient">(AI)</span>
           </h1>
-          <div className="fy-campaign-brief">
-            <p>{campaign.description || 'Your campaign insights and analytics'}</p>
+          <div className="campaign-brief">
+            <p>Your campaign insights and analytics</p>
           </div>
           {isActive && (
-            <div className="fy-active-badge">
+            <div className="active-badge">
               <span>ACTIVE</span>
             </div>
           )}
+        </div>
+        <div className="hero-decoration">
+          <div className="hero-circle"></div>
+          <div className="hero-wave"></div>
         </div>
       </div>
 
       {/* Ephemeral images notice */}
       {showImageNotice && (
-        <div className="fy-image-notice">
-          <div className="fy-notice-icon">
+        <div className="image-notice">
+          <div className="notice-icon">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#FFA726" strokeWidth="2"/>
               <path d="M12 8V12" stroke="#FFA726" strokeWidth="2" strokeLinecap="round"/>
@@ -355,7 +374,7 @@ function CampaignResults() {
           </p>
           <button 
             onClick={() => setShowImageNotice(false)}
-            className="fy-notice-button"
+            className="notice-button"
           >
             Got it
           </button>
@@ -363,10 +382,10 @@ function CampaignResults() {
       )}
 
       {/* Top metrics */}
-      <div className="fy-metrics-section fy-scroll-section" ref={metricsRef}>
-        <div className="fy-metric-card">
-          <div className="fy-metric-icon">
-            <svg className="fy-icon-rocket" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div id="metrics-section" ref={metricsRef} className="metrics-section animate-on-scroll">
+        <div className="metric-card">
+          <div className="metric-icon">
+            <svg className="icon-pulse" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M22 2L12 12M22 2H17M22 2V7" stroke="#FF7D00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M22 19C22 19.5523 21.5523 20 21 20H3C2.44772 20 2 19.5523 2 19V5C2 4.44772 2.44772 4 3 4H10" stroke="#FF7D00" strokeWidth="2" strokeLinecap="round"/>
               <path d="M18 14V20" stroke="#FF7D00" strokeWidth="2" strokeLinecap="round"/>
@@ -376,64 +395,76 @@ function CampaignResults() {
             </svg>
           </div>
           <h3>Total Calendar Events</h3>
-          <div className="fy-metric-value-container">
-            <p className="fy-metric-value">{totalEvents}</p>
+          <div className="metric-value-container">
+            <p className="metric-value">{totalEvents}</p>
           </div>
         </div>
         
-        <div className="fy-metric-card">
-          <div className="fy-metric-icon">
-            <svg className="fy-icon-target" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="metric-card">
+          <div className="metric-icon">
+            <svg className="icon-pulse" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="10" stroke="#1DA1F2" strokeWidth="2"/>
               <circle cx="12" cy="12" r="6" stroke="#1DA1F2" strokeWidth="2"/>
               <circle cx="12" cy="12" r="2" stroke="#1DA1F2" strokeWidth="2"/>
             </svg>
           </div>
           <h3>Bingo Suggestions</h3>
-          <div className="fy-metric-value-container">
-            <p className="fy-metric-value">{bingoSuggestions.length}</p>
+          <div className="metric-value-container">
+            <p className="metric-value">{bingoSuggestions.length}</p>
           </div>
         </div>
         
-        <div className="fy-metric-card">
-          <div className="fy-metric-icon">
-            <svg className="fy-icon-advice" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="metric-card">
+          <div className="metric-icon">
+            <svg className="icon-pulse" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="#0A66C2"/>
               <path d="M12 17a1 1 0 100-2 1 1 0 000 2z" fill="#0A66C2"/>
               <path d="M12 14c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .55.45 1 1 1z" fill="#0A66C2"/>
             </svg>
           </div>
           <h3>Advice Tips</h3>
-          <div className="fy-metric-value-container">
-            <p className="fy-metric-value">{moreAdvice.length}</p>
+          <div className="metric-value-container">
+            <p className="metric-value">{moreAdvice.length}</p>
           </div>
         </div>
         
-        <div className="fy-metric-card">
-          <div className="fy-metric-icon">
-            <svg className={`fy-icon-status ${isActive ? 'active' : ''}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="metric-card">
+          <div className="metric-icon">
+            <svg className={`icon-pulse ${isActive ? 'active' : ''}`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9 12L11 14L15 10" stroke={isActive ? "#4CAF50" : "#FF7D00"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <circle cx="12" cy="12" r="10" stroke={isActive ? "#4CAF50" : "#FF7D00"} strokeWidth="2"/>
             </svg>
           </div>
           <h3>Status</h3>
-          <div className="fy-metric-value-container">
-            <p className="fy-metric-value fy-status-value">{campaign.status || 'Draft'}</p>
+          <div className="metric-value-container">
+            <p className="metric-value status-value">{campaign.status || 'Draft'}</p>
           </div>
         </div>
       </div>
 
       {/* Calendar */}
-      <div className="fy-calendar-section fy-scroll-section" ref={calendarRef}>
-        <div className="fy-section-header">
-          <h2>Campaign Calendar</h2>
-          <div className="fy-section-divider"></div>
+      <div id="calendar-section" ref={calendarRef} className="calendar-section animate-on-scroll">
+        <div className="section-header">
+          <div className="section-title-group">
+            <div className="section-icon calendar-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="18" height="18" rx="2" stroke="#FF7D00" strokeWidth="2"/>
+                <path d="M3 10H21" stroke="#FF7D00" strokeWidth="2"/>
+                <path d="M16 2L16 6" stroke="#FF7D00" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M8 2L8 6" stroke="#FF7D00" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <h2>Campaign Calendar</h2>
+          </div>
+          <div className="section-divider"></div>
         </div>
         
-        <div className="fy-calendar-container">
-          <div className="fy-calendar-header">
-            <button onClick={handlePrevMonth} className="fy-month-btn">
-              &lt;
+        <div className="calendar-container">
+          <div className="calendar-header">
+            <button onClick={handlePrevMonth} className="month-btn">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 6L9 12L15 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </button>
             <h3>
               {new Date(currentYear, currentMonth).toLocaleString('default', {
@@ -441,21 +472,23 @@ function CampaignResults() {
                 year: 'numeric',
               })}
             </h3>
-            <button onClick={handleNextMonth} className="fy-month-btn">
-              &gt;
+            <button onClick={handleNextMonth} className="month-btn">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </button>
           </div>
 
-          <div className="fy-weekday-header">
+          <div className="weekday-header">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-              <div key={day} className="fy-weekday-cell">{day}</div>
+              <div key={day} className="weekday-cell">{day}</div>
             ))}
           </div>
 
-          <div className="fy-calendar-grid">
+          <div className="calendar-grid">
             {/* Empty cells for days of the week before the 1st of the month */}
             {Array.from({ length: firstDayOfMonth }).map((_, idx) => (
-              <div key={`empty-${idx}`} className="fy-calendar-day empty"></div>
+              <div key={`empty-${idx}`} className="calendar-day empty"></div>
             ))}
             
             {/* Actual days of the month */}
@@ -468,18 +501,18 @@ function CampaignResults() {
               return (
                 <div
                   key={day}
-                  className={`fy-calendar-day ${dayEvents.length > 0 ? 'has-event' : ''} ${isSelected ? 'selected' : ''}`}
+                  className={`calendar-day ${dayEvents.length > 0 ? 'has-event' : ''} ${isSelected ? 'selected' : ''}`}
                   style={{ background: bgColor, color: fontColor }}
                   onClick={() => handleDayClick(day)}
                 >
-                  <span className="fy-day-number">{day}</span>
+                  <span className="day-number">{day}</span>
                   {dayEvents.length === 1 && (
-                    <div className="fy-event-title">
+                    <div className="event-title">
                       {dayEvents[0].event || 'No Title'}
                     </div>
                   )}
                   {dayEvents.length > 1 && (
-                    <div className="fy-event-title">
+                    <div className="event-title">
                       {dayEvents.length} events
                     </div>
                   )}
@@ -492,12 +525,22 @@ function CampaignResults() {
 
       {/* Day Details */}
       {selectedDayEvents.length > 0 && (
-        <div className="fy-day-details">
-          <div className="fy-section-header">
-            <h2>Day Details</h2>
-            <div className="fy-section-divider"></div>
+        <div className="day-details">
+          <div className="section-header">
+            <div className="section-title-group">
+              <div className="section-icon details-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="3" width="18" height="18" rx="2" stroke="#0A66C2" strokeWidth="2"/>
+                  <path d="M7 9H17" stroke="#0A66C2" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M7 12H17" stroke="#0A66C2" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M7 15H13" stroke="#0A66C2" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <h2>Day Details</h2>
+            </div>
+            <div className="section-divider"></div>
           </div>
-          <div className="fy-day-events-container">
+          <div className="day-events-container">
             {selectedDayEvents.map((ev, i) => {
               const ctaVal =
                 typeof ev.cta === 'object' ? JSON.stringify(ev.cta) : ev.cta;
@@ -522,24 +565,24 @@ function CampaignResults() {
               return (
                 <div 
                   key={i} 
-                  className="fy-day-event-card"
+                  className="day-event-card"
                   style={{ borderLeft: `4px solid ${platformColor}` }}
                 >
-                  <div className="fy-event-date-header" style={{ background: `linear-gradient(to right, ${platformColor}20, transparent)` }}>
+                  <div className="event-date-header" style={{ background: `linear-gradient(to right, ${platformColor}20, transparent)` }}>
                     <h4>{ev.date}</h4>
                   </div>
-                  <div className="fy-event-content">
+                  <div className="event-content">
                     <p>
                       <strong>Event/Content:</strong> {ev.event || 'No event text'}
                     </p>
                     {Array.isArray(ev.platforms) && ev.platforms.length > 0 && (
                       <p>
                         <strong>Platforms:</strong>
-                        <div className="fy-platform-tags">
+                        <div className="platform-tags">
                           {ev.platforms.map(platform => (
                             <span 
                               key={platform} 
-                              className="fy-platform-tag"
+                              className="platform-tag"
                               style={{ background: platformColors[platform] || platformColors.Default }}
                             >
                               {platform}
@@ -572,17 +615,19 @@ function CampaignResults() {
       )}
 
       {/* Bingo Suggestions */}
-      <div className="fy-bingo-section fy-scroll-section" ref={bingoRef}>
-        <div className="fy-section-header">
-          <div className="fy-section-icon">🎯</div>
-          <h2>Bingo Suggestions</h2>
-          <div className="fy-section-divider"></div>
+      <div id="bingo-section" ref={bingoRef} className="bingo-section animate-on-scroll">
+        <div className="section-header">
+          <div className="section-title-group">
+            <div className="section-icon">🎯</div>
+            <h2>Bingo Suggestions</h2>
+          </div>
+          <div className="section-divider"></div>
         </div>
         
         {!bingoSuggestions.length ? (
-          <p className="fy-empty-state">No suggestions found.</p>
+          <p className="empty-state">No suggestions found.</p>
         ) : (
-          <div className="fy-bingo-cards">
+          <div className="bingo-cards">
             {bingoSuggestions.map((bingo, i) => {
               const suggestionVal =
                 typeof bingo.suggestion === 'object'
@@ -595,34 +640,34 @@ function CampaignResults() {
               return (
                 <div 
                   key={i} 
-                  className="fy-bingo-card"
+                  className="bingo-card"
                   style={{ animationDelay: `${i * 0.1}s` }}
                 >
                   {bingo.imageUrl ? (
-                    <div className="fy-bingo-image-container">
+                    <div className="bingo-image-container">
                       <img
                         src={bingo.imageUrl}
                         alt={suggestionVal}
-                        className="fy-bingo-card-image"
+                        className="bingo-card-image"
                         loading="lazy"
                       />
-                      <div className="fy-image-overlay">
-                        <div className="fy-overlay-text">{suggestionVal}</div>
+                      <div className="image-overlay">
+                        <div className="overlay-text">{suggestionVal}</div>
                       </div>
                     </div>
                   ) : (
-                    <div className="fy-bingo-image-container placeholder">
-                      <div className="fy-placeholder-icon">
+                    <div className="bingo-image-container placeholder">
+                      <div className="placeholder-icon">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M18 13V19M18 16H13M12 21H6C4.89543 21 4 20.1046 4 19V5C4 3.89543 4.89543 3 6 3H18C19.1046 3 20 3.89543 20 5V12" stroke="#FF7D00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           <path d="M4 16.5L7 14L10 16.5" stroke="#FF7D00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           <path d="M8.5 9C8.5 9.82843 7.82843 10.5 7 10.5C6.17157 10.5 5.5 9.82843 5.5 9C5.5 8.17157 6.17157 7.5 7 7.5C7.82843 7.5 8.5 8.17157 8.5 9Z" stroke="#FF7D00" strokeWidth="2"/>
                         </svg>
                       </div>
-                      <div className="fy-overlay-text">{suggestionVal}</div>
+                      <div className="overlay-text">{suggestionVal}</div>
                     </div>
                   )}
-                  <div className="fy-bingo-card-content">
+                  <div className="bingo-card-content">
                     <h3>{suggestionVal}</h3>
                     <p>{strategyVal}</p>
                   </div>
@@ -634,17 +679,19 @@ function CampaignResults() {
       </div>
 
       {/* More Advice */}
-      <div className="fy-more-advice-section fy-scroll-section" ref={adviceRef}>
-        <div className="fy-section-header">
-          <div className="fy-section-icon">💡</div>
-          <h2>Additional Advice</h2>
-          <div className="fy-section-divider"></div>
+      <div id="advice-section" ref={adviceRef} className="advice-section animate-on-scroll">
+        <div className="section-header">
+          <div className="section-title-group">
+            <div className="section-icon">💡</div>
+            <h2>Additional Advice</h2>
+          </div>
+          <div className="section-divider"></div>
         </div>
         
         {!moreAdvice.length ? (
-          <p className="fy-empty-state">No additional advice found.</p>
+          <p className="empty-state">No additional advice found.</p>
         ) : (
-          <div className="fy-advice-list">
+          <div className="advice-list">
             {moreAdvice.map((advice, i) => {
               // Attempt to parse advice if it's a JSON string
               let adviceData = null;
@@ -668,16 +715,16 @@ function CampaignResults() {
                 return (
                   <div 
                     key={i} 
-                    className="fy-advice-item"
+                    className="advice-item"
                     style={{ animationDelay: `${i * 0.1}s` }}
                   >
-                    <div className="fy-advice-icon">
+                    <div className="advice-icon">
                       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#0A66C2" strokeWidth="2"/>
                         <path d="M12 8V12L14 14" stroke="#0A66C2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
-                    <div className="fy-advice-content">
+                    <div className="advice-content">
                       <h4>{adviceData.title || 'Untitled Advice'}</h4>
                       <p>{adviceData.description || 'No description provided.'}</p>
                     </div>
@@ -688,16 +735,16 @@ function CampaignResults() {
                 return (
                   <div 
                     key={i} 
-                    className="fy-advice-item"
+                    className="advice-item"
                     style={{ animationDelay: `${i * 0.1}s` }}
                   >
-                    <div className="fy-advice-icon">
+                    <div className="advice-icon">
                       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#0A66C2" strokeWidth="2"/>
                         <path d="M12 8V12L14 14" stroke="#0A66C2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
-                    <div className="fy-advice-content">
+                    <div className="advice-content">
                       <h4>Note</h4>
                       <p>
                         {typeof advice === 'object'
@@ -714,60 +761,138 @@ function CampaignResults() {
       </div>
 
       {/* Connect with Influencers Section */}
-      <div className="fy-influencers-section fy-scroll-section">
-        <div className="fy-section-header">
-          <div className="fy-section-icon">👥</div>
-          <h2>Connect with Influencers</h2>
-          <div className="fy-section-divider"></div>
+      <div id="influencers-section" ref={adviceRef} className="influencers-section animate-on-scroll">
+        <div className="section-header">
+          <div className="section-title-group">
+            <div className="section-icon">👥</div>
+            <h2>Connect with Influencers</h2>
+          </div>
+          <div className="section-divider"></div>
         </div>
         
-        <div className="fy-influencers-carousel">
-          <div className="fy-influencer-card">
-            <div className="fy-influencer-header">
-              <h3>Connect with Miks</h3>
+        <div className="influencers-carousel">
+          <div className="influencer-card">
+            <div className="influencer-profile">
+              <div className="influencer-avatar">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="8" r="4" stroke="#1DA1F2" strokeWidth="2"/>
+                  <path d="M20 19C20 16.2386 16.4183 14 12 14C7.58172 14 4 16.2386 4 19" stroke="#1DA1F2" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div className="influencer-header">
+                <h3>Connect with Miks</h3>
+              </div>
             </div>
-            <div className="fy-influencer-content">
+            <div className="influencer-content">
+              <div className="influencer-stats">
+                <div className="stat-item">
+                  <span className="stat-value">15.3k</span>
+                  <span className="stat-label">Followers</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">9.22%</span>
+                  <span className="stat-label">Engagement</span>
+                </div>
+              </div>
               <p>Miks (@bodybymiks) has 15.3k followers on Instagram with 9.22% engagement. Consider collaborating for your campaign.</p>
+              <button className="connect-button">Connect Now</button>
             </div>
           </div>
           
-          <div className="fy-influencer-card">
-            <div className="fy-influencer-header">
-              <h3>Connect with Andréa Zoe</h3>
+          <div className="influencer-card">
+            <div className="influencer-profile">
+              <div className="influencer-avatar">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="8" r="4" stroke="#1DA1F2" strokeWidth="2"/>
+                  <path d="M20 19C20 16.2386 16.4183 14 12 14C7.58172 14 4 16.2386 4 19" stroke="#1DA1F2" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div className="influencer-header">
+                <h3>Connect with Andréa Zoe</h3>
+              </div>
             </div>
-            <div className="fy-influencer-content">
+            <div className="influencer-content">
+              <div className="influencer-stats">
+                <div className="stat-item">
+                  <span className="stat-value">13.9k</span>
+                  <span className="stat-label">Followers</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">8%</span>
+                  <span className="stat-label">Engagement</span>
+                </div>
+              </div>
               <p>Andréa Zoe (@andreasinfluencingyou) has 13.9k followers on Instagram with 8% engagement. Consider collaborating for your campaign.</p>
+              <button className="connect-button">Connect Now</button>
             </div>
           </div>
           
-          <div className="fy-influencer-card">
-            <div className="fy-influencer-header">
-              <h3>Connect with Abibat</h3>
+          <div className="influencer-card">
+            <div className="influencer-profile">
+              <div className="influencer-avatar">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="8" r="4" stroke="#1DA1F2" strokeWidth="2"/>
+                  <path d="M20 19C20 16.2386 16.4183 14 12 14C7.58172 14 4 16.2386 4 19" stroke="#1DA1F2" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div className="influencer-header">
+                <h3>Connect with Abibat</h3>
+              </div>
             </div>
-            <div className="fy-influencer-content">
+            <div className="influencer-content">
+              <div className="influencer-stats">
+                <div className="stat-item">
+                  <span className="stat-value">43k</span>
+                  <span className="stat-label">Followers</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">6%</span>
+                  <span className="stat-label">Engagement</span>
+                </div>
+              </div>
               <p>Abibat (Natural Hair) (@abs.tract_) has 43k followers on Instagram with 6% engagement. Consider collaborating for your campaign.</p>
+              <button className="connect-button">Connect Now</button>
             </div>
           </div>
           
-          <div className="fy-influencer-card">
-            <div className="fy-influencer-header">
-              <h3>Connect with Milly Mason</h3>
+          <div className="influencer-card">
+            <div className="influencer-profile">
+              <div className="influencer-avatar">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="8" r="4" stroke="#1DA1F2" strokeWidth="2"/>
+                  <path d="M20 19C20 16.2386 16.4183 14 12 14C7.58172 14 4 16.2386 4 19" stroke="#1DA1F2" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div className="influencer-header">
+                <h3>Connect with Milly Mason</h3>
+              </div>
             </div>
-            <div className="fy-influencer-content">
+            <div className="influencer-content">
+              <div className="influencer-stats">
+                <div className="stat-item">
+                  <span className="stat-value">19k</span>
+                  <span className="stat-label">Followers</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">6%</span>
+                  <span className="stat-label">Engagement</span>
+                </div>
+              </div>
               <p>Milly Mason (@millymason_) has 19k followers on Instagram with 6% engagement. Consider collaborating for your campaign.</p>
+              <button className="connect-button">Connect Now</button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="fy-action-buttons fy-scroll-section" ref={actionsRef}>
+      <div id="action-section" ref={actionsRef} className="action-buttons animate-on-scroll">
         {!isActive && (
           <button 
             onClick={handleActivateCampaign} 
-            className="fy-activate-button"
+            className="activate-button"
           >
-            <div className="fy-button-icon">
+            <div className="button-icon">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -777,9 +902,9 @@ function CampaignResults() {
         )}
         <button 
           onClick={handleDelete} 
-          className="fy-delete-button"
+          className="delete-button"
         >
-          <div className="fy-button-icon">
+          <div className="button-icon">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -788,9 +913,9 @@ function CampaignResults() {
         </button>
         <button 
           onClick={handleFindInfluencers} 
-          className="fy-find-button"
+          className="find-button"
         >
-          <div className="fy-button-icon">
+          <div className="button-icon">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
