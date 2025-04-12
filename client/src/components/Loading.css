@@ -1,4 +1,5 @@
-/* Loading.css */
+
+/* EnhancedPremiumAILoading.css */
 /* World-class premium enterprise loading experience with enhanced visuals and animations */
 
 :root {
@@ -66,23 +67,32 @@ body {
   overflow-x: hidden;
 }
 
-/* Main container with enhanced background effects */
+/* Optimize the background for better performance */
 .premium-loading-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-  background-color: var(--premium-bg);
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(0, 98, 255, 0.05), transparent 30%),
-    radial-gradient(circle at 90% 80%, rgba(255, 125, 0, 0.05), transparent 30%),
-    linear-gradient(to bottom, var(--premium-bg), rgba(10, 17, 32, 0.99));
+  background-color: #0a0f1e; /* Solid dark blue background for better performance */
   position: relative;
   overflow: hidden;
+  z-index: 0;
 }
 
-/* Neural network background */
+/* Alternative fixed background with subtle gradient */
+.premium-loading-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0a0f1e 0%, #131c36 100%);
+  z-index: -2;
+}
+
+/* Simplified neural network background for better performance */
 .neural-network-container {
   position: absolute;
   top: 0;
@@ -90,46 +100,210 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 0.4;
-  z-index: 0;
+  opacity: 0.3;
+  z-index: -1;
+  transform: translateZ(0); /* Force GPU acceleration */
+  will-change: transform; /* Hint for browser optimization */
 }
 
-.neural-network {
-  width: 100%;
-  height: 100%;
-}
-
-@keyframes dash {
-  to {
-    stroke-dashoffset: 1000;
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(0.8);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.8);
-    opacity: 0.5;
-  }
-}
-
-/* Particle words animation */
+/* Subtle star field background effect instead of particle words */
 .particle-words-container {
+  display: none; /* Remove the potentially laggy particle words */
+}
+
+/* Add subtle star field effect */
+.star-field {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: twinkle 4s infinite alternate;
+  will-change: opacity;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+/* Enhanced metrics display to always show non-zero values */
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(90deg, var(--primary-blue), var(--accent-teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  display: inline-block;
+  text-shadow: 0 2px 10px rgba(0, 98, 255, 0.2);
+}
+
+/* Ensure the progress percentage stands out more */
+.progress-percentage {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+  text-shadow: 0 0 8px rgba(79, 195, 247, 0.3);
+}
+
+/* Enhanced progress bar for more visibility */
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, var(--primary-blue), var(--accent-teal));
+  border-radius: 3px;
+  position: relative;
+  transition: width 0.3s ease-out;
+  transform-origin: left;
+  box-shadow: 0 0 15px rgba(0, 98, 255, 0.3);
+}
+
+/* Console optimization for faster typing display */
+.log-container {
+  font-family: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  height: 440px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: #a8b3cf;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+  position: relative;
+  z-index: 1;
+  padding: 0.5rem;
+  scrollbar-width: thin;
+  transform: translateZ(0); /* Force GPU acceleration */
+  will-change: transform;
+}
+
+/* Optimization for log lines to appear immediately for faster scrolling effect */
+.log-line {
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+  position: relative;
+  transform-origin: left;
+  opacity: 1; /* Always visible */
+  font-family: 'Consolas', 'SF Mono', 'Menlo', monospace;
+  padding-left: 0.25rem;
+  animation: none; /* Remove appear animation for speed */
+}
+
+/* Special styling for various types of log content for syntax highlighting effect */
+.log-content {
+  color: #4fc3f7; /* Default blue for most logs */
+}
+
+.log-content:contains("function") { color: #ce93d8; }
+.log-content:contains("const") { color: #ce93d8; }
+.log-content:contains("await") { color: #ce93d8; }
+.log-content:contains("class") { color: #ce93d8; }
+.log-content:contains("if") { color: #ce93d8; }
+.log-content:contains("for") { color: #ce93d8; }
+.log-content:contains("=>") { color: #80cbc4; }
+
+.log-content:contains("[DATA]") { color: #4fc3f7; }
+.log-content:contains("[ML]") { color: #b39ddb; }
+.log-content:contains("[CORE]") { color: #4db6ac; }
+.log-content:contains("[API]") { color: #ffb74d; }
+.log-content:contains("[ALGO]") { color: #7986cb; }
+.log-content:contains("[NLP]") { color: #ff8a65; }
+.log-content:contains("[SYS]") { color: #aed581; }
+.log-content:contains("[STAT]") { color: #4dd0e1; }
+.log-content:contains("[PERF]") { color: #dce775; }
+.log-content:contains("[SEC]") { color: #9575cd; }
+.log-content:contains("[DB]") { color: #f06292; }
+.log-content:contains("[UI]") { color: #90a4ae; }
+.log-content:contains("[TEST]") { color: #a1887f; }
+
+/* Insights styled like comments */
+.log-content:contains("/* Insight:") {
+  color: #FFC107;
+  border-left: 2px solid #FFC107;
+  padding-left: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+  display: block;
+}
+
+/* Enhanced logo for better appearance */
+.logo-circle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0062ff, #00b0ff);
+  position: relative;
+  margin-right: 15px;
+  box-shadow: 0 0 20px rgba(0, 98, 255, 0.5);
+  animation: logo-pulse 2s ease-in-out infinite alternate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+@keyframes logo-pulse {
+  0% {
+    box-shadow: 0 0 15px rgba(0, 98, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 25px rgba(0, 98, 255, 0.7);
+  }
+}
+
+.logo-inner-circle {
+  position: absolute;
+  width: 65%;
+  height: 65%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0f1525, #161f36);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.9;
   z-index: 1;
 }
+
+/* Star field for improved background performance */
+.star {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: twinkle 4s infinite alternate;
+  will-change: opacity;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.2;
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    opacity: 0.7;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+  }
+}
+
 
 .particle-word {
   position: absolute;

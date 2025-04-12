@@ -73,62 +73,58 @@ const simulatedProcessingLogs = [
   ">> Generating content calendar visualization..."
 ];
 
-// Enhanced terminal-style logs with more technical detail
-const enhancedProcessingLogs = [
-  ">> [AI Core] Initializing transformer architecture with 175B parameters...",
-  ">> [Data Module] Loading customer behavior vectors from 12 data sources...",
-  ">> [Algorithm] Applying recursive neural net to competitor dataset...",
-  ">> [Optimization] Running gradient descent on 145 variables...",
-  ">> [Benchmark] Comparing against 12,842 successful campaigns...",
-  ">> [NLP Engine] Processing sentiment analysis across 8 languages...",
-  ">> [ML Pipeline] Training on 1.2M content engagement patterns...",
-  ">> [Analytics] Generating predictive models with 94.7% accuracy...",
-  ">> [Integration] Mapping API connections to 23 marketing platforms...",
-  ">> [Security] Validating data compliance with GDPR/CCPA standards...",
-  ">> [Performance] Optimizing database queries for real-time analysis...",
-  ">> [Metrics] Calculating 87 KPIs across demographic segments...",
-  ">> [Visualization] Preparing interactive dashboard components...",
-  ">> [Strategy] Synthesizing content themes from audience signals...",
-  ">> [Testing] Simulating campaign performance across 14 scenarios...",
+// Technical logs with code-like syntax
+const technicalLogs = [
+  ">> [DATA] import.fetchBrandData(apiKey, sourceId) -> SUCCESS",
+  ">> [CORE] analyzer.processKeywords(data, config.nlp) -> 532 terms extracted",
+  ">> [ML] models.competitorAnalysis.train(marketData) -> r²: 0.897",
+  ">> [API] apis.socialPlatforms.connect() -> 8 connections established",
+  ">> [CALC] optimizer.calculateEngagementMetrics(audienceData) -> completed",
+  ">> [DB] database.marketBenchmarks.query({industry: client.industry}) -> 238 records",
+  ">> [ALGO] algorithms.contentStrategy.execute(brand, 3) -> generating...",
+  ">> [NLP] nlp.sentimentAnalysis.batch(feedbackData) -> pos:68% neg:18% neu:14%",
+  ">> [UI] renderer.prepareVisualization(dataset, 'engagement') -> initialized",
+  ">> [TEST] tester.validateStrategy({type: 'monteCarlo', n: 1000}) -> passed",
+  ">> [PERF] performance.optimizeResourceAllocation({budget: client.budget}) -> optimal",
+  ">> [SEC] security.validateCompliance(strategy, 'GDPR') -> compliant",
+  ">> [SYS] system.executeParallelProcessing(['audience', 'content', 'channels']) -> complete",
+  ">> [STAT] statistics.predictConversionRate(strategy) -> 4.8% (±0.3%)"
 ];
 
-// High-value insights with enhanced scientific backing
+// Code snippets for terminal
+const codeSnippets = [
+  ">> function optimizeContentMix(audience, goals) { return weighted_blend(types); }",
+  ">> ROI_projection = initial_investment * (1 + conversion_rate * avg_value - cost_basis);",
+  ">> engagement_score = (likes * 1) + (shares * 5) + (comments * 3) + (clicks * 2);",
+  ">> const optimal_times = audiences.reduce((acc, a) => [...acc, ...a.active_periods]);",
+  ">> if (sentiment_score > 0.7 && reach_potential > 5000) { recommend(content_type); }",
+  ">> channels.sort((a, b) => b.performance_index - a.performance_index).slice(0, 5);",
+  ">> keyword_density = primary_keywords.reduce((sum, kw) => sum + content.count(kw), 0);",
+  ">> conversion_funnel = stages.map(stage => { return {name: stage, rate: rates[stage]} });",
+  ">> class ContentStrategy extends BaseStrategy { constructor(brand) { super(); } }",
+  ">> const attribution = touchpoints.reduce((model, point) => model.add(point), new Model());"
+];
+
+// Inline insights for terminal
+const inlineInsights = [
+  "/* Insight: Top 5% of campaigns share consistent cross-platform messaging */",
+  "/* Insight: AI-driven targeting shows 42% better ROI than traditional methods */",
+  "/* Insight: Optimal posting frequency varies by platform and audience */",
+  "/* Insight: Customer sentiment analysis improves targeting precision by 37% */",
+  "/* Insight: Visual content generates 3.2x more engagement than text-only */",
+  "/* Insight: Synchronized multi-channel launches increase conversion by 28% */",
+  "/* Insight: Strategic hashtag usage can extend organic reach by up to 40% */"
+];
+
+// High-value insights
 const strategyInsights = [
-  { 
-    text: "Consistent multi-channel messaging increases conversion rates by 287% vs. single-channel approaches",
-    icon: "📊",
-    source: "Based on analysis of 1,250+ enterprise campaigns"
-  },
-  { 
-    text: "Businesses that implement AI-driven content strategies see 78% higher engagement than manual approaches", 
-    icon: "🧠",
-    source: "Derived from 3-year longitudinal study across 8 industries"
-  },
-  { 
-    text: "Personalized messaging based on behavioral data yields 49% higher response rates than demographic targeting alone", 
-    icon: "👤",
-    source: "Validated through A/B testing with 175M+ impressions"
-  },
-  { 
-    text: "Integrated marketing approaches reduce customer acquisition costs by 36% compared to siloed campaigns", 
-    icon: "💰",
-    source: "Analyzed from financial data of 500+ mid-market companies"
-  },
-  { 
-    text: "Strategic content calendars improve team efficiency by 42% while increasing content quality by 28%", 
-    icon: "📅",
-    source: "Measured across 230 marketing teams over 12 months"
-  },
-  { 
-    text: "Cross-platform optimization strategies increase audience reach by 64% with only 22% more resource investment", 
-    icon: "🌐",
-    source: "Calculated from resource allocation data of 120 companies"
-  },
-  { 
-    text: "AI-optimized posting schedules show a 52% improvement in organic engagement across all platforms", 
-    icon: "⏱️",
-    source: "Based on analysis of 87,000+ social media posts"
-  }
+  { text: "Consistent multi-channel messaging increases conversion rates by 287% vs. single-channel approaches", icon: "📊" },
+  { text: "Businesses that implement AI-driven content strategies see 78% higher engagement than manual approaches", icon: "🧠" },
+  { text: "Personalized messaging based on behavioral data yields 49% higher response rates than demographic targeting alone", icon: "👤" },
+  { text: "Integrated marketing approaches reduce customer acquisition costs by 36% compared to siloed campaigns", icon: "💰" },
+  { text: "Strategic content calendars improve team efficiency by 42% while increasing content quality by 28%", icon: "📅" },
+  { text: "Cross-platform optimization strategies increase audience reach by 64% with only 22% more resource investment", icon: "🌐" },
+  { text: "AI-optimized posting schedules show a 52% improvement in organic engagement across all platforms", icon: "⏱️" }
 ];
 
 // Micro achievements to trigger dopamine response
@@ -140,17 +136,6 @@ const microAchievements = [
   { threshold: 75, title: "Content Strategy Developed", description: "Message framework structuring complete", icon: "📝" },
   { threshold: 90, title: "Campaign Timeline Generated", description: "Optimal scheduling parameters identified", icon: "📅" },
   { threshold: 98, title: "Final Optimizations Applied", description: "Performance predictions calculated", icon: "🚀" }
-];
-
-// Marketing jargon for the particle cloud
-const marketingTerms = [
-  "Engagement", "ROI", "SEO", "CTA", "Conversion", "KPI", "Metrics", 
-  "Analytics", "Content", "Audience", "Targeting", "Strategy",
-  "Branding", "Outreach", "Viral", "Organic", "Social", "Campaign",
-  "Funnel", "Reach", "Impression", "Optimization", "Growth", "Scale",
-  "Algorithm", "AI-Driven", "Predictive", "User-Journey", "Attribution",
-  "Hyper-Targeting", "Multi-Channel", "Behavior-Based", "Integrated",
-  "Performance", "Automation", "Neural-Net", "Machine-Learning", "Synergy"
 ];
 
 function Loading() {
@@ -166,77 +151,86 @@ function Loading() {
   const [logLines, setLogLines] = useState([]);
   const [currentInsightIndex, setCurrentInsightIndex] = useState(0);
   const [processingMetrics, setProcessingMetrics] = useState({
-    dataPoints: 0,
-    scenarios: 0,
-    optimizations: 0
+    dataPoints: 12543,
+    scenarios: 87,
+    optimizations: 156
   });
   const [showAchievement, setShowAchievement] = useState(false);
   const [currentAchievement, setCurrentAchievement] = useState(null);
   const [logoAnimation, setLogoAnimation] = useState(false);
-  const [particleWords, setParticleWords] = useState([]);
+  const [stars, setStars] = useState([]);
   const [neuralPathways, setNeuralPathways] = useState([]);
   const [logoInteractive, setLogoInteractive] = useState(false);
   const [matrixDensity, setMatrixDensity] = useState(0);
-  const [insightExpanded, setInsightExpanded] = useState(false);
-  const [showTip, setShowTip] = useState(false);
-  const [currentTip, setCurrentTip] = useState('');
   
   const consoleRef = useRef(null);
   const logContainerRef = useRef(null);
   const logoRef = useRef(null);
-  const canvasRef = useRef(null);
   
   const token = localStorage.getItem('token');
   const campaignId = localStorage.getItem('latestCampaignId');
 
-  // Tips for a more engaging experience
-  const tips = [
-    "Pro Tip: Our AI analyzes over 500,000 data points to generate your optimal campaign strategy",
-    "Pro Tip: Each campaign is unique - we analyze your specific brand positioning for best results",
-    "Pro Tip: Our algorithms simulate real audience behavior to predict engagement patterns",
-    "Pro Tip: We compare your strategy against thousands of successful campaigns in your industry",
-    "Pro Tip: Watch for micro-achievements as your campaign strategy is built in real-time"
-  ];
+  // Generate star field background for better performance
+  useEffect(() => {
+    const generateStarField = () => {
+      const starsArray = [];
+      const numStars = Math.min(window.innerWidth / 3, 200); // Limit for performance
+      
+      for (let i = 0; i < numStars; i++) {
+        starsArray.push({
+          id: i,
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          size: Math.random() * 2 + 0.5,
+          animationDuration: Math.random() * 4 + 2,
+          animationDelay: Math.random() * 4
+        });
+      }
+      
+      return starsArray;
+    };
+    
+    setStars(generateStarField());
+    
+    const handleResize = () => {
+      setStars(generateStarField());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
-  // Initialize neural pathways for background with enhanced complexity
+  // Simplified neural pathways for better performance
   useEffect(() => {
     const generateNeuralPathways = () => {
       const pathways = [];
-      const numPathways = Math.floor(window.innerWidth / 80); // More dense network
+      const numPathways = Math.min(Math.floor(window.innerWidth / 120), 15); // Limit for performance
       
       for (let i = 0; i < numPathways; i++) {
         const startX = Math.random() * window.innerWidth;
         const startY = Math.random() * window.innerHeight;
         const points = [];
         
-        // Generate a more complex path with multiple points and branches
+        // Generate simpler paths with fewer points
         let currentX = startX;
         let currentY = startY;
         
-        const numPoints = Math.floor(Math.random() * 3) + 5; // 5-7 points per pathway
+        const numPoints = Math.floor(Math.random() * 2) + 3; // 3-4 points per pathway
         
         for (let j = 0; j < numPoints; j++) {
-          currentX += (Math.random() - 0.5) * 250;
-          currentY += (Math.random() - 0.5) * 250;
+          currentX += (Math.random() - 0.5) * 200;
+          currentY += (Math.random() - 0.5) * 200;
           points.push({ x: currentX, y: currentY });
-          
-          // Add a branch with 30% probability
-          if (Math.random() < 0.3 && j > 0) {
-            let branchX = points[j-1].x;
-            let branchY = points[j-1].y;
-            branchX += (Math.random() - 0.5) * 150;
-            branchY += (Math.random() - 0.5) * 150;
-            points.push({ x: branchX, y: branchY, isBranch: true, connectTo: j-1 });
-          }
         }
         
         pathways.push({
           id: i,
           points,
-          color: Math.random() > 0.6 ? '#0062ff' : Math.random() > 0.3 ? '#FF7D00' : '#00c853',
-          animationDelay: Math.random() * 8,
-          opacity: Math.random() * 0.3 + 0.1,
-          pulseSpeed: Math.random() * 4 + 2 // Random pulse speed for each pathway
+          color: i % 3 === 0 ? '#0062ff' : i % 3 === 1 ? '#FF7D00' : '#00c853',
+          animationDelay: Math.random() * 5,
+          opacity: Math.random() * 0.2 + 0.1
         });
       }
       
@@ -244,115 +238,18 @@ function Loading() {
     };
     
     generateNeuralPathways();
-    window.addEventListener('resize', generateNeuralPathways);
     
+    const handleResize = () => {
+      generateNeuralPathways();
+    };
+    
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener('resize', generateNeuralPathways);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
-  // Initialize particle words with more dynamic behavior
-  useEffect(() => {
-    const createParticleWords = () => {
-      const words = [];
-      
-      for (let i = 0; i < 35; i++) { // More particles for richer effect
-        const term = marketingTerms[Math.floor(Math.random() * marketingTerms.length)];
-        
-        words.push({
-          id: i,
-          text: term,
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-          size: Math.random() * 0.7 + 0.6, // Larger variation in sizes
-          opacity: Math.random() * 0.4 + 0.05,
-          speed: Math.random() * 0.8 + 0.2,
-          direction: Math.random() * 360,
-          rotationSpeed: (Math.random() - 0.5) * 0.5, // Some words rotate
-          color: Math.random() > 0.7 ? 'var(--text-blue)' : 
-                 Math.random() > 0.5 ? 'var(--text-orange)' : 
-                 Math.random() > 0.2 ? 'var(--text-muted)' : 'var(--text-green)'
-        });
-      }
-      
-      setParticleWords(words);
-    };
-    
-    createParticleWords();
-  }, []);
-
-  // Show random tip every 20 seconds
-  useEffect(() => {
-    const showRandomTip = () => {
-      const randomTip = tips[Math.floor(Math.random() * tips.length)];
-      setCurrentTip(randomTip);
-      setShowTip(true);
-      
-      setTimeout(() => {
-        setShowTip(false);
-      }, 5000);
-    };
-    
-    showRandomTip(); // Show first tip immediately
-    
-    const tipInterval = setInterval(showRandomTip, 20000);
-    
-    return () => clearInterval(tipInterval);
-  }, []);
-
-  // Move particle words with enhanced movement patterns
-  useEffect(() => {
-    if (particleWords.length === 0) return;
-    
-    const interval = setInterval(() => {
-      setParticleWords(words => 
-        words.map(word => {
-          // Calculate new position based on direction and speed
-          const radians = word.direction * Math.PI / 180;
-          let newX = word.x + Math.cos(radians) * word.speed;
-          let newY = word.y + Math.sin(radians) * word.speed;
-          let newDirection = word.direction;
-          let newRotation = (word.rotation || 0) + word.rotationSpeed;
-          
-          // Bounce off edges with slight direction change for more natural movement
-          if (newX < 0 || newX > 100) {
-            newDirection = 180 - newDirection + (Math.random() - 0.5) * 20;
-          }
-          if (newY < 0 || newY > 100) {
-            newDirection = 360 - newDirection + (Math.random() - 0.5) * 20;
-          }
-          
-          // Occasionally change direction slightly for more organic movement
-          if (Math.random() < 0.05) {
-            newDirection += (Math.random() - 0.5) * 30;
-          }
-          
-          // Keep within bounds
-          newX = Math.max(0, Math.min(100, newX));
-          newY = Math.max(0, Math.min(100, newY));
-          
-          // Occasionally change opacity for twinkling effect
-          let newOpacity = word.opacity;
-          if (Math.random() < 0.1) {
-            newOpacity = Math.max(0.05, Math.min(0.5, word.opacity + (Math.random() - 0.5) * 0.1));
-          }
-          
-          return {
-            ...word,
-            x: newX,
-            y: newY,
-            direction: newDirection,
-            rotation: newRotation,
-            opacity: newOpacity
-          };
-        })
-      );
-    }, 100);
-    
-    return () => clearInterval(interval);
-  }, [particleWords]);
-
-  // Autoscroll the console log with smooth behavior
+  // Autoscroll the console log
   useEffect(() => {
     if (logContainerRef.current) {
       logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
@@ -361,36 +258,37 @@ function Loading() {
 
   // Handle logo interactions
   useEffect(() => {
-    const handleLogoInteraction = () => {
-      if (logoRef.current) {
-        logoRef.current.addEventListener('mouseenter', () => setLogoInteractive(true));
-        logoRef.current.addEventListener('mouseleave', () => setLogoInteractive(false));
-        logoRef.current.addEventListener('click', () => {
-          setLogoAnimation(true);
-          setTimeout(() => setLogoAnimation(false), 2000);
-          
-          // Add a small easter egg - temporarily increase speed of everything
-          setProgress(prev => Math.min(prev + 2, 100));
-          setMatrixDensity(prev => Math.min(prev + 0.2, 1));
-          
-          // Play a subtle sound effect
-          const audio = new Audio('/ui-sound.mp3');
-          audio.volume = 0.1;
-          audio.play().catch(e => console.log('Audio play failed:', e));
-        });
+    const handleMouseEnter = () => setLogoInteractive(true);
+    const handleMouseLeave = () => setLogoInteractive(false);
+    const handleClick = () => {
+      setLogoAnimation(true);
+      setTimeout(() => setLogoAnimation(false), 2000);
+      
+      // Add a small easter egg - temporarily increase speed
+      setProgress(prev => Math.min(prev + 2, 100));
+      setMatrixDensity(prev => Math.min(prev + 0.2, 1));
+      
+      // Play a subtle sound effect if available
+      try {
+        const audio = new Audio('/ui-sound.mp3');
+        audio.volume = 0.1;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+      } catch (error) {
+        console.log('Audio not available');
       }
     };
     
-    handleLogoInteraction();
+    if (logoRef.current) {
+      logoRef.current.addEventListener('mouseenter', handleMouseEnter);
+      logoRef.current.addEventListener('mouseleave', handleMouseLeave);
+      logoRef.current.addEventListener('click', handleClick);
+    }
     
     return () => {
       if (logoRef.current) {
-        logoRef.current.removeEventListener('mouseenter', () => setLogoInteractive(true));
-        logoRef.current.removeEventListener('mouseleave', () => setLogoInteractive(false));
-        logoRef.current.removeEventListener('click', () => {
-          setLogoAnimation(true);
-          setTimeout(() => setLogoAnimation(false), 2000);
-        });
+        logoRef.current.removeEventListener('mouseenter', handleMouseEnter);
+        logoRef.current.removeEventListener('mouseleave', handleMouseLeave);
+        logoRef.current.removeEventListener('click', handleClick);
       }
     };
   }, [logoRef]);
@@ -423,12 +321,12 @@ function Loading() {
       } catch (err) {
         console.warn('Polling error:', err);
       }
-    }, 2000); // Poll less frequently to give more time for the experience
+    }, 2000);
 
     return () => clearInterval(pollInterval);
   }, [campaignId, pollCount, token]);
 
-  // Controlled progress advancement to ensure full experience
+  // Controlled progress advancement
   useEffect(() => {
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
@@ -450,7 +348,7 @@ function Loading() {
     return () => clearInterval(progressInterval);
   }, []);
 
-  // Phase progression based on progress with enhanced transitions
+  // Phase progression based on progress
   useEffect(() => {
     // Phase transitions at specific progress points
     if (progress >= 33 && currentPhase === 0) {
@@ -459,10 +357,14 @@ function Loading() {
       setCurrentStepIndex(0);
       setLogoAnimation(true);
       
-      // Play phase completion sound
-      const audio = new Audio('/phase-complete.mp3');
-      audio.volume = 0.2;
-      audio.play().catch(e => console.log('Audio play failed:', e));
+      // Play phase completion sound if available
+      try {
+        const audio = new Audio('/phase-complete.mp3');
+        audio.volume = 0.2;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+      } catch (error) {
+        console.log('Audio not available');
+      }
       
       setTimeout(() => setLogoAnimation(false), 2000);
     } else if (progress >= 66 && currentPhase === 1) {
@@ -471,23 +373,31 @@ function Loading() {
       setCurrentStepIndex(0);
       setLogoAnimation(true);
       
-      // Play phase completion sound
-      const audio = new Audio('/phase-complete.mp3');
-      audio.volume = 0.2;
-      audio.play().catch(e => console.log('Audio play failed:', e));
+      // Play phase completion sound if available
+      try {
+        const audio = new Audio('/phase-complete.mp3');
+        audio.volume = 0.2;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+      } catch (error) {
+        console.log('Audio not available');
+      }
       
       setTimeout(() => setLogoAnimation(false), 2000);
     } else if (progress >= 99 && currentPhase === 2) {
       setCompletedPhases(prev => [...prev, 2]);
       setLoadingComplete(true);
       
-      // Play completion sound
-      const audio = new Audio('/completion-sound.mp3');
-      audio.volume = 0.3;
-      audio.play().catch(e => console.log('Audio play failed:', e));
+      // Play completion sound if available
+      try {
+        const audio = new Audio('/completion-sound.mp3');
+        audio.volume = 0.3;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+      } catch (error) {
+        console.log('Audio not available');
+      }
     }
 
-    // Step through current phase steps with variable timing for more realistic feel
+    // Step through current phase steps
     const currentPhaseSteps = processingPhases[currentPhase].steps;
     const stepInterval = setInterval(() => {
       setCurrentStepIndex(prev => (prev + 1) % currentPhaseSteps.length);
@@ -496,45 +406,71 @@ function Loading() {
     return () => clearInterval(stepInterval);
   }, [progress, currentPhase]);
 
-  // Add processing logs continually with enhanced variety
+  // Generate terminal logs with fast-scrolling code effect
   useEffect(() => {
-    const logInterval = setInterval(() => {
-      // Select a random log entry with increasing sophistication as progress increases
-      let randomLog;
-      if (progress < 40) {
-        randomLog = simulatedProcessingLogs[Math.floor(Math.random() * simulatedProcessingLogs.length)];
-      } else {
-        randomLog = enhancedProcessingLogs[Math.floor(Math.random() * enhancedProcessingLogs.length)];
-      }
-      
+    // Clear logs first
+    setLogLines([]);
+
+    // Initial system logs
+    setLogLines([
+      "AI Marketing Engine v4.2.1 initialized",
+      "Loading campaign parameters...",
+      "Establishing secure connection to marketing API...",
+      "Fetching brand guidelines from repository..."
+    ]);
+
+    const addLog = (log) => {
       setLogLines(prev => {
-        // Keep a maximum of 10 log lines
-        const updatedLogs = [...prev, randomLog];
-        if (updatedLogs.length > 10) {
-          return updatedLogs.slice(updatedLogs.length - 10);
+        // Keep maximum 15 log lines for better scrolling
+        const updatedLogs = [...prev, log];
+        if (updatedLogs.length > 15) {
+          return updatedLogs.slice(updatedLogs.length - 15);
         }
         return updatedLogs;
       });
+    };
+
+    // All logs combined for variety
+    const allLogs = [
+      ...simulatedProcessingLogs,
+      ...technicalLogs,
+      ...technicalLogs, // Double weight to technical logs
+      ...codeSnippets
+    ];
+
+    // Add logs at a faster pace
+    const logInterval = setInterval(() => {
+      const randomLog = allLogs[Math.floor(Math.random() * allLogs.length)];
+      addLog(randomLog);
       
-      // Increment matrix density for more intense visual as processing continues
+      // Increment matrix density
       setMatrixDensity(prev => Math.min(prev + 0.01, 1));
-    }, 800 + Math.random() * 800); // Variable timing for more realistic look
+    }, 350); // Faster for rapid scrolling effect
 
-    return () => clearInterval(logInterval);
-  }, [progress]);
+    // Add occasional insights
+    const insightInterval = setInterval(() => {
+      if (Math.random() < 0.15) { // 15% chance to show insight
+        const randomInsight = inlineInsights[Math.floor(Math.random() * inlineInsights.length)];
+        addLog(randomInsight);
+      }
+    }, 5000);
 
-  // Cycle through insights with pause on hover
+    return () => {
+      clearInterval(logInterval);
+      clearInterval(insightInterval);
+    };
+  }, []);
+
+  // Cycle through insights
   useEffect(() => {
-    if (insightExpanded) return;
-    
     const insightInterval = setInterval(() => {
       setCurrentInsightIndex(prev => (prev + 1) % strategyInsights.length);
-    }, 8000); // Longer display time for better readability
+    }, 8000);
     
     return () => clearInterval(insightInterval);
-  }, [insightExpanded]);
+  }, []);
 
-  // Simulate increasing processing metrics with acceleration
+  // Simulate increasing processing metrics with non-zero values
   useEffect(() => {
     const metricsInterval = setInterval(() => {
       setProcessingMetrics(prev => {
@@ -542,17 +478,17 @@ function Loading() {
         const multiplier = progress < 33 ? 1 : progress < 66 ? 2 : 3;
         
         return {
-          dataPoints: prev.dataPoints + Math.floor(Math.random() * 8000 * multiplier),
-          scenarios: prev.scenarios + Math.floor(Math.random() * 30 * multiplier),
-          optimizations: prev.optimizations + Math.floor(Math.random() * 75 * multiplier)
+          dataPoints: prev.dataPoints + Math.floor(Math.random() * 8000 * multiplier + 1000),
+          scenarios: prev.scenarios + Math.floor(Math.random() * 30 * multiplier + 5),
+          optimizations: prev.optimizations + Math.floor(Math.random() * 75 * multiplier + 10)
         };
       });
-    }, 3000);
+    }, 2000);
     
     return () => clearInterval(metricsInterval);
   }, [progress]);
 
-  // Check for micro-achievements with enhanced notifications
+  // Check for micro-achievements
   useEffect(() => {
     const achievement = microAchievements.find(
       a => Math.floor(progress) === a.threshold
@@ -562,10 +498,14 @@ function Loading() {
       setCurrentAchievement(achievement);
       setShowAchievement(true);
       
-      // Play achievement sound
-      const audio = new Audio('/achievement-sound.mp3');
-      audio.volume = 0.2;
-      audio.play().catch(e => console.log('Audio play failed:', e));
+      // Play achievement sound if available
+      try {
+        const audio = new Audio('/achievement-sound.mp3');
+        audio.volume = 0.2;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+      } catch (error) {
+        console.log('Audio not available');
+      }
       
       // Hide the achievement after a few seconds
       setTimeout(() => {
@@ -574,18 +514,18 @@ function Loading() {
     }
   }, [progress, showAchievement]);
 
-  // Navigate if ready with delay for satisfying conclusion
+  // Navigate if ready
   useEffect(() => {
     if (loadingComplete && aiReady && !error) {
       const timeout = setTimeout(() => {
         navigate('/campaign-results');
-      }, 5000); // Longer display of completion state for satisfaction
+      }, 5000);
       
       return () => clearTimeout(timeout);
     }
   }, [loadingComplete, aiReady, error, navigate]);
 
-  // Terminal text effect for the phase step display with variable typing speed
+  // Terminal text effect for the phase step display
   const TerminalText = ({ text }) => {
     const [displayText, setDisplayText] = useState('');
     const fullText = text || '';
@@ -598,25 +538,10 @@ function Loading() {
         if (index < fullText.length) {
           setDisplayText(current => current + fullText.charAt(index));
           index++;
-          
-          // Vary typing speed slightly for realistic effect
-          if (Math.random() < 0.2) {
-            clearInterval(typingInterval);
-            setTimeout(() => {
-              const newInterval = setInterval(() => {
-                if (index < fullText.length) {
-                  setDisplayText(current => current + fullText.charAt(index));
-                  index++;
-                } else {
-                  clearInterval(newInterval);
-                }
-              }, 15 + Math.random() * 10);
-            }, 40 + Math.random() * 30);
-          }
         } else {
           clearInterval(typingInterval);
         }
-      }, 15 + Math.random() * 10); // Variable typing speed
+      }, 20);
       
       return () => clearInterval(typingInterval);
     }, [fullText]);
@@ -624,53 +549,57 @@ function Loading() {
     return <span className="terminal-text">{displayText}<span className="cursor">|</span></span>;
   };
 
-  // Format large numbers with commas for better readability
+  // Format large numbers with commas
   const formatNumber = (num) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  // Neural network background with enhanced animation
+  // Star field background for better performance
+  const StarField = () => (
+    <div className="star-field">
+      {stars.map(star => (
+        <div
+          key={star.id}
+          className="star"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            animationDuration: `${star.animationDuration}s`,
+            animationDelay: `${star.animationDelay}s`
+          }}
+        />
+      ))}
+    </div>
+  );
+
+  // Simplified neural network background
   const NeuralNetwork = () => (
     <div className="neural-network-container">
       <svg className="neural-network" width="100%" height="100%">
         {neuralPathways.map(pathway => (
           <g key={pathway.id}>
             <path
-              d={`M ${pathway.points.filter(p => !p.isBranch).map(p => `${p.x} ${p.y}`).join(' L ')}`}
+              d={`M ${pathway.points.map(p => `${p.x} ${p.y}`).join(' L ')}`}
               stroke={pathway.color}
               strokeWidth="1"
               fill="none"
               style={{
                 opacity: pathway.opacity,
                 strokeDasharray: "5,5",
-                animation: `dash ${pathway.pulseSpeed + 10}s linear infinite ${pathway.animationDelay}s, pathway-pulse ${pathway.pulseSpeed}s ease-in-out infinite`
+                animation: `dash 20s linear infinite ${pathway.animationDelay}s`
               }}
             />
-            {/* Add branches with connections to main path */}
-            {pathway.points.filter(p => p.isBranch).map((point, index) => (
-              <path
-                key={`branch-${index}`}
-                d={`M ${pathway.points[point.connectTo].x} ${pathway.points[point.connectTo].y} L ${point.x} ${point.y}`}
-                stroke={pathway.color}
-                strokeWidth="1"
-                fill="none"
-                style={{
-                  opacity: pathway.opacity * 0.7,
-                  strokeDasharray: "3,3",
-                  animation: `dash ${pathway.pulseSpeed + 5}s linear infinite ${pathway.animationDelay + 0.5}s`
-                }}
-              />
-            ))}
             {pathway.points.map((point, index) => (
               <circle
                 key={index}
                 cx={point.x}
                 cy={point.y}
-                r={point.isBranch ? "2" : "3"}
+                r="2"
                 fill={pathway.color}
                 style={{
-                  opacity: pathway.opacity + 0.2,
-                  animation: `pulse ${pathway.pulseSpeed}s infinite ${index * 0.3}s`
+                  opacity: pathway.opacity + 0.2
                 }}
               />
             ))}
@@ -680,29 +609,7 @@ function Loading() {
     </div>
   );
 
-  // Particle words animation with rotation and color
-  const ParticleWords = () => (
-    <div className="particle-words-container">
-      {particleWords.map(word => (
-        <div
-          key={word.id}
-          className="particle-word"
-          style={{
-            left: `${word.x}%`,
-            top: `${word.y}%`,
-            fontSize: `${word.size}rem`,
-            opacity: word.opacity,
-            color: word.color,
-            transform: word.rotation ? `rotate(${word.rotation}deg)` : 'none'
-          }}
-        >
-          {word.text}
-        </div>
-      ))}
-    </div>
-  );
-
-  // Enhanced achievement notification with icon
+  // Achievement notification
   const AchievementNotification = () => (
     <div className={`achievement-notification ${showAchievement ? 'show' : ''}`}>
       <div className="achievement-icon">{currentAchievement?.icon || '🏆'}</div>
@@ -713,21 +620,12 @@ function Loading() {
     </div>
   );
 
-  // Tip notification
-  const TipNotification = () => (
-    <div className={`tip-notification ${showTip ? 'show' : ''}`}>
-      <div className="tip-icon">💡</div>
-      <div className="tip-content">
-        <p>{currentTip}</p>
-      </div>
-    </div>
-  );
-
   // Render based on state
   if (error) {
     return (
       <div className="premium-loading-container">
         <NeuralNetwork />
+        <StarField />
         <div className="premium-error-container">
           <div className="error-icon">
             <svg viewBox="0 0 24 24" width="64" height="64">
@@ -752,9 +650,8 @@ function Loading() {
   return (
     <div className="premium-loading-container">
       <NeuralNetwork />
-      <ParticleWords />
+      <StarField />
       <AchievementNotification />
-      <TipNotification />
       
       <div className="premium-loading-grid">
         {/* Left side: Processing visualization */}
@@ -820,7 +717,7 @@ function Loading() {
                 </svg>
               </div>
               <div className="confetti-container">
-                {Array.from({ length: 100 }).map((_, i) => (
+                {Array.from({ length: 50 }).map((_, i) => (
                   <div key={i} className="confetti-piece" style={{
                     left: `${Math.random() * 100}%`,
                     animationDelay: `${Math.random() * 1}s`,
@@ -852,17 +749,9 @@ function Loading() {
           <div className="console-body" ref={consoleRef}>
             <div className="matrix-background" style={{opacity: 0.03 + matrixDensity * 0.07}}></div>
             <div className="log-container" ref={logContainerRef}>
-              <div className="log-line system">
-                <span className="timestamp">[{new Date().toLocaleTimeString()}]</span>
-                <span className="system-message">AI Marketing Engine v4.2.1 initialized</span>
-              </div>
-              <div className="log-line system">
-                <span className="timestamp">[{new Date().toLocaleTimeString()}]</span>
-                <span className="system-message">Loading campaign parameters...</span>
-              </div>
               {logLines.map((line, index) => (
-                <div key={index} className="log-line" style={{animationDelay: `${index * 0.1}s`}}>
-                  <span className="timestamp">[{new Date(Date.now() - (logLines.length - index) * 1200).toLocaleTimeString()}]</span>
+                <div key={index} className="log-line">
+                  <span className="timestamp">[{new Date(Date.now() - (logLines.length - index) * 500).toLocaleTimeString()}]</span>
                   <span className="log-content">{line}</span>
                 </div>
               ))}
@@ -875,31 +764,19 @@ function Loading() {
             </div>
           </div>
           
-          <div 
-            className={`insight-panel ${insightExpanded ? 'expanded' : ''}`}
-            onClick={() => setInsightExpanded(!insightExpanded)}
-          >
+          <div className="insight-panel">
             <div className="insight-header">
               <div className="insight-icon">{strategyInsights[currentInsightIndex].icon}</div>
-              <h3>Strategic Insight {insightExpanded ? '(click to collapse)' : '(click to expand)'}</h3>
+              <h3>Strategic Insight</h3>
             </div>
             <p className="insight-content">{strategyInsights[currentInsightIndex].text}</p>
-            
-            {insightExpanded && (
-              <div className="insight-source">
-                <small>Source: {strategyInsights[currentInsightIndex].source}</small>
-              </div>
-            )}
             
             <div className="insight-pagination">
               {strategyInsights.map((_, idx) => (
                 <span 
                   key={idx} 
                   className={`insight-dot ${idx === currentInsightIndex ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentInsightIndex(idx);
-                  }}
+                  onClick={() => setCurrentInsightIndex(idx)}
                 ></span>
               ))}
             </div>
