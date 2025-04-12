@@ -51,7 +51,7 @@ body {
   color: var(--fy-text-primary);
   min-height: 100vh;
   padding: var(--fy-spacing-md);
-  
+  padding-bottom: 100px;
   position: relative;
 }
 
@@ -1085,6 +1085,9 @@ body {
   justify-content: center;
   margin-top: var(--fy-spacing-xl);
   padding-bottom: var(--fy-spacing-lg);
+  z-index: 10;
+  position: relative;
+  min-height: 100px;
 }
 
 .fy-action-buttons button {
@@ -1103,6 +1106,8 @@ body {
   overflow: hidden;
   box-shadow: var(--fy-shadow-medium);
   color: white;
+  z-index: 10;
+  position: relative;
 }
 
 .fy-action-buttons button::before {
