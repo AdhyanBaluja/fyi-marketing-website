@@ -471,23 +471,27 @@ function Loading() {
   }, []);
 
   // Simulate increasing processing metrics with non-zero values
-  useEffect(() => {
-    const metricsInterval = setInterval(() => {
-      setProcessingMetrics(prev => {
-        // More dramatic increases in later stages
-        const multiplier = progress < 33 ? 1 : progress < 66 ? 2 : 3;
-        
-        return {
-          dataPoints: prev.dataPoints + Math.floor(Math.random() * 8000 * multiplier + 1000),
-          scenarios: prev.scenarios + Math.floor(Math.random() * 30 * multiplier + 5),
-          optimizations: prev.optimizations + Math.floor(Math.random() * 75 * multiplier + 10)
-        };
-      });
-    }, 2000);
-    
-    return () => clearInterval(metricsInterval);
-  }, [progress]);
-
+// Update this useEffect to ensure metrics keep increasing
+useEffect(() => {
+  // Initialize with non-zero starting values (which you already have)
+  
+  // Set a shorter interval for more frequent updates
+  const metricsInterval = setInterval(() => {
+    setProcessingMetrics(prev => {
+      // More dramatic increases in later stages
+      const multiplier = progress < 33 ? 1 : progress < 66 ? 2 : 3;
+      
+      return {
+        // Add larger increments and ensure they're never zero
+        dataPoints: prev.dataPoints + Math.floor(Math.random() * 12000 * multiplier + 2000),
+        scenarios: prev.scenarios + Math.floor(Math.random() * 40 * multiplier + 8),
+        optimizations: prev.optimizations + Math.floor(Math.random() * 95 * multiplier + 15)
+      };
+    });
+  }, 1200); // Faster update frequency (was 2000)
+  
+  return () => clearInterval(metricsInterval);
+}, []);
   // Check for micro-achievements
   useEffect(() => {
     const achievement = microAchievements.find(
@@ -691,22 +695,25 @@ function Loading() {
           </div>
           
           <div className="processing-metrics">
-            <div className="metric">
-              <div className="metric-value">{formatNumber(processingMetrics.dataPoints)}</div>
-              <div className="metric-label">Data Points Analyzed</div>
-              <div className="metric-bar" style={{width: `${Math.min(processingMetrics.dataPoints / 100000 * 100, 100)}%`}}></div>
-            </div>
-            <div className="metric">
-              <div className="metric-value">{formatNumber(processingMetrics.scenarios)}</div>
-              <div className="metric-label">Scenarios Evaluated</div>
-              <div className="metric-bar" style={{width: `${Math.min(processingMetrics.scenarios / 300 * 100, 100)}%`}}></div>
-            </div>
-            <div className="metric">
-              <div className="metric-value">{formatNumber(processingMetrics.optimizations)}</div>
-              <div className="metric-label">Optimizations Applied</div>
-              <div className="metric-bar" style={{width: `${Math.min(processingMetrics.optimizations / 800 * 100, 100)}%`}}></div>
-            </div>
-          </div>
+  <div className="metric">
+    <div className="metric-value">{formatNumber(processingMetrics.dataPoints)}</div>
+    <div className="metric-label">Data Points Analyzed</div>
+    {/* Lower the denominator to make the bar fill faster */}
+    <div className="metric-bar" style={{width: `${Math.min(processingMetrics.dataPoints / 50000 * 100, 100)}%`}}></div>
+  </div>
+  <div className="metric">
+    <div className="metric-value">{formatNumber(processingMetrics.scenarios)}</div>
+    <div className="metric-label">Scenarios Evaluated</div>
+    {/* Lower the denominator to make the bar fill faster */}
+    <div className="metric-bar" style={{width: `${Math.min(processingMetrics.scenarios / 200 * 100, 100)}%`}}></div>
+  </div>
+  <div className="metric">
+    <div className="metric-value">{formatNumber(processingMetrics.optimizations)}</div>
+    <div className="metric-label">Optimizations Applied</div>
+    {/* Lower the denominator to make the bar fill faster */}
+    <div className="metric-bar" style={{width: `${Math.min(processingMetrics.optimizations / 400 * 100, 100)}%`}}></div>
+  </div>
+</div>
           
           {loadingComplete && (
             <div className="completion-message">
