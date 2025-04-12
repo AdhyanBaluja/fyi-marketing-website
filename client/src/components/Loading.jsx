@@ -30,7 +30,7 @@ const campaignTips = [
   "Tip: Storytelling content receives 22% more shares than promotional content"
 ];
 
-function Loading() {
+function FixedLoading() {
   const [progress, setProgress] = useState(0);
   const [aiReady, setAiReady] = useState(false);
   const [error, setError] = useState(null);
@@ -38,6 +38,7 @@ function Loading() {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
   const [showTip, setShowTip] = useState(true);
+  const [loadingComplete, setLoadingComplete] = useState(false);
   
   const particlesContainer = useRef(null);
   const progressBarRef = useRef(null);
@@ -116,7 +117,7 @@ function Loading() {
       setProgress((prev) => {
         // Slow down progress as it gets closer to 100%
         if (prev >= 95) {
-          return prev + 0.5;
+          return Math.min(prev + 0.5, 100);
         } else if (prev >= 85) {
           return prev + 1;
         } else if (prev >= 70) {
@@ -135,6 +136,11 @@ function Loading() {
     if (progressBarRef.current) {
       const intensity = Math.min(progress / 100 * 15, 15);
       progressBarRef.current.style.boxShadow = `0 0 ${intensity}px 0 rgba(255, 125, 0, 0.8)`;
+    }
+
+    // Set loading complete when progress hits 100
+    if (progress >= 100) {
+      setLoadingComplete(true);
     }
   }, [progress]);
 
@@ -166,13 +172,17 @@ function Loading() {
 
   // 5) Navigate if ready
   useEffect(() => {
-    if (progress >= 100 && aiReady && !error) {
+    if (loadingComplete && aiReady && !error) {
+      // Navigate to results page after 3 seconds of completion
+      console.log("Loading complete and AI ready - will navigate in 3 seconds");
       const timeout = setTimeout(() => {
+        console.log("Navigating to campaign-results");
         navigate('/campaign-results');
-      }, 500);
+      }, 3000);
+      
       return () => clearTimeout(timeout);
     }
-  }, [progress, aiReady, error, navigate]);
+  }, [loadingComplete, aiReady, error, navigate]);
 
   // 6) Render
   if (error) {
@@ -207,8 +217,8 @@ function Loading() {
       <div className="grid-pattern"></div>
       
       <div className="loading-card">
-        <div className={`loading-icon ${progress >= 100 ? 'complete' : ''}`}>
-          {progress >= 100 ? (
+        <div className={`loading-icon ${loadingComplete ? 'complete' : ''}`}>
+          {loadingComplete ? (
             <svg className="checkmark" viewBox="0 0 52 52">
               <circle className="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
               <path className="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
@@ -224,7 +234,12 @@ function Loading() {
         <h1 className="loading-title">Generating Your Campaign</h1>
         
         <div className="loading-message-container">
-          <div className="loading-message">{loadingMessages[currentMessageIndex]}</div>
+          <div className="loading-message">
+            {loadingComplete 
+              ? "Campaign successfully generated!" 
+              : loadingMessages[currentMessageIndex]
+            }
+          </div>
         </div>
         
         <div className="progress-container">
@@ -240,7 +255,7 @@ function Loading() {
           <div className="progress-text">
             <span className="progress-percentage">{Math.min(Math.round(progress), 100)}%</span>
             <span className="progress-status">
-              {progress >= 100 && !aiReady ? 'Finalizing results...' : 'Completed'}
+              {loadingComplete && !aiReady ? 'Finalizing results...' : 'Completed'}
             </span>
           </div>
         </div>
@@ -249,9 +264,15 @@ function Loading() {
           <div className="tip-icon">💡</div>
           <p>{campaignTips[currentTipIndex]}</p>
         </div>
+        
+        {loadingComplete && (
+          <div className="redirect-message">
+            <p>Redirecting to results in 3 seconds...</p>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-export default Loading;
+export default FixedLoading;
