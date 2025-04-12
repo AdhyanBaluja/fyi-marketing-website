@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './EnhancedLoading.css';
+import './Loading.css';
 
 // Use environment variable for API base URL; fallback to localhost for development
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
@@ -30,7 +30,7 @@ const campaignTips = [
   "Tip: Storytelling content receives 22% more shares than promotional content"
 ];
 
-function EnhancedLoading() {
+function Loading() {
   const [progress, setProgress] = useState(0);
   const [aiReady, setAiReady] = useState(false);
   const [error, setError] = useState(null);
@@ -254,4 +254,4 @@ function EnhancedLoading() {
   );
 }
 
-export default EnhancedLoading;
+export default Loading;
