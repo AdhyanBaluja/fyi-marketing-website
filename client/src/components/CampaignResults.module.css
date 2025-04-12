@@ -1,0 +1,630 @@
+/* CampaignResults.module.css */
+/* Dark theme with orange, navy, blue and cream accents */
+
+:root {
+  --primary-bg: #121526;
+  --secondary-bg: #1e212b;
+  --card-bg: #252a3d;
+  --card-hover: #2d344a;
+  --primary-orange: #FF7D00;
+  --secondary-orange: #ffa726;
+  --accent-blue: #1DA1F2;
+  --accent-navy: #0A66C2;
+  --accent-cream: #FFECD1;
+  --text-primary: #f5f5f5;
+  --text-secondary: #b0b8c4;
+  --text-accent: #FF7D00;
+  --success-color: #4CAF50;
+  --error-color: #f44336;
+  --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 10px 25px rgba(0, 0, 0, 0.2);
+  --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.3);
+  --transition-default: all 0.3s ease;
+}
+
+/* Base Styles */
+.campaign-results-container {
+  background: var(--primary-bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  margin-top: 0;
+}
+
+h2.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-orange);
+  width: fit-content;
+}
+
+.section-title .section-icon {
+  margin-right: 0.5rem;
+  font-size: 1.5rem;
+}
+
+/* Loading and Error States */
+.loading-container, .error-container, .no-campaign-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-text {
+  margin-top: 1rem;
+  color: var(--accent-cream);
+  font-size: 1.5rem;
+  animation: pulse 1.5s infinite alternate;
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 1.1rem;
+  margin: 1rem 0;
+}
+
+.retry-button, .create-campaign-button {
+  background: var(--primary-orange);
+  color: var(--accent-cream);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-default);
+  margin-top: 1rem;
+}
+
+/* Hero Section */
+.campaign-hero {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--secondary-bg), var(--card-bg));
+  border-radius: 12px;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.campaign-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, var(--primary-orange) 0%, transparent 70%);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.campaign-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(90deg, var(--text-primary), var(--primary-orange));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.campaign-brief {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 80%;
+  position: relative;
+  z-index: 1;
+}
+
+.active-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: linear-gradient(135deg, var(--success-color), #2E7D32);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 10px rgba(46, 125, 50, 0.3);
+  animation: pulse 2s infinite;
+  z-index: 2;
+}
+
+/* Image Notice */
+.image-notice {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #2c3049, #272d40);
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-light);
+  border-left: 4px solid var(--secondary-orange);
+  position: relative;
+  overflow: hidden;
+}
+
+.notice-icon {
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.image-notice p {
+  flex: 1;
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.notice-button {
+  background: var(--primary-orange);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-left: 1rem;
+  transition: var(--transition-default);
+}
+
+/* Metrics Section */
+.metrics-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.metric-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--shadow-light);
+  transition: var(--transition-default);
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-orange), var(--accent-blue));
+  opacity: 0.7;
+}
+
+.metric-card h3 {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.metric-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-orange);
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.metric-icon {
+  margin-bottom: 0.5rem;
+}
+
+/* Calendar Section */
+.calendar-section {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-medium);
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-header h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.month-btn {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-default);
+}
+
+.month-btn:hover {
+  background: var(--primary-orange);
+}
+
+.weekday-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.weekday-cell {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  padding: 0.5rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.calendar-day {
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition-default);
+  min-height: 80px;
+}
+
+.calendar-day.empty {
+  background: transparent;
+  cursor: default;
+}
+
+.calendar-day.has-event {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.calendar-day.selected {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.day-number {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.event-title {
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: auto;
+}
+
+/* Day Details Section */
+.day-details {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-medium);
+  overflow: hidden;
+}
+
+.day-events-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.day-event-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-light);
+  transition: var(--transition-default);
+}
+
+.day-event-card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--primary-orange);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.day-event-card p {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.day-event-card p:last-child {
+  margin-bottom: 0;
+}
+
+.day-event-card strong {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+.platform-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.platform-tag {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+}
+
+/* Bingo Section */
+.bingo-section {
+  margin-bottom: 2.5rem;
+}
+
+.bingo-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.bingo-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-light);
+  transition: var(--transition-default);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.bingo-image-container {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.bingo-image-container.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2c3049, #272d40);
+}
+
+.bingo-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.bingo-card:hover .bingo-card-image {
+  transform: scale(1.05);
+}
+
+.bingo-card-content {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bingo-card-content h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--primary-orange);
+}
+
+.bingo-card-content p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* More Advice Section */
+.more-advice-section {
+  margin-bottom: 2.5rem;
+}
+
+.advice-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.advice-item {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-light);
+  transition: var(--transition-default);
+  border-left: 4px solid var(--accent-blue);
+}
+
+.advice-item h4 {
+  font-size: 1.1rem;
+  color: var(--accent-blue);
+  margin-bottom: 0.75rem;
+}
+
+.advice-item p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 3rem;
+  padding-bottom: 2rem;
+}
+
+.action-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition-default);
+  border: none;
+  min-width: 200px;
+}
+
+.action-buttons button span {
+  margin-left: 0.5rem;
+}
+
+.activate-button {
+  background: linear-gradient(135deg, var(--primary-orange), #FF9800);
+  color: white;
+}
+
+.delete-button {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+}
+
+.find-button {
+  background: linear-gradient(135deg, var(--accent-blue), #0288d1);
+  color: white;
+}
+
+/* Activation Success Overlay */
+.activation-success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(18, 21, 38, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.activation-success-overlay h2 {
+  color: var(--accent-cream);
+  font-size: 2rem;
+  margin-top: 1rem;
+  animation: slideUp 0.5s ease;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .campaign-results-container {
+    padding: 1rem;
+  }
+  
+  .metrics-section {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .calendar-grid {
+    gap: 0.25rem;
+  }
+  
+  .calendar-day {
+    min-height: 60px;
+  }
+  
+  .bingo-cards,
+  .advice-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons button {
+    width: 100%;
+  }
+  
+  .campaign-title {
+    font-size: 1.8rem;
+  }
+}

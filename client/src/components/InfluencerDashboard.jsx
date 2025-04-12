@@ -467,11 +467,7 @@ function InfluencerDashboard() {
 
       {/* Particle Background & Animated Shapes */}
       <div id="particles-js" className="particles-container"></div>
-      <div className="animated-shapes">
-        <div className="shape shape1"></div>
-        <div className="shape shape2"></div>
-        <div className="shape shape3"></div>
-      </div>
+  
       
       {/* Optional Vignette Overlay - you can uncomment if needed */}
       {/* <div className="vignette-overlay"></div> */}
