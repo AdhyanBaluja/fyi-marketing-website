@@ -1040,17 +1040,17 @@ button {
   content: '';
   position: absolute;
   bottom: -1px;
-  left: 50%;
-  width: 0;
+  left: 50%; /* Center relative to the tab button */
+  width: 0; /* Start with 0 width */
   height: 3px;
   background: linear-gradient(90deg, var(--premium-blue), var(--premium-purple));
-  transform: translateX(-50%);
+  transform: translateX(-50%); /* Center it */
   transition: width 0.3s ease;
   border-radius: 3px 3px 0 0;
 }
 
-.premium-filter-tab-btn:hover {
-  color: var(--premium-text-primary);
+.premium-filter-tab-btn.active::after {
+  width: 100%; /* Full width when active */
 }
 
 .premium-filter-tab-btn.active {
@@ -2439,4 +2439,15 @@ button {
 .premium-invite-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--premium-shadow-md), var(--premium-orange-glow);
+}
+
+.title-underline,
+.filter-tab-btn::after,
+.premium-filter-tab-btn::after {
+  position: absolute;
+  bottom: -1px;
+  left: 50%; /* Center the underline */
+  transform: translateX(-50%); /* Ensure it's truly centered */
+  width: 100%; /* Make it match the width of the parent tab */
+  transition: all 0.3s ease; /* Smooth transition when tabs change */
 }
