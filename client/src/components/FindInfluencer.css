@@ -1,437 +1,1600 @@
-/* Root Container - Navbar (fixed at the top) */
-.navbar {
+/* FindInfluencer.css - Dark Theme with Orange, Navy, Blue and Cream accents */
+
+/* ===== VARIABLES ===== */
+:root {
+  /* Dark theme base colors */
+  --nebula-bg: #0d1117;
+  --nebula-surface: #161b22;
+  --nebula-card: #1a2233;
+  --nebula-card-hover: #1e2940;
+  
+  /* Accent colors */
+  --nebula-navy: #0a192f;
+  --nebula-blue: #3a86ff;
+  --nebula-blue-light: #4361ee;
+  --nebula-orange: #ff6d00;
+  --nebula-orange-light: #ff9e00;
+  --nebula-cream: #f8f0e3;
+  --nebula-cream-light: #fff8eb;
+  
+  /* Text colors */
+  --nebula-text-primary: #e6e6e6;
+  --nebula-text-secondary: #b0b0b0;
+  --nebula-text-accent: #fff8eb;
+  
+  /* UI feedback colors */
+  --nebula-success: #4ade80;
+  --nebula-error: #ef4444;
+  --nebula-warning: #fbbf24;
+  
+  /* Animation speeds */
+  --nebula-anim-quick: 0.2s;
+  --nebula-anim-normal: 0.4s;
+  --nebula-anim-slow: 0.8s;
+  
+  /* Shadow and glow effects */
+  --nebula-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --nebula-glow-blue: 0 0 15px rgba(58, 134, 255, 0.5);
+  --nebula-glow-orange: 0 0 15px rgba(255, 109, 0, 0.5);
+  
+  /* Fonts */
+  --nebula-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --nebula-font-secondary: 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ===== GLOBAL STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+body {
+  background-color: var(--nebula-bg);
+  color: var(--nebula-text-primary);
+  font-family: var(--nebula-font-primary);
+}
+
+button, input, select {
+  font-family: inherit;
+}
+
+/* ===== COSMIC BACKGROUND EFFECTS ===== */
+.nebula-finder-universe {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+  background-color: var(--nebula-bg);
+}
+
+/* Starry background */
+.nebula-stars {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
-  height: 70px; /* or any nav height */
-  z-index: 999; /* ensure it stays above page content */
-  /* Any desired styling, e.g.: background: #001524; */
+  height: 100%;
+  background-image: 
+    radial-gradient(1px 1px at 25px 5px, white, rgba(255, 255, 255, 0)),
+    radial-gradient(1px 1px at 50px 25px, white, rgba(255, 255, 255, 0)),
+    radial-gradient(1px 1px at 125px 20px, white, rgba(255, 255, 255, 0)),
+    radial-gradient(1.5px 1.5px at 50px 75px, white, rgba(255, 255, 255, 0)),
+    radial-gradient(2px 2px at 15px 125px, white, rgba(255, 255, 255, 0)),
+    radial-gradient(2.5px 2.5px at 110px 80px, white, rgba(255, 255, 255, 0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: twinkle 8s ease-in-out infinite alternate;
+  opacity: 0.3;
+  z-index: -2;
 }
 
-/* Main Container */
-.find-influencer-container {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 2rem;
-  padding: 80px 20px 20px 20px; /* top right bottom left */
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(to right, #FFECD1, #15616D);
-  min-height: 100vh;
+/* Floating cosmic blobs */
+.cosmic-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: -1;
 }
 
-/* ================= FILTERS SECTION ================= */
+@keyframes twinkle {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
 
-.filters-section {
-  background: #FFECD1;
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+/* Filter action buttons */
+.nebula-filter-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.cosmic-apply-btn, .cosmic-reset-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cosmic-apply-btn {
+  background: linear-gradient(135deg, var(--nebula-blue), var(--nebula-blue-light));
+  color: white;
+  flex: 1;
+}
+
+.cosmic-reset-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--nebula-text-secondary);
+  flex-basis: 80px;
+}
+
+.cosmic-apply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(58, 134, 255, 0.3);
+}
+
+.cosmic-reset-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--nebula-text-primary);
+}
+
+.btn-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0s;
+}
+
+.cosmic-apply-btn:hover .btn-glow {
+  transform: translateX(100%);
+  transition: transform 1s ease;
+}
+
+.btn-pulse {
+  animation: btnPulse 0.5s ease;
+}
+
+@keyframes btnPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ===== INFLUENCERS PANEL ===== */
+.nebula-influencers-panel {
+  flex: 1;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.nebula-influencers-panel.appear {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Search section */
+.nebula-search-section {
+  background: var(--nebula-surface);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
+  box-shadow: var(--nebula-shadow);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.nebula-search-section.appear {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nebula-search-container {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.nebula-search-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--nebula-text-primary);
+  border-radius: 30px;
+  padding: 14px 20px 14px 50px;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.nebula-search-input:focus {
+  border-color: var(--nebula-blue);
+  box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.2);
+}
+
+.nebula-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.search-icon-container {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.search-icon {
+  font-size: 16px;
+  color: var(--nebula-text-secondary);
+}
+
+.search-input-glow {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 10px;
+  background: var(--nebula-blue);
+  filter: blur(10px);
+  opacity: 0;
+  border-radius: 50%;
+  transition: opacity 0.3s ease;
+}
+
+.nebula-search-input:focus ~ .search-input-glow {
+  opacity: 0.3;
+}
+
+.search-active {
+  animation: searchPulse 0.5s ease;
+}
+
+@keyframes searchPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Results tools (count and sorting) */
+.nebula-results-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.results-count {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.count-number {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--nebula-blue);
+  text-shadow: 0 0 10px rgba(58, 134, 255, 0.3);
+}
+
+.count-label {
+  color: var(--nebula-text-secondary);
+  font-size: 14px;
+}
+
+.nebula-sort-options {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-label {
+  font-size: 14px;
+  color: var(--nebula-text-secondary);
+}
+
+.sort-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.sort-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--nebula-text-secondary);
+  border-radius: 30px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sort-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--nebula-text-primary);
+}
+
+.sort-btn.active {
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--nebula-blue);
+  border-color: rgba(58, 134, 255, 0.3);
+}
+
+/* Loading animations */
+.nebula-loading-container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  animation: fadeIn 1s ease-in-out;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  text-align: center;
 }
 
-.filters-section h2 {
-  font-size: 1.8rem;
-  color: #001524;
+.cosmic-loading-spinner {
+  position: relative;
+  width: 60px;
+  height: 60px;
   margin-bottom: 20px;
 }
 
-.filter-item {
-  display: flex;
-  flex-direction: column;
+.spinner-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid transparent;
 }
 
-.filter-item label {
-  font-size: 14px;
-  font-weight: bold;
-  color: #15616D;
-  margin-bottom: 5px;
+.spinner-ring:nth-child(1) {
+  width: 60px;
+  height: 60px;
+  border-top-color: var(--nebula-blue);
+  animation: spin 3s linear infinite;
 }
 
-.filter-item input,
-.filter-item select {
-  padding: 10px;
-  border: 1px solid #FFECD1;
+.spinner-ring:nth-child(2) {
+  width: 45px;
+  height: 45px;
+  top: 7.5px;
+  left: 7.5px;
+  border-right-color: var(--nebula-blue-light);
+  animation: spin 2s linear infinite reverse;
+}
+
+.spinner-ring:nth-child(3) {
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  left: 15px;
+  border-bottom-color: var(--nebula-orange);
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  color: var(--nebula-text-secondary);
+  font-size: 16px;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* No results state */
+.nebula-no-results {
+  background: var(--nebula-surface);
   border-radius: 12px;
-  width: 100%;
-  font-size: 14px;
-  background: #FFECD1;
-  transition: box-shadow 0.3s ease-in-out;
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: var(--nebula-shadow);
 }
 
-.filter-item input:focus,
-.filter-item select:focus {
-  box-shadow: 0px 0px 8px rgba(255, 125, 0, 0.5);
-  outline: none;
+.no-results-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+  opacity: 0.5;
 }
 
-/* Add Button for Niche Platforms */
-.filter-item button {
-  padding: 6px 10px;
+.nebula-no-results h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: var(--nebula-text-primary);
+}
+
+.nebula-no-results p {
   font-size: 14px;
-  font-weight: bold;
-  background: linear-gradient(to right, #FF9800, #F57C00);
+  color: var(--nebula-text-secondary);
+  margin-bottom: 20px;
+}
+
+.nebula-reset-search-btn {
+  background: linear-gradient(135deg, var(--nebula-blue), var(--nebula-blue-light));
   color: white;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.filter-item button:hover {
-  background: linear-gradient(to right, #F57C00, #FF9800);
-  transform: scale(1.05);
-}
-
-/* Filter Buttons Container */
-.filter-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.apply-filters-btn,
-.remove-filters-btn {
-  background: linear-gradient(to right, #FF7D00, #F4511E);
-  color: white;
+  padding: 12px 24px;
   font-size: 14px;
-  font-weight: bold;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 10px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.apply-filters-btn:hover,
-.remove-filters-btn:hover {
-  background: linear-gradient(to right, #F4511E, #FF7D00);
-  transform: scale(1.05);
+.nebula-reset-search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(58, 134, 255, 0.3);
 }
 
-/* ================= INFLUENCERS SECTION ================= */
-
-.influencers-section {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Search Bar */
-.search-bar input {
-  padding: 15px;
-  border: 1px solid #FFECD1;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  font-size: 14px;
-  background: #FFECD1;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease-in-out;
-}
-
-.search-bar input:focus {
-  box-shadow: 0px 0px 8px rgba(255, 125, 0, 0.5);
-  outline: none;
-}
-
-/* Influencers Grid */
-.influencers-grid {
+/* Influencer cards grid */
+.nebula-influencers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
-  animation: fadeInUp 1.5s ease-in-out;
 }
 
 /* Influencer Card */
-.influencer-card {
-  background: linear-gradient(to bottom right, #FFECD1, #FFECD1);
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
+.nebula-influencer-card {
+  background: var(--nebula-card);
+  border-radius: 12px;
   overflow: hidden;
-  animation: bounceIn 1.2s ease-in-out;
+  position: relative;
+  box-shadow: var(--nebula-shadow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: cardAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-play-state: paused;
 }
 
-.influencer-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(to bottom right, #FFECD1, #FFECD1);
+.nebula-influencer-card:nth-child(even) {
+  animation-delay: 0.1s;
 }
 
-/* Card Header */
-.card-header {
+.nebula-influencer-card:nth-child(3n) {
+  animation-delay: 0.2s;
+}
+
+.nebula-influencers-grid:has(.nebula-influencer-card) .nebula-influencer-card {
+  animation-play-state: running;
+}
+
+@keyframes cardAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nebula-influencer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.nebula-influencer-card.focused {
+  background: var(--nebula-card-hover);
+}
+
+.card-glow-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(180deg, 
+    rgba(58, 134, 255, 0.05) 0%, 
+    rgba(58, 134, 255, 0) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nebula-influencer-card:hover .card-glow-effect {
+  opacity: 1;
+}
+
+.nebula-card-content {
+  position: relative;
+  padding: 20px;
+}
+
+/* Card header with avatar */
+.nebula-card-header {
   display: flex;
-  align-items: center;
   gap: 15px;
   margin-bottom: 15px;
 }
 
-/* Profile Image */
-.profile-image {
-  width: 60px;
-  height: 60px;
+.avatar-container {
+  position: relative;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  border: 3px solid #FFECD1;
+  overflow: hidden;
+}
+
+.avatar-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--nebula-blue), var(--nebula-orange));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nebula-influencer-card:hover .avatar-glow {
+  opacity: 0.5;
+  animation: avatarGlow 2s infinite alternate ease-in-out;
+}
+
+@keyframes avatarGlow {
+  0% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.nebula-profile-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 }
 
-.influencer-card:hover .profile-image {
-  transform: scale(1.2);
-  border-color: #FF7D00;
+.nebula-influencer-card:hover .nebula-profile-image {
+  border-color: var(--nebula-blue);
 }
 
-/* Card Info */
-.card-info h3 {
-  font-size: 1.4rem;
-  color: #001524;
-  margin: 0;
-  transition: color 0.3s ease;
+.nebula-card-info {
+  flex: 1;
 }
 
-.card-info p {
-  font-size: 0.9rem;
-  color: #15616D;
-  margin: 5px 0;
+.influencer-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--nebula-text-accent);
+  margin-bottom: 5px;
+  transition: all 0.3s ease;
 }
 
-/* Tags */
-.card-tags {
+.nebula-influencer-card:hover .influencer-name {
+  color: var(--nebula-blue-light);
+}
+
+.influencer-location {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--nebula-text-secondary);
+  gap: 5px;
+}
+
+.location-icon {
+  font-size: 14px;
+}
+
+/* Rating stars */
+.nebula-rating-container {
+  margin-left: auto;
+}
+
+.nebula-star-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.nebula-filled-star {
+  color: var(--nebula-orange);
+  position: relative;
+  font-size: 16px;
+}
+
+.star-glow {
+  position: relative;
+  z-index: 1;
+}
+
+.nebula-filled-star::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  background: var(--nebula-orange);
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 0;
+  transition: all 0.3s ease;
+}
+
+.nebula-influencer-card:hover .nebula-filled-star::after {
+  width: 14px;
+  height: 14px;
+  opacity: 0.3;
+  filter: blur(4px);
+}
+
+.nebula-empty-star {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 16px;
+}
+
+.nebula-no-rating {
+  font-size: 12px;
+  color: var(--nebula-text-secondary);
+  font-style: italic;
+}
+
+/* Platform tags */
+.nebula-platform-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
+  gap: 8px;
+  margin-bottom: 15px;
 }
 
-.tag {
-  background: #FFECD1;
-  color: #15616D;
-  font-size: 0.8rem;
-  padding: 5px 10px;
-  border-radius: 20px;
-  text-align: center;
-  transition: background 0.3s ease, color 0.3s ease;
+.nebula-platform-tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--nebula-blue);
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-size: 12px;
+  transition: all 0.3s ease;
 }
 
-.tag:hover {
-  background: #15616D;
-  color: #FFECD1;
+.nebula-platform-tag:hover {
+  background: rgba(58, 134, 255, 0.2);
+  transform: translateY(-2px);
 }
 
-/* Followers + Experience */
-.card-followers p {
-  font-size: 0.9rem;
-  color: #001524;
-  margin: 3px 0;
+.more-platforms {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--nebula-text-secondary);
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-size: 12px;
 }
 
-/* Extra Info */
-.card-extra-info {
-  font-size: 0.85rem;
-  color: #001524;
-  margin-top: 10px;
-}
-.card-extra-info p {
-  margin: 3px 0;
+/* Stats with visualization */
+.nebula-stats-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 15px;
 }
 
-/* RATING */
-.card-rating {
-  display: flex;
-  gap: 3px;
-  margin-top: 10px;
+.nebula-stat {
+  margin-bottom: 10px;
 }
 
-.filled-star {
-  color: #FF7D00;
-  font-size: 1rem;
+.nebula-stat:last-child {
+  margin-bottom: 0;
 }
 
-.empty-star {
-  color: #FFECD1;
-  font-size: 1rem;
+.stat-label {
+  font-size: 12px;
+  color: var(--nebula-text-secondary);
+  margin-bottom: 5px;
 }
 
-/* Invite Section */
-.invite-section {
-  margin-top: 15px;
+.stat-value-container {
+  position: relative;
+  height: 24px;
   display: flex;
   align-items: center;
 }
 
-.invite-section label {
-  font-size: 0.8rem;
-  color: #15616D;
+.stat-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(58, 134, 255, 0.8), 
+    rgba(58, 134, 255, 0.3));
+  border-radius: 4px;
+  transition: width 1s ease;
 }
 
-.invite-section select {
-  margin: 0 5px;
-  padding: 6px 8px;
-  border: 1px solid #FFECD1;
-  border-radius: 8px;
-  background: #FFECD1;
-  font-size: 0.85rem;
+.nebula-influencer-card:hover .stat-bar {
+  background: linear-gradient(90deg, 
+    rgba(67, 97, 238, 0.8), 
+    rgba(58, 134, 255, 0.3));
+  box-shadow: 0 0 10px rgba(58, 134, 255, 0.3);
 }
 
-.invite-btn {
-  background: linear-gradient(to right, #FF9800, #F57C00);
-  color: white;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
-  font-size: 0.85rem;
-}
-
-.invite-btn:hover {
-  background: linear-gradient(to right, #F57C00, #FF9800);
-  transform: scale(1.05);
-}
-
-/* Card Buttons */
-.card-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-}
-
-.card-buttons button {
+.stat-value {
+  position: relative;
+  z-index: 1;
+  padding: 0 8px;
   font-size: 14px;
-  font-weight: bold;
-  padding: 6px 10px;
-  border: none;
+  font-weight: 500;
+  color: var(--nebula-text-accent);
+}
+
+/* Card details section */
+.nebula-card-details {
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  padding: 12px;
+  margin-bottom: 15px;
 }
 
-.view-profile-btn {
-  background: linear-gradient(to right, #1976D2, #2196F3);
-  color: white;
+.details-header {
+  margin-bottom: 10px;
+  position: relative;
 }
 
-.view-profile-btn:hover {
-  background: linear-gradient(to right, #2196F3, #1976D2);
-  transform: scale(1.05);
+.details-header h4 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--nebula-text-primary);
+  margin-bottom: 5px;
 }
 
-/* ============ ANIMATIONS ============ */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.details-underline {
+  width: 40px;
+  height: 2px;
+  background: var(--nebula-blue);
+  border-radius: 2px;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0px);
-  }
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
-@keyframes bounceIn {
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detail-icon {
+  font-size: 14px;
+  color: var(--nebula-text-secondary);
+}
+
+.detail-label {
+  font-size: 12px;
+  color: var(--nebula-text-secondary);
+}
+
+.detail-value {
+  font-size: 13px;
+  color: var(--nebula-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Invite section */
+.nebula-invite-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.nebula-campaign-select {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--nebula-text-primary);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.nebula-campaign-select:focus {
+  border-color: var(--nebula-blue);
+  box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.2);
+}
+
+.nebula-campaign-select option {
+  background-color: var(--nebula-card);
+  color: var(--nebula-text-primary);
+  padding: 5px;
+}
+
+.select-active {
+  animation: selectPulse 0.5s ease;
+}
+
+@keyframes selectPulse {
   0% {
-    transform: scale(0.8);
-    opacity: 0;
+    transform: scale(1);
   }
   50% {
-    transform: scale(1.1);
-    opacity: 0.8;
+    transform: scale(1.02);
   }
   100% {
     transform: scale(1);
-    opacity: 1;
   }
 }
 
-/* ==================== MEDIA QUERIES ==================== */
+.nebula-invite-btn {
+  background: var(--nebula-orange);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0 15px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+  position: relative;
+  overflow: hidden;
+}
 
-/* Tablets (max-width: 768px) */
-@media (max-width: 768px) {
-  .find-influencer-container {
-    grid-template-columns: 1fr;
+.nebula-invite-btn:hover {
+  background: var(--nebula-orange-light);
+}
+
+.nebula-invite-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0s;
+}
+
+.nebula-invite-btn:hover::after {
+  transform: translateX(100%);
+  transition: transform 0.6s ease;
+}
+
+/* Button states */
+.btn-loading {
+  background: var(--nebula-surface) !important;
+  color: var(--nebula-text-secondary) !important;
+  cursor: wait;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+}
+
+.btn-success {
+  background: var(--nebula-success) !important;
+  color: white !important;
+}
+
+.success-icon {
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+.btn-error {
+  background: var(--nebula-error) !important;
+  color: white !important;
+}
+
+.error-icon {
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+.nebula-error-tooltip {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--nebula-error);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: tooltipAppear 0.3s ease forwards;
+}
+
+.nebula-error-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--nebula-error);
+}
+
+@keyframes tooltipAppear {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 10px);
   }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
 
-  /* Filters section on top, influencers below */
-  .filters-section {
-    order: 1;
+/* Card actions */
+.nebula-card-actions {
+  text-align: center;
+}
+
+.nebula-view-profile-btn {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(58, 134, 255, 0.1), rgba(58, 134, 255, 0.2));
+  color: var(--nebula-blue);
+  border: 1px solid rgba(58, 134, 255, 0.3);
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.nebula-view-profile-btn:hover {
+  background: rgba(58, 134, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.nebula-view-profile-btn .btn-icon {
+  transition: transform 0.3s ease;
+  margin: 0;
+}
+
+.nebula-view-profile-btn:hover .btn-icon {
+  transform: translateX(5px);
+}
+
+/* Profile transition effect */
+.profile-transition-ripple {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 10px;
+  height: 10px;
+  background: var(--nebula-blue);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+}
+
+/* Enhanced chatbot */
+.nebula-chatbot-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.chatbot-pulse {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  bottom: 30px;
+  right: 30px;
+  border-radius: 50%;
+  background: var(--nebula-blue);
+  opacity: 0.1;
+  z-index: -1;
+  animation: chatbotPulse 3s infinite ease-in-out;
+}
+
+@keyframes chatbotPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.1;
+  }
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+@media (max-width: 1100px) {
+  .nebula-finder-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  .nebula-filters-panel {
+    width: 100%;
     margin-bottom: 20px;
   }
-  .influencers-section {
-    order: 2;
-  }
-
-  .filters-section h2 {
-    font-size: 1.5rem;
-  }
-
-  .apply-filters-btn,
-  .remove-filters-btn {
-    font-size: 12px;
-    padding: 8px;
-  }
-
-  .influencers-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  
+  .nebula-influencers-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 }
 
-/* Mobile (max-width: 480px) */
-@media (max-width: 480px) {
-  .filters-section {
-    padding: 15px;
-    border-radius: 15px;
+@media (max-width: 768px) {
+  .nebula-filter-toggle {
+    display: flex;
   }
-
-  .filters-section h2 {
-    font-size: 1.3rem;
+  
+  .nebula-filters-panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
   }
-
-  .filter-item button {
-    font-size: 12px;
-    padding: 5px 8px;
+  
+  .nebula-filters-panel.mobile-active {
+    transform: translateX(0);
   }
-
-  .apply-filters-btn,
-  .remove-filters-btn {
-    font-size: 11px;
-    padding: 6px 8px;
-  }
-
-  .influencers-grid {
-    grid-template-columns: 1fr;
+  
+  .nebula-results-tools {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 15px;
   }
-
-  .profile-image {
-    width: 50px;
-    height: 50px;
+  
+  .nebula-sort-options {
+    width: 100%;
+    justify-content: space-between;
   }
-
-  .card-info h3 {
-    font-size: 1.2rem;
+  
+  .nebula-influencers-grid {
+    grid-template-columns: 1fr;
   }
+}
 
-  .card-info p {
-    font-size: 0.8rem;
+.nebula-glow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.nebula-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+}
+
+.nebula-glow-1 {
+  width: 60vh;
+  height: 60vh;
+  background: radial-gradient(circle, var(--nebula-blue), transparent 70%);
+  top: 10%;
+  left: 5%;
+  animation: float-slow 20s infinite alternate ease-in-out;
+}
+
+.nebula-glow-2 {
+  width: 40vh;
+  height: 40vh;
+  background: radial-gradient(circle, var(--nebula-orange), transparent 70%);
+  bottom: 5%;
+  right: 10%;
+  animation: float-slow 15s infinite alternate-reverse ease-in-out;
+}
+
+.nebula-glow-3 {
+  width: 50vh;
+  height: 50vh;
+  background: radial-gradient(circle, var(--nebula-blue-light), transparent 70%);
+  top: 60%;
+  right: 30%;
+  animation: float-slow 18s 2s infinite alternate ease-in-out;
+}
+
+/* Floating particles */
+.nebula-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.nebula-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 50%;
+  filter: blur(1px);
+  opacity: 0.3;
+  animation: particle-float 20s linear infinite;
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
   }
-
-  .tag {
-    font-size: 0.7rem;
+  10% {
+    opacity: 0.3;
   }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(50px);
+    opacity: 0;
+  }
+}
 
-  .card-extra-info {
-    font-size: 0.75rem;
+@keyframes float-slow {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  100% {
+    transform: translateY(40px) translateX(20px);
+  }
+}
+
+/* ===== MAIN CONTAINER ===== */
+.nebula-finder-container {
+  display: flex;
+  padding: 20px;
+  max-width: 1800px;
+  margin: 80px auto 40px auto; /* Space for NavBar */
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== NOTIFICATION SYSTEM ===== */
+.nebula-notification {
+  position: fixed;
+  top: 100px;
+  right: -320px;
+  background: var(--nebula-card);
+  color: var(--nebula-text-primary);
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: var(--nebula-shadow);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  max-width: 300px;
+  transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-left: 3px solid var(--nebula-success);
+}
+
+.nebula-notification.show {
+  right: 20px;
+}
+
+.notification-icon {
+  background: rgba(74, 222, 128, 0.2);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nebula-success);
+  font-size: 16px;
+}
+
+.notification-message {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* ===== FILTER TOGGLE BUTTON (MOBILE) ===== */
+.nebula-filter-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: var(--nebula-surface);
+  color: var(--nebula-text-primary);
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: var(--nebula-shadow);
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: none; /* Hidden on desktop */
+}
+
+.nebula-filter-toggle:hover {
+  background: var(--nebula-card-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.nebula-filter-toggle.active {
+  background: var(--nebula-blue);
+  color: white;
+}
+
+.filter-icon {
+  font-size: 18px;
+}
+
+/* ===== FILTERS PANEL ===== */
+.nebula-filters-panel {
+  width: 300px;
+  background: var(--nebula-surface);
+  border-radius: 12px;
+  position: relative;
+  box-shadow: var(--nebula-shadow);
+  flex-shrink: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.nebula-filters-panel.appear {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.nebula-filters-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at top left, rgba(58, 134, 255, 0.15), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.nebula-filters-content {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+}
+
+.nebula-section-title {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--nebula-text-accent);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.title-icon {
+  margin-right: 10px;
+  font-size: 24px;
+}
+
+.title-underline {
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--nebula-blue), var(--nebula-blue-light));
+  border-radius: 3px;
+}
+
+/* Filter Tabs */
+.nebula-filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.filter-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--nebula-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.filter-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--nebula-text-primary);
+}
+
+.filter-tab-btn.active {
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--nebula-blue);
+  position: relative;
+}
+
+.filter-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: var(--nebula-blue);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--nebula-blue);
+}
+
+.nebula-filter-tab-content {
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.nebula-filter-tab-content.active {
+  display: block;
+}
+
+/* Filter Items */
+.nebula-filter-item {
+  margin-bottom: 18px;
+}
+
+.nebula-filter-item label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--nebula-text-secondary);
+  margin-bottom: 8px;
+}
+
+.filter-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.nebula-filter-input, .nebula-filter-select {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--nebula-text-primary);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.nebula-filter-input:focus, .nebula-filter-select:focus {
+  border-color: var(--nebula-blue);
+  box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.2);
+}
+
+.nebula-filter-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.nebula-filter-select option {
+  background-color: var(--nebula-card);
+  color: var(--nebula-text-primary);
+}
+
+/* Platform select multi */
+.platform-select-container {
+  display: flex;
+  gap: 8px;
+}
+
+.nebula-platform-select {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--nebula-text-primary);
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 14px;
+  min-height: 120px;
+  outline: none;
+}
+
+.nebula-platform-select option {
+  padding: 6px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+}
+
+.nebula-platform-select option:checked {
+  background: linear-gradient(90deg, var(--nebula-blue), var(--nebula-blue-light));
+  color: white;
+}
+
+.nebula-add-platforms-btn {
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--nebula-blue);
+  border: none;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.nebula-add-platforms-btn:hover {
+  background: rgba(58, 134, 255, 0.2);
+}
+
+.btn-icon {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.btn-text {
+  font-size: 12px;
+}
+
+/* Platform tags */
+.platform-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.platform-tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(58, 134, 255, 0.1);
+  color: var(--nebula-blue);
+  padding: 6px 10px;
+  border-radius: 30px;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.platform-icon {
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+.tag-remove-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  margin-left: 6px;
+  font-size: 14px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.tag-remove-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+@keyframes tagPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.tag-pulse {
+  animation: tagPulse 0.5s ease-in-out;
+}
+
+.tag-remove {
+  animation: tagRemove 0.3s ease forwards;
+}
+
+@keyframes tagRemove {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0;
   }
 }
