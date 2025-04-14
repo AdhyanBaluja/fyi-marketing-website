@@ -424,15 +424,22 @@ h1, h2, h3, h4, h5 {
   z-index: 1;
 }
 
+/* Fix for blurry profile name */
 .premium-profile-name {
   font-size: 32px;
   margin-bottom: 5px;
   color: var(--premium-text-primary);
-  position: relative;
-  background: linear-gradient(90deg, var(--premium-text-primary), var(--premium-text-accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* Remove potentially problematic effects */
+  text-shadow: none;
+  filter: none;
+  /* Use solid color instead of gradient */
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: var(--premium-text-primary);
+  /* Ensure sharp text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .premium-profile-rating {
@@ -1496,22 +1503,19 @@ h1, h2, h3, h4, h5 {
     transform: translateX(5px);
   }
 }
-
-/* Page transition effect */
-.page-transition {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  width: 10px;
-  height: 10px;
-  background: var(--premium-blue);
-  border-radius: 50%;
-  opacity: 0;
-  z-index: 9999;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+/* Simple fade transition */
+.fade-out {
+  animation: fadeOut 0.3s ease forwards;
 }
 
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 /* ===== RESPONSIVE STYLES ===== */
 @media (max-width: 768px) {
   .premium-profile-header {

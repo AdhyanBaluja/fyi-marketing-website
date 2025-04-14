@@ -359,19 +359,15 @@ function InfluencerProfile() {
   };
   
   const handleBackClick = () => {
-    // Create back transition effect
-    const transition = document.createElement('div');
-    transition.className = 'page-transition';
-    document.body.appendChild(transition);
+    // Add a class to the main container for fade out
+    if (profileRef.current) {
+      profileRef.current.classList.add('fade-out');
+    }
     
+    // Navigate after a short delay
     setTimeout(() => {
-      transition.style.transform = 'scale(100)';
-      transition.style.opacity = '1';
-      
-      setTimeout(() => {
-        navigate(-1);
-      }, 400);
-    }, 100);
+      navigate(-1);
+    }, 300);
   };
   
   const togglePlatformsView = () => {
