@@ -23,15 +23,20 @@ function BrandBuilderGame({ onClose }) {
   const [highScore, setHighScore] = useState(0);
   const [showTutorial, setShowTutorial] = useState(true);
 
-  // NEW: State to lock the Done button for 10 minutes and to show a message.
+  // 10-minute lock restored
   const [doneButtonDisabled, setDoneButtonDisabled] = useState(true);
   const [doneButtonLockedMessage, setDoneButtonLockedMessage] = useState(true);
+  
+  // Game state management
+  const [gameActive, setGameActive] = useState(false);
+  const [canvasReady, setCanvasReady] = useState(false);
 
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const gameContainerRef = useRef(null);
+  const gameLoopRef = useRef(null);
 
-  // NEW: Unlock the Done button after 10 minutes (600,000 milliseconds)
+  // Restored 10-minute timer
   useEffect(() => {
     const timer = setTimeout(() => {
       setDoneButtonDisabled(false);
@@ -41,6 +46,35 @@ function BrandBuilderGame({ onClose }) {
     return () => clearTimeout(timer);
   }, []);
 
+  // Set up canvas and add resize handling
+  useEffect(() => {
+    const setupCanvas = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      // Make sure canvas is properly sized
+      const container = canvas.parentElement;
+      if (container) {
+        const containerWidth = container.clientWidth;
+        canvas.width = Math.min(500, containerWidth - 20);
+      }
+      
+      setCanvasReady(true);
+    };
+
+    // Set up resize handler
+    const handleResize = () => {
+      setupCanvas();
+    };
+
+    window.addEventListener('resize', handleResize);
+    setupCanvas();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // Initialize the game and load high score
   useEffect(() => {
     const storedHighScore = localStorage.getItem('brandBuilderHighScore');
@@ -48,28 +82,52 @@ function BrandBuilderGame({ onClose }) {
       setHighScore(parseInt(storedHighScore, 10));
     }
     
-    if (!showTutorial && !gameStarted) {
-      startGame();
-    }
-    
+    // Cleanup function
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+      
+      if (gameLoopRef.current) {
+        clearInterval(gameLoopRef.current);
+      }
     };
-  }, [showTutorial, gameStarted]);
+  }, []);
+
+  // Handle game start
+  useEffect(() => {
+    if (gameStarted && canvasReady && !showTutorial) {
+      // Clear any existing game loop
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      
+      if (gameLoopRef.current) {
+        clearInterval(gameLoopRef.current);
+      }
+
+      setGameActive(true);
+      generateElements(4);
+      generateObstacles(2);
+      
+      // Start the game loop using setInterval for better reliability
+      gameLoopRef.current = setInterval(() => {
+        if (canvasRef.current) {
+          const canvas = canvasRef.current;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            updateGameState(ctx, canvas.width, canvas.height);
+          }
+        }
+      }, 16); // ~60 FPS
+    }
+  }, [gameStarted, canvasReady, showTutorial]);
 
   // Start the game
   const startGame = () => {
     setGameStarted(true);
     setGameScore(0);
     setLevel(1);
-    generateElements(4);
-    generateObstacles(2);
-    
-    if (canvasRef.current) {
-      runGameLoop();
-    }
   };
 
   // Generate collectable brand elements
@@ -90,8 +148,9 @@ function BrandBuilderGame({ onClose }) {
         x = Math.random() * (width - 60) + 30;
         y = Math.random() * (height - 150) + 30;
         
-        const distToPlayer = Math.sqrt(Math.pow(x - 250, 2) + Math.pow(y - 350, 2));
-        tooClose = distToPlayer < 100;
+        // Keep elements away from player
+        const distToPlayer = Math.sqrt(Math.pow(x - playerPosition.x, 2) + Math.pow(y - playerPosition.y, 2));
+        tooClose = distToPlayer < 80;
       } while (tooClose);
       
       newElements.push({
@@ -99,8 +158,8 @@ function BrandBuilderGame({ onClose }) {
         x,
         y,
         radius: 20,
-        speedX: (Math.random() - 0.5) * 1.2,
-        speedY: (Math.random() - 0.5) * 1.2,
+        speedX: (Math.random() - 0.5) * 1.5,
+        speedY: (Math.random() - 0.5) * 1.5,
         ...element,
         collected: false
       });
@@ -126,8 +185,9 @@ function BrandBuilderGame({ onClose }) {
         x = Math.random() * (width - 60) + 30;
         y = Math.random() * (height - 150) + 30;
         
-        const distToPlayer = Math.sqrt(Math.pow(x - 250, 2) + Math.pow(y - 350, 2));
-        tooClose = distToPlayer < 120;
+        // Keep obstacles away from player
+        const distToPlayer = Math.sqrt(Math.pow(x - playerPosition.x, 2) + Math.pow(y - playerPosition.y, 2));
+        tooClose = distToPlayer < 100;
       } while (tooClose);
       
       newObstacles.push({
@@ -135,8 +195,8 @@ function BrandBuilderGame({ onClose }) {
         x,
         y,
         radius: 20,
-        speedX: (Math.random() - 0.5) * 1.5,
-        speedY: (Math.random() - 0.5) * 1.5,
+        speedX: (Math.random() - 0.5) * 2,
+        speedY: (Math.random() - 0.5) * 2,
         ...obstacle
       });
     }
@@ -146,43 +206,61 @@ function BrandBuilderGame({ onClose }) {
 
   // Handle mouse/touch move
   const handleMouseMove = (e) => {
-    if (!canvasRef.current || !gameStarted) return;
+    if (!canvasRef.current || !gameActive) return;
     
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
-    const x = Math.max(20, Math.min(canvas.width - 20, e.clientX - rect.left));
-    const y = Math.max(20, Math.min(canvas.height - 20, e.clientY - rect.top));
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const x = Math.max(20, Math.min(canvas.width - 20, 
+      (e.clientX - rect.left) * scaleX));
+    const y = Math.max(20, Math.min(canvas.height - 20, 
+      (e.clientY - rect.top) * scaleY));
+    
     setPlayerPosition({ x, y });
   };
 
   const handleTouchMove = (e) => {
     e.preventDefault();
-    if (!canvasRef.current || !gameStarted) return;
+    if (!canvasRef.current || !gameActive) return;
     
     const touch = e.touches[0];
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
-    const x = Math.max(20, Math.min(canvas.width - 20, touch.clientX - rect.left));
-    const y = Math.max(20, Math.min(canvas.height - 20, touch.clientY - rect.top));
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const x = Math.max(20, Math.min(canvas.width - 20, 
+      (touch.clientX - rect.left) * scaleX));
+    const y = Math.max(20, Math.min(canvas.height - 20, 
+      (touch.clientY - rect.top) * scaleY));
+    
     setPlayerPosition({ x, y });
   };
 
   // Show points popup
   const showPoints = (x, y, points) => {
+    if (!gameContainerRef.current) return;
+    
     const pointsEl = document.createElement('div');
     pointsEl.className = 'points-popup';
     pointsEl.textContent = `+${points}`;
-    pointsEl.style.left = `${x}px`;
-    pointsEl.style.top = `${y}px`;
     
-    if (gameContainerRef.current) {
-      gameContainerRef.current.appendChild(pointsEl);
-      setTimeout(() => {
-        if (gameContainerRef.current && gameContainerRef.current.contains(pointsEl)) {
-          gameContainerRef.current.removeChild(pointsEl);
-        }
-      }, 1000);
+    // Position relative to the container
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const rect = canvas.getBoundingClientRect();
+      pointsEl.style.left = `${x * (rect.width / canvas.width) + rect.left - gameContainerRef.current.getBoundingClientRect().left}px`;
+      pointsEl.style.top = `${y * (rect.height / canvas.height) + rect.top - gameContainerRef.current.getBoundingClientRect().top}px`;
     }
+    
+    gameContainerRef.current.appendChild(pointsEl);
+    setTimeout(() => {
+      if (gameContainerRef.current && gameContainerRef.current.contains(pointsEl)) {
+        gameContainerRef.current.removeChild(pointsEl);
+      }
+    }, 1000);
   };
 
   // Level up
@@ -193,23 +271,16 @@ function BrandBuilderGame({ onClose }) {
     generateObstacles(1 + Math.min(Math.floor(newLevel / 2), 3));
   };
 
-  // Main game loop
-  const runGameLoop = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-    
+  // Main game update function
+  const updateGameState = (ctx, width, height) => {
     ctx.clearRect(0, 0, width, height);
     drawGrid(ctx, width, height);
     drawGameInfo(ctx, width);
     
+    // Update elements
     let allCollected = elements.length > 0;
     const updatedElements = elements.map(element => {
       if (element.collected) {
-        allCollected = allCollected && true;
         return element;
       } else {
         allCollected = false;
@@ -218,6 +289,7 @@ function BrandBuilderGame({ onClose }) {
       let newX = element.x + element.speedX;
       let newY = element.y + element.speedY;
       
+      // Bounce off walls
       if (newX <= element.radius || newX >= width - element.radius) {
         element.speedX = -element.speedX;
         newX = element.x + element.speedX;
@@ -228,6 +300,7 @@ function BrandBuilderGame({ onClose }) {
         newY = element.y + element.speedY;
       }
       
+      // Check collision with player
       const distToPlayer = Math.sqrt(Math.pow(newX - playerPosition.x, 2) + Math.pow(newY - playerPosition.y, 2));
       if (distToPlayer < 20 + element.radius) {
         setGameScore(prev => prev + element.points);
@@ -235,6 +308,7 @@ function BrandBuilderGame({ onClose }) {
         return { ...element, collected: true };
       }
       
+      // Draw element
       ctx.beginPath();
       ctx.arc(newX, newY, element.radius, 0, Math.PI * 2);
       ctx.fillStyle = element.color;
@@ -249,15 +323,18 @@ function BrandBuilderGame({ onClose }) {
       return { ...element, x: newX, y: newY };
     });
     
+    // Level up if all elements are collected
     if (allCollected && updatedElements.length > 0) {
       levelUp();
     }
     setElements(updatedElements);
     
+    // Update obstacles
     const updatedObstacles = obstacles.map(obstacle => {
       let newX = obstacle.x + obstacle.speedX;
       let newY = obstacle.y + obstacle.speedY;
       
+      // Bounce off walls
       if (newX <= obstacle.radius || newX >= width - obstacle.radius) {
         obstacle.speedX = -obstacle.speedX;
         newX = obstacle.x + obstacle.speedX;
@@ -268,9 +345,12 @@ function BrandBuilderGame({ onClose }) {
         newY = obstacle.y + obstacle.speedY;
       }
       
+      // Check collision with player
       const distToPlayer = Math.sqrt(Math.pow(newX - playerPosition.x, 2) + Math.pow(newY - playerPosition.y, 2));
       if (distToPlayer < 20 + obstacle.radius) {
         setGameScore(prev => Math.max(0, prev - 5));
+        
+        // Push obstacle away from player
         const dx = newX - playerPosition.x;
         const dy = newY - playerPosition.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -282,6 +362,7 @@ function BrandBuilderGame({ onClose }) {
         newY = playerPosition.y + ny * (20 + obstacle.radius + 5);
       }
       
+      // Draw obstacle
       ctx.beginPath();
       ctx.arc(newX, newY, obstacle.radius, 0, Math.PI * 2);
       ctx.fillStyle = obstacle.color;
@@ -298,6 +379,7 @@ function BrandBuilderGame({ onClose }) {
     
     setObstacles(updatedObstacles);
     
+    // Draw player
     ctx.beginPath();
     ctx.arc(playerPosition.x, playerPosition.y, 20, 0, Math.PI * 2);
     const gradient = ctx.createRadialGradient(playerPosition.x, playerPosition.y, 0, playerPosition.x, playerPosition.y, 20);
@@ -311,8 +393,6 @@ function BrandBuilderGame({ onClose }) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText("🚀", playerPosition.x, playerPosition.y);
-    
-    animationRef.current = requestAnimationFrame(runGameLoop);
   };
 
   // Helper function to draw grid
@@ -354,22 +434,63 @@ function BrandBuilderGame({ onClose }) {
   // Handle starting the game
   const handleStartGame = () => {
     setShowTutorial(false);
+    startGame();
   };
 
   // Handle closing (Done button)
   const handleClose = () => {
     if (doneButtonDisabled) {
-      // Optionally, you might display a message or alert here.
       return;
     }
+    
     if (gameScore > highScore) {
       localStorage.setItem('brandBuilderHighScore', gameScore.toString());
     }
+    
+    // Clean up game resources
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
     }
-    onClose(gameScore);
+    
+    if (gameLoopRef.current) {
+      clearInterval(gameLoopRef.current);
+    }
+    
+    setGameActive(false);
+    onClose && onClose(gameScore);
   };
+
+  // Handle visibility change
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Pause the game when tab is not visible
+        if (gameLoopRef.current) {
+          clearInterval(gameLoopRef.current);
+        }
+      } else if (gameStarted && !showTutorial) {
+        // Resume the game when tab becomes visible again
+        if (gameLoopRef.current) {
+          clearInterval(gameLoopRef.current);
+        }
+        
+        gameLoopRef.current = setInterval(() => {
+          if (canvasRef.current) {
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              updateGameState(ctx, canvas.width, canvas.height);
+            }
+          }
+        }, 16);
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [gameStarted, showTutorial]);
 
   return (
     <div className="brand-builder-game" ref={gameContainerRef}>
