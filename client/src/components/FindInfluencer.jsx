@@ -501,13 +501,12 @@ function FindInfluencer() {
         }
       }
 
-      // influencerLocation
-      if (filters.influencerLocation && filters.influencerLocation !== "--Select--") {
-        filtered = filtered.filter(
-          (inf) => inf.influencerLocation && inf.influencerLocation === filters.influencerLocation
-        );
-      }
-
+     // Modified filter with case-insensitive comparison
+if (filters.influencerLocation && filters.influencerLocation !== "--Select--") {
+  filtered = filtered.filter(
+    (inf) => inf.influencerLocation?.toLowerCase() === filters.influencerLocation.toLowerCase()
+  );
+}
       // majorityAudienceLocation
       if (
         filters.majorityAudienceLocation &&
