@@ -231,17 +231,7 @@
 
 /* ===== CUSTOM ANIMATIONS ===== */
 /* Floating animations for background elements */
-@keyframes float {
-  0% {
-    transform: translateY(0px) translateX(0px);
-  }
-  50% {
-    transform: translateY(-15px) translateX(10px);
-  }
-  100% {
-    transform: translateY(0px) translateX(0px);
-  }
-}
+
 
 /* Shimmer effect for gradients */
 @keyframes shimmer {
@@ -389,6 +379,9 @@
   position: absolute;
   top: -2px;
   left: -2px;
+
+
+
   right: -2px;
   bottom: -2px;
   background: linear-gradient(45deg, 
