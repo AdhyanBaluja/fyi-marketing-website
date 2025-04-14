@@ -469,7 +469,7 @@ body {
   display: inline-block;
   position: relative;
   color: var(--fy-text-primary);
-  animation: text-glow 8s infinite alternate;
+  /* animation: text-glow 8s infinite alternate; */
   text-shadow: 0 0 20px rgba(255, 125, 0, 0.2);
 }
 
@@ -579,7 +579,7 @@ body {
   box-shadow: var(--fy-shadow-light), 0 0 15px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
-  animation: slide-in 0.5s ease, glow 3s infinite alternate;
+  /* animation: slide-in 0.5s ease, glow 3s infinite alternate; */
   backdrop-filter: blur(5px);
 }
 
@@ -1905,3 +1905,32 @@ body {
  ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(to bottom, rgba(255, 125, 0, 0.9), rgba(255, 152, 0, 0.9));
  }
+
+ .fy-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.fy-calendar-day {
+  aspect-ratio: 1/1;
+  height: auto;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.fy-day-number {
+  font-weight: bold;
+  padding: 4px;
+}
+
+.fy-event-title {
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  padding: 0 4px;
+}
