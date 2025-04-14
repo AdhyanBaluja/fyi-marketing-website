@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import AiChatbot from "./AiChatbot.jsx";
 import axios from "axios";
-import "./FindInfluencer.css"; // New unique CSS filename
+import "./FindInfluencer.css"; // New ultra-premium CSS file
 import NavBar from "./NavBar.jsx";
 
 function FindInfluencer() {
@@ -10,7 +10,8 @@ function FindInfluencer() {
   const token = localStorage.getItem("token");
   const filtersRef = useRef(null);
   const searchInputRef = useRef(null);
-  const cardContainerRef = useRef(null);
+  const mainContainerRef = useRef(null);
+  const canvasRef = useRef(null);
 
   // -------------------------------
   // STATES
@@ -38,13 +39,16 @@ function FindInfluencer() {
   const [activeFilterTab, setActiveFilterTab] = useState("basic");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [focusedCard, setFocusedCard] = useState(null);
+  const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [sortOption, setSortOption] = useState("followers");
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [mouseCursor, setMouseCursor] = useState({ x: 0, y: 0 });
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [transitionState, setTransitionState] = useState({
-    filters: false,
-    cards: false,
-    search: false
+    isActive: false,
+    influencerId: null
   });
 
   // Options
@@ -74,7 +78,7 @@ function FindInfluencer() {
     "TikTok", "X", "Youtube", "Threads", "Quora", "Discord", "Snapchat"
   ];
 
-  // Platform icons mapping (using emoji as placeholders)
+  // Platform icons mapping (using emoji as placeholders - you could replace with SVG icons)
   const platformIcons = {
     "Instagram": "📸",
     "LinkedIn": "💼",
@@ -95,84 +99,172 @@ function FindInfluencer() {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
   // -------------------------------
-  // Initial animations on load
+  // CANVAS BACKGROUND ANIMATION
   // -------------------------------
   useEffect(() => {
-    // Staggered animation sequence
-    setTimeout(() => {
-      setTransitionState(prev => ({ ...prev, filters: true }));
-    }, 300);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
     
-    setTimeout(() => {
-      setTransitionState(prev => ({ ...prev, search: true }));
-    }, 600);
-    
-    setTimeout(() => {
-      setTransitionState(prev => ({ ...prev, cards: true }));
-    }, 900);
-    
-    // Focus search input with pulsing animation
-    if (searchInputRef.current) {
-      setTimeout(() => {
-        searchInputRef.current.focus();
-      }, 1500);
-    }
-    
-    // Background particles/blobs effect
-    const createBlob = () => {
-      if (!cardContainerRef.current) return;
-      
-      const blob = document.createElement('div');
-      blob.className = 'cosmic-blob';
-      
-      // Random properties
-      const size = Math.random() * 200 + 50;
-      const posX = Math.random() * window.innerWidth;
-      const posY = Math.random() * window.innerHeight;
-      const duration = Math.random() * 15 + 10;
-      const hue = Math.random() * 60 + 200; // Blue range
-      
-      // Apply styles
-      blob.style.width = `${size}px`;
-      blob.style.height = `${size}px`;
-      blob.style.left = `${posX}px`;
-      blob.style.top = `${posY}px`;
-      blob.style.animation = `float ${duration}s infinite alternate ease-in-out`;
-      blob.style.background = `radial-gradient(circle at 30% 30%, hsla(${hue}, 70%, 60%, 0.08), hsla(${hue + 30}, 90%, 50%, 0.03))`;
-      
-      // Add to DOM
-      document.body.appendChild(blob);
-      
-      // Remove after some time
-      setTimeout(() => {
-        document.body.removeChild(blob);
-        if (document.body.contains(blob)) {
-          createBlob();
-        }
-      }, duration * 1000);
+    // Set canvas dimensions
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
     
-    // Create initial blobs
-    for (let i = 0; i < 6; i++) {
-      setTimeout(() => {
-        createBlob();
-      }, i * 2000);
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    // Particles
+    const particlesArray = [];
+    const numberOfParticles = 100;
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+        this.color = `hsla(${Math.random() * 60 + 200}, 80%, 60%, ${Math.random() * 0.3 + 0.1})`;
+      }
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+        if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+      }
+      
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
     
-    // Create new blobs periodically
-    const blobInterval = setInterval(createBlob, 8000);
+    // Initialize particles
+    const init = () => {
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    };
+    
+    init();
+    
+    // Connection lines between particles
+    const connectParticles = () => {
+      for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+          const dx = particlesArray[a].x - particlesArray[b].x;
+          const dy = particlesArray[a].y - particlesArray[b].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) {
+            const opacity = 1 - distance / 100;
+            ctx.strokeStyle = `rgba(88, 150, 255, ${opacity * 0.2})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+            ctx.stroke();
+          }
+        }
+      }
+    };
+    
+    // Mouse interaction
+    const mouse = {
+      x: undefined,
+      y: undefined,
+      radius: 150
+    };
+    
+    canvas.addEventListener('mousemove', (e) => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+    
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Create gradient background
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, 'rgba(10, 15, 30, 1)');
+      gradient.addColorStop(1, 'rgba(20, 25, 45, 1)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw and update particles
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+        
+        // Mouse interaction
+        if (mouse.x && mouse.y) {
+          const dx = particlesArray[i].x - mouse.x;
+          const dy = particlesArray[i].y - mouse.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < mouse.radius) {
+            const angle = Math.atan2(dy, dx);
+            const force = (mouse.radius - distance) / mouse.radius;
+            particlesArray[i].x += Math.cos(angle) * force * 3;
+            particlesArray[i].y += Math.sin(angle) * force * 3;
+          }
+        }
+      }
+      
+      connectParticles();
+      
+      animationFrameId = requestAnimationFrame(animate);
+    };
+    
+    animate();
     
     return () => {
-      clearInterval(blobInterval);
-      // Remove any existing blobs when component unmounts
-      document.querySelectorAll('.cosmic-blob').forEach(blob => {
-        document.body.removeChild(blob);
-      });
+      window.removeEventListener('resize', resizeCanvas);
+      canvas.removeEventListener('mousemove', () => {});
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
   // -------------------------------
-  // Fetch data with loading states
+  // CUSTOM CURSOR EFFECT
+  // -------------------------------
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMouseCursor({ x: e.clientX, y: e.clientY });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  // -------------------------------
+  // INITIAL LOADING SEQUENCE
+  // -------------------------------
+  useEffect(() => {
+    // Staggered animation sequence for initial load
+    const timer1 = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 2000);
+    
+    return () => {
+      clearTimeout(timer1);
+    };
+  }, []);
+
+  // -------------------------------
+  // FETCH DATA WITH LOADING EFFECTS
   // -------------------------------
   useEffect(() => {
     if (!token) return;
@@ -228,12 +320,15 @@ function FindInfluencer() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    // Add input animation
+    // Add ripple effect animation
     const input = e.target;
-    input.classList.add('input-pulse');
+    const ripple = document.createElement('span');
+    ripple.className = 'input-ripple';
+    input.parentNode.appendChild(ripple);
+    
     setTimeout(() => {
-      input.classList.remove('input-pulse');
-    }, 500);
+      input.parentNode.removeChild(ripple);
+    }, 600);
     
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
@@ -272,7 +367,7 @@ function FindInfluencer() {
 
   const handleRemovePlatform = (platform) => {
     // Animation for tag removal
-    const tag = document.querySelector(`.platform-tag[data-platform="${platform}"]`);
+    const tag = document.querySelector(`.premium-platform-tag[data-platform="${platform}"]`);
     if (tag) {
       tag.classList.add('tag-remove');
     }
@@ -286,11 +381,12 @@ function FindInfluencer() {
   };
 
   const handleSearchChange = (e) => {
-    const searchBox = e.target.closest('.nebula-search-container');
-    if (searchBox) {
-      searchBox.classList.add('search-active');
+    // Search animation effect
+    const searchInput = searchInputRef.current;
+    if (searchInput) {
+      searchInput.classList.add('premium-search-active');
       setTimeout(() => {
-        searchBox.classList.remove('search-active');
+        searchInput.classList.remove('premium-search-active');
       }, 500);
     }
     
@@ -303,19 +399,25 @@ function FindInfluencer() {
 
   const changeFilterTab = (tab) => {
     // Tab switching animation
-    const tabElement = document.querySelector(`.filter-tab-btn[data-tab="${tab}"]`);
+    const tabElement = document.querySelector(`.premium-filter-tab-btn[data-tab="${tab}"]`);
     if (tabElement) {
       tabElement.classList.add('tab-active');
       
       // Reset other tabs
-      document.querySelectorAll('.filter-tab-btn').forEach(el => {
-        if (el !== tabElement) {
+      document.querySelectorAll('.premium-filter-tab-btn').forEach(el => {
+        if (el.getAttribute('data-tab') !== tab) {
           el.classList.remove('tab-active');
         }
       });
     }
     
     setActiveFilterTab(tab);
+  };
+
+  // Toggle dark/light mode
+  const toggleThemeMode = () => {
+    document.body.classList.toggle('light-mode');
+    setIsDarkMode(!isDarkMode);
   };
 
   // Sort influencers based on selected option
@@ -335,6 +437,18 @@ function FindInfluencer() {
   };
 
   const handleSortChange = (option) => {
+    // Don't sort if already selected
+    if (option === sortOption) return;
+    
+    // Animate the sort button
+    const sortBtn = document.querySelector(`.sort-btn[data-sort="${option}"]`);
+    if (sortBtn) {
+      sortBtn.classList.add('sort-btn-active');
+      setTimeout(() => {
+        sortBtn.classList.remove('sort-btn-active');
+      }, 500);
+    }
+    
     setSortOption(option);
     
     // Animation for sorting change
@@ -352,7 +466,7 @@ function FindInfluencer() {
     setIsLoading(true);
     
     // Add button click effect
-    const button = document.querySelector('.cosmic-apply-btn');
+    const button = document.querySelector('.premium-apply-btn');
     if (button) {
       button.classList.add('btn-pulse');
       setTimeout(() => {
@@ -411,7 +525,7 @@ function FindInfluencer() {
       if (filters.audienceAgeGroup.trim()) {
         const aag = filters.audienceAgeGroup.toLowerCase();
         filtered = filtered.filter((inf) =>
-          inf.audienceAgeGroup.toLowerCase().includes(aag)
+          inf.audienceAgeGroup?.toLowerCase().includes(aag)
         );
       }
 
@@ -419,7 +533,7 @@ function FindInfluencer() {
       if (filters.audienceGenderDemographics.trim()) {
         const agd = filters.audienceGenderDemographics.toLowerCase();
         filtered = filtered.filter((inf) =>
-          inf.audienceGenderDemographics.toLowerCase().includes(agd)
+          inf.audienceGenderDemographics?.toLowerCase().includes(agd)
         );
       }
 
@@ -467,7 +581,7 @@ function FindInfluencer() {
     setIsLoading(true);
     
     // Add button click effect
-    const button = document.querySelector('.cosmic-reset-btn');
+    const button = document.querySelector('.premium-reset-btn');
     if (button) {
       button.classList.add('btn-pulse');
       setTimeout(() => {
@@ -476,7 +590,7 @@ function FindInfluencer() {
     }
     
     // Clear all form fields with animation
-    document.querySelectorAll('.nebula-filter-input').forEach(input => {
+    document.querySelectorAll('.premium-filter-input').forEach(input => {
       input.classList.add('input-clear');
       setTimeout(() => {
         input.classList.remove('input-clear');
@@ -512,33 +626,38 @@ function FindInfluencer() {
   };
 
   // Card hover and interaction effects
-  const handleCardHover = (id, isHovering) => {
+  const handleCardHover = (id, isHovering, e) => {
+    if (e) {
+      const card = e.currentTarget;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left; // x position within the element
+      const y = e.clientY - rect.top;  // y position within the element
+      setHoverPosition({ x, y });
+    }
+    
     setFocusedCard(isHovering ? id : null);
   };
 
   // 4) View Profile with transition effect
   const handleViewProfile = (influencerId) => {
-    // Create a visual transition effect
-    const ripple = document.createElement('div');
-    ripple.className = 'profile-transition-ripple';
-    document.body.appendChild(ripple);
+    // Update state to trigger the transition animation
+    setTransitionState({
+      isActive: true,
+      influencerId
+    });
     
+    // Wait for animation to complete before navigating
     setTimeout(() => {
-      ripple.style.transform = 'scale(100)';
-      ripple.style.opacity = '1';
-      
-      setTimeout(() => {
-        navigate(`/influencer-profile/${influencerId}`);
-      }, 400);
-    }, 50);
+      navigate(`/influencer-profile/${influencerId}`);
+    }, 900);
   };
 
   // 5) star rating with animation
   const renderStars = (rating) => {
     if (rating == null || rating === 0) {
       return (
-        <div className="nebula-no-rating">
-          <span className="nebula-rating-text">No rating yet</span>
+        <div className="premium-no-rating">
+          <span className="premium-rating-text">No rating yet</span>
         </div>
       );
     }
@@ -549,20 +668,20 @@ function FindInfluencer() {
     for (let i = 1; i <= 5; i++) {
       if (i <= rounded) {
         stars.push(
-          <span key={i} className="nebula-filled-star">
+          <span key={i} className="premium-filled-star">
             <span className="star-glow">★</span>
           </span>
         );
       } else {
         stars.push(
-          <span key={i} className="nebula-empty-star">
+          <span key={i} className="premium-empty-star">
             ★
           </span>
         );
       }
     }
     
-    return <div className="nebula-star-rating">{stars}</div>;
+    return <div className="premium-star-rating">{stars}</div>;
   };
 
   // 6) Track selected campaign
@@ -592,7 +711,7 @@ function FindInfluencer() {
         button.classList.add('btn-error');
         
         const tooltip = document.createElement('div');
-        tooltip.className = 'nebula-error-tooltip';
+        tooltip.className = 'premium-error-tooltip';
         tooltip.textContent = 'Please select a campaign first';
         button.appendChild(tooltip);
         
@@ -668,44 +787,74 @@ function FindInfluencer() {
   };
 
   return (
-    <div className="nebula-finder-universe">
-      {/* Animated background elements */}
-      <div className="nebula-stars"></div>
-      <div className="nebula-glow-container">
-        <div className="nebula-glow nebula-glow-1"></div>
-        <div className="nebula-glow nebula-glow-2"></div>
-        <div className="nebula-glow nebula-glow-3"></div>
+    <div className="premium-finder-universe" ref={mainContainerRef}>
+      {/* Initial loading screen */}
+      {isInitialLoad && (
+        <div className="premium-initial-loader">
+          <div className="loader-content">
+            <div className="loader-logo">Let'sFYI</div>
+            <div className="loader-spinner">
+              <div className="spinner-circles">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+            <div className="loader-text">Preparing Your Influencer Discovery...</div>
+          </div>
+        </div>
+      )}
+      
+      {/* Dynamic Canvas Background */}
+      <canvas ref={canvasRef} className="premium-background-canvas"></canvas>
+      
+      {/* Custom cursor effect */}
+      <div 
+        className={`premium-cursor ${focusedCard ? 'cursor-active' : ''}`}
+        style={{ 
+          left: `${mouseCursor.x}px`, 
+          top: `${mouseCursor.y}px`
+        }}
+      >
+        <div className="cursor-dot"></div>
+        <div className="cursor-ring"></div>
       </div>
       
-      {/* Floating particles */}
-      <div className="nebula-particles">
-        {[...Array(20)].map((_, i) => (
-          <div 
-            key={i} 
-            className="nebula-particle"
-            style={{ 
-              animationDelay: `${i * 0.3}s`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`
-            }}
-          ></div>
-        ))}
+      {/* Profile transition effect */}
+      <div className={`profile-transition-overlay ${transitionState.isActive ? 'active' : ''}`}>
+        <div className="transition-circles">
+          <div className="circle circle-1"></div>
+          <div className="circle circle-2"></div>
+          <div className="circle circle-3"></div>
+        </div>
       </div>
       
       {/* Success notification */}
-      <div className={`nebula-notification ${showSuccess ? 'show' : ''}`}>
+      <div className={`premium-notification ${showSuccess ? 'show' : ''}`}>
         <div className="notification-icon">✓</div>
         <div className="notification-message">{successMessage}</div>
+        <div className="notification-progress"></div>
       </div>
+      
+      {/* Theme toggle */}
+      <button 
+        className={`theme-toggle-btn ${isDarkMode ? 'dark' : 'light'}`}
+        onClick={toggleThemeMode}
+      >
+        <div className="toggle-icon">
+          <span className="light-icon">☀️</span>
+          <span className="dark-icon">🌙</span>
+        </div>
+      </button>
       
       {/* Fixed NavBar at the top */}
       <NavBar />
 
       {/* Main content container */}
-      <div className="nebula-finder-container">
+      <div className="premium-finder-container">
         {/* Mobile filter toggle */}
         <button 
-          className={`nebula-filter-toggle ${showMobileFilters ? 'active' : ''}`} 
+          className={`premium-filter-toggle ${showMobileFilters ? 'active' : ''}`} 
           onClick={toggleMobileFilters}
         >
           <span className="filter-icon">⚙️</span>
@@ -713,168 +862,196 @@ function FindInfluencer() {
         </button>
         
         {/* FILTERS SECTION */}
-        <div className={`nebula-filters-panel ${showMobileFilters ? 'mobile-active' : ''} ${transitionState.filters ? 'appear' : ''}`}>
-          <div className="nebula-filters-glow"></div>
+        <div className={`premium-filters-panel ${showMobileFilters ? 'mobile-active' : ''}`}>
+          <div className="premium-glass-effect"></div>
+          <div className="premium-filters-glow"></div>
           
-          <div className="nebula-filters-content">
-            <h2 className="nebula-section-title">
+          <div className="premium-filters-content">
+            <h2 className="premium-section-title">
               <span className="title-icon">🔍</span>
               Find Influencers
               <div className="title-underline"></div>
             </h2>
             
             {/* Filter tabs for better organization */}
-            <div className="nebula-filter-tabs">
+            <div className="premium-filter-tabs">
               <button 
-                className={`filter-tab-btn ${activeFilterTab === 'basic' ? 'active' : ''}`}
+                className={`premium-filter-tab-btn ${activeFilterTab === 'basic' ? 'active' : ''}`}
                 data-tab="basic"
                 onClick={() => changeFilterTab('basic')}
               >
+                <span className="tab-icon">⭐</span>
                 Basic Filters
               </button>
               <button 
-                className={`filter-tab-btn ${activeFilterTab === 'audience' ? 'active' : ''}`}
+                className={`premium-filter-tab-btn ${activeFilterTab === 'audience' ? 'active' : ''}`}
                 data-tab="audience"
                 onClick={() => changeFilterTab('audience')}
               >
+                <span className="tab-icon">👨‍👩‍👧‍👦</span>
                 Audience
               </button>
               <button 
-                className={`filter-tab-btn ${activeFilterTab === 'platforms' ? 'active' : ''}`}
+                className={`premium-filter-tab-btn ${activeFilterTab === 'platforms' ? 'active' : ''}`}
                 data-tab="platforms"
                 onClick={() => changeFilterTab('platforms')}
               >
+                <span className="tab-icon">📱</span>
                 Platforms
               </button>
             </div>
             
             {/* Basic Filters Tab */}
-            <div className={`nebula-filter-tab-content ${activeFilterTab === 'basic' ? 'active' : ''}`}>
-              <div className="nebula-filter-item">
+            <div className={`premium-filter-tab-content ${activeFilterTab === 'basic' ? 'active' : ''}`}>
+              <div className="premium-filter-item">
                 <label>
                   <span className="filter-icon">⭐</span>
                   Experience (Years)
                 </label>
-                <input
-                  type="number"
-                  name="experience"
-                  placeholder="Min years"
-                  value={filters.experience}
-                  onChange={handleChange}
-                  className="nebula-filter-input"
-                />
+                <div className="input-container">
+                  <input
+                    type="number"
+                    name="experience"
+                    placeholder="Min years"
+                    value={filters.experience}
+                    onChange={handleChange}
+                    className="premium-filter-input"
+                  />
+                  <div className="input-focus-effect"></div>
+                </div>
               </div>
 
-              <div className="nebula-filter-item">
+              <div className="premium-filter-item">
                 <label>
                   <span className="filter-icon">👥</span>
                   Number of Followers
                 </label>
-                <input
-                  type="text"
-                  name="followers"
-                  placeholder="e.g., >10000"
-                  value={filters.followers}
-                  onChange={handleChange}
-                  className="nebula-filter-input"
-                />
+                <div className="input-container">
+                  <input
+                    type="text"
+                    name="followers"
+                    placeholder="e.g., >10000"
+                    value={filters.followers}
+                    onChange={handleChange}
+                    className="premium-filter-input"
+                  />
+                  <div className="input-focus-effect"></div>
+                </div>
               </div>
 
-              <div className="nebula-filter-item">
+              <div className="premium-filter-item">
                 <label>
                   <span className="filter-icon">📍</span>
                   Influencer Location
                 </label>
-                <select
-                  name="influencerLocation"
-                  value={filters.influencerLocation}
-                  onChange={handleChange}
-                  className="nebula-filter-select"
-                >
-                  {locationOptions.map((loc) => (
-                    <option key={loc} value={loc}>
-                      {loc}
-                    </option>
-                  ))}
-                </select>
+                <div className="select-container">
+                  <select
+                    name="influencerLocation"
+                    value={filters.influencerLocation}
+                    onChange={handleChange}
+                    className="premium-filter-select"
+                  >
+                    {locationOptions.map((loc) => (
+                      <option key={loc} value={loc}>
+                        {loc}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="select-arrow">▼</div>
+                  <div className="select-focus-effect"></div>
+                </div>
               </div>
               
-              <div className="nebula-filter-item">
+              <div className="premium-filter-item">
                 <label>
                   <span className="filter-icon">🏭</span>
                   Industry Category
                 </label>
-                <select
-                  name="industry"
-                  value={filters.industry}
-                  onChange={handleChange}
-                  className="nebula-filter-select"
-                >
-                  <option value="">Select Industry</option>
-                  {industryOptions.map((ind) => (
-                    <option key={ind} value={ind}>
-                      {ind}
-                    </option>
-                  ))}
-                </select>
+                <div className="select-container">
+                  <select
+                    name="industry"
+                    value={filters.industry}
+                    onChange={handleChange}
+                    className="premium-filter-select"
+                  >
+                    <option value="">Select Industry</option>
+                    {industryOptions.map((ind) => (
+                      <option key={ind} value={ind}>
+                        {ind}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="select-arrow">▼</div>
+                  <div className="select-focus-effect"></div>
+                </div>
               </div>
             </div>
             
             {/* Audience Filters Tab */}
-            <div className={`nebula-filter-tab-content ${activeFilterTab === 'audience' ? 'active' : ''}`}>
-              <div className="nebula-filter-item">
+            <div className={`premium-filter-tab-content ${activeFilterTab === 'audience' ? 'active' : ''}`}>
+              <div className="premium-filter-item">
                 <label>
                   <span className="filter-icon">🌎</span>
                   Audience Location
                 </label>
-                <select
-                  name="majorityAudienceLocation"
-                  value={filters.majorityAudienceLocation}
-                  onChange={handleChange}
-                  className="nebula-filter-select"
-                >
-                  {locationOptions.map((loc) => (
-                    <option key={loc} value={loc}>
-                      {loc}
-                    </option>
-                  ))}
-                </select>
+                <div className="select-container">
+                  <select
+                    name="majorityAudienceLocation"
+                    value={filters.majorityAudienceLocation}
+                    onChange={handleChange}
+                    className="premium-filter-select"
+                  >
+                    {locationOptions.map((loc) => (
+                      <option key={loc} value={loc}>
+                        {loc}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="select-arrow">▼</div>
+                  <div className="select-focus-effect"></div>
+                </div>
               </div>
 
-              <div className="nebula-filter-item">
+              <div className="premium-filter-item">
                 <label>
                   <span className="filter-icon">👨‍👩‍👧‍👦</span>
                   Audience Age Group
                 </label>
-                <input
-                  type="text"
-                  name="audienceAgeGroup"
-                  placeholder="e.g., 18–25"
-                  value={filters.audienceAgeGroup}
-                  onChange={handleChange}
-                  className="nebula-filter-input"
-                />
+                <div className="input-container">
+                  <input
+                    type="text"
+                    name="audienceAgeGroup"
+                    placeholder="e.g., 18–25"
+                    value={filters.audienceAgeGroup}
+                    onChange={handleChange}
+                    className="premium-filter-input"
+                  />
+                  <div className="input-focus-effect"></div>
+                </div>
               </div>
 
-              <div className="nebula-filter-item">
+              <div className="premium-filter-item">
                 <label>
                   <span className="filter-icon">👫</span>
                   Gender Demographics
                 </label>
-                <input
-                  type="text"
-                  name="audienceGenderDemographics"
-                  placeholder="e.g., 70% Female"
-                  value={filters.audienceGenderDemographics}
-                  onChange={handleChange}
-                  className="nebula-filter-input"
-                />
+                <div className="input-container">
+                  <input
+                    type="text"
+                    name="audienceGenderDemographics"
+                    placeholder="e.g., 70% Female"
+                    value={filters.audienceGenderDemographics}
+                    onChange={handleChange}
+                    className="premium-filter-input"
+                  />
+                  <div className="input-focus-effect"></div>
+                </div>
               </div>
             </div>
             
             {/* Platforms Filters Tab */}
-            <div className={`nebula-filter-tab-content ${activeFilterTab === 'platforms' ? 'active' : ''}`}>
-              <div className="nebula-filter-item platforms-filter">
+            <div className={`premium-filter-tab-content ${activeFilterTab === 'platforms' ? 'active' : ''}`}>
+              <div className="premium-filter-item platforms-filter">
                 <label>
                   <span className="filter-icon">📱</span>
                   Niche Platforms
@@ -883,20 +1060,22 @@ function FindInfluencer() {
                   <select 
                     multiple 
                     onChange={handlePlatformSelect}
-                    className="nebula-platform-select"
+                    className="premium-platform-select"
                     value={tempPlatformSelection}
                   >
                     {platformOptions.map((plat) => (
                       <option key={plat} value={plat}>
+                        <span className="platform-option-icon">{platformIcons[plat]}</span>
                         {plat}
                       </option>
                     ))}
                   </select>
                   <button 
                     type="button" 
-                    className="nebula-add-platforms-btn" 
+                    className="premium-add-platforms-btn" 
                     onClick={handleAddPlatforms}
                   >
+                    <div className="btn-glow"></div>
                     <span className="btn-icon">+</span>
                     <span className="btn-text">Add</span>
                   </button>
@@ -908,7 +1087,7 @@ function FindInfluencer() {
                     {filters.platforms.map((p, idx) => (
                       <span
                         key={idx}
-                        className="platform-tag"
+                        className="premium-platform-tag"
                         data-platform={p}
                       >
                         <span className="platform-icon">{platformIcons[p] || '🔗'}</span>
@@ -919,6 +1098,7 @@ function FindInfluencer() {
                         >
                           ×
                         </button>
+                        <div className="tag-glow"></div>
                       </span>
                     ))}
                   </div>
@@ -927,17 +1107,17 @@ function FindInfluencer() {
             </div>
             
             {/* Filter action buttons */}
-            <div className="nebula-filter-actions">
+            <div className="premium-filter-actions">
               <button 
-                className="cosmic-apply-btn" 
+                className="premium-apply-btn" 
                 onClick={handleApplyFilters}
               >
-                <span className="btn-glow"></span>
+                <div className="btn-glow"></div>
                 <span className="btn-text">Apply Filters</span>
                 <span className="btn-icon">✓</span>
               </button>
               <button
-                className="cosmic-reset-btn"
+                className="premium-reset-btn"
                 onClick={handleRemoveAllFilters}
               >
                 <span className="btn-text">Reset</span>
@@ -948,16 +1128,16 @@ function FindInfluencer() {
         </div>
 
         {/* INFLUENCERS SECTION */}
-        <div className={`nebula-influencers-panel ${transitionState.cards ? 'appear' : ''}`} ref={cardContainerRef}>
-          <div className={`nebula-search-section ${transitionState.search ? 'appear' : ''}`}>
-            <div className="nebula-search-container">
+        <div className="premium-influencers-panel">
+          <div className="premium-search-section">
+            <div className="premium-search-container">
               <input
                 ref={searchInputRef}
                 type="text"
                 placeholder="Search by name..."
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="nebula-search-input"
+                className="premium-search-input"
               />
               <div className="search-icon-container">
                 <span className="search-icon">🔍</span>
@@ -966,31 +1146,39 @@ function FindInfluencer() {
             </div>
             
             {/* Results count and sorting options */}
-            <div className="nebula-results-tools">
+            <div className="premium-results-tools">
               <div className="results-count">
-                <span className="count-number">{influencers.length}</span>
-                <span className="count-label">found</span>
+                <div className="count-bubble">
+                  <span className="count-number">{influencers.length}</span>
+                </div>
+                <span className="count-label">influencers found</span>
               </div>
               
-              <div className="nebula-sort-options">
+              <div className="premium-sort-options">
                 <span className="sort-label">Sort by:</span>
                 <div className="sort-buttons">
                   <button 
                     className={`sort-btn ${sortOption === 'followers' ? 'active' : ''}`}
+                    data-sort="followers"
                     onClick={() => handleSortChange('followers')}
                   >
+                    <span className="sort-icon">👥</span>
                     Followers
                   </button>
                   <button 
                     className={`sort-btn ${sortOption === 'experience' ? 'active' : ''}`}
+                    data-sort="experience"
                     onClick={() => handleSortChange('experience')}
                   >
+                    <span className="sort-icon">⭐</span>
                     Experience
                   </button>
                   <button 
                     className={`sort-btn ${sortOption === 'rating' ? 'active' : ''}`}
+                    data-sort="rating"
                     onClick={() => handleSortChange('rating')}
                   >
+                    <span className="sort-icon">⭐⭐</span>
                     Rating
                   </button>
                 </div>
@@ -1000,25 +1188,40 @@ function FindInfluencer() {
 
           {/* Loading state */}
           {isLoading ? (
-            <div className="nebula-loading-container">
-              <div className="cosmic-loading-spinner">
+            <div className="premium-loading-container">
+              <div className="premium-loading-spinner">
                 <div className="spinner-ring"></div>
                 <div className="spinner-ring"></div>
                 <div className="spinner-ring"></div>
+                <div className="spinner-center"></div>
               </div>
               <p className="loading-text">Discovering perfect influencers...</p>
+              <div className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
             </div>
           ) : (
-            <div className="nebula-influencers-grid">
+            <div className="premium-influencers-grid">
               {influencers.length === 0 ? (
-                <div className="nebula-no-results">
+                <div className="premium-no-results">
                   <div className="no-results-icon">🔍</div>
+                  <div className="no-results-illustration">
+                    <div className="illustration-magnifier"></div>
+                    <div className="illustration-dots">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
                   <h3>No influencers match your filters</h3>
                   <p>Try adjusting your search criteria</p>
                   <button 
-                    className="nebula-reset-search-btn"
+                    className="premium-reset-search-btn"
                     onClick={handleRemoveAllFilters}
                   >
+                    <div className="btn-glow"></div>
                     Reset All Filters
                   </button>
                 </div>
@@ -1026,27 +1229,32 @@ function FindInfluencer() {
                 influencers.map((inf, index) => (
                   <div 
                     key={inf._id} 
-                    className={`nebula-influencer-card ${focusedCard === inf._id ? 'focused' : ''}`}
+                    className={`premium-influencer-card ${focusedCard === inf._id ? 'focused' : ''}`}
                     style={{ 
                       animationDelay: `${index * 0.05}s`,
                     }}
-                    onMouseEnter={() => handleCardHover(inf._id, true)}
-                    onMouseLeave={() => handleCardHover(inf._id, false)}
+                    onMouseEnter={(e) => handleCardHover(inf._id, true, e)}
+                    onMouseLeave={(e) => handleCardHover(inf._id, false, e)}
                   >
                     <div className="card-glow-effect"></div>
+                    <div className="card-hover-effect" style={{ 
+                      left: `${hoverPosition.x}px`, 
+                      top: `${hoverPosition.y}px` 
+                    }}></div>
                     
-                    <div className="nebula-card-content">
+                    <div className="premium-card-content">
                       {/* Card header with avatar */}
-                      <div className="nebula-card-header">
+                      <div className="premium-card-header">
                         <div className="avatar-container">
                           <div className="avatar-glow"></div>
                           <img
                             src={inf.profileImage || "https://via.placeholder.com/60"}
                             alt={inf.name}
-                            className="nebula-profile-image"
+                            className="premium-profile-image"
                           />
+                          <div className="avatar-highlight"></div>
                         </div>
-                        <div className="nebula-card-info">
+                        <div className="premium-card-info">
                           <h3 className="influencer-name">{inf.name}</h3>
                           <p className="influencer-location">
                             <span className="location-icon">📍</span>
@@ -1054,17 +1262,18 @@ function FindInfluencer() {
                           </p>
                         </div>
                         {/* Rating */}
-                        <div className="nebula-rating-container">
+                        <div className="premium-rating-container">
                           {renderStars(inf.averageRating)}
                         </div>
                       </div>
 
                       {/* Niche Platforms with icons */}
-                      <div className="nebula-platform-tags">
+                      <div className="premium-platform-tags">
                         {inf.nichePlatforms?.slice(0, 4).map((tag, index) => (
-                          <span key={index} className="nebula-platform-tag">
+                          <span key={index} className="premium-platform-tag card-tag">
                             <span className="platform-icon">{platformIcons[tag] || '🔗'}</span>
                             {tag}
+                            <div className="tag-glow"></div>
                           </span>
                         ))}
                         {inf.nichePlatforms?.length > 4 && (
@@ -1073,36 +1282,46 @@ function FindInfluencer() {
                       </div>
 
                       {/* Stats with visualization */}
-                      <div className="nebula-stats-container">
-                        <div className="nebula-stat">
-                          <div className="stat-label">Followers</div>
+                      <div className="premium-stats-container">
+                        <div className="premium-stat">
+                          <div className="stat-label">
+                            <span className="stat-icon">👥</span>
+                            Followers
+                          </div>
                           <div className="stat-value-container">
                             <div 
-                              className="stat-bar" 
+                              className="stat-bar"
                               style={{ 
                                 width: `${Math.min(100, (inf.numFollowers || 0) / 1000)}%` 
                               }}
-                            ></div>
+                            >
+                              <div className="stat-bar-glow"></div>
+                            </div>
                             <span className="stat-value">{inf.numFollowers?.toLocaleString() || 0}</span>
                           </div>
                         </div>
                         
-                        <div className="nebula-stat">
-                          <div className="stat-label">Experience</div>
+                        <div className="premium-stat">
+                          <div className="stat-label">
+                            <span className="stat-icon">⭐</span>
+                            Experience
+                          </div>
                           <div className="stat-value-container">
                             <div 
-                              className="stat-bar" 
+                              className="stat-bar"
                               style={{ 
                                 width: `${Math.min(100, ((inf.experience || 0) / 10) * 100)}%` 
                               }}
-                            ></div>
+                            >
+                              <div className="stat-bar-glow"></div>
+                            </div>
                             <span className="stat-value">{inf.experience || 0} years</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Interactive buttons for expanded view */}
-                      <div className="nebula-card-details">
+                      <div className="premium-card-details">
                         <div className="details-header">
                           <h4>Audience Demographics</h4>
                           <div className="details-underline"></div>
@@ -1142,32 +1361,38 @@ function FindInfluencer() {
                       </div>
 
                       {/* Invite Section with animation */}
-                      <div className="nebula-invite-section">
-                        <select
-                          className={`nebula-campaign-select campaign-select-${inf._id}`}
-                          value={selectedCampaignMap[inf._id] || ""}
-                          onChange={(e) => handleCampaignSelect(inf._id, e.target.value)}
-                        >
-                          <option value="">--Select Campaign--</option>
-                          {brandCampaigns.map((camp) => (
-                            <option key={camp._id} value={camp._id}>
-                              {camp.name}
-                            </option>
-                          ))}
-                        </select>
+                      <div className="premium-invite-section">
+                        <div className="select-container invite-select-container">
+                          <select
+                            className={`premium-campaign-select campaign-select-${inf._id}`}
+                            value={selectedCampaignMap[inf._id] || ""}
+                            onChange={(e) => handleCampaignSelect(inf._id, e.target.value)}
+                          >
+                            <option value="">--Select Campaign--</option>
+                            {brandCampaigns.map((camp) => (
+                              <option key={camp._id} value={camp._id}>
+                                {camp.name}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="select-arrow">▼</div>
+                          <div className="select-focus-effect"></div>
+                        </div>
                         <button
-                          className={`nebula-invite-btn invite-btn-${inf._id}`}
+                          className={`premium-invite-btn invite-btn-${inf._id}`}
                           onClick={() => handleSendInvite(inf._id)}
                         >
+                          <div className="btn-glow"></div>
                           Send Invite
                         </button>
                       </div>
 
-                      <div className="nebula-card-actions">
+                      <div className="premium-card-actions">
                         <button
-                          className="nebula-view-profile-btn"
+                          className="premium-view-profile-btn"
                           onClick={() => handleViewProfile(inf._id)}
                         >
+                          <div className="btn-glow"></div>
                           <span className="btn-text">View Full Profile</span>
                           <span className="btn-icon">→</span>
                         </button>
@@ -1182,13 +1407,12 @@ function FindInfluencer() {
       </div>
 
       {/* Enhanced Chatbot container */}
-      <div className="nebula-chatbot-wrapper">
+      <div className="premium-chatbot-wrapper">
         <div className="chatbot-pulse"></div>
-        <AiChatbot />
+        <div className="chatbot-container">
+          <AiChatbot />
+        </div>
       </div>
-      
-      {/* Profile transition effect element */}
-      <div className="profile-transition-ripple"></div>
     </div>
   );
 }
