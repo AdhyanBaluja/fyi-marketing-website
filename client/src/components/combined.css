@@ -2127,12 +2127,8 @@ select:focus + label + .select-arrow {
     }
   }
 
-  /* ============================================
-   Brand Builder Mini-Game CSS - Add to your amplify-redesigned.css file
-   ============================================ */
-
-/* Mini-Game Popup */
-.minigame-popup {
+  /* Modal Overlay for Mini-Game */
+.modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -2144,398 +2140,33 @@ select:focus + label + .select-arrow {
     align-items: center;
     z-index: 9999;
     backdrop-filter: blur(8px);
-    animation: fadeIn 0.5s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
   }
   
-  .minigame-container {
-    background: var(--color-bg-card);
-    border-radius: var(--border-radius-xl);
-    padding: 2rem;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+  .modal-container {
+    width: 100%;
     max-width: 600px;
-    width: 100%;
-    animation: game-enter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    overflow: hidden;
+    animation: modalSlideIn 0.4s ease-out;
   }
   
-  @keyframes game-enter {
-    0% {
-      transform: scale(0.9);
+  @keyframes fadeIn {
+    from {
       opacity: 0;
     }
-    100% {
-      transform: scale(1);
+    to {
       opacity: 1;
     }
   }
   
-  /* Mini-Game Header */
-  .minigame-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .minigame-header h3 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--color-text);
-    margin: 0;
-    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: 0 2px 10px rgba(255, 125, 0, 0.3);
-  }
-  
-  /* Game Statistics */
-  .game-stats {
-    display: flex;
-    gap: 1.5rem;
-  }
-  
-  .game-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .stat-value {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    line-height: 1;
-  }
-  
-  .stat-label {
-    font-size: 0.8rem;
-    color: var(--color-text-dim);
-    margin-top: 3px;
-  }
-  
-  /* Canvas Styling */
-  .minigame-canvas {
-    width: 100%;
-    height: 400px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: var(--border-radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    margin-bottom: 1.5rem;
-    position: relative;
-  }
-  
-  /* Game Controls */
-  .game-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .control-tip {
-    text-align: center;
-    color: var(--color-text-dim);
-    font-size: 0.9rem;
-    animation: pulse-opacity 2s infinite;
-  }
-  
-  @keyframes pulse-opacity {
-    0%, 100% {
-      opacity: 0.7;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-  
-  .campaign-progress {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .progress-label {
-    color: var(--color-text);
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
-  
-  .progress-bar {
-    flex: 1;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .progress-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
-    border-radius: 3px;
-    
-  }
-  .campaign-progress .progress-bar .progress-fill {
-    animation: loading-progress 20s linear forwards;
-  }
-  
-  @keyframes loading-progress {
-    0% {
-      width: 0;
-    }
-    100% {
-      width: 100%;
-    }
-  }
-  
-  /* Points Indicator Animation */
-  .points-indicator {
-    position: absolute;
-    color: white;
-    font-weight: 700;
-    font-size: 16px;
-    pointer-events: none;
-    z-index: 100;
-    animation: points-float 1s forwards ease-out;
-    text-shadow: 0 0 5px var(--color-accent);
-  }
-  
-  @keyframes points-float {
-    0% {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(-30px) scale(1.5);
+  @keyframes modalSlideIn {
+    from {
+      transform: translateY(30px);
       opacity: 0;
     }
-  }
-  
-  /* Game Tutorial */
-  .game-tutorial {
-    padding: 1rem;
-    text-align: center;
-  }
-  
-  .game-tutorial h3 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: var(--color-text);
-    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  
-  .game-tutorial p {
-    color: var(--color-text-dim);
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-  }
-  
-  .tutorial-items {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .tutorial-item {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: var(--border-radius-md);
-    padding: 1rem 1.5rem;
-    text-align: left;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: transform 0.3s ease;
-  }
-  
-  .tutorial-item:hover {
-    transform: translateY(-3px);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  .tutorial-icon {
-    font-size: 2rem;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  
-  .tutorial-icon.collect {
-    background: linear-gradient(135deg, #FF9E00, #FF7D00);
-    box-shadow: 0 0 15px rgba(255, 125, 0, 0.4);
-  }
-  
-  .tutorial-icon.avoid {
-    background: linear-gradient(135deg, #f44336, #d32f2f);
-    box-shadow: 0 0 15px rgba(244, 67, 54, 0.4);
-  }
-  
-  .tutorial-icon.power {
-    background: linear-gradient(135deg, #E91E63, #C2185B);
-    box-shadow: 0 0 15px rgba(233, 30, 99, 0.4);
-  }
-  
-  .tutorial-text {
-    flex: 1;
-  }
-  
-  .tutorial-text h4 {
-    color: var(--color-text);
-    margin-bottom: 0.3rem;
-    font-size: 1.1rem;
-  }
-  
-  .tutorial-text p {
-    color: var(--color-text-dim);
-    font-size: 0.9rem;
-    margin: 0;
-  }
-  
-  .start-game-btn {
-    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
-    color: var(--color-text);
-    border: none;
-    border-radius: var(--border-radius-md);
-    padding: 12px 30px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .start-game-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
-  }
-  
-  .start-game-btn:active {
-    transform: translateY(-1px);
-  }
-  
-  .start-game-btn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    animation: button-shimmer 2s infinite;
-  }
-  
-  @keyframes button-shimmer {
-    100% {
-      left: 200%;
+    to {
+      transform: translateY(0);
+      opacity: 1;
     }
   }
+
   
-  .tutorial-note {
-    color: var(--color-text-dim);
-    font-size: 0.9rem;
-    font-style: italic;
-  }
-  
-  /* Game Result in Success Popup */
-  .game-result {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    text-align: center;
-  }
-  
-  .game-score-final {
-    font-size: 1.2rem;
-    color: var(--color-text);
-    margin-bottom: 0.5rem;
-  }
-  
-  .game-score-final span {
-    color: var(--color-accent);
-    font-weight: 700;
-    font-size: 1.4rem;
-  }
-  
-  .new-record {
-    font-size: 1rem;
-    color: var(--color-success);
-    font-weight: 600;
-    animation: pulse-scale 1.5s infinite;
-  }
-  
-  @keyframes pulse-scale {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 700px) {
-    .minigame-container {
-      max-width: 90%;
-      padding: 1.5rem;
-    }
-    
-    .minigame-header {
-      flex-direction: column;
-      gap: 1rem;
-      align-items: center;
-    }
-    
-    .minigame-canvas {
-      height: 300px;
-    }
-    
-    .tutorial-item {
-      flex-direction: column;
-      text-align: center;
-      padding: 1rem;
-    }
-    
-    .game-stats {
-      gap: 0.8rem;
-    }
-  }
-  
-  @media (max-width: 500px) {
-    .minigame-canvas {
-      height: 250px;
-    }
-    
-    .stat-value {
-      font-size: 1.1rem;
-    }
-    
-    .game-tutorial h3 {
-      font-size: 1.6rem;
-    }
-    
-    .game-tutorial p {
-      font-size: 0.9rem;
-    }
-  }

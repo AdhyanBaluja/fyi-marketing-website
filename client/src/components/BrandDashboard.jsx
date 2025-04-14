@@ -283,6 +283,7 @@ function BrandDashboard() {
     default:   '#004d40',    // Dark teal fallback
   };
 
+  // FIX: ensure gradient style does not expand the cell
   const getDayStyle = (dayEvents) => {
     let platformSet = new Set();
     dayEvents.forEach((ev) => {
@@ -295,29 +296,40 @@ function BrandDashboard() {
       }
     });
 
-    // Default style for calendar days with no events - cream color
+    // Default style for calendar days with no events
     if (platformSet.size === 0) {
       return {
-        backgroundColor: '#F8F1E5', // Cream color for days with no events
-        color: '#0E1D24',           // Dark text for contrast
+        backgroundColor: '#F8F1E5',
+        color: '#0E1D24',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        overflow: 'hidden',
       };
     }
 
     const uniquePlatforms = Array.from(platformSet);
     const colors = uniquePlatforms.map((pf) => platformColors[pf] || platformColors.default);
 
+    // Single color
     if (colors.length === 1) {
       return {
         backgroundColor: colors[0],
-        color: '#F8F1E5', // Light text for contrast
+        color: '#F8F1E5',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        overflow: 'hidden',
       };
     } else {
+      // Multiple colors => linear gradient
       const step = 100 / (colors.length - 1);
       const gradientParts = colors.map((clr, idx) => `${clr} ${Math.round(step * idx)}%`);
       const gradientStr = `linear-gradient(135deg, ${gradientParts.join(', ')})`;
       return {
         background: gradientStr,
-        color: '#F8F1E5', // Light text for contrast
+        color: '#F8F1E5',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        overflow: 'hidden',
       };
     }
   };
@@ -481,62 +493,82 @@ function BrandDashboard() {
       </section>
 
       {/* IMPROVED BRAND-LEVEL CALENDAR => All Active Campaign Events */}
-      <section className="calendar-section fade-in-up" style={{ backgroundColor: '#0E1D24', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}>
-        <h2 style={{ color: '#F8F1E5', fontSize: '28px', textAlign: 'center', marginBottom: '24px' }}>All Active Campaign Events</h2>
-        
-        <div className="calendar-controls" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
-          <button 
-            className="arrow-btn prev-arrow" 
+      <section
+        className="calendar-section fade-in-up"
+        style={{ backgroundColor: '#0E1D24', borderRadius: '12px', padding: '24px', marginBottom: '30px' }}
+      >
+        <h2
+          style={{
+            color: '#F8F1E5',
+            fontSize: '28px',
+            textAlign: 'center',
+            marginBottom: '24px',
+          }}
+        >
+          All Active Campaign Events
+        </h2>
+
+        <div
+          className="calendar-controls"
+          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}
+        >
+          <button
+            className="arrow-btn prev-arrow"
             onClick={handlePrevMonth}
-            style={{ 
-              backgroundColor: '#007070', 
-              color: '#F8F1E5', 
-              border: 'none', 
-              borderRadius: '50%', 
-              width: '40px', 
-              height: '40px', 
+            style={{
+              backgroundColor: '#007070',
+              color: '#F8F1E5',
+              border: 'none',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
               fontSize: '18px',
-              cursor: 'pointer' 
+              cursor: 'pointer',
             }}
           >
             &lt;
           </button>
-          <h3 style={{ 
-            color: '#F8F1E5', 
-            fontSize: '32px',
-            margin: '0 40px',
-            fontWeight: 'bold' 
-          }}>
+          <h3
+            style={{
+              color: '#F8F1E5',
+              fontSize: '32px',
+              margin: '0 40px',
+              fontWeight: 'bold',
+            }}
+          >
             {new Date(calendarYear, calendarMonth).toLocaleString('default', {
               month: 'long',
               year: 'numeric',
             })}
           </h3>
-          <button 
-            className="arrow-btn next-arrow" 
+          <button
+            className="arrow-btn next-arrow"
             onClick={handleNextMonth}
-            style={{ 
-              backgroundColor: '#007070', 
-              color: '#F8F1E5', 
-              border: 'none', 
-              borderRadius: '50%', 
-              width: '40px', 
-              height: '40px', 
+            style={{
+              backgroundColor: '#007070',
+              color: '#F8F1E5',
+              border: 'none',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
               fontSize: '18px',
-              cursor: 'pointer' 
+              cursor: 'pointer',
             }}
           >
             &gt;
           </button>
         </div>
-        
-        <div className="calendar-grid" style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(7, 1fr)', 
-          gap: '10px', 
-          maxWidth: '1000px', 
-          margin: '0 auto' 
-        }}>
+
+        <div
+          className="calendar-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(7, 1fr)',
+            gap: '10px',
+            maxWidth: '1000px',
+            margin: '0 auto',
+          }}
+        >
           {Array.from({
             length: new Date(calendarYear, calendarMonth + 1, 0).getDate(),
           }).map((_, idx) => {
@@ -558,14 +590,13 @@ function BrandDashboard() {
                   cursor: 'pointer',
                   transition: 'transform 0.2s, box-shadow 0.2s',
                   boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
-                  ':hover': {
-                    transform: 'scale(1.03)',
-                    boxShadow: '0 5px 15px rgba(0,0,0,0.3)'
-                  }
                 }}
                 onClick={() => setSelectedCalendarEvents(dayEvents)}
               >
-                <span className="day-number" style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '5px' }}>
+                <span
+                  className="day-number"
+                  style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '5px' }}
+                >
                   {day}
                 </span>
                 {dayEvents.length > 1 && (
@@ -582,19 +613,29 @@ function BrandDashboard() {
             );
           })}
         </div>
-        
+
         {selectedCalendarEvents && selectedCalendarEvents.length > 0 && (
-          <div className="day-details" style={{ 
-            backgroundColor: '#F8F1E5', 
-            borderRadius: '8px', 
-            padding: '20px', 
-            marginTop: '24px',
-            color: '#0E1D24',
-            maxWidth: '900px',
-            margin: '24px auto 0'
-          }}>
+          <div
+            className="day-details"
+            style={{
+              backgroundColor: '#F8F1E5',
+              borderRadius: '8px',
+              padding: '20px',
+              marginTop: '24px',
+              color: '#0E1D24',
+              maxWidth: '900px',
+              margin: '24px auto 0',
+            }}
+          >
             <h3 style={{ fontSize: '24px', textAlign: 'center', marginBottom: '16px' }}>Day Details</h3>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '16px',
+                justifyContent: 'center',
+              }}
+            >
               {selectedCalendarEvents.map((ev, i) => {
                 let platformsStr = '';
                 if (ev.platforms) {
@@ -614,16 +655,27 @@ function BrandDashboard() {
                 }
 
                 return (
-                  <div key={i} className="day-event-card" style={{ 
-                    backgroundColor: '#ffffff', 
-                    borderRadius: '8px', 
-                    padding: '16px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                    width: 'calc(50% - 16px)',
-                    minWidth: '300px',
-                    border: '1px solid #e0e0e0'
-                  }}>
-                    <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: '#008080', marginBottom: '12px' }}>
+                  <div
+                    key={i}
+                    className="day-event-card"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      borderRadius: '8px',
+                      padding: '16px',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                      width: 'calc(50% - 16px)',
+                      minWidth: '300px',
+                      border: '1px solid #e0e0e0',
+                    }}
+                  >
+                    <h4
+                      style={{
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        color: '#008080',
+                        marginBottom: '12px',
+                      }}
+                    >
                       {ev.event || 'Event'}
                     </h4>
                     <p className="event-detail" style={{ margin: '8px 0', fontSize: '14px' }}>

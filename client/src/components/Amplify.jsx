@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './combined.css';
 import AiChatbot from './AiChatbot.jsx';
+import BrandBuilderGame from './BrandBuilderGame.jsx'; // Import the separate game component
 
 // Expanded marketing quotes for more variety
 const marketingQuotes = [
@@ -24,27 +25,6 @@ const microAchievements = [
   "Excellent progress! Your campaign is shaping up nicely!",
   "Amazing strategy forming! Your audience will love this!",
   "You're unlocking premium marketing potential!"
-];
-
-// Brand elements for mini-game
-const brandElements = [
-  { type: "social", icon: "📱", name: "Social Media", points: 15, color: "#1DA1F2" },
-  { type: "email", icon: "📧", name: "Email Marketing", points: 10, color: "#4CAF50" },
-  { type: "content", icon: "📝", name: "Content Marketing", points: 20, color: "#FF5722" },
-  { type: "ads", icon: "🎯", name: "Targeted Ads", points: 25, color: "#9C27B0" },
-  { type: "video", icon: "🎬", name: "Video Content", points: 30, color: "#F44336" },
-  { type: "seo", icon: "🔍", name: "SEO", points: 20, color: "#2196F3" },
-  { type: "influencer", icon: "👥", name: "Influencer Marketing", points: 35, color: "#FF9800" },
-  { type: "analytics", icon: "📊", name: "Analytics", points: 15, color: "#607D8B" },
-  { type: "community", icon: "🌐", name: "Community Building", points: 25, color: "#8BC34A" },
-  { type: "loyalty", icon: "🏆", name: "Loyalty Programs", points: 20, color: "#FFC107" }
-];
-
-// Obstacles for mini-game
-const marketingObstacles = [
-  { type: "spam", icon: "🚫", name: "Spam Filter", color: "#f44336" },
-  { type: "competitor", icon: "🏢", name: "Competitor", color: "#d32f2f" },
-  { type: "adblock", icon: "⛔", name: "Ad Blocker", color: "#c62828" }
 ];
 
 // Use environment variable for API base URL; fallback to localhost if not defined
@@ -91,29 +71,9 @@ function Amplify() {
   // Mini-game state
   const [showMiniGame, setShowMiniGame] = useState(false);
   const [gameScore, setGameScore] = useState(0);
-  const [gameElements, setGameElements] = useState([]);
-  const [gameObstacles, setGameObstacles] = useState([]);
-  const [gameLevel, setGameLevel] = useState(1);
-  const [gameTime, setGameTime] = useState(60); // 60 seconds timer
-  const [gamePaused, setGamePaused] = useState(false);
-  const [userAvatar, setUserAvatar] = useState({ x: 250, y: 350, radius: 20 });
-  const [gameStreak, setGameStreak] = useState(0);
-  const [gameMultiplier, setGameMultiplier] = useState(1);
-  const [gameHighScore, setGameHighScore] = useState(0);
-  const [gameMessage, setGameMessage] = useState({ text: "", color: "#FFFFFF", opacity: 0 });
-  const [showGameTutorial, setShowGameTutorial] = useState(true);
-  const [powerUps, setPowerUps] = useState([]);
-  const [activePowerUps, setActivePowerUps] = useState({
-    magnet: false,
-    shield: false,
-    multiplier: false
-  });
-  const gameCanvasRef = useRef(null);
-  const gameAnimationRef = useRef(null);
-  const userInteractionRef = useRef(null);
-  const gameTimeIntervalRef = useRef(null);
+  
+  // Campaign creation timer
   const campaignCreationTimer = useRef(null);
-  const lastMousePosition = useRef({ x: 250, y: 350 });
 
   // Color theme options that users can toggle (professional dark themes)
   const [colorTheme, setColorTheme] = useState('orange-navy'); // 'orange-navy', 'blue-teal', 'purple-indigo'
@@ -356,14 +316,32 @@ function Amplify() {
     
     // If field was empty but now has content, activate the node interaction for visual feedback
     if (!previousValue && value) {
-      setActiveNode(Math.floor(Math.random() * networkNodes.length));
-      
-      // Create pulse effect on the active node
-      setNetworkNodes(nodes => 
-        nodes.map((node, idx) => idx === activeNode ? { ...node, pulseIntensity: 1 } : node)
+      const randomIndex = Math.floor(Math.random() * networkNodes.length);
+      setActiveNode(randomIndex);
+    
+      setNetworkNodes(nodes =>
+        nodes.map((node, idx) =>
+          idx === randomIndex ? { ...node, pulseIntensity: 1 } : node
+        )
       );
-      
+    
       setTimeout(() => setActiveNode(null), 2000);
+    }
+    
+  };
+
+  // Handle game completion callback
+  const handleGameComplete = (finalScore) => {
+    setGameScore(finalScore);
+    setShowMiniGame(false);
+    
+    // If API hasn't returned yet, redirect now
+    if (isCreating) {
+      setShowSuccessPopup(true);
+      
+      setTimeout(() => {
+        navigate('/loading');
+      }, 3000);
     }
   };
 
@@ -386,7 +364,6 @@ function Amplify() {
 
     // Show mini-game
     setShowMiniGame(true);
-    initializeGame();
 
     // Set up a simulated campaign creation time (15-25 seconds)
     const campaignCreationTime = Math.floor(Math.random() * 10000) + 15000;
@@ -414,36 +391,32 @@ function Amplify() {
 
         const newCampaign = response.data.campaign;
         if (newCampaign && newCampaign._id) {
-          // Clean up game timers
-          cleanupGameTimers();
-          
-          // Show success animation before navigating
-          setShowMiniGame(false);
-          setShowSuccessPopup(true);
-          
-          // Store the new campaign ID in localStorage
-          localStorage.setItem('latestCampaignId', newCampaign._id);
-          // Store high score if applicable
-          if (gameScore > gameHighScore) {
-            localStorage.setItem('brandBuilderHighScore', gameScore);
+          // If game is still showing, let its close handler manage redirects
+          if (showMiniGame) {
+            // Store the campaign ID for later use
+            localStorage.setItem('latestCampaignId', newCampaign._id);
+          } else {
+            // Game already closed, show success and redirect
+            setShowSuccessPopup(true);
+            
+            // Store the new campaign ID in localStorage
+            localStorage.setItem('latestCampaignId', newCampaign._id);
+            
+            // Add delay for animation
+            setTimeout(() => {
+              // Then navigate to /loading
+              navigate('/loading');
+            }, 3000);
           }
-          
-          // Add delay for animation
-          setTimeout(() => {
-            // Then navigate to /loading
-            navigate('/loading');
-          }, 3000);
         } else {
           setErrorMessage('Campaign created, but no ID returned.');
           setNetworkMode('default');
-          cleanupGameTimers();
           setShowMiniGame(false);
         }
       } catch (err) {
         console.error('Error creating amplify campaign:', err);
         setErrorMessage('Failed to create AI campaign. Please try again.');
         setNetworkMode('default');
-        cleanupGameTimers();
         setShowMiniGame(false);
         
         if (formRef.current) {
@@ -459,774 +432,16 @@ function Amplify() {
         }
       }
     }, campaignCreationTime);
-
-    // Simulate API response
-    // In a real implementation, this would be replaced with actual API call handling
   };
 
-  // Clean up all game-related timers and intervals
-  const cleanupGameTimers = () => {
-    if (gameAnimationRef.current) {
-      cancelAnimationFrame(gameAnimationRef.current);
-      gameAnimationRef.current = null;
-    }
-    
-    if (gameTimeIntervalRef.current) {
-      clearInterval(gameTimeIntervalRef.current);
-      gameTimeIntervalRef.current = null;
-    }
-    
-    if (campaignCreationTimer.current) {
-      clearTimeout(campaignCreationTimer.current);
-      campaignCreationTimer.current = null;
-    }
-  };
-
-  // Initialize the brand builder mini-game
-  const initializeGame = () => {
-    // Reset game state
-    setGameScore(0);
-    setGameLevel(1);
-    setGameTime(60);
-    setGameStreak(0);
-    setGameMultiplier(1);
-    setGameMessage({ text: "", color: "#FFFFFF", opacity: 0 });
-    setActivePowerUps({
-      magnet: false,
-      shield: false,
-      multiplier: false
-    });
-    
-    // Try to retrieve previous high score
-    const savedHighScore = localStorage.getItem('brandBuilderHighScore');
-    if (savedHighScore) {
-      setGameHighScore(parseInt(savedHighScore));
-    }
-    
-    // Generate initial game elements (brand elements to collect)
-    setGameElements(generateGameElements(6));
-    
-    // Generate obstacles
-    setGameObstacles(generateGameObstacles(3));
-    
-    // Generate power-ups
-    setPowerUps(generatePowerUps(1));
-    
-    // Start game timer - the game runs for 60 seconds or until campaign creation is complete
-    gameTimeIntervalRef.current = setInterval(() => {
-      setGameTime(prevTime => {
-        if (prevTime <= 1) {
-          // Game over by time expiration
-          clearInterval(gameTimeIntervalRef.current);
-          levelUpGame(); // Start a new round
-          return 60; // Reset timer
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-  };
-  
-  // Generate brand elements (collectibles) for the mini-game
-  const generateGameElements = (count) => {
-    const canvas = gameCanvasRef.current;
-    if (!canvas) return [];
-    
-    const width = canvas.width;
-    const height = canvas.height;
-    const elements = [];
-    
-    // Create a copy of brand elements and shuffle it
-    const shuffledElements = [...brandElements]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, count);
-    
-    shuffledElements.forEach((element, index) => {
-      // Ensure elements don't spawn too close to the player's starting position
-      let x, y, tooClose;
-      do {
-        x = Math.random() * (width - 60) + 30;
-        y = Math.random() * (height - 150) + 30; // Keep away from bottom where player starts
-        
-        // Check if this position is too close to the player start position
-        const distToPlayer = Math.sqrt(
-          Math.pow(x - 250, 2) + Math.pow(y - 350, 2)
-        );
-        
-        tooClose = distToPlayer < 100;
-      } while (tooClose);
-      
-      elements.push({
-        id: Date.now() + index,
-        x,
-        y,
-        radius: 25,
-        speedX: (Math.random() - 0.5) * 1.5,
-        speedY: (Math.random() - 0.5) * 1.5,
-        ...element,
-        collected: false,
-        pulsePhase: Math.random() * Math.PI * 2, // Random starting phase for pulsing
-      });
-    });
-    
-    return elements;
-  };
-  
-  // Generate obstacles for the mini-game
-  const generateGameObstacles = (count) => {
-    const canvas = gameCanvasRef.current;
-    if (!canvas) return [];
-    
-    const width = canvas.width;
-    const height = canvas.height;
-    const obstacles = [];
-    
-    for (let i = 0; i < count; i++) {
-      // Shuffle obstacles array
-      const shuffledObstacles = [...marketingObstacles].sort(() => Math.random() - 0.5);
-      const obstacleType = shuffledObstacles[0];
-      
-      // Ensure obstacles don't spawn too close to the player's starting position
-      let x, y, tooClose;
-      do {
-        x = Math.random() * (width - 60) + 30;
-        y = Math.random() * (height - 150) + 30;
-        
-        // Check if this position is too close to the player start position
-        const distToPlayer = Math.sqrt(
-          Math.pow(x - 250, 2) + Math.pow(y - 350, 2)
-        );
-        
-        tooClose = distToPlayer < 120;
-      } while (tooClose);
-      
-      obstacles.push({
-        id: Date.now() + i + 1000,
-        x,
-        y,
-        radius: 30,
-        speedX: (Math.random() - 0.5) * 2,
-        speedY: (Math.random() - 0.5) * 2,
-        ...obstacleType
-      });
-    }
-    
-    return obstacles;
-  };
-  
-  // Generate power-ups for the mini-game
-  const generatePowerUps = (count) => {
-    const canvas = gameCanvasRef.current;
-    if (!canvas) return [];
-    
-    const width = canvas.width;
-    const height = canvas.height;
-    const powerUpTypes = [
-      { type: "magnet", icon: "🧲", name: "Magnet", color: "#FF9800", duration: 8 },
-      { type: "shield", icon: "🛡️", name: "Shield", color: "#2196F3", duration: 10 },
-      { type: "multiplier", icon: "✨", name: "Multiplier", color: "#E91E63", duration: 6 }
-    ];
-    
-    const powerUps = [];
-    
-    for (let i = 0; i < count; i++) {
-      const powerUpType = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)];
-      
-      powerUps.push({
-        id: Date.now() + i + 2000,
-        x: Math.random() * (width - 60) + 30,
-        y: Math.random() * (height - 150) + 30,
-        radius: 20,
-        collected: false,
-        ...powerUpType
-      });
-    }
-    
-    return powerUps;
-  };
-  
-  // Level up the game
-  const levelUpGame = () => {
-    // Increase level
-    setGameLevel(prev => prev + 1);
-    
-    // Set message
-    showGameStatusMessage(`Level ${gameLevel + 1}!`, "#FFC107");
-    
-    // Add more elements and obstacles based on level
-    const elementCount = Math.min(6 + Math.floor(gameLevel / 2), 12);
-    const obstacleCount = Math.min(3 + Math.floor(gameLevel / 3), 6);
-    const powerUpCount = Math.min(1 + Math.floor(gameLevel / 4), 3);
-    
-    setGameElements(generateGameElements(elementCount));
-    setGameObstacles(generateGameObstacles(obstacleCount));
-    setPowerUps(generatePowerUps(powerUpCount));
-    
-    // Reset timer for next round
-    setGameTime(60);
-  };
-  
-  // Show a status message in the game
-  const showGameStatusMessage = (text, color = "#FFFFFF") => {
-    setGameMessage({ text, color, opacity: 1 });
-    
-    setTimeout(() => {
-      setGameMessage(prev => ({ ...prev, opacity: 0 }));
-    }, 2000);
-  };
-  
-  // Mouse/touch movement handler for mini-game
-  const handleMouseMove = (e) => {
-    if (!gameCanvasRef.current || gamePaused) return;
-    
-    const canvas = gameCanvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    
-    // Calculate mouse position relative to canvas
-    const x = Math.max(
-      userAvatar.radius,
-      Math.min(
-        canvas.width - userAvatar.radius,
-        e.clientX - rect.left
-      )
-    );
-    
-    const y = Math.max(
-      userAvatar.radius,
-      Math.min(
-        canvas.height - userAvatar.radius,
-        e.clientY - rect.top
-      )
-    );
-    
-    // Update last mouse position
-    lastMousePosition.current = { x, y };
-    
-    // Update user avatar position with smooth movement
-    setUserAvatar(prev => ({
-      ...prev,
-      x: x,
-      y: y
-    }));
-  };
-  
-  // Handle touch movement for mobile devices
-  const handleTouchMove = (e) => {
-    e.preventDefault();
-    if (!gameCanvasRef.current || gamePaused) return;
-    
-    const touch = e.touches[0];
-    const canvas = gameCanvasRef.current;
-    const rect = canvas.getBoundingClientRect();
-    
-    // Calculate touch position relative to canvas
-    const x = Math.max(
-      userAvatar.radius,
-      Math.min(
-        canvas.width - userAvatar.radius,
-        touch.clientX - rect.left
-      )
-    );
-    
-    const y = Math.max(
-      userAvatar.radius,
-      Math.min(
-        canvas.height - userAvatar.radius,
-        touch.clientY - rect.top
-      )
-    );
-    
-    // Update last position
-    lastMousePosition.current = { x, y };
-    
-    // Update user avatar position
-    setUserAvatar(prev => ({
-      ...prev,
-      x: x,
-      y: y
-    }));
-  };
-  
-  // Close tutorial and start playing
-  const handleStartPlaying = () => {
-    setShowGameTutorial(false);
-  };
-  
-  // Main game loop
+  // Clean up timers when component unmounts
   useEffect(() => {
-    if (!showMiniGame || !gameCanvasRef.current || showGameTutorial) return;
-    
-    const canvas = gameCanvasRef.current;
-    const ctx = canvas.getContext('2d');
-    
-    // Set up mouse movement tracking
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-    
-    // Game animation loop
-    const animate = () => {
-      if (!canvas) return;
-      
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw background grid
-      drawGrid(ctx, canvas.width, canvas.height);
-      
-      // Draw game info
-      drawGameInfo(ctx, canvas.width, canvas.height);
-      
-      // Update and draw power-ups
-      const updatedPowerUps = powerUps.map(powerUp => {
-        if (powerUp.collected) return powerUp;
-        
-        // Check collision with player
-        const distToPlayer = Math.sqrt(
-          Math.pow(powerUp.x - userAvatar.x, 2) + 
-          Math.pow(powerUp.y - userAvatar.y, 2)
-        );
-        
-        if (distToPlayer < userAvatar.radius + powerUp.radius) {
-          // Collect power-up
-          showGameStatusMessage(`${powerUp.name} Activated!`, powerUp.color);
-          
-          // Activate power-up effect
-          setActivePowerUps(prev => ({
-            ...prev,
-            [powerUp.type]: true
-          }));
-          
-          // Schedule power-up deactivation
-          setTimeout(() => {
-            setActivePowerUps(prev => ({
-              ...prev,
-              [powerUp.type]: false
-            }));
-            showGameStatusMessage(`${powerUp.name} Expired`, "#607D8B");
-          }, powerUp.duration * 1000);
-          
-          return { ...powerUp, collected: true };
-        }
-        
-        // Draw power-up
-        ctx.beginPath();
-        ctx.arc(powerUp.x, powerUp.y, powerUp.radius, 0, Math.PI * 2);
-        ctx.fillStyle = powerUp.color;
-        ctx.fill();
-        
-        // Draw glow effect
-        ctx.save();
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = powerUp.color;
-        ctx.stroke();
-        ctx.restore();
-        
-        // Draw icon
-        ctx.fillStyle = "white";
-        ctx.font = "16px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(powerUp.icon, powerUp.x, powerUp.y);
-        
-        return powerUp;
-      });
-      
-      setPowerUps(updatedPowerUps);
-      
-      // Update and draw brand elements
-      const updatedElements = gameElements.map(element => {
-        if (element.collected) return element;
-        
-        // Move element
-        let newX = element.x + element.speedX;
-        let newY = element.y + element.speedY;
-        
-        // Bounce off walls
-        if (newX <= element.radius || newX >= canvas.width - element.radius) {
-          element.speedX = -element.speedX;
-          newX = element.x + element.speedX;
-        }
-        
-        if (newY <= element.radius || newY >= canvas.height - element.radius) {
-          element.speedY = -element.speedY;
-          newY = element.y + element.speedY;
-        }
-        
-        // Apply magnet effect if active
-        if (activePowerUps.magnet) {
-          const dx = userAvatar.x - newX;
-          const dy = userAvatar.y - newY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < 150) {
-            const factor = 0.05;
-            newX += dx * factor;
-            newY += dy * factor;
-          }
-        }
-        
-        // Check collision with player
-        const distToPlayer = Math.sqrt(
-          Math.pow(newX - userAvatar.x, 2) + 
-          Math.pow(newY - userAvatar.y, 2)
-        );
-        
-        if (distToPlayer < userAvatar.radius + element.radius) {
-          // Calculate points with multiplier
-          const basePoints = element.points;
-          const multiplier = activePowerUps.multiplier ? 2 : gameMultiplier;
-          const points = basePoints * multiplier;
-          
-          // Update score
-          setGameScore(prev => prev + points);
-          
-          // Update streak
-          setGameStreak(prev => prev + 1);
-          
-          // Update multiplier every 3 collected items
-          if ((gameStreak + 1) % 3 === 0) {
-            const newMultiplier = Math.min(gameMultiplier + 0.5, 3);
-            setGameMultiplier(newMultiplier);
-            showGameStatusMessage(`${newMultiplier}x Multiplier!`, "#FFC107");
-          }
-          
-          // Show points earned
-          showPointsIndicator(newX, newY, points);
-          
-          return { ...element, collected: true };
-        }
-        
-        // Pulse effect for elements
-        const pulseOffset = Math.sin(Date.now() * 0.005 + element.pulsePhase) * 0.2 + 1;
-        const displayRadius = element.radius * pulseOffset;
-        
-        // Draw element
-        ctx.beginPath();
-        ctx.arc(newX, newY, displayRadius, 0, Math.PI * 2);
-        ctx.fillStyle = element.color;
-        ctx.fill();
-        
-        // Draw element icon
-        ctx.fillStyle = "white";
-        ctx.font = "16px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(element.icon, newX, newY);
-        
-        return {
-          ...element,
-          x: newX,
-          y: newY
-        };
-      });
-      
-      // If all elements are collected, level up
-      if (updatedElements.every(e => e.collected) && updatedElements.length > 0) {
-        levelUpGame();
-      }
-      
-      setGameElements(updatedElements);
-      
-      // Update and draw obstacles
-      const updatedObstacles = gameObstacles.map(obstacle => {
-        // Move obstacle
-        let newX = obstacle.x + obstacle.speedX;
-        let newY = obstacle.y + obstacle.speedY;
-        
-        // Bounce off walls
-        if (newX <= obstacle.radius || newX >= canvas.width - obstacle.radius) {
-          obstacle.speedX = -obstacle.speedX;
-          newX = obstacle.x + obstacle.speedX;
-        }
-        
-        if (newY <= obstacle.radius || newY >= canvas.height - obstacle.radius) {
-          obstacle.speedY = -obstacle.speedY;
-          newY = obstacle.y + obstacle.speedY;
-        }
-        
-        // Check collision with player (if shield is not active)
-        if (!activePowerUps.shield) {
-          const distToPlayer = Math.sqrt(
-            Math.pow(newX - userAvatar.x, 2) + 
-            Math.pow(newY - userAvatar.y, 2)
-          );
-          
-          if (distToPlayer < userAvatar.radius + obstacle.radius) {
-            // Penalty for hitting obstacle
-            const penalty = 10 * gameLevel;
-            setGameScore(prev => Math.max(0, prev - penalty));
-            
-            // Reset streak and multiplier
-            setGameStreak(0);
-            setGameMultiplier(1);
-            
-            // Show penalty message
-            showGameStatusMessage(`-${penalty} points!`, "#F44336");
-            
-            // Bounce away from player
-            const dx = newX - userAvatar.x;
-            const dy = newY - userAvatar.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const nx = dx / dist;
-            const ny = dy / dist;
-            
-            obstacle.speedX = nx * 3;
-            obstacle.speedY = ny * 3;
-            
-            newX = userAvatar.x + nx * (userAvatar.radius + obstacle.radius + 5);
-            newY = userAvatar.y + ny * (userAvatar.radius + obstacle.radius + 5);
-          }
-        }
-        
-        // Draw obstacle
-        ctx.beginPath();
-        ctx.arc(newX, newY, obstacle.radius, 0, Math.PI * 2);
-        ctx.fillStyle = obstacle.color;
-        ctx.fill();
-        
-        // Add warning pattern
-        ctx.save();
-        ctx.strokeStyle = "#FFD700";
-        ctx.lineWidth = 2;
-        ctx.setLineDash([5, 3]);
-        ctx.stroke();
-        ctx.restore();
-        
-        // Draw obstacle icon
-        ctx.fillStyle = "white";
-        ctx.font = "18px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(obstacle.icon, newX, newY);
-        
-        return {
-          ...obstacle,
-          x: newX,
-          y: newY
-        };
-      });
-      
-      setGameObstacles(updatedObstacles);
-      
-      // Draw player avatar
-      drawPlayerAvatar(ctx, userAvatar, activePowerUps);
-      
-      // Draw game message if active
-      if (gameMessage.opacity > 0) {
-        ctx.save();
-        ctx.fillStyle = gameMessage.color;
-        ctx.globalAlpha = gameMessage.opacity;
-        ctx.font = "bold 24px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(gameMessage.text, canvas.width / 2, canvas.height / 2);
-        ctx.restore();
-      }
-      
-      // Continue animation
-      gameAnimationRef.current = requestAnimationFrame(animate);
-    };
-    
-    // Start animation
-    gameAnimationRef.current = requestAnimationFrame(animate);
-    
-    // Cleanup event listeners on unmount
     return () => {
-      canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('touchmove', handleTouchMove);
-      if (gameAnimationRef.current) {
-        cancelAnimationFrame(gameAnimationRef.current);
+      if (campaignCreationTimer.current) {
+        clearTimeout(campaignCreationTimer.current);
       }
     };
-  }, [
-    showMiniGame, 
-    gameElements, 
-    gameObstacles, 
-    userAvatar, 
-    gameScore, 
-    gamePaused, 
-    gameLevel, 
-    gameMessage,
-    gameMultiplier,
-    gameStreak,
-    activePowerUps,
-    powerUps,
-    showGameTutorial
-  ]);
-  
-  // Helper function to draw the background grid
-  const drawGrid = (ctx, width, height) => {
-    ctx.save();
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-    ctx.lineWidth = 1;
-    
-    // Draw vertical lines
-    for (let x = 0; x <= width; x += 50) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
-      ctx.stroke();
-    }
-    
-    // Draw horizontal lines
-    for (let y = 0; y <= height; y += 50) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
-      ctx.stroke();
-    }
-    
-    ctx.restore();
-  };
-  
-  // Helper function to draw player avatar
-  const drawPlayerAvatar = (ctx, avatar, powerUps) => {
-    ctx.save();
-    
-    // Draw shield if active
-    if (powerUps.shield) {
-      ctx.beginPath();
-      ctx.arc(avatar.x, avatar.y, avatar.radius + 10, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(33, 150, 243, 0.3)";
-      ctx.fill();
-      
-      // Add shield glow effect
-      ctx.shadowBlur = 15;
-      ctx.shadowColor = "#2196F3";
-      ctx.strokeStyle = "#2196F3";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-    
-    // Draw magnet field if active
-    if (powerUps.magnet) {
-      ctx.beginPath();
-      ctx.arc(avatar.x, avatar.y, 150, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 152, 0, 0.1)";
-      ctx.fill();
-      
-      ctx.beginPath();
-      ctx.arc(avatar.x, avatar.y, 150, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(255, 152, 0, 0.3)";
-      ctx.setLineDash([5, 5]);
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-    
-    // Draw multiplier indicator if active
-    if (powerUps.multiplier) {
-      ctx.font = "14px Arial";
-      ctx.fillStyle = "#E91E63";
-      ctx.textAlign = "center";
-      ctx.fillText("2x", avatar.x, avatar.y - avatar.radius - 15);
-    }
-    
-    // Draw player circle
-    ctx.beginPath();
-    ctx.arc(avatar.x, avatar.y, avatar.radius, 0, Math.PI * 2);
-    
-    // Create gradient fill
-    const gradient = ctx.createRadialGradient(
-      avatar.x, avatar.y, 0,
-      avatar.x, avatar.y, avatar.radius
-    );
-    gradient.addColorStop(0, "#FF9E00");
-    gradient.addColorStop(1, "#FF7D00");
-    
-    ctx.fillStyle = gradient;
-    ctx.fill();
-    
-    // Add glow
-    ctx.shadowBlur = 10;
-    ctx.shadowColor = "#FF7D00";
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "#FFB74D";
-    ctx.stroke();
-    
-    // Draw player icon
-    ctx.fillStyle = "white";
-    ctx.font = "18px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("🚀", avatar.x, avatar.y);
-    
-    ctx.restore();
-  };
-  
-  // Helper function to draw game info
-  const drawGameInfo = (ctx, width, height) => {
-    ctx.save();
-    
-    // Draw semi-transparent header
-    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-    ctx.fillRect(0, 0, width, 60);
-    
-    // Draw time remaining
-    ctx.fillStyle = "white";
-    ctx.font = "16px Arial";
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    ctx.fillText(`Time: ${gameTime}s`, 20, 30);
-    
-    // Draw score
-    ctx.textAlign = "center";
-    ctx.font = "18px Arial";
-    ctx.fillText(`Score: ${gameScore}`, width / 2, 30);
-    
-    // Draw level
-    ctx.textAlign = "right";
-    ctx.fillText(`Level: ${gameLevel}`, width - 20, 30);
-    
-    // Draw multiplier
-    if (gameMultiplier > 1) {
-      ctx.fillStyle = "#FFC107";
-      ctx.textAlign = "center";
-      ctx.font = "14px Arial";
-      ctx.fillText(`${gameMultiplier}x Multiplier`, width / 2, 55);
-    }
-    
-    // Draw active power-ups
-    let powerUpX = 20;
-    if (activePowerUps.magnet) {
-      ctx.fillStyle = "#FF9800";
-      ctx.fillText("🧲", powerUpX, 55);
-      powerUpX += 30;
-    }
-    
-    if (activePowerUps.shield) {
-      ctx.fillStyle = "#2196F3";
-      ctx.fillText("🛡️", powerUpX, 55);
-      powerUpX += 30;
-    }
-    
-    if (activePowerUps.multiplier) {
-      ctx.fillStyle = "#E91E63";
-      ctx.fillText("✨", powerUpX, 55);
-    }
-    
-    ctx.restore();
-  };
-  
-  // Show points indicator animation
-  const showPointsIndicator = (x, y, points) => {
-    // Create points indicator element
-    const indicator = document.createElement('div');
-    indicator.className = 'points-indicator';
-    indicator.textContent = `+${points}`;
-    indicator.style.left = `${x}px`;
-    indicator.style.top = `${y}px`;
-    
-    // Add to game container
-    const gameContainer = document.querySelector('.minigame-container');
-    if (gameContainer) {
-      gameContainer.appendChild(indicator);
-      
-      // Remove after animation completes
-      setTimeout(() => {
-        if (gameContainer.contains(indicator)) {
-          gameContainer.removeChild(indicator);
-        }
-      }, 1000);
-    }
-  };
+  }, []);
 
   return (
     <div className={`amplify-redesigned-container ${colorTheme}`}>
@@ -1719,96 +934,11 @@ function Amplify() {
         </div>
       </div>
       
-      {/* Mini-Game Popup */}
+      {/* Mini-Game Modal - Now a separate imported component */}
       {showMiniGame && (
-        <div className="minigame-popup">
-          <div className="minigame-container">
-            {showGameTutorial ? (
-              <div className="game-tutorial">
-                <h3>Brand Builder Challenge</h3>
-                <p>While we create your campaign, try this mini-game!</p>
-                
-                <div className="tutorial-items">
-                  <div className="tutorial-item">
-                    <div className="tutorial-icon collect">📱</div>
-                    <div className="tutorial-text">
-                      <h4>Collect Brand Elements</h4>
-                      <p>Move your cursor to collect marketing channels and boost your score</p>
-                    </div>
-                  </div>
-                  
-                  <div className="tutorial-item">
-                    <div className="tutorial-icon avoid">🚫</div>
-                    <div className="tutorial-text">
-                      <h4>Avoid Obstacles</h4>
-                      <p>Steer clear of spam filters and competitors that will reduce your score</p>
-                    </div>
-                  </div>
-                  
-                  <div className="tutorial-item">
-                    <div className="tutorial-icon power">✨</div>
-                    <div className="tutorial-text">
-                      <h4>Grab Power-Ups</h4>
-                      <p>Special power-ups give you temporary abilities to boost your brand</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <button className="start-game-btn" onClick={handleStartPlaying}>
-                  Start Playing
-                </button>
-                
-                <div className="tutorial-note">
-                  Your campaign will continue to generate while you play!
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="minigame-header">
-                  <h3>Brand Builder Challenge</h3>
-                  <div className="game-stats">
-                    <div className="game-stat">
-                      <span className="stat-value">{gameScore}</span>
-                      <span className="stat-label">Score</span>
-                    </div>
-                    <div className="game-stat">
-                      <span className="stat-value">{gameLevel}</span>
-                      <span className="stat-label">Level</span>
-                    </div>
-                    <div className="game-stat">
-                      <span className="stat-value">{gameTime}</span>
-                      <span className="stat-label">Time</span>
-                    </div>
-                    {gameHighScore > 0 && (
-                      <div className="game-stat">
-                        <span className="stat-value">{gameHighScore}</span>
-                        <span className="stat-label">Best</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                <canvas 
-                  ref={gameCanvasRef} 
-                  className="minigame-canvas" 
-                  width="500"
-                  height="400"
-                ></canvas>
-                
-                <div className="game-controls">
-                  <div className="control-tip">
-                    Move your mouse cursor to control your brand rocket
-                  </div>
-                  
-                  <div className="campaign-progress">
-                    <div className="progress-label">Campaign Creation:</div>
-                    <div className="progress-bar">
-                      <div className="progress-fill"></div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <BrandBuilderGame onClose={handleGameComplete} />
           </div>
         </div>
       )}
@@ -1845,9 +975,6 @@ function Amplify() {
                 <div className="game-score-final">
                   Brand Builder Score: <span>{gameScore}</span>
                 </div>
-                {gameScore > gameHighScore && gameHighScore > 0 && (
-                  <div className="new-record">New High Score!</div>
-                )}
               </div>
             )}
           </div>
