@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './FindNewCustomers.css';
+import './combined.css';
+
 import AiChatbot from './AiChatbot.jsx';
 import demoImage from '../assets/demo.png';
 

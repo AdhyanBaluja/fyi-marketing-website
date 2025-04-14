@@ -1,34 +1,46 @@
+/* ============================================
+   Combined CSS for All AI Campaign Form Pages
+   ============================================ */
+
+/* Container Styles for Each Page */
+.amplify-container,
+.drive-event-awareness-container,
+.drive-sales-container,
+.find-customers-container,
 .market-product-container {
   display: flex;
   flex-direction: row;
   gap: 20px;
   padding: 20px;
-  background: #FFECD1; /* replaced #f9f9f9 */
+  background: #FFECD1;
   font-family: 'Poppins', sans-serif;
-  min-height: 100vh; /* Ensures the page spans the full viewport height */
+  min-height: 100vh;
   margin: 0;
 }
 
+/* Form Section Styling */
 .form-section {
   flex: 1;
-  background: #FFECD1; /* replaced white */
+  background: #FFECD1;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Headings and Paragraphs */
 h2 {
   font-size: 24px;
   margin-bottom: 10px;
-  color: #001524; /* replaced #333 */
+  color: #001524;
 }
 
 p {
   font-size: 14px;
-  color: #15616D; /* replaced #555 */
+  color: #15616D;
   margin-bottom: 20px;
 }
 
+/* Form Group and Label Styling */
 .form-group {
   margin-bottom: 15px;
 }
@@ -36,18 +48,19 @@ p {
 label {
   font-size: 16px;
   font-weight: bold;
-  color: #001524; /* replaced #333 */
+  color: #001524;
   margin-bottom: 5px;
   display: block;
 }
 
+/* Input, Select, and Textarea Styling */
 textarea,
 select,
 input {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  border: 1px solid #FFECD1; /* replaced #ddd */
+  border: 1px solid #FFECD1;
   border-radius: 5px;
   font-size: 14px;
   background-color: #FFECD1;
@@ -57,19 +70,21 @@ input {
 textarea:focus,
 select:focus,
 input:focus {
-  border-color: #FF7D00; /* replaced #007bff */
+  border-color: #FF7D00;
   outline: none;
 }
 
+/* Timeframe Inputs */
 .timeframe-inputs {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+/* Submit Button Styling */
 .submit-btn {
-  background: #FF7D00; /* replaced #007bff */
-  color: #FFECD1; /* using light text for contrast */
+  background: #FF7D00;
+  color: #FFECD1;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -79,15 +94,16 @@ input:focus {
 }
 
 .submit-btn:hover {
-  background: #78290F; /* replaced #0056b3 */
+  background: #78290F;
 }
 
+/* Image Section Styling */
 .image-section {
-  flex: 0.6; /* Adjust space given to the image section */
+  flex: 0.5;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px; /* Adds spacing inside the image section */
+  padding: 20px;
 }
 
 .demo-image {
@@ -96,26 +112,36 @@ input:focus {
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Fix the black line issue by resetting any unwanted bottom margin or background */
+/* Global Reset */
 body, html {
   margin: 0;
   padding: 0;
-  background-color: #FFECD1; /* replaced #f9f9f9 */
+  background-color: #FFECD1;
 }
 
-/* ==================== MEDIA QUERIES ==================== */
+/* ====================================
+   MEDIA QUERIES
+   ==================================== */
 
-/* Tablets and down */
+/* Tablets and Down */
 @media (max-width: 768px) {
+  .amplify-container,
+  .drive-event-awareness-container,
+  .drive-sales-container,
+  .find-customers-container,
   .market-product-container {
     flex-direction: column;
     padding: 10px;
   }
 
-  .form-section,
-  .image-section {
+  .form-section {
+    order: 1;
     padding: 15px;
-    margin-bottom: 1rem;
+  }
+
+  .image-section {
+    order: 2;
+    padding: 15px;
   }
 
   h2 {
@@ -136,19 +162,14 @@ body, html {
     font-size: 14px;
     padding: 8px 12px;
   }
-
-  .image-section {
-    order: 2; /* Image section after the form on tablets */
-    flex: none;
-  }
-
-  .form-section {
-    order: 1;
-  }
 }
 
-/* Mobile screens and down */
+/* Mobile Screens and Down */
 @media (max-width: 480px) {
+  .amplify-container,
+  .drive-event-awareness-container,
+  .drive-sales-container,
+  .find-customers-container,
   .market-product-container {
     padding: 8px;
   }
@@ -156,7 +177,6 @@ body, html {
   .form-section,
   .image-section {
     padding: 10px;
-    margin-bottom: 0.5rem;
   }
 
   h2 {
@@ -177,13 +197,5 @@ body, html {
   .submit-btn {
     font-size: 13px;
     padding: 8px 10px;
-  }
-
-  .image-section {
-    order: 2;
-  }
-
-  .form-section {
-    order: 1;
   }
 }
