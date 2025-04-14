@@ -29,7 +29,8 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
       '/influencer/',
       '/plans',
       '/campaign-results',
-      '/campaign-builder'
+      '/campaign-builder',
+      '/find-influencer'
     ];
     
     const isLoggedInByRoute = protectedRoutes.some(route => 
@@ -43,7 +44,8 @@ function NavBar({ isLoggedIn, userType, scrolled }) {
       detectedUserType = 'influencer';
     } else if (!detectedUserType && (
       location.pathname.includes('/campaign-results') || 
-      location.pathname.includes('/campaign-builder')
+      location.pathname.includes('/campaign-builder') ||
+      location.pathname.includes('/find-influencer')
     )) {
       detectedUserType = 'brand';
     }

@@ -502,12 +502,9 @@ function FindInfluencer() {
       }
 
       // influencerLocation
-      if (
-        filters.influencerLocation &&
-        filters.influencerLocation !== "--Select--"
-      ) {
+      if (filters.influencerLocation && filters.influencerLocation !== "--Select--") {
         filtered = filtered.filter(
-          (inf) => inf.influencerLocation === filters.influencerLocation
+          (inf) => inf.influencerLocation && inf.influencerLocation === filters.influencerLocation
         );
       }
 
