@@ -436,6 +436,8 @@
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow-medium);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  position: relative;
+  top: 4rem;
 }
 
 .theme-selector-button:hover {
@@ -1414,6 +1416,7 @@
   color: var(--primary-color);
   margin: 0;
   position: relative;
+  bottom: 15px;
 }
 
 .expand-indicator {
@@ -1753,7 +1756,7 @@
 
 /* Brand Request Card */
 .brand-request-card {
-  height: 200px;
+
   perspective: 1000px;
   cursor: pointer;
 }

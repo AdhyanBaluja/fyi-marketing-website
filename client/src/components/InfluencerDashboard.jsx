@@ -732,60 +732,6 @@ function BrandRequestCard({ request, onAccept }) {
   );
 }
 
-function AmplifyPlanCard() {
-  const [isGlowing, setIsGlowing] = useState(false);
-  
-  useEffect(() => {
-    // Create a pulsing effect for the AI recommendation
-    const interval = setInterval(() => {
-      setIsGlowing(prev => !prev);
-    }, 2000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className={`${styles['amplify-card']} ${styles['neo-card']} ${isGlowing ? styles['ai-glow'] : ''}`}>
-      <div className={styles['card-glare']}></div>
-      <div className={styles['ai-badge']}>
-        <span className={styles['ai-icon']}>AI</span>
-        <span className={styles['ai-label']}>Recommended</span>
-      </div>
-      
-      <h3 className={styles['ai-title']}>
-        amplify Plan
-        <SectionUnderline width="50%" />
-      </h3>
-      <div className={styles['sparkle-effect']}></div>
-      
-      <div className={styles['info-column']}>
-        <div className={styles['info-row']}>
-          <span className={styles['info-label']}>Brand:</span>
-          <span className={styles['info-value']}>LetS FYI</span>
-        </div>
-        <div className={styles['info-row']}>
-          <span className={styles['info-label']}>Budget:</span>
-          <span className={styles['info-value']}>Premium</span>
-        </div>
-        <div className={styles['info-row']}>
-          <span className={styles['info-label']}>Platform:</span>
-          <span className={styles['info-value']}>Instagram</span>
-        </div>
-        <div className={styles['info-row']}>
-          <span className={styles['info-label']}>Target:</span>
-          <span className={styles['info-value']}>Females in the United Kingdom, age group 18-50</span>
-        </div>
-      </div>
-      
-      <div className={styles['ai-action-btn']}>
-        <button className={styles['learn-more-btn']}>
-          <span>Learn More</span>
-          <span className={styles['btn-icon']}>→</span>
-        </button>
-      </div>
-    </div>
-  );
-}
 
 // Profile Avatar Component with hover effects
 function ProfileAvatar({ imageUrl, altImage, name }) {
@@ -1547,10 +1493,7 @@ function InfluencerDashboard() {
     )}
   </div>
 </section>
-        {/* AI Recommended Campaign */}
-        <section className={styles['ai-recommendation']}>
-          <AmplifyPlanCard />
-        </section>
+        
         
         {/* Brand Requests Section */}
         <section 
