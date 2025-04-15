@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './CampaignBuilder.css';
@@ -7,9 +7,9 @@ import NavBar from './NavBar';
 // Use the environment variable for the API base URL, falling back to localhost if not set
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
-// Inline SVG components to replace external icon URLs
+// Inline SVG components with enhanced styling
 const MegaphoneIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="campaign-icon-svg">
     <path d="m3 11 18-5v12L3 13"></path>
     <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path>
   </svg>
@@ -19,6 +19,7 @@ const ShoppingBagIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
     viewBox="0 0 24 24" fill="none" stroke="currentColor"
     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+    className="campaign-icon-svg"
   >
     <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
     <path d="M16 10a4 4 0 0 1-8 0"></path>
@@ -30,6 +31,7 @@ const BarChartIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
     viewBox="0 0 24 24" fill="none" stroke="currentColor"
     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+    className="campaign-icon-svg"
   >
     <line x1="18" y1="20" x2="18" y2="10"></line>
     <line x1="12" y1="20" x2="12" y2="4"></line>
@@ -41,6 +43,7 @@ const MapPinIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
     viewBox="0 0 24 24" fill="none" stroke="currentColor"
     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+    className="campaign-icon-svg"
   >
     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
     <circle cx="12" cy="10" r="3"></circle>
@@ -51,6 +54,7 @@ const CalendarHeartIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
     viewBox="0 0 24 24" fill="none" stroke="currentColor"
     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+    className="campaign-icon-svg"
   >
     <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5Z"></path>
     <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -60,8 +64,20 @@ const CalendarHeartIcon = () => (
   </svg>
 );
 
+// Animated background elements
+const AnimatedBubbles = () => {
+  return (
+    <div className="campaign-animated-bubbles">
+      {[...Array(15)].map((_, i) => (
+        <div key={i} className="campaign-bubble"></div>
+      ))}
+    </div>
+  );
+};
+
 function CampaignBuilder() {
   const navigate = useNavigate();
+  const panelRef = useRef(null);
 
   // Membership plan and loading state
   const [membershipPlan, setMembershipPlan] = useState('');
@@ -72,18 +88,43 @@ function CampaignBuilder() {
 
   // Selected goals
   const [selectedGoals, setSelectedGoals] = useState([]);
+  
+  // Animation states
+  const [isVisible, setIsVisible] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
 
   // Read user/token from localStorage
   const token = localStorage.getItem('token');
   const userId = localStorage.getItem('userId');
 
-  // Check user plan on mount
+  // Check user plan on mount and setup animations
   useEffect(() => {
     if (!token || !userId) {
       navigate('/signin');
       return;
     }
+    
     fetchUserPlan();
+    
+    // Add animation timing
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 300);
+    
+    // Sequence animations for sections
+    const topGoalsTimer = setTimeout(() => {
+      setActiveSection('top');
+    }, 800);
+    
+    const moreGoalsTimer = setTimeout(() => {
+      setActiveSection('more');
+    }, 1300);
+    
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(topGoalsTimer);
+      clearTimeout(moreGoalsTimer);
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -170,25 +211,51 @@ function CampaignBuilder() {
     }
   };
 
-  // Toggle goal selection
+  // Toggle goal selection with animation enhancement
   const handleToggleGoal = (id) => {
+    // Play selection sound for tactile feedback
+    try {
+      const audio = new Audio();
+      if (selectedGoals.includes(id)) {
+        audio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAEluZm8AAAAPAAAAAwAAAbsAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxAAAAANIAAAAAExBTUUzLjEwMC4xMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
+      } else {
+        audio.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAEluZm8AAAAPAAAABAAAAaAAICAgICAgICAgICAgQEBAQEBAQEBAQEBAYGBgYGBgYGBgYGBgYICAgICAgICAgICAgI/+MYxAAAAANIAAAAAExBTUUzLjEwMC4xMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV/+MYxDsAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV';
+      }
+      audio.volume = 0.2;
+      audio.play().catch(e => console.error("Audio play error:", e));
+    } catch (e) {
+      console.error("Audio error:", e);
+    }
+    
     setSelectedGoals((prev) =>
       prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]
     );
   };
 
-  // Reset selected goals
+  // Reset selected goals with animation
   const handleCancel = () => {
-    setSelectedGoals([]);
+    const goalElements = document.querySelectorAll('.campaign-goal-box.selected');
+    goalElements.forEach(el => {
+      el.classList.add('campaign-deselect-animation');
+    });
+    
+    setTimeout(() => {
+      setSelectedGoals([]);
+    }, 300);
   };
 
-  // Continue => Ensure exactly one selected goal => navigate
+  // Continue => Ensure exactly one selected goal => navigate with animation
   const handleContinue = () => {
     if (selectedGoals.length === 1) {
+      // Add transition effect
+      if (panelRef.current) {
+        panelRef.current.classList.add('campaign-panel-exit');
+      }
+      
       const selectedGoalId = selectedGoals[0];
       const selectedGoal = goals.find((g) => g.id === selectedGoalId);
       
-      // Pass only serializable data (no React components or functions)
+      // Pass only serializable data
       const goalData = {
         id: selectedGoal.id,
         label: selectedGoal.label,
@@ -197,27 +264,37 @@ function CampaignBuilder() {
         category: selectedGoal.category
       };
 
-      switch (selectedGoalId) {
-        case 'amplify-brand-awareness':
-          navigate('/amplify', { state: { selectedGoal: goalData } });
-          break;
-        case 'market-a-product':
-          navigate('/market-product', { state: { selectedGoal: goalData } });
-          break;
-        case 'drive-sales':
-          navigate('/drive-sales', { state: { selectedGoal: goalData } });
-          break;
-        case 'find-new-customers':
-          navigate('/find-new-customers', { state: { selectedGoal: goalData } });
-          break;
-        case 'drive-event-awareness':
-          navigate('/drive-event-awareness', { state: { selectedGoal: goalData } });
-          break;
-        default:
-          alert(`Navigation for "${selectedGoal.label}" is not yet implemented.`);
-          break;
-      }
+      // Delay navigation to allow for exit animation
+      setTimeout(() => {
+        switch (selectedGoalId) {
+          case 'amplify-brand-awareness':
+            navigate('/amplify', { state: { selectedGoal: goalData } });
+            break;
+          case 'market-a-product':
+            navigate('/market-product', { state: { selectedGoal: goalData } });
+            break;
+          case 'drive-sales':
+            navigate('/drive-sales', { state: { selectedGoal: goalData } });
+            break;
+          case 'find-new-customers':
+            navigate('/find-new-customers', { state: { selectedGoal: goalData } });
+            break;
+          case 'drive-event-awareness':
+            navigate('/drive-event-awareness', { state: { selectedGoal: goalData } });
+            break;
+          default:
+            alert(`Navigation for "${selectedGoal.label}" is not yet implemented.`);
+            break;
+        }
+      }, 600);
     } else {
+      // Shake animation for error
+      if (panelRef.current) {
+        panelRef.current.classList.add('campaign-panel-shake');
+        setTimeout(() => {
+          panelRef.current.classList.remove('campaign-panel-shake');
+        }, 500);
+      }
       alert('Please select exactly one goal to continue.');
     }
   };
@@ -228,59 +305,120 @@ function CampaignBuilder() {
 
   if (loadingPlan) {
     return (
-      <div className="campaign-builder-full-page">
-        <p style={{ textAlign: 'center', marginTop: '2rem', color: '#F8F1E5' }}>
-          Verifying your plan...
-        </p>
+      <div className="campaign-builder-page">
+        <div className="campaign-loading-container">
+          <div className="campaign-loading-spinner">
+            <div className="campaign-spinner-inner"></div>
+          </div>
+          <p className="campaign-loading-text">Verifying your plan...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="campaign-builder-full-page">
+    <div className="campaign-builder-page">
       <NavBar userInfo={userInfo} isAuthenticated={!!token} />
-      <div className="campaign-builder-panel">
-        <div className="campaign-builder-header">
-          <h2>Campaign Builder</h2>
-          <span className="new-badge">New</span>
-          <p>Choose one and get a multi-channel campaign to meet your goal.</p>
+      
+      {/* Animated background elements */}
+      <AnimatedBubbles />
+      
+      <div className={`campaign-glow-effect ${isVisible ? 'visible' : ''}`}></div>
+      
+      <div 
+        ref={panelRef}
+        className={`campaign-panel ${isVisible ? 'campaign-panel-visible' : ''}`}
+      >
+        <div className="campaign-panel-header">
+          <h2 className="campaign-panel-title">Campaign Builder</h2>
+          <span className="campaign-panel-badge">New</span>
+          <p className="campaign-panel-description">Choose one and get a multi-channel campaign to meet your goal.</p>
         </div>
 
-        <div className="top-goals-section">
-          {topGoals.map((goal) => (
+        <div className={`campaign-top-goals ${activeSection === 'top' ? 'campaign-section-active' : ''}`}>
+          {topGoals.map((goal, index) => (
             <div
               key={goal.id}
-              className={`goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
+              className={`campaign-goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
               onClick={() => handleToggleGoal(goal.id)}
+              style={{ animationDelay: `${index * 0.15}s` }}
             >
-              <div className="goal-icon">{renderIcon(goal.iconType)}</div>
-              <h3>{goal.label}</h3>
-              <p>{goal.description}</p>
+              <div className="campaign-goal-icon-container">
+                <div className="campaign-goal-icon-background"></div>
+                <div className="campaign-goal-icon">{renderIcon(goal.iconType)}</div>
+              </div>
+              <h3 className="campaign-goal-title">{goal.label}</h3>
+              <p className="campaign-goal-description">{goal.description}</p>
+              
+              {/* Selection indicator */}
+              <div className="campaign-selection-indicator">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              
+              {/* Hover effect elements */}
+              <div className="campaign-goal-hover-glow"></div>
+              <div className="campaign-goal-corner-accent top-left"></div>
+              <div className="campaign-goal-corner-accent top-right"></div>
+              <div className="campaign-goal-corner-accent bottom-left"></div>
+              <div className="campaign-goal-corner-accent bottom-right"></div>
             </div>
           ))}
         </div>
 
-        <h4 className="more-goals-title">More goals</h4>
-        <div className="more-goals-section">
-          {moreGoals.map((goal) => (
+        <h4 className={`campaign-more-goals-title ${activeSection === 'more' ? 'campaign-section-active' : ''}`}>
+          More goals
+        </h4>
+        
+        <div className={`campaign-more-goals ${activeSection === 'more' ? 'campaign-section-active' : ''}`}>
+          {moreGoals.map((goal, index) => (
             <div
               key={goal.id}
-              className={`goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
+              className={`campaign-goal-box ${selectedGoals.includes(goal.id) ? 'selected' : ''}`}
               onClick={() => handleToggleGoal(goal.id)}
+              style={{ animationDelay: `${index * 0.15}s` }}
             >
-              <div className="goal-icon">{renderIcon(goal.iconType)}</div>
-              <h3>{goal.label}</h3>
-              <p>{goal.description}</p>
+              <div className="campaign-goal-icon-container">
+                <div className="campaign-goal-icon-background"></div>
+                <div className="campaign-goal-icon">{renderIcon(goal.iconType)}</div>
+              </div>
+              <h3 className="campaign-goal-title">{goal.label}</h3>
+              <p className="campaign-goal-description">{goal.description}</p>
+              
+              {/* Selection indicator */}
+              <div className="campaign-selection-indicator">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              
+              {/* Hover effect elements */}
+              <div className="campaign-goal-hover-glow"></div>
+              <div className="campaign-goal-corner-accent top-left"></div>
+              <div className="campaign-goal-corner-accent top-right"></div>
+              <div className="campaign-goal-corner-accent bottom-left"></div>
+              <div className="campaign-goal-corner-accent bottom-right"></div>
             </div>
           ))}
         </div>
 
-        <div className="campaign-builder-buttons">
-          <button className="cancel-btn" onClick={handleCancel}>
+        <div className="campaign-panel-buttons">
+          <button 
+            className="campaign-button-cancel" 
+            onClick={handleCancel}
+          >
             Cancel
           </button>
-          <button className="continue-btn" onClick={handleContinue}>
+          <button 
+            className="campaign-button-continue" 
+            onClick={handleContinue}
+          >
             Continue
+            <div className="campaign-button-shimmer"></div>
+            <svg className="campaign-button-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </button>
         </div>
       </div>

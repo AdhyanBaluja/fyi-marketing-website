@@ -1,354 +1,941 @@
-/* CampaignBuilder.css */
+/* EnhancedCampaignBuilder.css */
 
 /* Import the Poppins font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+/* =========== BASE STYLES =========== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #001524;
-  background: #001524;
-}
-
-/* Overall Background: Deep Navy */
-.campaign-builder-full-page {
-  background-color: #001524; /* Updated to exact hex from image 3 */
-  width: 100vw; 
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   overflow-x: hidden;
 }
 
-/* ===== NavBar styling ===== */
-nav.navbar {
+/* =========== BACKGROUND & LAYOUT =========== */
+.campaign-builder-page {
+  min-height: 100vh;
   width: 100%;
-  padding: 1.2rem 2.5rem;
+  position: relative;
+  overflow: hidden;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  color: #F8F1E5; /* Updated to match the Cool Cream color */
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  position: fixed;
+  background: linear-gradient(135deg, #001524 0%, #001f36 50%, #002a4e 100%);
+  z-index: 0;
+}
+
+/* =========== ANIMATED BACKGROUND ELEMENTS =========== */
+.campaign-animated-bubbles {
+  position: absolute;
   top: 0;
   left: 0;
-  z-index: 10;
-}
-
-/* Main Card Container */
-.campaign-builder-panel {
-  background-color: #012A36; /* Updated to elegant dark teal */
   width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.campaign-bubble {
+  position: absolute;
+  bottom: -100px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 125, 0, 0.1);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: campaign-bubble-rise 15s infinite ease-in;
+}
+
+@keyframes campaign-bubble-rise {
+  0% {
+    transform: translateY(0) scale(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 0.1;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-120vh) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Position each bubble with unique properties */
+.campaign-bubble:nth-child(1) {
+  left: 10%;
+  width: 80px;
+  height: 80px;
+  animation-duration: 22s;
+  animation-delay: 0s;
+}
+
+.campaign-bubble:nth-child(2) {
+  left: 20%;
+  width: 45px;
+  height: 45px;
+  animation-duration: 20s;
+  animation-delay: 1s;
+  background: rgba(19, 106, 138, 0.1);
+}
+
+.campaign-bubble:nth-child(3) {
+  left: 35%;
+  width: 60px;
+  height: 60px;
+  animation-duration: 18s;
+  animation-delay: 2s;
+}
+
+.campaign-bubble:nth-child(4) {
+  left: 50%;
+  width: 75px;
+  height: 75px;
+  animation-duration: 21s;
+  animation-delay: 0s;
+  background: rgba(19, 106, 138, 0.1);
+}
+
+.campaign-bubble:nth-child(5) {
+  left: 65%;
+  width: 35px;
+  height: 35px;
+  animation-duration: 19s;
+  animation-delay: 1s;
+}
+
+.campaign-bubble:nth-child(6) {
+  left: 80%;
+  width: 50px;
+  height: 50px;
+  animation-duration: 15s;
+  animation-delay: 3s;
+  background: rgba(19, 106, 138, 0.1);
+}
+
+.campaign-bubble:nth-child(7) {
+  left: 15%;
+  width: 45px;
+  height: 45px;
+  animation-duration: 25s;
+  animation-delay: 2s;
+}
+
+.campaign-bubble:nth-child(8) {
+  left: 30%;
+  width: 65px;
+  height: 65px;
+  animation-duration: 23s;
+  animation-delay: 4s;
+  background: rgba(19, 106, 138, 0.1);
+}
+
+.campaign-bubble:nth-child(9) {
+  left: 45%;
+  width: 40px;
+  height: 40px;
+  animation-duration: 20s;
+  animation-delay: 1s;
+}
+
+.campaign-bubble:nth-child(10) {
+  left: 60%;
+  width: 55px;
+  height: 55px;
+  animation-duration: 26s;
+  animation-delay: 2s;
+  background: rgba(19, 106, 138, 0.1);
+}
+
+.campaign-bubble:nth-child(11) {
+  left: 75%;
+  width: 60px;
+  height: 60px;
+  animation-duration: 22s;
+  animation-delay: 0s;
+}
+
+.campaign-bubble:nth-child(12) {
+  left: 90%;
+  width: 35px;
+  height: 35px;
+  animation-duration: 18s;
+  animation-delay: 3s;
+  background: rgba(19, 106, 138, 0.1);
+}
+
+.campaign-bubble:nth-child(13) {
+  left: 25%;
+  width: 70px;
+  height: 70px;
+  animation-duration: 24s;
+  animation-delay: 5s;
+}
+
+.campaign-bubble:nth-child(14) {
+  left: 55%;
+  width: 40px;
+  height: 40px;
+  animation-duration: 19s;
+  animation-delay: 2s;
+  background: rgba(19, 106, 138, 0.1);
+}
+
+.campaign-bubble:nth-child(15) {
+  left: 85%;
+  width: 50px;
+  height: 50px;
+  animation-duration: 21s;
+  animation-delay: 4s;
+}
+
+/* Glow effect behind the panel */
+.campaign-glow-effect {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 125, 0, 0.15) 0%,
+    rgba(255, 125, 0, 0.05) 40%,
+    rgba(0, 21, 36, 0) 70%
+  );
+  z-index: 1;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+}
+
+.campaign-glow-effect.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* =========== PANEL STYLING & ANIMATIONS =========== */
+.campaign-panel {
+  position: relative;
   max-width: 800px;
-  border-radius: 12px; /* Updated to match design spec of 12px */
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5); /* Enhanced shadow for depth */
-  padding: 2.5rem 2.5rem 2rem;
-  margin: 8rem auto 0;
-  color: white;
+  width: 90%;
+  background: linear-gradient(145deg, #012A36 0%, #011824 100%);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-top: 8rem;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 2px 0 0 rgba(255, 255, 255, 0.1) inset,
+    0 -1px 0 0 rgba(0, 0, 0, 0.3) inset;
+  z-index: 5;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  overflow: hidden;
 }
 
-/* Header content inside the panel */
-.campaign-builder-header {
-  margin-bottom: 2rem;
+.campaign-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent 65%, rgba(255, 125, 0, 0.1) 75%, transparent 85%);
+  background-size: 200% 200%;
+  animation: campaign-panel-shimmer 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes campaign-panel-shimmer {
+  0% {
+    background-position: 200% 0%;
+  }
+  50% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}
+
+.campaign-panel-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.campaign-panel-exit {
+  animation: campaign-panel-exit 0.6s forwards;
+}
+
+@keyframes campaign-panel-exit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+}
+
+.campaign-panel-shake {
+  animation: campaign-panel-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes campaign-panel-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* =========== HEADER STYLING =========== */
+.campaign-panel-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
   position: relative;
-  text-align: center; /* CENTER ALIGNMENT */
 }
 
-/* Heading */
-.campaign-builder-header h2 {
+.campaign-panel-title {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
-  font-weight: 500;
-  color: #F8F1E5; /* Updated to Cool Cream */
+  font-weight: 600;
+  color: #F8F1E5;
+  margin-bottom: 0.5rem;
   display: inline-block;
-  margin-right: 0.5rem;
+  letter-spacing: 0.5px;
+  background: linear-gradient(to right, #F8F1E5, #FFC88A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: campaign-text-shimmer 8s ease-in-out infinite;
+  position: relative;
 }
 
-/* "New" badge */
-.new-badge {
-  background-color: #FF7D00; /* Updated to Vivid Orange */
-  color: #ffffff;
+@keyframes campaign-text-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.campaign-panel-title::after {
+  content: '';
+  position: absolute;
+  width: 40%;
+  height: 3px;
+  background: linear-gradient(to right, rgba(255, 125, 0, 0), rgba(255, 125, 0, 0.8), rgba(255, 125, 0, 0));
+  bottom: -8px;
+  left: 30%;
+  border-radius: 2px;
+  animation: campaign-underline-pulse 3s ease-in-out infinite;
+}
+
+@keyframes campaign-underline-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    width: 40%;
+    left: 30%;
+  }
+  50% {
+    opacity: 1;
+    width: 60%;
+    left: 20%;
+  }
+}
+
+.campaign-panel-badge {
+  position: relative;
+  background: linear-gradient(135deg, #FF7D00, #FF5500);
+  color: white;
   font-size: 0.8rem;
-  padding: 0.25rem 0.5rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
   border-radius: 4px;
-  vertical-align: top;
   margin-left: 0.5rem;
-  position: relative;
-  top: 0.5rem;
+  top: -0.5rem;
+  box-shadow: 0 2px 8px rgba(255, 125, 0, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  animation: campaign-badge-pulse 2s ease-in-out infinite;
 }
 
-/* Subheading text */
-.campaign-builder-header p {
-  color: rgba(248, 241, 229, 0.75); /* Cool Cream at 75% opacity */
+@keyframes campaign-badge-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 2px 8px rgba(255, 125, 0, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 2px 12px rgba(255, 125, 0, 0.6);
+  }
+}
+
+.campaign-panel-description {
   font-size: 1.25rem;
-  line-height: 1.4;
-  margin-top: 0.5rem;
+  color: rgba(248, 241, 229, 0.75);
+  line-height: 1.5;
+  margin-top: 1.2rem;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: campaign-fade-in 0.8s ease-out 0.5s forwards;
 }
 
-/* Top Goals Section */
-.top-goals-section {
+@keyframes campaign-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========== GOAL SECTIONS STYLING =========== */
+.campaign-top-goals,
+.campaign-more-goals {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: center;
+  gap: 1.2rem;
   margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-/* "More goals" label */
-.more-goals-title {
+.campaign-section-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.campaign-more-goals-title {
+  text-align: center;
   font-size: 1.5rem;
-  color: #F8F1E5; /* Cool Cream */
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  color: #F8F1E5;
+  margin: 2rem 0 1.5rem;
   font-weight: 500;
-  text-align: center; /* CENTER ALIGNMENT */
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-/* More Goals Section container */
-.more-goals-section {
-  display: flex;
-  justify-content: center; /* CENTER ALIGNMENT */
-  gap: 1rem;
-}
-
-/* Goal boxes */
-.goal-box {
-  flex: 1;
-  background-color: #0E1217; /* Midnight Charcoal */
-  border-radius: 12px; /* Updated to 12px per design spec */
-  padding: 1.5rem;
+/* =========== GOAL BOX STYLING =========== */
+.campaign-goal-box {
   position: relative;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  text-align: center; /* CENTER ALIGNMENT */
-  color: #F8F1E5; /* Cool Cream */
+  flex: 1;
   min-width: 200px;
-  max-width: 280px;
-  border: 1px solid #0E1217;
-  /* Added shadow for depth */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-.goal-box:hover {
-  transform: scale(1.03); /* Added subtle scale effect on hover */
-  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-}
-
-.goal-box.selected {
-  border-color: #FF7D00; /* Vivid Orange */
-  box-shadow: 0 3px 8px rgba(255,125,0,0.3);
-}
-
-/* Icon styling - UPDATED to make icons bigger and bolder and centered */
-.goal-icon {
-  margin-bottom: 1.5rem;
+  max-width: 250px;
+  background: linear-gradient(145deg, rgba(20, 30, 40, 0.9), rgba(15, 23, 33, 0.9));
+  border-radius: 12px;
+  padding: 1.8rem 1.5rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center; /* CENTER ALIGNMENT */
-  color: #FF7D00; /* Vivid Orange for SVG icons */
-  font-size: 3rem; /* Increased from 2rem */
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease-out,
+              background 0.3s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  animation: campaign-goal-box-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  backface-visibility: hidden;
 }
 
-/* For SVG icons - UPDATED size */
-.goal-icon svg {
-  width: 55px; /* Increased from 35px */
-  height: 55px; /* Increased from 35px */
-  color: #FF7D00; /* Vivid Orange */
-  stroke-width: 2.5; /* Added for bolder lines */
-  font-weight: bold; /* Added for bolder appearance */
+@keyframes campaign-goal-box-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-/* For backup icon display - UPDATED size */
-.goal-icon .icon-fallback {
-  width: 55px; /* Increased from 35px */
-  height: 55px; /* Increased from 35px */
-  background-color: #FF7D00; /* Vivid Orange */
-  border-radius: 6px; /* Slightly larger to match new size */
+.campaign-goal-box:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  z-index: 2;
+}
+
+.campaign-goal-box.selected {
+  background: linear-gradient(145deg, rgba(35, 45, 60, 0.9), rgba(25, 35, 50, 0.9));
+  border: 1px solid rgba(255, 125, 0, 0.5);
+  box-shadow: 
+    0 8px 25px rgba(0, 0, 0, 0.4),
+    0 0 15px rgba(255, 125, 0, 0.3),
+    0 0 0 1px rgba(255, 125, 0, 0.5);
+  transform: translateY(-5px) scale(1.03);
+  z-index: 3;
+}
+
+.campaign-goal-box.selected .campaign-goal-icon-background {
+  background: rgba(255, 125, 0, 0.15);
+  transform: scale(1.1);
+}
+
+.campaign-goal-box.selected .campaign-goal-icon svg {
+  color: #FF7D00;
+  filter: drop-shadow(0 0 8px rgba(255, 125, 0, 0.5));
+}
+
+.campaign-deselect-animation {
+  animation: campaign-goal-deselect 0.3s forwards;
+}
+
+@keyframes campaign-goal-deselect {
+  0% {
+    transform: translateY(-5px) scale(1.03);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    border-color: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Goal box corner accents */
+.campaign-goal-corner-accent {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.campaign-goal-box:hover .campaign-goal-corner-accent,
+.campaign-goal-box.selected .campaign-goal-corner-accent {
+  opacity: 1;
+}
+
+.campaign-goal-corner-accent.top-left {
+  top: 0;
+  left: 0;
+  border-top: 2px solid rgba(255, 125, 0, 0.7);
+  border-left: 2px solid rgba(255, 125, 0, 0.7);
+  transform: translate(-4px, -4px);
+}
+
+.campaign-goal-corner-accent.top-right {
+  top: 0;
+  right: 0;
+  border-top: 2px solid rgba(255, 125, 0, 0.7);
+  border-right: 2px solid rgba(255, 125, 0, 0.7);
+  transform: translate(4px, -4px);
+}
+
+.campaign-goal-corner-accent.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-bottom: 2px solid rgba(255, 125, 0, 0.7);
+  border-left: 2px solid rgba(255, 125, 0, 0.7);
+  transform: translate(-4px, 4px);
+}
+
+.campaign-goal-corner-accent.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-bottom: 2px solid rgba(255, 125, 0, 0.7);
+  border-right: 2px solid rgba(255, 125, 0, 0.7);
+  transform: translate(4px, 4px);
+}
+
+.campaign-goal-box:hover .campaign-goal-corner-accent.top-left,
+.campaign-goal-box.selected .campaign-goal-corner-accent.top-left {
+  transform: translate(0, 0);
+}
+
+.campaign-goal-box:hover .campaign-goal-corner-accent.top-right,
+.campaign-goal-box.selected .campaign-goal-corner-accent.top-right {
+  transform: translate(0, 0);
+}
+
+.campaign-goal-box:hover .campaign-goal-corner-accent.bottom-left,
+.campaign-goal-box.selected .campaign-goal-corner-accent.bottom-left {
+  transform: translate(0, 0);
+}
+
+.campaign-goal-box:hover .campaign-goal-corner-accent.bottom-right,
+.campaign-goal-box.selected .campaign-goal-corner-accent.bottom-right {
+  transform: translate(0, 0);
+}
+
+/* Goal hover glow effect */
+.campaign-goal-hover-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: radial-gradient(circle at center, 
+                              rgba(255, 125, 0, 0.2) 0%, 
+                              rgba(255, 125, 0, 0) 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.campaign-goal-box:hover .campaign-goal-hover-glow,
+.campaign-goal-box.selected .campaign-goal-hover-glow {
+  opacity: 1;
+}
+
+/* =========== GOAL ICON STYLING =========== */
+.campaign-goal-icon-container {
+  position: relative;
+  margin-bottom: 1.5rem;
+  width: 65px;
+  height: 65px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-weight: 800; /* Increased from bold for extra boldness */
-  font-size: 1.5rem; /* Added to make content bigger */
 }
 
-/* Goal Title */
-.goal-box h3 {
+.campaign-goal-icon-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  transition: transform 0.3s ease-out, background 0.3s ease-out;
+}
+
+.campaign-goal-box:hover .campaign-goal-icon-background {
+  transform: scale(1.1);
+  background: rgba(255, 125, 0, 0.1);
+}
+
+.campaign-goal-icon {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease-out;
+}
+
+.campaign-goal-box:hover .campaign-goal-icon {
+  transform: scale(1.1);
+}
+
+.campaign-icon-svg {
+  width: 35px;
+  height: 35px;
+  color: #F8F1E5;
+  transition: color 0.3s ease-out, filter 0.3s ease-out;
+}
+
+.campaign-goal-box:hover .campaign-icon-svg {
+  color: #FF7D00;
+  filter: drop-shadow(0 0 5px rgba(255, 125, 0, 0.3));
+}
+
+/* =========== GOAL TEXT STYLING =========== */
+.campaign-goal-title {
   font-size: 1.2rem;
-  font-weight: 700; /* Inter Bold 700 */
-  margin-bottom: 0.5rem;
-  color: #F8F1E5; /* Cool Cream */
+  font-weight: 600;
+  color: #F8F1E5;
+  margin-bottom: 0.8rem;
+  transition: color 0.3s ease-out;
+  text-align: center;
 }
 
-/* Two-row title adjustments for specific goal boxes */
-.goal-box[data-goal="drive-sales"] h3,
-.goal-box[data-goal="find-new-customers"] h3 {
+.campaign-goal-box:hover .campaign-goal-title,
+.campaign-goal-box.selected .campaign-goal-title {
+  color: #FFC88A;
+}
+
+.campaign-goal-description {
+  font-size: 0.95rem;
+  color: rgba(248, 241, 229, 0.65);
+  line-height: 1.5;
+  text-align: center;
+  transition: color 0.3s ease-out;
+}
+
+.campaign-goal-box:hover .campaign-goal-description,
+.campaign-goal-box.selected .campaign-goal-description {
+  color: rgba(248, 241, 229, 0.8);
+}
+
+/* =========== SELECTION INDICATOR =========== */
+.campaign-selection-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 125, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              opacity 0.3s ease-out,
+              background 0.3s ease-out;
+}
+
+.campaign-selection-indicator svg {
+  width: 12px;
+  height: 12px;
+  color: white;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.campaign-goal-box.selected .campaign-selection-indicator {
+  transform: scale(1);
+  opacity: 1;
+  background: #FF7D00;
+}
+
+.campaign-goal-box.selected .campaign-selection-indicator svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* =========== BUTTON STYLING =========== */
+.campaign-panel-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: campaign-fade-in 0.8s ease-out 1.2s forwards;
+}
+
+.campaign-button-cancel,
+.campaign-button-continue {
+  padding: 0.9rem 2rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease-out,
+              background 0.3s ease-out;
+  position: relative;
+  border: none;
+  outline: none;
+  overflow: hidden;
+}
+
+.campaign-button-cancel {
+  background: rgba(15, 25, 35, 0.8);
+  color: #F8F1E5;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.campaign-button-cancel:hover {
+  background: rgba(25, 35, 45, 0.9);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.campaign-button-continue {
+  background: linear-gradient(135deg, #FF7D00, #FF5500);
+  color: white;
+  padding: 0.9rem 2.5rem;
+  box-shadow: 0 5px 15px rgba(255, 85, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.campaign-button-continue:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 85, 0, 0.4);
+  background: linear-gradient(135deg, #FF8F20, #FF6500);
+}
+
+.campaign-button-arrow {
+  width: 18px;
+  height: 18px;
+  margin-left: 0.3rem;
+  transition: transform 0.3s ease-out;
+}
+
+.campaign-button-continue:hover .campaign-button-arrow {
+  transform: translateX(3px);
+}
+
+.campaign-button-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  pointer-events: none;
+  animation: campaign-button-shimmer 3s infinite;
+}
+
+@keyframes campaign-button-shimmer {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 100%;
+  }
+}
+
+/* =========== LOADING ANIMATION =========== */
+.campaign-loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  line-height: 1.3;
+  justify-content: center;
+  height: 100vh;
 }
 
-/* Custom styling for Drive Sales heading */
-.goal-box[data-goal="drive-sales"] h3::before {
-  content: "Drive";
-  display: block;
+.campaign-loading-spinner {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  margin-bottom: 1.5rem;
 }
 
-.goal-box[data-goal="drive-sales"] h3::after {
-  content: "Sales";
-  display: block;
+.campaign-spinner-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid transparent;
+  border-top-color: #FF7D00;
+  border-radius: 50%;
+  animation: campaign-spinner-rotate 1.2s linear infinite;
 }
 
-.goal-box[data-goal="drive-sales"] h3 span {
-  display: none;
+.campaign-spinner-inner::before,
+.campaign-spinner-inner::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  border: 4px solid transparent;
+  border-radius: 50%;
 }
 
-/* Custom styling for Find New Customers heading */
-.goal-box[data-goal="find-new-customers"] h3::before {
-  content: "Find New";
-  display: block;
+.campaign-spinner-inner::before {
+  border-top-color: rgba(255, 125, 0, 0.5);
+  animation: campaign-spinner-rotate 2s linear infinite;
 }
 
-.goal-box[data-goal="find-new-customers"] h3::after {
-  content: "Customers";
-  display: block;
+.campaign-spinner-inner::after {
+  border-top-color: rgba(255, 125, 0, 0.3);
+  animation: campaign-spinner-rotate 3s linear infinite;
 }
 
-.goal-box[data-goal="find-new-customers"] h3 span {
-  display: none;
+@keyframes campaign-spinner-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-/* Goal Description */
-.goal-box p {
-  font-size: 0.9rem;
-  color: rgba(248, 241, 229, 0.75); /* Cool Cream at 75% opacity */
-  line-height: 1.5;
-  font-weight: 400; /* Inter Regular 400 */
+.campaign-loading-text {
+  color: #F8F1E5;
+  font-size: 1.2rem;
+  text-align: center;
+  animation: campaign-loading-pulse 1.5s ease-in-out infinite;
 }
 
-/* Bottom Buttons */
-.campaign-builder-buttons {
-  display: flex;
-  justify-content: center; /* CENTER ALIGNMENT */
-  gap: 1rem; /* Added gap between buttons */
-  margin-top: 2.5rem;
+@keyframes campaign-loading-pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
-/* Cancel & Continue buttons */
-.cancel-btn,
-.continue-btn {
-  border: none;
-  border-radius: 10px;
-  padding: 0.8rem 1.5rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  font-size: 1rem;
-}
-
-/* Cancel: text button */
-.cancel-btn {
-  background-color: #0E1217; /* Midnight Charcoal */
-  color: #F8F1E5; /* Cool Cream */
-}
-
-.cancel-btn:hover {
-  background-color: #1a1f2a;
-  transform: translateY(-2px);
-}
-
-/* Continue: orange button */
-.continue-btn {
-  background-color: #FF7D00; /* Vivid Orange */
-  color: white;
-  padding: 0.8rem 2rem;
-  box-shadow: 0 3px 6px rgba(255,125,0,0.2);
-}
-
-.continue-btn:hover {
-  background-color: #e86c00;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255,125,0,0.3);
-}
-
-/* Media Queries */
+/* =========== RESPONSIVE DESIGN =========== */
 @media (max-width: 768px) {
-  .campaign-builder-panel {
-    margin: 3rem 1rem;
-    padding: 1.5rem;
-    max-width: 90%;
+  .campaign-panel {
+    width: 92%;
+    padding: 2rem 1.5rem;
+    margin-top: 6rem;
   }
   
-  .campaign-builder-header h2 {
+  .campaign-panel-title {
     font-size: 2rem;
   }
   
-  .top-goals-section, .more-goals-section {
-    flex-wrap: wrap;
-    justify-content: center; /* CENTER ALIGNMENT */
+  .campaign-panel-description {
+    font-size: 1.1rem;
   }
   
-  .goal-box {
+  .campaign-top-goals, 
+  .campaign-more-goals {
+    flex-wrap: wrap;
+  }
+  
+  .campaign-goal-box {
     min-width: 45%;
+    max-width: 45%;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .campaign-panel {
+    width: 95%;
+    padding: 1.5rem 1rem;
+    margin-top: 5rem;
+  }
+  
+  .campaign-panel-title {
+    font-size: 1.8rem;
+  }
+  
+  .campaign-goal-box {
+    min-width: 100%;
     max-width: 100%;
   }
   
-  /* Responsive icon sizing */
-  .goal-icon svg,
-  .goal-icon .icon-fallback {
-    width: 50px;
-    height: 50px;
-  }
-}
-
-@media (max-width: 480px) {
-  .campaign-builder-panel {
-    padding: 1rem;
-  }
-  
-  .campaign-builder-header h2 {
-    font-size: 1.5rem;
-  }
-  
-  .goal-box {
-    min-width: 100%;
-  }
-  
-  .campaign-builder-buttons {
+  .campaign-panel-buttons {
     flex-direction: column;
     gap: 1rem;
-    align-items: center; /* CENTER ALIGNMENT */
   }
   
-  .cancel-btn, .continue-btn {
+  .campaign-button-cancel,
+  .campaign-button-continue {
     width: 100%;
   }
-  
-  /* Maintain slightly bigger icons even on small screens */
-  .goal-icon svg,
-  .goal-icon .icon-fallback {
-    width: 45px;
-    height: 45px;
-  }
 }
-
-/* Alternative method for breaking titles into two rows if the data-goal attribute approach doesn't work */
-.two-row-title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1.3;
-}
-
-/* CSS to handle the HTML structure for two-row titles if needed as a fallback
-.two-row-title .first-line,
-.two-row-title .second-line {
-  display: block;
-}
-*/
