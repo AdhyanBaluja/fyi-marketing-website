@@ -1509,34 +1509,7 @@ function InfluencerDashboard() {
   </div>
   
   <div className={styles['cards-container']}>
-    {/* AI Amplify Plan Card */}
-    <div className={styles['brand-request-card']}>
-      <div className={styles['amplify-header']}>
-        <h3 className={styles['amplify-title']}>
-          amplify Plan (AI)
-          <div className={styles['amplify-underline']}></div>
-        </h3>
-      </div>
-      
-      <div className={styles['brand-request-info']}>
-        <div className={styles['info-row']}>
-          <span className={styles['info-label']}>Brand:</span>
-          <span className={styles['info-value']}>N/A</span>
-        </div>
-        
-        <div className={styles['info-row']}>
-          <span className={styles['info-label']}>Budget:</span>
-          <span className={styles['info-value']}>
-            Moderate budget to bolster multi-platform visibility and strategic influencer alliances
-          </span>
-        </div>
-        
-        <div className={styles['request-status']}>
-          <span className={`${styles['status-indicator']} ${styles['status-pending']}`}></span>
-          <span className={styles['status-text']}>Pending</span>
-        </div>
-      </div>
-    </div>
+    
     
     {/* Regular Brand Requests */}
     {brandRequests.length === 0 ? (
