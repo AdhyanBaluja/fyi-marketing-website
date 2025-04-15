@@ -111,19 +111,11 @@ function CampaignBuilder() {
       setIsVisible(true);
     }, 300);
     
-    // Sequence animations for sections
-    const topGoalsTimer = setTimeout(() => {
-      setActiveSection('top');
-    }, 800);
-    
-    const moreGoalsTimer = setTimeout(() => {
-      setActiveSection('more');
-    }, 1300);
+    // Make all sections visible immediately
+    setActiveSection('all');
     
     return () => {
       clearTimeout(timer);
-      clearTimeout(topGoalsTimer);
-      clearTimeout(moreGoalsTimer);
     };
     // eslint-disable-next-line
   }, []);
@@ -335,7 +327,7 @@ function CampaignBuilder() {
           <p className="campaign-panel-description">Choose one and get a multi-channel campaign to meet your goal.</p>
         </div>
 
-        <div className={`campaign-top-goals ${activeSection === 'top' ? 'campaign-section-active' : ''}`}>
+        <div className="campaign-top-goals campaign-section-active">
           {topGoals.map((goal, index) => (
             <div
               key={goal.id}
@@ -371,7 +363,7 @@ function CampaignBuilder() {
           More goals
         </h4>
         
-        <div className={`campaign-more-goals ${activeSection === 'more' ? 'campaign-section-active' : ''}`}>
+        <div className="campaign-more-goals campaign-section-active">
           {moreGoals.map((goal, index) => (
             <div
               key={goal.id}
