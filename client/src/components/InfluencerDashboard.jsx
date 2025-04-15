@@ -223,16 +223,9 @@ function AnimatedBackground() {
   );
 }
 
-// Shining Underline Component
-function ShiningUnderline({ width = "100%" }) {
-  return (
-    <div className={styles["shining-underline-container"]} style={{ width }}>
-      <div className={styles["shining-underline"]}></div>
-      <div className={styles["shining-effect"]}></div>
-    </div>
-  );
+function SectionUnderline() {
+  return <div className={styles['section-underline']}></div>;
 }
-
 // Main Card Components with enhanced animations
 function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   const cardRef = useRef(null);
@@ -359,7 +352,7 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
           </div>
           <h3 className={styles['campaign-title']}>
             {campaignName}
-            <ShiningUnderline width="70%" />
+            <SectionUnderline width="70%" />
           </h3>
         </div>
         <div className={styles['expand-indicator']}>
@@ -387,39 +380,41 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
           </div>
         </div>
 
-        {/* Interactive Progress Bar */}
-        <div className={styles['progress-container']}>
-          <div className={styles['progress-label']}>Progress: {campaign.progress || 0}%</div>
-          <div className={styles['progress-bar']}>
-            <div 
-              className={styles['progress-fill']} 
-              style={{ width: `${campaign.progress || 0}%` }}
-            ></div>
-            <div className={styles['progress-glow']}></div>
-          </div>
-          
-          {/* Progress Update Controls */}
-          <div className={styles['progress-update']}>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={tempProgress}
-              onChange={(e) => setTempProgress(e.target.value)}
-              className={styles['range-slider']}
-            />
-            <div className={styles['range-value']}>{tempProgress}%</div>
-            <button 
-              className={styles['save-progress-btn']} 
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSaveProgress();
-              }}
-            >
-              Update
-            </button>
-          </div>
-        </div>
+        <div className={styles['progress-container']} onClick={(e) => e.stopPropagation()}>
+  <div className={styles['progress-info']}>
+    <span className={styles['progress-text']}>Progress: {campaign.progress || 0}%</span>
+  </div>
+  
+  <div className={styles['progress-bar']}>
+    <div 
+      className={styles['progress-fill']} 
+      style={{ width: `${campaign.progress || 0}%` }}
+    ></div>
+  </div>
+  
+  {/* Progress Update Controls */}
+  <div className={styles['progress-update']} onClick={(e) => e.stopPropagation()}>
+    <input
+      type="range"
+      min="0"
+      max="100"
+      value={tempProgress}
+      onChange={(e) => setTempProgress(e.target.value)}
+      onClick={(e) => e.stopPropagation()}
+      className={styles['range-slider']}
+    />
+    <span className={styles['range-value']}>{tempProgress}%</span>
+    <button 
+      className={styles['update-btn']} 
+      onClick={(e) => {
+        e.stopPropagation();
+        handleSaveProgress();
+      }}
+    >
+      Update
+    </button>
+  </div>
+</div>
 
         {/* Tasks Section */}
         <div 
@@ -583,7 +578,7 @@ function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds
         <div className={styles['campaign-info']}>
           <h3 className={styles['campaign-title']}>
             {campaign.name || 'Untitled Campaign'}
-            <ShiningUnderline width="70%" />
+            <SectionUnderline width="70%" />
           </h3>
           <div className={styles['info-row']}>
             <span className={styles['info-label']}>Brand:</span>
@@ -676,7 +671,7 @@ function BrandRequestCard({ request, onAccept }) {
           <div className={styles['card-glare']}></div>
           <h3 className={styles['request-title']}>
             {request.campaignName}
-            <ShiningUnderline width="70%" />
+            <SectionUnderline width="70%" />
           </h3>
           <div className={styles['info-row']}>
             <span className={styles['info-label']}>Brand:</span>
@@ -700,7 +695,7 @@ function BrandRequestCard({ request, onAccept }) {
           <div className={styles['card-glare']}></div>
           <h3 className={styles['request-title']}>
             Request Details
-            <ShiningUnderline width="70%" />
+            <SectionUnderline width="70%" />
           </h3>
           <div className={styles['info-row']}>
             <span className={styles['info-label']}>Campaign:</span>
@@ -759,7 +754,7 @@ function AmplifyPlanCard() {
       
       <h3 className={styles['ai-title']}>
         amplify Plan
-        <ShiningUnderline width="50%" />
+        <SectionUnderline width="50%" />
       </h3>
       <div className={styles['sparkle-effect']}></div>
       
@@ -1218,39 +1213,21 @@ function InfluencerDashboard() {
       <div className={styles['dashboard-container']}>
         {/* Navigation Bar */}
         <nav className={styles['main-nav']}>
-          <div className={styles['nav-left']}>
-            <h2 className={styles['nav-logo']}>
-              lets<span>FYI</span>
-              <div className={styles['logo-shine']}></div>
-            </h2>
-            <div 
-              className={`${styles['mobile-menu-toggle']} ${isMobileNavActive ? styles['menu-active'] : ''}`} 
-              onClick={toggleMobileNav}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-          
-          <ul className={`${styles['nav-menu']} ${isMobileNavActive ? styles['menu-active'] : ''}`}>
-            <li 
-              onClick={() => scrollToSection('top')}
-              className={activeSection === 'top' ? styles['active'] : ''}
-            >
-              <span className={styles['nav-icon']}>📊</span>
-              Dashboard
-            </li>
-            <li 
-              onClick={() => scrollToSection('brandRequests')}
-              className={activeSection === 'brandRequests' ? styles['active'] : ''}
-            >
-              <span className={styles['nav-icon']}>🔔</span>
-              Requests
-              {brandRequests.length > 0 && (
-                <span className={styles['nav-badge']}>{brandRequests.length}</span>
-              )}
-            </li>
+  <div className={styles['nav-left']}>
+    <h2 className={styles['nav-logo']}>
+      lets<span>FYI</span>
+    </h2>
+  </div>
+  
+  <ul className={styles['nav-menu']}>
+    <li className={activeSection === 'top' ? styles['active'] : ''}>
+      <span className={styles['nav-icon']}>📊</span>
+      Dashboard
+    </li>
+    <li className={activeSection === 'brandRequests' ? styles['active'] : ''}>
+      <span className={styles['nav-icon']}>🔔</span>
+      Requests
+    </li>
             <li 
               onClick={() => scrollToSection('activeCampaigns')}
               className={activeSection === 'activeCampaigns' ? styles['active'] : ''}
@@ -1297,7 +1274,7 @@ function InfluencerDashboard() {
             <div className={styles['welcome-message']}>
               <h1 className={styles['page-title']}>
                 <span className={styles['title-highlight']}>Influencer Dashboard</span>
-                <ShiningUnderline width="300px" />
+                <SectionUnderline width="300px" />
               </h1>
               <p className={styles['greeting-text']}>
                 Welcome back, <span className={styles['user-name']}>{influencerInfo.name}</span>!
@@ -1331,264 +1308,245 @@ function InfluencerDashboard() {
         </section>
         
         {/* Profile Card */}
-        <section className={styles['profile-section']}>
-          <div className={`${styles['profile-card']} ${styles['neo-card']}`}>
-            {isEditing ? (
-              <div className={styles['edit-profile-container']}>
-                <h3 className={styles['section-title']}>
-                  Edit Profile
-                  <ShiningUnderline width="120px" />
-                </h3>
-                
-                <div className={styles['edit-form']}>
-                  <div className={styles['form-row']}>
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Profile Image URL</label>
-                      <input
-                        type="text"
-                        className={styles['form-input']}
-                        value={tempInfo.profileImage}
-                        onChange={(e) => setTempInfo({ ...tempInfo, profileImage: e.target.value })}
-                        placeholder="Enter image URL"
-                      />
-                    </div>
-                    
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Display Name</label>
-                      <input
-                        type="text"
-                        className={styles['form-input']}
-                        value={tempInfo.name}
-                        onChange={(e) => setTempInfo({ ...tempInfo, name: e.target.value })}
-                        placeholder="Your name"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className={styles['form-row']}>
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Experience (Years)</label>
-                      <input
-                        type="number"
-                        className={styles['form-input']}
-                        value={tempInfo.experience}
-                        onChange={(e) => setTempInfo({ ...tempInfo, experience: e.target.value })}
-                      />
-                    </div>
-                    
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Followers Count</label>
-                      <input
-                        type="number"
-                        className={styles['form-input']}
-                        value={tempInfo.numFollowers}
-                        onChange={(e) => setTempInfo({ ...tempInfo, numFollowers: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className={styles['form-row']}>
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Your Location</label>
-                      <input
-                        type="text"
-                        className={styles['form-input']}
-                        value={tempInfo.influencerLocation}
-                        onChange={(e) => setTempInfo({ ...tempInfo, influencerLocation: e.target.value })}
-                      />
-                    </div>
-                    
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Audience Location</label>
-                      <input
-                        type="text"
-                        className={styles['form-input']}
-                        value={tempInfo.majorityAudienceLocation}
-                        onChange={(e) => setTempInfo({ ...tempInfo, majorityAudienceLocation: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className={styles['form-row']}>
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Audience Age Group</label>
-                      <input
-                        type="text"
-                        className={styles['form-input']}
-                        value={tempInfo.audienceAgeGroup}
-                        onChange={(e) => setTempInfo({ ...tempInfo, audienceAgeGroup: e.target.value })}
-                      />
-                    </div>
-                    
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Audience Gender</label>
-                      <input
-                        type="text"
-                        className={styles['form-input']}
-                        value={tempInfo.audienceGenderDemographics}
-                        onChange={(e) => setTempInfo({ ...tempInfo, audienceGenderDemographics: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className={styles['form-row']}>
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Your Gender</label>
-                      <input
-                        type="text"
-                        className={styles['form-input']}
-                        value={tempInfo.gender}
-                        onChange={(e) => setTempInfo({ ...tempInfo, gender: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className={styles['form-row']}>
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Industries (comma-separated)</label>
-                      <input
-                        type="text"
-                        className={styles['form-input']}
-                        value={Array.isArray(tempInfo.industries) ? tempInfo.industries.join(', ') : ''}
-                        onChange={(e) =>
-                          setTempInfo({
-                            ...tempInfo,
-                            industries: e.target.value.split(',').map(item => item.trim()),
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className={styles['form-row']}>
-                    <div className={styles['form-group']}>
-                      <label className={styles['form-label']}>Platforms (comma-separated)</label>
-                      <input
-                        type="text"
-                        className={styles['form-input']}
-                        value={Array.isArray(tempInfo.nichePlatforms) ? tempInfo.nichePlatforms.join(', ') : ''}
-                        onChange={(e) =>
-                          setTempInfo({
-                            ...tempInfo,
-                            nichePlatforms: e.target.value.split(',').map(item => item.trim()),
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className={styles['form-buttons']}>
-                    <button 
-                      className={styles['save-btn']} 
-                      onClick={handleSaveClick}
-                    >
-                      Save Changes
-                    </button>
-                    <button 
-                      className={styles['cancel-btn']} 
-                      onClick={handleCancelClick}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className={styles['profile-view']}>
-                <div className={styles['profile-header']}>
-                  <ProfileAvatar 
-                    imageUrl={influencerInfo.profileImage} 
-                    altImage={influencerBack}
-                    name={influencerInfo.name} 
-                  />
-                  
-                  <div className={styles['profile-actions']}>
-                    <button 
-                      className={styles['edit-profile-btn']} 
-                      onClick={handleEditClick}
-                    >
-                      Edit Profile
-                    </button>
-                  </div>
-                </div>
-                
-                <div className={styles['profile-details']}>
-                  <div className={styles['detail-section']}>
-                    <h3 className={styles['detail-heading']}>
-                      Personal Info
-                      <ShiningUnderline width="100px" />
-                    </h3>
-                    <div className={styles['detail-grid']}>
-                      <div className={styles['detail-item']}>
-                        <span className={styles['detail-label']}>Experience:</span>
-                        <span className={styles['detail-value']}>{influencerInfo.experience} year</span>
-                      </div>
-                      <div className={styles['detail-item']}>
-                        <span className={styles['detail-label']}>Followers:</span>
-                        <span className={styles['detail-value']}>{influencerInfo.numFollowers.toLocaleString()}</span>
-                      </div>
-                      <div className={styles['detail-item']}>
-                        <span className={styles['detail-label']}>Location:</span>
-                        <span className={styles['detail-value']}>{influencerInfo.influencerLocation}</span>
-                      </div>
-                      <div className={styles['detail-item']}>
-                        <span className={styles['detail-label']}>Gender:</span>
-                        <span className={styles['detail-value']}>{influencerInfo.gender}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className={styles['detail-section']}>
-                    <h3 className={styles['detail-heading']}>
-                      Audience Demographics
-                      <ShiningUnderline width="180px" />
-                    </h3>
-                    <div className={styles['detail-grid']}>
-                      <div className={styles['detail-item']}>
-                        <span className={styles['detail-label']}>Audience Location:</span>
-                        <span className={styles['detail-value']}>{influencerInfo.majorityAudienceLocation}</span>
-                      </div>
-                      <div className={styles['detail-item']}>
-                        <span className={styles['detail-label']}>Age Group:</span>
-                        <span className={styles['detail-value']}>{influencerInfo.audienceAgeGroup}</span>
-                      </div>
-                      <div className={styles['detail-item']}>
-                        <span className={styles['detail-label']}>Gender Distribution:</span>
-                        <span className={styles['detail-value']}>{influencerInfo.audienceGenderDemographics}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className={styles['tag-section']}>
-                    <div className={styles['tag-container']}>
-                      <h3 className={styles['tag-heading']}>
-                        Industries
-                        <ShiningUnderline width="80px" />
-                      </h3>
-                      <div className={styles['tags']}>
-                        {Array.isArray(influencerInfo.industries) && influencerInfo.industries.map((industry, index) => (
-                          <span key={index} className={styles['tag']}>{industry}</span>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div className={styles['tag-container']}>
-                      <h3 className={styles['tag-heading']}>
-                        Platforms
-                        <ShiningUnderline width="80px" />
-                      </h3>
-                      <div className={styles['tags']}>
-                        {Array.isArray(influencerInfo.nichePlatforms) && influencerInfo.nichePlatforms.map((platform, index) => (
-                          <span key={index} className={styles['tag']}>{platform}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+{/* Profile Card */}
+<section className={styles['profile-section']}>
+  <div className={styles['profile-card']}>
+    {isEditing ? (
+      /* Edit Profile Mode */
+      <div className={styles['edit-profile-container']}>
+        <h3 className={styles['section-title']}>
+          Edit Profile
+          <div className={styles['section-underline']}></div>
+        </h3>
+        
+        <div className={styles['edit-form']}>
+          <div className={styles['form-row']}>
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Profile Image URL</label>
+              <input
+                type="text"
+                className={styles['form-input']}
+                value={tempInfo.profileImage}
+                onChange={(e) => setTempInfo({ ...tempInfo, profileImage: e.target.value })}
+                placeholder="Enter image URL"
+              />
+            </div>
+            
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Display Name</label>
+              <input
+                type="text"
+                className={styles['form-input']}
+                value={tempInfo.name}
+                onChange={(e) => setTempInfo({ ...tempInfo, name: e.target.value })}
+                placeholder="Your name"
+              />
+            </div>
           </div>
-        </section>
+          
+          <div className={styles['form-row']}>
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Experience (Years)</label>
+              <input
+                type="number"
+                className={styles['form-input']}
+                value={tempInfo.experience}
+                onChange={(e) => setTempInfo({ ...tempInfo, experience: e.target.value })}
+              />
+            </div>
+            
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Followers Count</label>
+              <input
+                type="number"
+                className={styles['form-input']}
+                value={tempInfo.numFollowers}
+                onChange={(e) => setTempInfo({ ...tempInfo, numFollowers: e.target.value })}
+              />
+            </div>
+          </div>
+          
+          <div className={styles['form-row']}>
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Your Location</label>
+              <input
+                type="text"
+                className={styles['form-input']}
+                value={tempInfo.influencerLocation}
+                onChange={(e) => setTempInfo({ ...tempInfo, influencerLocation: e.target.value })}
+              />
+            </div>
+            
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Audience Location</label>
+              <input
+                type="text"
+                className={styles['form-input']}
+                value={tempInfo.majorityAudienceLocation}
+                onChange={(e) => setTempInfo({ ...tempInfo, majorityAudienceLocation: e.target.value })}
+              />
+            </div>
+          </div>
+          
+          <div className={styles['form-row']}>
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Audience Age Group</label>
+              <input
+                type="text"
+                className={styles['form-input']}
+                value={tempInfo.audienceAgeGroup}
+                onChange={(e) => setTempInfo({ ...tempInfo, audienceAgeGroup: e.target.value })}
+              />
+            </div>
+            
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Audience Gender</label>
+              <input
+                type="text"
+                className={styles['form-input']}
+                value={tempInfo.audienceGenderDemographics}
+                onChange={(e) => setTempInfo({ ...tempInfo, audienceGenderDemographics: e.target.value })}
+              />
+            </div>
+          </div>
+          
+          <div className={styles['form-row']}>
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Your Gender</label>
+              <input
+                type="text"
+                className={styles['form-input']}
+                value={tempInfo.gender}
+                onChange={(e) => setTempInfo({ ...tempInfo, gender: e.target.value })}
+              />
+            </div>
+          </div>
+          
+          <div className={styles['form-row']}>
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Industries (comma-separated)</label>
+              <input
+                type="text"
+                className={styles['form-input']}
+                value={Array.isArray(tempInfo.industries) ? tempInfo.industries.join(', ') : ''}
+                onChange={(e) =>
+                  setTempInfo({
+                    ...tempInfo,
+                    industries: e.target.value.split(',').map(item => item.trim()),
+                  })
+                }
+              />
+            </div>
+          </div>
+          
+          <div className={styles['form-row']}>
+            <div className={styles['form-group']}>
+              <label className={styles['form-label']}>Platforms (comma-separated)</label>
+              <input
+                type="text"
+                className={styles['form-input']}
+                value={Array.isArray(tempInfo.nichePlatforms) ? tempInfo.nichePlatforms.join(', ') : ''}
+                onChange={(e) =>
+                  setTempInfo({
+                    ...tempInfo,
+                    nichePlatforms: e.target.value.split(',').map(item => item.trim()),
+                  })
+                }
+              />
+            </div>
+          </div>
+          
+          <div className={styles['form-buttons']}>
+            <button 
+              className={styles['save-btn']} 
+              onClick={handleSaveClick}
+            >
+              Save Changes
+            </button>
+            <button 
+              className={styles['cancel-btn']} 
+              onClick={handleCancelClick}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    ) : (
+      /* Profile View Mode */
+      <div className={styles['profile-content']}>
+        <div className={styles['profile-main']}>
+          <div className={styles['profile-avatar-container']}>
+            <div className={styles['profile-avatar']}>
+              <img 
+                src={influencerInfo.profileImage || influencerBack} 
+                alt={influencerInfo.name}
+              />
+            </div>
+            <h3 className={styles['profile-name']}>{influencerInfo.name}</h3>
+          </div>
+          
+          <button 
+            className={styles['edit-profile-btn']} 
+            onClick={handleEditClick}
+          >
+            Edit Profile
+          </button>
+        </div>
+        
+        <div className={styles['profile-details']}>
+          <div className={styles['profile-section-header']}>
+            <h3 className={styles['profile-section-title']}>
+              Personal Info
+              <div className={styles['section-underline']}></div>
+            </h3>
+          </div>
+          
+          <div className={styles['detail-grid']}>
+            <div className={styles['detail-item']}>
+              <span className={styles['detail-label']}>Audience Location:</span>
+              <span className={styles['detail-value']}>{influencerInfo.majorityAudienceLocation}</span>
+            </div>
+            <div className={styles['detail-item']}>
+              <span className={styles['detail-label']}>Age Group:</span>
+              <span className={styles['detail-value']}>{influencerInfo.audienceAgeGroup}</span>
+            </div>
+            <div className={styles['detail-item']}>
+              <span className={styles['detail-label']}>Gender Distribution:</span>
+              <span className={styles['detail-value']}>{influencerInfo.audienceGenderDemographics}</span>
+            </div>
+          </div>
+          
+          <div className={styles['tag-sections']}>
+            <div className={styles['tag-section']}>
+              <h3 className={styles['tag-section-title']}>
+                Industries
+                <div className={styles['section-underline']}></div>
+              </h3>
+              <div className={styles['tags']}>
+                {Array.isArray(influencerInfo.industries) && influencerInfo.industries.map((industry, index) => (
+                  <span key={index} className={styles['tag']}>{industry}</span>
+                ))}
+              </div>
+            </div>
+            
+            <div className={styles['tag-section']}>
+              <h3 className={styles['tag-section-title']}>
+                Platforms
+                <div className={styles['section-underline']}></div>
+              </h3>
+              <div className={styles['tags']}>
+                {Array.isArray(influencerInfo.nichePlatforms) && influencerInfo.nichePlatforms.map((platform, index) => (
+                  <span key={index} className={styles['tag']}>{platform}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+</section>
         {/* AI Recommended Campaign */}
         <section className={styles['ai-recommendation']}>
           <AmplifyPlanCard />
@@ -1596,39 +1554,92 @@ function InfluencerDashboard() {
         
         {/* Brand Requests Section */}
         <section 
-          id="brandRequests" 
-          className={`${styles['section-container']} ${activeSection === 'brandRequests' ? styles['active-section'] : ''}`}
-        >
-          <div className={styles['section-header']}>
-            <h2 className={styles['section-title']}>
-              <span className={styles['section-icon']}>🔔</span>
-              Brand Requests
-              <ShiningUnderline width="120px" />
-            </h2>
-            <div className={styles['section-actions']}>
-              <button 
-                className={styles['refresh-button']} 
-                onClick={fetchDashboardData}
-              >
-                Refresh
-              </button>
+  id="brandRequests" 
+  className={`${styles['section-container']} ${activeSection === 'brandRequests' ? styles['active-section'] : ''}`}
+>
+  <div className={styles['section-header']}>
+    <h2 className={styles['section-title']}>
+      <span className={styles['section-icon']}>🔔</span>
+      Brand Requests
+      <div className={styles['section-underline']}></div>
+    </h2>
+  </div>
+  
+  <div className={styles['cards-container']}>
+    {/* AI Amplify Plan Card */}
+    <div className={styles['brand-request-card']}>
+      <div className={styles['amplify-header']}>
+        <h3 className={styles['amplify-title']}>
+          amplify Plan (AI)
+          <div className={styles['amplify-underline']}></div>
+        </h3>
+      </div>
+      
+      <div className={styles['brand-request-info']}>
+        <div className={styles['info-row']}>
+          <span className={styles['info-label']}>Brand:</span>
+          <span className={styles['info-value']}>N/A</span>
+        </div>
+        
+        <div className={styles['info-row']}>
+          <span className={styles['info-label']}>Budget:</span>
+          <span className={styles['info-value']}>
+            Moderate budget to bolster multi-platform visibility and strategic influencer alliances
+          </span>
+        </div>
+        
+        <div className={styles['request-status']}>
+          <span className={`${styles['status-indicator']} ${styles['status-pending']}`}></span>
+          <span className={styles['status-text']}>Pending</span>
+        </div>
+      </div>
+    </div>
+    
+    {/* Regular Brand Requests */}
+    {brandRequests.length === 0 ? (
+      <div className={styles['empty-state']}>
+        <div className={styles['empty-icon']}>📭</div>
+        <p className={styles['empty-message']}>No brand requests at the moment.</p>
+        <p className={styles['empty-tip']}>Apply to campaigns below to connect with brands!</p>
+      </div>
+    ) : (
+      brandRequests.map((req) => (
+        <div key={req._id} className={styles['brand-request-card']}>
+          <h3 className={styles['request-title']}>
+            {req.campaignName}
+            <div className={styles['section-underline']}></div>
+          </h3>
+          
+          <div className={styles['brand-request-info']}>
+            <div className={styles['info-row']}>
+              <span className={styles['info-label']}>Brand:</span>
+              <span className={styles['info-value']}>{req.brandName || 'Unknown Brand'}</span>
+            </div>
+            
+            <div className={styles['info-row']}>
+              <span className={styles['info-label']}>Budget:</span>
+              <span className={styles['info-value']}>{req.budget || 'N/A'}</span>
+            </div>
+            
+            <div className={styles['request-status']}>
+              <span className={`${styles['status-indicator']} ${styles[`status-${req.status}`]}`}></span>
+              <span className={styles['status-text']}>{req.status}</span>
             </div>
           </div>
           
-          <div className={styles['cards-container']}>
-            {brandRequests.length === 0 ? (
-              <EmptyState 
-                icon="📭" 
-                message="No brand requests at the moment." 
-                tip="Apply to campaigns below to connect with brands!"
-              />
-            ) : (
-              brandRequests.map((req) => (
-                <BrandRequestCard key={req._id} request={req} onAccept={handleAcceptRequest} />
-              ))
-            )}
-          </div>
-        </section>
+          {req.status === 'pending' && (
+            <button 
+              className={styles['accept-btn']} 
+              onClick={() => handleAcceptRequest(req._id)}
+            >
+              Accept Request
+            </button>
+          )}
+        </div>
+      ))
+    )}
+  </div>
+</section>
         
         {/* Active Campaigns Section */}
         <section 
@@ -1639,7 +1650,7 @@ function InfluencerDashboard() {
             <h2 className={styles['section-title']}>
               <span className={styles['section-icon']}>🚀</span>
               Active Campaigns
-              <ShiningUnderline width="150px" />
+              <SectionUnderline width="150px" />
             </h2>
             <div className={styles['section-actions']}>
               <button 
@@ -1680,7 +1691,7 @@ function InfluencerDashboard() {
             <h2 className={styles['section-title']}>
               <span className={styles['section-icon']}>🔍</span>
               Explore Campaigns
-              <ShiningUnderline width="150px" />
+              <SectionUnderline width="150px" />
             </h2>
             <div className={styles['section-actions']}>
               <button 
