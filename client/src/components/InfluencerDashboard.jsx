@@ -1,16 +1,230 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './InfluencerDashboard.module.css';
 import useScrollReveal from '../hooks/useScrollReveal';
 import AiChatbot from './AiChatbot.jsx';
 import brandLogo from '../assets/bird_2.jpg';
-import influencerBack from '../assets/InfluencerBack.png'; // Used for profile placeholder & background
-import CosmicNebulaLoader from './CosmicNebulaLoader'; // Your (or new) loader component
+import influencerBack from '../assets/InfluencerBack.png';
+import themeIcons from '../assets/theme-icons.png'; // Make sure to create this asset with 5 theme icons
 
 // ==================== Environment Variable ====================
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
+// Theme options with color schemes
+const themeOptions = [
+  {
+    name: "Cosmic Blue",
+    id: "cosmic-blue",
+    colors: {
+      primary: "#FF7D00",
+      secondary: "#1a4870",
+      background: "linear-gradient(135deg, #001524 0%, #00294d 100%)",
+      cardBg: "rgba(16, 39, 57, 0.3)",
+      text: "#e0e0e0"
+    }
+  },
+  {
+    name: "Royal Purple",
+    id: "royal-purple",
+    colors: {
+      primary: "#9D4EDD",
+      secondary: "#3A0CA3",
+      background: "linear-gradient(135deg, #240046 0%, #3C096C 100%)",
+      cardBg: "rgba(58, 12, 163, 0.3)",
+      text: "#F8F9FA"
+    }
+  },
+  {
+    name: "Emerald Forest",
+    id: "emerald-forest",
+    colors: {
+      primary: "#57CC99",
+      secondary: "#38A3A5",
+      background: "linear-gradient(135deg, #22577A 0%, #38A3A5 100%)",
+      cardBg: "rgba(34, 87, 122, 0.3)",
+      text: "#F8F9FA"
+    }
+  },
+  {
+    name: "Sunset Gold",
+    id: "sunset-gold",
+    colors: {
+      primary: "#FFB627",
+      secondary: "#FF7B00",
+      background: "linear-gradient(135deg, #2A0944 0%, #3B185F 100%)",
+      cardBg: "rgba(42, 9, 68, 0.3)",
+      text: "#F8F9FA"
+    }
+  },
+  {
+    name: "Dark Elegance",
+    id: "dark-elegance",
+    colors: {
+      primary: "#E63946",
+      secondary: "#457B9D",
+      background: "linear-gradient(135deg, #1D3557 0%, #2C4875 100%)",
+      cardBg: "rgba(29, 53, 87, 0.3)",
+      text: "#F1FAEE"
+    }
+  }
+];
+
+// Cosmic Nebula Loader Component
+function CosmicNebulaLoader() {
+  return (
+    <div className={styles["cosmic-loader-container"]}>
+      <div className={styles["nebula-background"]}></div>
+      <div className={styles["cosmic-loader"]}>
+        <div className={styles["orbit-container"]}>
+          <div className={`${styles["orbit"]} ${styles["orbit-1"]}`}>
+            <div className={styles["planet"]}></div>
+          </div>
+          <div className={`${styles["orbit"]} ${styles["orbit-2"]}`}>
+            <div className={styles["planet"]}></div>
+          </div>
+          <div className={`${styles["orbit"]} ${styles["orbit-3"]}`}>
+            <div className={styles["planet"]}></div>
+          </div>
+        </div>
+        <div className={styles["star-field"]}>
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className={styles["star"]} style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`
+            }}></div>
+          ))}
+        </div>
+        <div className={styles["loading-text"]}>
+          <span>P</span>
+          <span>r</span>
+          <span>e</span>
+          <span>p</span>
+          <span>a</span>
+          <span>r</span>
+          <span>i</span>
+          <span>n</span>
+          <span>g</span>
+          <span>&nbsp;</span>
+          <span>Y</span>
+          <span>o</span>
+          <span>u</span>
+          <span>r</span>
+          <span>&nbsp;</span>
+          <span>D</span>
+          <span>a</span>
+          <span>s</span>
+          <span>h</span>
+          <span>b</span>
+          <span>o</span>
+          <span>a</span>
+          <span>r</span>
+          <span>d</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Notification Toast Component
+function NotificationToast({ message, type, onClose, visible }) {
+  useEffect(() => {
+    if (visible) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [visible, onClose]);
+
+  return (
+    <div 
+      className={`${styles["toast-notification"]} ${styles[`toast-${type}`]} ${visible ? styles["toast-visible"] : ""}`}
+      onClick={onClose}
+    >
+      <div className={styles["toast-icon"]}>
+        {type === "success" && "✓"}
+        {type === "error" && "✗"}
+        {type === "info" && "ⓘ"}
+      </div>
+      <div className={styles["toast-message"]}>{message}</div>
+      <button className={styles["toast-close"]}>×</button>
+    </div>
+  );
+}
+
+// Theme Selector Component
+function ThemeSelector({ currentTheme, onThemeChange }) {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div className={styles["theme-selector-container"]}>
+      <button 
+        className={styles["theme-selector-button"]}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className={styles["color-circle"]} style={{ background: themeOptions.find(t => t.id === currentTheme)?.colors.primary }}></span>
+        <span>Theme</span>
+      </button>
+      
+      {isOpen && (
+        <div className={styles["theme-dropdown"]}>
+          {themeOptions.map((theme) => (
+            <div 
+              key={theme.id}
+              className={`${styles["theme-option"]} ${currentTheme === theme.id ? styles["active-theme"] : ""}`}
+              onClick={() => {
+                onThemeChange(theme.id);
+                setIsOpen(false);
+              }}
+            >
+              <div className={styles["theme-preview"]}>
+                <div 
+                  className={styles["theme-color-primary"]} 
+                  style={{ background: theme.colors.primary }}
+                ></div>
+                <div 
+                  className={styles["theme-color-secondary"]} 
+                  style={{ background: theme.colors.secondary }}
+                ></div>
+              </div>
+              <span>{theme.name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Custom Animation Background
+function AnimatedBackground() {
+  return (
+    <div className={styles["animated-background"]}>
+      <div className={styles["floating-shapes-container"]}>
+        {Array(15).fill().map((_, i) => (
+          <div 
+            key={i}
+            className={styles["floating-shape"]}
+            style={{
+              width: `${Math.random() * 60 + 20}px`,
+              height: `${Math.random() * 60 + 20}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDuration: `${Math.random() * 15 + 15}s`,
+              animationDelay: `${Math.random() * 5}s`,
+              opacity: Math.random() * 0.5 + 0.1
+            }}
+          ></div>
+        ))}
+      </div>
+      <div className={styles["glow-overlay"]}></div>
+    </div>
+  );
+}
+
+// Main Card Components with enhanced animations
 function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   const [cardRef, cardRevealed] = useScrollReveal({ threshold: 0.15 });
   const [tempProgress, setTempProgress] = useState(campaign.progress || 0);
@@ -22,10 +236,20 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
 
   const [tasks, setTasks] = useState(campaign.tasks || []);
   const [newTaskText, setNewTaskText] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [toast, setToast] = useState({ visible: false, message: '', type: 'info' });
 
   useEffect(() => {
     setTasks(campaign.tasks || []);
   }, [campaign.tasks]);
+
+  const showToast = (message, type) => {
+    setToast({ visible: true, message, type });
+  };
+
+  const hideToast = () => {
+    setToast({ ...toast, visible: false });
+  };
 
   const handleAddTask = async (e) => {
     e.preventDefault();
@@ -38,10 +262,11 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
       );
       setTasks(res.data.tasks);
       setNewTaskText('');
+      showToast('Task added successfully!', 'success');
       if (onRefresh) onRefresh();
     } catch (err) {
       console.error('Error adding task:', err);
-      alert('Failed to add task. Check console for details.');
+      showToast('Failed to add task. Please try again.', 'error');
     }
   };
 
@@ -52,15 +277,17 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setTasks(res.data.tasks);
+      showToast('Task removed successfully!', 'success');
       if (onRefresh) onRefresh();
     } catch (err) {
       console.error('Error removing task:', err);
-      alert('Failed to remove task. Check console for details.');
+      showToast('Failed to remove task. Please try again.', 'error');
     }
   };
 
   const handleSaveProgress = () => {
     onUpdateProgress(realId, tempProgress);
+    showToast('Progress updated successfully!', 'success');
   };
 
   const handleLeave = async () => {
@@ -71,75 +298,159 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
         `${API_BASE_URL}/api/influencer/my-active-campaigns/${realId}/leave`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert(`You left the campaign "${campaignName}".`);
+      showToast(`You left the campaign "${campaignName}".`, 'info');
       if (onRefresh) onRefresh();
     } catch (err) {
       console.error('Error leaving campaign:', err);
-      alert('Failed to leave the campaign. Check console for details.');
+      showToast('Failed to leave the campaign. Please try again.', 'error');
     }
   };
 
   return (
     <div
       ref={cardRef}
-      className={`${styles['campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} tilt-effect ${cardRevealed ? styles['scroll-reveal'] : ''}`}
-      data-peek="More info: Progress details & tasks"
+      className={`${styles['campaign-card']} ${styles['neo-card']} ${isExpanded ? styles['expanded'] : ''} ${cardRevealed ? styles['scroll-reveal'] : ''}`}
+      onClick={() => setIsExpanded(!isExpanded)}
     >
-      <img src={brandLogo} alt={brandName} className={`${styles['campaign-logo']} elastic-pop`} />
-      <div className={styles['campaign-info']}>
-        <h3 className="animated-underline">{campaignName}</h3>
-        <p><strong>Brand:</strong> {brandName}</p>
-        <p><strong>Budget:</strong> {campaign.budget || realCampaign.budget || 'N/A'}</p>
-        <p><strong>Platform:</strong> {campaign.platform || 'N/A'}</p>
-        <p><strong>Target Audience:</strong> {realCampaign.targetAudience || 'N/A'}</p>
-
-        {/* Progress Bar */}
-        <div className={styles['progress-bar']}>
-          <div className={styles['progress-fill']} style={{ width: `${campaign.progress || 0}%` }}></div>
-        </div>
-        <p className={styles['progress-text']}>Progress: {campaign.progress || 0}%</p>
-
-        {/* Update Progress */}
-        <div className={styles['progress-update']}>
-          <label>Update Progress (%): </label>
-          <input
-            type="number"
-            min="0"
-            max="100"
-            value={tempProgress}
-            onChange={(e) => setTempProgress(e.target.value)}
-          />
-          <button className="pulse-wave" onClick={handleSaveProgress}>Save Progress</button>
-        </div>
-
-        {/* Leave Campaign */}
-        {campaign.status === 'active' && (
-          <div style={{ marginTop: '10px' }}>
-            <button className={`${styles['leave-btn']} pulse-wave`} onClick={handleLeave}>Leave Campaign</button>
+      <NotificationToast 
+        message={toast.message} 
+        type={toast.type} 
+        visible={toast.visible} 
+        onClose={hideToast} 
+      />
+      
+      <div className={styles['card-glare']}></div>
+      
+      <div className={styles['card-header']}>
+        <div className={styles['brand-info']}>
+          <div className={styles['logo-wrapper']}>
+            <img src={brandLogo} alt={brandName} className={styles['campaign-logo']} />
           </div>
-        )}
+          <h3 className={styles['campaign-title']}>{campaignName}</h3>
+        </div>
+        <div className={styles['expand-indicator']}>
+          <span>{isExpanded ? '−' : '+'}</span>
+        </div>
+      </div>
+      
+      <div className={styles['card-content']}>
+        <div className={styles['campaign-info']}>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Brand:</span>
+            <span className={styles['info-value']}>{brandName}</span>
+          </div>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Budget:</span>
+            <span className={styles['info-value']}>{campaign.budget || realCampaign.budget || 'N/A'}</span>
+          </div>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Platform:</span>
+            <span className={styles['info-value']}>{campaign.platform || 'N/A'}</span>
+          </div>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Target:</span>
+            <span className={styles['info-value']}>{realCampaign.targetAudience || 'N/A'}</span>
+          </div>
+        </div>
+
+        {/* Interactive Progress Bar */}
+        <div className={styles['progress-container']}>
+          <div className={styles['progress-label']}>Progress: {campaign.progress || 0}%</div>
+          <div className={styles['progress-bar']}>
+            <div 
+              className={styles['progress-fill']} 
+              style={{ width: `${campaign.progress || 0}%` }}
+            ></div>
+            <div className={styles['progress-glow']}></div>
+          </div>
+          
+          {/* Progress Update Controls */}
+          <div className={styles['progress-update']}>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={tempProgress}
+              onChange={(e) => setTempProgress(e.target.value)}
+              className={styles['range-slider']}
+            />
+            <div className={styles['range-value']}>{tempProgress}%</div>
+            <button 
+              className={styles['save-progress-btn']} 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSaveProgress();
+              }}
+            >
+              Update
+            </button>
+          </div>
+        </div>
 
         {/* Tasks Section */}
-        <div className={styles['tasks-section']}>
-          <h4>My To-Do List</h4>
+        <div 
+          className={`${styles['tasks-section']} ${isExpanded ? styles['tasks-visible'] : ''}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className={styles['section-header']}>
+            <h4>My To-Do List</h4>
+            <div className={styles['tasks-counter']}>{tasks.length} tasks</div>
+          </div>
+          
           <ul className={styles['task-list']}>
             {tasks.map((task) => (
               <li key={task._id} className={styles['task-item']}>
                 <span>{task.text}</span>
-                <button className={styles['remove-task-btn']} onClick={() => handleRemoveTask(task._id)}>✕</button>
+                <button 
+                  className={styles['remove-task-btn']} 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveTask(task._id);
+                  }}
+                >
+                  <span className={styles['remove-icon']}>×</span>
+                </button>
               </li>
             ))}
           </ul>
-          <form onSubmit={handleAddTask} className={styles['add-task-form']}>
+          
+          <form 
+            onSubmit={(e) => {
+              e.stopPropagation();
+              handleAddTask(e);
+            }} 
+            className={styles['add-task-form']}
+          >
             <input
               type="text"
               placeholder="Add a new task..."
               value={newTaskText}
               onChange={(e) => setNewTaskText(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
             />
-            <button type="submit" className={styles['add-task-btn']}>+</button>
+            <button 
+              type="submit" 
+              className={styles['add-task-btn']}
+            >
+              <span>+</span>
+            </button>
           </form>
         </div>
+        
+        {/* Leave Campaign Button */}
+        {campaign.status === 'active' && (
+          <div className={styles['leave-campaign-container']}>
+            <button 
+              className={styles['leave-btn']} 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleLeave();
+              }}
+            >
+              Leave Campaign
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -149,9 +460,19 @@ function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds
   const [bigRef, bigRevealed] = useScrollReveal({ threshold: 0.15 });
   const brandName = campaign.brandName || 'Unknown Brand';
   const token = localStorage.getItem('token');
+  const [toast, setToast] = useState({ visible: false, message: '', type: 'info' });
+  const [isHovered, setIsHovered] = useState(false);
 
   const isApplied = appliedCampaignIds.has(campaign._id);
   const isActive = activeCampaignIds.has(campaign._id);
+
+  const showToast = (message, type) => {
+    setToast({ visible: true, message, type });
+  };
+
+  const hideToast = () => {
+    setToast({ ...toast, visible: false });
+  };
 
   const handleApply = async () => {
     try {
@@ -160,44 +481,77 @@ function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds
         { influencerId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert('Successfully applied to campaign! Status = "applied" (pending brand acceptance).');
+      showToast('Successfully applied to campaign!', 'success');
       if (onApplied) onApplied();
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
-        alert(`Failed to apply: ${error.response.data.error}`);
+        showToast(`Failed to apply: ${error.response.data.error}`, 'error');
       } else {
         console.error('Error applying to campaign:', error);
-        alert('Failed to apply. Check console for details.');
+        showToast('Failed to apply. Please try again.', 'error');
       }
     }
   };
 
-  let actionButton = null;
+  let buttonLabel = "Apply";
+  let buttonStatus = "";
+  
   if (isActive) {
-    actionButton = <button className={styles['apply-btn']} disabled>Active</button>;
+    buttonLabel = "Active";
+    buttonStatus = "active";
   } else if (isApplied) {
-    actionButton = <button className={styles['apply-btn']} disabled>Pending</button>;
-  } else {
-    actionButton = <button className={`${styles['apply-btn']} pulse-wave`} onClick={handleApply}>Apply</button>;
+    buttonLabel = "Pending";
+    buttonStatus = "pending";
   }
 
   return (
     <div
       ref={bigRef}
-      className={`${styles['big-campaign-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} tilt-effect ${bigRevealed ? styles['scroll-reveal'] : ''}`}
-      data-peek="More campaign details available"
+      className={`${styles['big-campaign-card']} ${styles['neo-card']} ${bigRevealed ? styles['scroll-reveal'] : ''} ${isHovered ? styles['card-hovered'] : ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
+      <NotificationToast 
+        message={toast.message} 
+        type={toast.type} 
+        visible={toast.visible} 
+        onClose={hideToast} 
+      />
+      
+      <div className={styles['card-glare']}></div>
+      
       <div className={styles['big-card-left']}>
-        <img src={brandLogo} alt={brandName} className={`${styles['campaign-logo']} ${styles['big-logo']} elastic-pop`} />
+        <div className={styles['logo-wrapper']}>
+          <img src={brandLogo} alt={brandName} className={`${styles['campaign-logo']} ${styles['big-logo']}`} />
+        </div>
         <div className={styles['campaign-info']}>
-          <h3 className="animated-underline">{campaign.name || 'Untitled Campaign'}</h3>
-          <p><strong>Brand:</strong> {brandName}</p>
-          <p><strong>Budget:</strong> {campaign.budget || 'N/A'}</p>
-          <p><strong>Target Audience:</strong> {campaign.targetAudience || 'N/A'}</p>
+          <h3 className={styles['campaign-title']}>{campaign.name || 'Untitled Campaign'}</h3>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Brand:</span>
+            <span className={styles['info-value']}>{brandName}</span>
+          </div>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Budget:</span>
+            <span className={styles['info-value']}>{campaign.budget || 'N/A'}</span>
+          </div>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Target:</span>
+            <span className={styles['info-value']}>{campaign.targetAudience || 'N/A'}</span>
+          </div>
         </div>
       </div>
+      
       <div className={styles['big-card-right']}>
-        {actionButton}
+        <button 
+          className={`${styles['apply-btn']} ${buttonStatus ? styles[`apply-btn-${buttonStatus}`] : ''}`} 
+          onClick={handleApply}
+          disabled={isActive || isApplied}
+        >
+          <span className={styles['btn-label']}>{buttonLabel}</span>
+          {!isActive && !isApplied && (
+            <span className={styles['btn-icon']}>→</span>
+          )}
+        </button>
       </div>
     </div>
   );
@@ -205,38 +559,171 @@ function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds
 
 function BrandRequestCard({ request, onAccept }) {
   const [reqRef, reqRevealed] = useScrollReveal({ threshold: 0.15 });
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [toast, setToast] = useState({ visible: false, message: '', type: 'info' });
+
+  const showToast = (message, type) => {
+    setToast({ visible: true, message, type });
+  };
+
+  const hideToast = () => {
+    setToast({ ...toast, visible: false });
+  };
+
+  const handleAcceptClick = (e) => {
+    e.stopPropagation();
+    onAccept(request._id);
+    showToast('Request accepted successfully!', 'success');
+  };
 
   return (
     <div
       ref={reqRef}
-      className={`${styles['brand-request-card']} ${styles['hover-rise']} ${styles['colored-container']} ${styles['shadow-effect']} tilt-effect ${reqRevealed ? styles['scroll-reveal'] : ''}`}
-      data-peek="Hover to reveal request details"
+      className={`${styles['brand-request-card']} ${styles['neo-card']} ${styles['flip-card']} ${isFlipped ? styles['is-flipped'] : ''} ${reqRevealed ? styles['scroll-reveal'] : ''}`}
+      onClick={() => setIsFlipped(!isFlipped)}
     >
-      <h3 className="animated-underline">{request.campaignName}</h3>
-      <p><strong>Brand:</strong> {request.brandName || 'Unknown Brand'}</p>
-      <p><strong>Budget:</strong> {request.budget || 'N/A'}</p>
-      <p><strong>Status:</strong> {request.status}</p>
-      {request.status === 'pending' && (
-        <button className={`${styles['accept-btn']} pulse-wave`} onClick={() => onAccept(request._id)}>Accept</button>
-      )}
+      <NotificationToast 
+        message={toast.message} 
+        type={toast.type} 
+        visible={toast.visible} 
+        onClose={hideToast} 
+      />
+      
+      <div className={styles['card-inner']}>
+        {/* Front of card */}
+        <div className={styles['card-front']}>
+          <div className={styles['card-glare']}></div>
+          <h3 className={styles['request-title']}>{request.campaignName}</h3>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Brand:</span>
+            <span className={styles['info-value']}>{request.brandName || 'Unknown Brand'}</span>
+          </div>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Budget:</span>
+            <span className={styles['info-value']}>{request.budget || 'N/A'}</span>
+          </div>
+          <div className={styles['request-status']}>
+            <span className={`${styles['status-indicator']} ${styles[`status-${request.status}`]}`}></span>
+            <span className={styles['status-text']}>{request.status}</span>
+          </div>
+          <div className={styles['card-footer']}>
+            <div className={styles['flip-indicator']}>Click to view details</div>
+          </div>
+        </div>
+        
+        {/* Back of card */}
+        <div className={styles['card-back']}>
+          <div className={styles['card-glare']}></div>
+          <h3 className={styles['request-title']}>Request Details</h3>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Campaign:</span>
+            <span className={styles['info-value']}>{request.campaignName}</span>
+          </div>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Received:</span>
+            <span className={styles['info-value']}>
+              {new Date().toLocaleDateString()}
+            </span>
+          </div>
+          <div className={styles['info-row']}>
+            <span className={styles['info-label']}>Platform:</span>
+            <span className={styles['info-value']}>
+              {request.platform || 'Not specified'}
+            </span>
+          </div>
+          
+          {request.status === 'pending' && (
+            <button 
+              className={styles['accept-btn']} 
+              onClick={handleAcceptClick}
+            >
+              Accept Request
+            </button>
+          )}
+          
+          <div className={styles['card-footer']}>
+            <div className={styles['flip-indicator']}>Click to flip back</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 function AmplifyPlanCard() {
+  const [isGlowing, setIsGlowing] = useState(false);
+  
+  useEffect(() => {
+    // Create a pulsing effect for the AI recommendation
+    const interval = setInterval(() => {
+      setIsGlowing(prev => !prev);
+    }, 2000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className={styles['amplify-card']}>
-      <h3 className="animated-underline">amplify Plan (AI)</h3>
-      <p><strong>Brand:</strong> LetS FYI</p>
-      <p><strong>Budget:</strong> undefined</p>
-      <p><strong>Platform:</strong> Instagram</p>
-      <p><strong>Target Audience:</strong> Females in the United Kingdom, age group 18-50</p>
+    <div className={`${styles['amplify-card']} ${styles['neo-card']} ${isGlowing ? styles['ai-glow'] : ''}`}>
+      <div className={styles['card-glare']}></div>
+      <div className={styles['ai-badge']}>
+        <span className={styles['ai-icon']}>AI</span>
+        <span className={styles['ai-label']}>Recommended</span>
+      </div>
+      
+      <h3 className={styles['ai-title']}>amplify Plan</h3>
+      <div className={styles['sparkle-effect']}></div>
+      
+      <div className={styles['info-column']}>
+        <div className={styles['info-row']}>
+          <span className={styles['info-label']}>Brand:</span>
+          <span className={styles['info-value']}>LetS FYI</span>
+        </div>
+        <div className={styles['info-row']}>
+          <span className={styles['info-label']}>Budget:</span>
+          <span className={styles['info-value']}>Premium</span>
+        </div>
+        <div className={styles['info-row']}>
+          <span className={styles['info-label']}>Platform:</span>
+          <span className={styles['info-value']}>Instagram</span>
+        </div>
+        <div className={styles['info-row']}>
+          <span className={styles['info-label']}>Target:</span>
+          <span className={styles['info-value']}>Females in the United Kingdom, age group 18-50</span>
+        </div>
+      </div>
+      
+      <div className={styles['ai-action-btn']}>
+        <button className={styles['learn-more-btn']}>
+          <span>Learn More</span>
+          <span className={styles['btn-icon']}>→</span>
+        </button>
+      </div>
     </div>
   );
 }
 
+// Profile Avatar Component with hover effects
+function ProfileAvatar({ imageUrl, altImage, name }) {
+  return (
+    <div className={styles['profile-avatar-container']}>
+      <div className={styles['avatar-frame']}>
+        <img 
+          src={imageUrl || altImage} 
+          alt={name || "Profile"} 
+          className={styles['profile-avatar']} 
+        />
+        <div className={styles['avatar-glow']}></div>
+      </div>
+      <div className={styles['avatar-name']}>{name}</div>
+    </div>
+  );
+}
+
+// Main Dashboard Component
 function InfluencerDashboard() {
   const navigate = useNavigate();
+  const [activeTheme, setActiveTheme] = useState("cosmic-blue");
+  const pageRef = useRef(null);
 
   // State for influencer profile and editing
   const initialProfile = {
@@ -263,385 +750,726 @@ function InfluencerDashboard() {
   const [appliedCampaignIds, setAppliedCampaignIds] = useState(new Set());
   const [activeCampaignIds, setActiveCampaignIds] = useState(new Set());
   const [showProfileBanner, setShowProfileBanner] = useState(true);
-  
-  // New state for mobile navigation toggle
   const [isMobileNavActive, setIsMobileNavActive] = useState(false);
-  // Loading screen state
   const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchInfluencerProfile();
-    fetchDashboardData();
-  }, []);
-
-  useEffect(() => {
-    if (!influencerInfo.profileImage || influencerInfo.profileImage.trim() === '') {
-      setShowProfileBanner(true);
-    } else {
-      setShowProfileBanner(false);
-    }
-  }, [influencerInfo]);
-
-  // Dynamic theme update based on time-of-day
-  useEffect(() => {
-    function updateThemeByTime() {
-      const hour = new Date().getHours();
-      const root = document.documentElement;
-      if (hour >= 18 || hour < 6) {
-        root.style.setProperty('--accent-color', '#FF7D00');
-        root.style.setProperty('--bg-gradient-start', '#00101d');
-        root.style.setProperty('--bg-gradient-end', '#001a29');
-      } else if (hour >= 6 && hour < 12) {
-        root.style.setProperty('--accent-color', '#FF7D00');
-        root.style.setProperty('--bg-gradient-start', '#002a4e');
-        root.style.setProperty('--bg-gradient-end', '#004a75');
-      } else {
-        root.style.setProperty('--accent-color', '#FF7D00');
-        root.style.setProperty('--bg-gradient-start', '#003d66');
-        root.style.setProperty('--bg-gradient-end', '#005b8a');
-      }
-    }
-    updateThemeByTime();
-  }, []);
-
-  // Hide loading screen after 1.5 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => { setIsLoading(false); }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const fetchInfluencerProfile = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    try {
-      const res = await axios.get(`${API_BASE_URL}/api/influencer/my-profile`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const apiData = res.data.influencer;
-      const mergedData = {
-        ...initialProfile,
-        ...apiData,
-        industries: apiData.industries || initialProfile.industries,
-        nichePlatforms: apiData.nichePlatforms || initialProfile.nichePlatforms
-      };
-      setInfluencerInfo(mergedData);
-      setTempInfo(mergedData);
-    } catch (error) {
-      console.error('Error fetching influencer profile:', error);
-      setInfluencerInfo(initialProfile);
-      setTempInfo(initialProfile);
-    }
-  };
-
-  const handleSaveClick = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    try {
-      const patchData = {
-        profileImage: tempInfo.profileImage,
-        name: tempInfo.name,
-        experience: tempInfo.experience,
-        numFollowers: tempInfo.numFollowers,
-        influencerLocation: tempInfo.influencerLocation,
-        majorityAudienceLocation: tempInfo.majorityAudienceLocation,
-        audienceAgeGroup: tempInfo.audienceAgeGroup,
-        audienceGenderDemographics: tempInfo.audienceGenderDemographics,
-        gender: tempInfo.gender,
-        industries: tempInfo.industries,
-        platforms: tempInfo.nichePlatforms,
-      };
-      await axios.patch(
-        `${API_BASE_URL}/api/influencer/my-profile`,
-        patchData,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setInfluencerInfo(tempInfo);
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Error updating influencer profile:', error);
-    }
-  };
-
-  const handleCancelClick = () => {
-    setTempInfo(influencerInfo);
-    setIsEditing(false);
-  };
-
-  const handleEditClick = () => {
-    setTempInfo(influencerInfo);
-    setIsEditing(true);
-  };
-
-  const fetchDashboardData = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    try {
-      const reqRes = await axios.get(`${API_BASE_URL}/api/influencer/brand-requests`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const requestsArr = reqRes.data.requests || [];
-      const visibleRequests = requestsArr.filter((r) => r.status !== 'accepted');
-      setBrandRequests(visibleRequests);
-
-      const activeRes = await axios.get(`${API_BASE_URL}/api/influencer/my-active-campaigns`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const activeArr = activeRes.data.activeCampaigns || [];
-      setActiveCampaigns(activeArr);
-
-      const allRes = await axios.get(`${API_BASE_URL}/api/campaigns`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const allArr = allRes.data.campaigns || [];
-      setAllCampaigns(allArr);
-
-      const appliedSet = new Set();
-      requestsArr.forEach((req) => {
-        if (req.status === 'applied' && req.campaignId) {
-          appliedSet.add(req.campaignId.toString());
-        }
-      });
-      const activeSet = new Set();
-      activeArr.forEach((act) => {
-        const realId = act.campaignId?._id || act._id;
-        if (realId) {
-          activeSet.add(realId.toString());
-        }
-      });
-      setAppliedCampaignIds(appliedSet);
-      setActiveCampaignIds(activeSet);
-    } catch (error) {
-      console.error('Error fetching influencer dashboard data:', error);
-    }
-  };
-
-  const handleAcceptRequest = async (requestId) => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    try {
-      await axios.patch(
-        `${API_BASE_URL}/api/influencer/brand-requests/${requestId}/accept`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      fetchDashboardData();
-    } catch (error) {
-      console.error('Error accepting brand request:', error);
-    }
-  };
-
-  const handleUpdateProgress = async (campaignId, newProgress) => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-    try {
-      await axios.patch(
-        `${API_BASE_URL}/api/influencer/my-active-campaigns/${campaignId}/progress`,
-        { progress: newProgress },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      fetchDashboardData();
-    } catch (error) {
-      console.error('Error updating campaign progress:', error);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/signin');
-  };
-
-  const scrollToSection = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    if (isMobileNavActive) setIsMobileNavActive(false);
-  };
-
-  // Mobile navigation toggle handler
-  const toggleMobileNav = () => {
-    setIsMobileNavActive((prev) => !prev);
-  };
-
-  return (
-    <>
-      {/* Loading Screen using the CosmicNebulaLoader component */}
-      {isLoading && <CosmicNebulaLoader />}
-
-      {/* Particle Background & Animated Shapes */}
-      <div id="particles-js" className="particles-container"></div>
   
+  // Toast notification state
+  const [toast, setToast] = useState({ visible: false, message: '', type: 'info' });
+  
+  // Dashboard stats for animated counters
+  const [dashboardStats, setDashboardStats] = useState({
+    totalCampaigns: 0,
+    activeCampaigns: 0,
+    pendingRequests: 0,
+    completedCampaigns: 0,
+    averageProgress: 0
+  });
+    // Animation states
+    const [animateSection, setAnimateSection] = useState("");
+  
+    // Scroll position tracking for parallax effects
+    const [scrollY, setScrollY] = useState(0);
+  
+    // Show toast notification
+    const showToast = (message, type) => {
+      setToast({ visible: true, message, type });
+    };
+  
+    const hideToast = () => {
+      setToast({ ...toast, visible: false });
+    };
+  
+    useEffect(() => {
+      fetchInfluencerProfile();
+      fetchDashboardData();
       
-      {/* Optional Vignette Overlay - you can uncomment if needed */}
-      {/* <div className="vignette-overlay"></div> */}
-
-      {/* Outer Wrapper with Background */}
-      <div
-        className={styles['influencer-dashboard-wrapper']}
-        style={{
-          backgroundImage: `url(${influencerBack})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          minHeight: '100vh'
-        }}
-      >
-        {/* Main container */}
-        <div className={styles['influencer-dashboard']} id="top">
-          {/* NAVIGATION BAR */}
-          <nav className={`${styles['main-nav']} ${styles['fade-in-down']}`}>
-            <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-              <h2 className={`${styles['nav-logo']} animated-underline`}>letsFYI</h2>
-              {/* Mobile Menu Toggle */}
-              <div className="mobile-menu-toggle" onClick={toggleMobileNav}>
+      // Set up scroll event listener for parallax effects
+      const handleScroll = () => {
+        setScrollY(window.scrollY);
+      };
+      
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+  
+    useEffect(() => {
+      if (!influencerInfo.profileImage || influencerInfo.profileImage.trim() === '') {
+        setShowProfileBanner(true);
+      } else {
+        setShowProfileBanner(false);
+      }
+    }, [influencerInfo]);
+  
+    // Apply active theme
+    useEffect(() => {
+      const theme = themeOptions.find(t => t.id === activeTheme);
+      if (theme) {
+        const root = document.documentElement;
+        root.style.setProperty('--primary-color', theme.colors.primary);
+        root.style.setProperty('--secondary-color', theme.colors.secondary);
+        root.style.setProperty('--bg-gradient-start', theme.colors.background.split('(')[1].split(',')[0]);
+        root.style.setProperty('--bg-gradient-end', theme.colors.background.split(',')[1].split(')')[0]);
+        root.style.setProperty('--card-bg', theme.colors.cardBg);
+        root.style.setProperty('--text-color', theme.colors.text);
+      }
+    }, [activeTheme]);
+  
+    // Calculate dashboard stats when data changes
+    useEffect(() => {
+      const totalCampaigns = allCampaigns.length;
+      const activeCount = activeCampaigns.length;
+      const pendingCount = brandRequests.filter(req => req.status === 'pending').length;
+      
+      // Calculate average progress for active campaigns
+      let totalProgress = 0;
+      activeCampaigns.forEach(campaign => {
+        totalProgress += campaign.progress || 0;
+      });
+      const avgProgress = activeCount > 0 ? Math.round(totalProgress / activeCount) : 0;
+      
+      // Count completed campaigns (assume >95% progress means completed)
+      const completedCount = activeCampaigns.filter(campaign => (campaign.progress || 0) > 95).length;
+      
+      setDashboardStats({
+        totalCampaigns,
+        activeCampaigns: activeCount,
+        pendingRequests: pendingCount,
+        completedCampaigns: completedCount,
+        averageProgress: avgProgress
+      });
+    }, [allCampaigns, activeCampaigns, brandRequests]);
+  
+    // Animate section when scrolled into view
+    useEffect(() => {
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.2
+      };
+      
+      const observerCallback = (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setAnimateSection(entry.target.id);
+          }
+        });
+      };
+      
+      const observer = new IntersectionObserver(observerCallback, observerOptions);
+      
+      // Observe each section
+      const sections = ['top', 'brandRequests', 'activeCampaigns', 'allCampaigns'];
+      sections.forEach(section => {
+        const element = document.getElementById(section);
+        if (element) observer.observe(element);
+      });
+      
+      return () => {
+        sections.forEach(section => {
+          const element = document.getElementById(section);
+          if (element) observer.unobserve(element);
+        });
+      };
+    }, []);
+  
+    // Hide loading screen after 2 seconds
+    useEffect(() => {
+      const timer = setTimeout(() => { 
+        setIsLoading(false); 
+      }, 2000);
+      return () => clearTimeout(timer);
+    }, []);
+  
+    const fetchInfluencerProfile = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/influencer/my-profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const apiData = res.data.influencer;
+        const mergedData = {
+          ...initialProfile,
+          ...apiData,
+          industries: apiData.industries || initialProfile.industries,
+          nichePlatforms: apiData.nichePlatforms || initialProfile.nichePlatforms
+        };
+        setInfluencerInfo(mergedData);
+        setTempInfo(mergedData);
+      } catch (error) {
+        console.error('Error fetching influencer profile:', error);
+        setInfluencerInfo(initialProfile);
+        setTempInfo(initialProfile);
+        showToast('Failed to load profile data', 'error');
+      }
+    };
+  
+    const handleSaveClick = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      try {
+        const patchData = {
+          profileImage: tempInfo.profileImage,
+          name: tempInfo.name,
+          experience: tempInfo.experience,
+          numFollowers: tempInfo.numFollowers,
+          influencerLocation: tempInfo.influencerLocation,
+          majorityAudienceLocation: tempInfo.majorityAudienceLocation,
+          audienceAgeGroup: tempInfo.audienceAgeGroup,
+          audienceGenderDemographics: tempInfo.audienceGenderDemographics,
+          gender: tempInfo.gender,
+          industries: tempInfo.industries,
+          platforms: tempInfo.nichePlatforms,
+        };
+        await axios.patch(
+          `${API_BASE_URL}/api/influencer/my-profile`,
+          patchData,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setInfluencerInfo(tempInfo);
+        setIsEditing(false);
+        showToast('Profile updated successfully!', 'success');
+      } catch (error) {
+        console.error('Error updating influencer profile:', error);
+        showToast('Failed to update profile', 'error');
+      }
+    };
+  
+    const handleCancelClick = () => {
+      setTempInfo(influencerInfo);
+      setIsEditing(false);
+    };
+  
+    const handleEditClick = () => {
+      setTempInfo(influencerInfo);
+      setIsEditing(true);
+    };
+  
+    const fetchDashboardData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      try {
+        const reqRes = await axios.get(`${API_BASE_URL}/api/influencer/brand-requests`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const requestsArr = reqRes.data.requests || [];
+        const visibleRequests = requestsArr.filter((r) => r.status !== 'accepted');
+        setBrandRequests(visibleRequests);
+  
+        const activeRes = await axios.get(`${API_BASE_URL}/api/influencer/my-active-campaigns`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const activeArr = activeRes.data.activeCampaigns || [];
+        setActiveCampaigns(activeArr);
+  
+        const allRes = await axios.get(`${API_BASE_URL}/api/campaigns`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const allArr = allRes.data.campaigns || [];
+        setAllCampaigns(allArr);
+  
+        const appliedSet = new Set();
+        requestsArr.forEach((req) => {
+          if (req.status === 'applied' && req.campaignId) {
+            appliedSet.add(req.campaignId.toString());
+          }
+        });
+        const activeSet = new Set();
+        activeArr.forEach((act) => {
+          const realId = act.campaignId?._id || act._id;
+          if (realId) {
+            activeSet.add(realId.toString());
+          }
+        });
+        setAppliedCampaignIds(appliedSet);
+        setActiveCampaignIds(activeSet);
+        
+        showToast('Dashboard data refreshed', 'info');
+      } catch (error) {
+        console.error('Error fetching influencer dashboard data:', error);
+        showToast('Failed to load dashboard data', 'error');
+      }
+    };
+  
+    const handleAcceptRequest = async (requestId) => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      try {
+        await axios.patch(
+          `${API_BASE_URL}/api/influencer/brand-requests/${requestId}/accept`,
+          {},
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        fetchDashboardData();
+      } catch (error) {
+        console.error('Error accepting brand request:', error);
+        showToast('Failed to accept request', 'error');
+      }
+    };
+  
+    const handleUpdateProgress = async (campaignId, newProgress) => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      try {
+        await axios.patch(
+          `${API_BASE_URL}/api/influencer/my-active-campaigns/${campaignId}/progress`,
+          { progress: newProgress },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        fetchDashboardData();
+      } catch (error) {
+        console.error('Error updating campaign progress:', error);
+        showToast('Failed to update progress', 'error');
+      }
+    };
+  
+    const handleLogout = () => {
+      localStorage.clear();
+      navigate('/signin');
+    };
+  
+    const scrollToSection = (id) => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      if (isMobileNavActive) setIsMobileNavActive(false);
+    };
+  
+    // Mobile navigation toggle handler
+    const toggleMobileNav = () => {
+      setIsMobileNavActive((prev) => !prev);
+    };
+  
+    // Animated counter component for dashboard stats
+    const AnimatedCounter = ({ value, label, icon }) => {
+      const [count, setCount] = useState(0);
+      
+      useEffect(() => {
+        let start = 0;
+        const end = parseInt(value);
+        const duration = 1500;
+        const increment = end / (duration / 16); // 60fps
+        
+        const timer = setInterval(() => {
+          start += increment;
+          if (start > end) start = end;
+          setCount(Math.floor(start));
+          if (start === end) clearInterval(timer);
+        }, 16);
+        
+        return () => clearInterval(timer);
+      }, [value]);
+      
+      return (
+        <div className={styles['stat-card']}>
+          <div className={styles['stat-icon']}>{icon}</div>
+          <div className={styles['stat-value']}>{count}</div>
+          <div className={styles['stat-label']}>{label}</div>
+        </div>
+      );
+    };
+  
+    return (
+      <div ref={pageRef} className={styles['dashboard-page']} style={{ '--scroll-y': `${scrollY}px` }}>
+        {/* Loading Screen */}
+        {isLoading && <CosmicNebulaLoader />}
+        
+        {/* Animated Background Effects */}
+        <AnimatedBackground />
+        
+        {/* Toast Notification */}
+        <NotificationToast 
+          message={toast.message} 
+          type={toast.type} 
+          visible={toast.visible} 
+          onClose={hideToast} 
+        />
+        
+        {/* Theme Selector */}
+        <ThemeSelector 
+          currentTheme={activeTheme} 
+          onThemeChange={setActiveTheme} 
+        />
+        
+        {/* Main Dashboard Container */}
+        <div className={styles['dashboard-container']}>
+          {/* Navigation Bar */}
+          <nav className={styles['main-nav']}>
+            <div className={styles['nav-left']}>
+              <h2 className={styles['nav-logo']}>
+                lets<span>FYI</span>
+              </h2>
+              <div 
+                className={`${styles['mobile-menu-toggle']} ${isMobileNavActive ? styles['menu-active'] : ''}`} 
+                onClick={toggleMobileNav}
+              >
                 <span></span>
                 <span></span>
                 <span></span>
               </div>
             </div>
-            <ul className={isMobileNavActive ? 'active' : ''}>
-              <li onClick={() => scrollToSection('top')}>Dashboard</li>
-              <li onClick={() => scrollToSection('brandRequests')}>Brand Requests</li>
-              <li onClick={() => scrollToSection('activeCampaigns')}>Active Campaigns</li>
-              <li onClick={() => scrollToSection('allCampaigns')}>All Campaigns</li>
-              <li onClick={handleLogout} style={{ color: 'red', cursor: 'pointer' }}>Logout</li>
+            
+            <ul className={`${styles['nav-menu']} ${isMobileNavActive ? styles['menu-active'] : ''}`}>
+              <li onClick={() => scrollToSection('top')}>
+                <span className={styles['nav-icon']}>📊</span>
+                Dashboard
+              </li>
+              <li onClick={() => scrollToSection('brandRequests')}>
+                <span className={styles['nav-icon']}>🔔</span>
+                Requests
+                {brandRequests.length > 0 && (
+                  <span className={styles['nav-badge']}>{brandRequests.length}</span>
+                )}
+              </li>
+              <li onClick={() => scrollToSection('activeCampaigns')}>
+                <span className={styles['nav-icon']}>🚀</span>
+                Active
+              </li>
+              <li onClick={() => scrollToSection('allCampaigns')}>
+                <span className={styles['nav-icon']}>📝</span>
+                Explore
+              </li>
+              <li onClick={handleLogout} className={styles['logout-item']}>
+                <span className={styles['nav-icon']}>🚪</span>
+                Logout
+              </li>
             </ul>
           </nav>
-
-          {/* COMPLETE PROFILE BANNER */}
+          
+          {/* Profile Completion Banner */}
           {showProfileBanner && (
-            <div className={styles['complete-profile-banner']}>
-              Please add your profile photo in the Edit Info section.
+            <div className={styles['profile-banner']}>
+              <div className={styles['banner-icon']}>💡</div>
+              <div className={styles['banner-message']}>
+                Complete your profile by adding a profile photo to increase your visibility to brands!
+              </div>
+              <button 
+                className={styles['banner-action']} 
+                onClick={handleEditClick}
+              >
+                Update Now
+              </button>
             </div>
           )}
-
-          {/* TOP SECTION - Influencer Profile */}
-          <div className={`${styles['top-section']} ${styles['fade-in-right']}`}>
-            <h1 className={styles['page-title']}>Influencer Dashboard</h1>
-            <div className={`${styles['influencer-details']} ${styles['colored-container']} ${styles['shadow-effect']} card-peek`} data-peek="Click to reveal more profile details">
+          
+          {/* Top Section - Dashboard Header */}
+          <section 
+            id="top" 
+            className={`${styles['dashboard-header']} ${animateSection === 'top' ? styles['animate-in'] : ''}`}
+          >
+            <div className={styles['header-content']}>
+              <div className={styles['welcome-message']}>
+                <h1 className={styles['page-title']}>
+                  <span className={styles['title-highlight']}>Influencer Dashboard</span>
+                </h1>
+                <p className={styles['greeting-text']}>
+                  Welcome back, <span className={styles['user-name']}>{influencerInfo.name}</span>!
+                </p>
+              </div>
+              
+              {/* Dashboard Stats */}
+              <div className={styles['stats-container']}>
+                <AnimatedCounter 
+                  value={dashboardStats.activeCampaigns} 
+                  label="Active Campaigns" 
+                  icon="🔥" 
+                />
+                <AnimatedCounter 
+                  value={dashboardStats.pendingRequests} 
+                  label="Pending Requests" 
+                  icon="🔔" 
+                />
+                <AnimatedCounter 
+                  value={dashboardStats.averageProgress} 
+                  label="Avg. Progress %" 
+                  icon="📈" 
+                />
+                <AnimatedCounter 
+                  value={dashboardStats.completedCampaigns} 
+                  label="Completed" 
+                  icon="✅" 
+                />
+              </div>
+            </div>
+          </section>
+          
+          {/* Profile Card */}
+          <section className={styles['profile-section']}>
+            <div className={`${styles['profile-card']} ${styles['neo-card']}`}>
               {isEditing ? (
-                <div className={styles['edit-form']}>
-                  <div className={styles['profile-pic-container']}>
-                    <img
-                      src={tempInfo.profileImage || influencerBack}
-                      alt="Profile"
-                      className={styles['profile-pic']}
-                    />
-                  </div>
-                  <label>Profile Image (URL):</label>
-                  <input
-                    type="text"
-                    value={tempInfo.profileImage}
-                    onChange={(e) => setTempInfo({ ...tempInfo, profileImage: e.target.value })}
-                  />
-                  <label>Name:</label>
-                  <input
-                    type="text"
-                    value={tempInfo.name}
-                    onChange={(e) => setTempInfo({ ...tempInfo, name: e.target.value })}
-                  />
-                  <label>Experience (Years):</label>
-                  <input
-                    type="number"
-                    value={tempInfo.experience}
-                    onChange={(e) => setTempInfo({ ...tempInfo, experience: e.target.value })}
-                  />
-                  <label>Number of Followers:</label>
-                  <input
-                    type="number"
-                    value={tempInfo.numFollowers}
-                    onChange={(e) => setTempInfo({ ...tempInfo, numFollowers: e.target.value })}
-                  />
-                  <label>Influencer Location:</label>
-                  <input
-                    type="text"
-                    value={tempInfo.influencerLocation}
-                    onChange={(e) => setTempInfo({ ...tempInfo, influencerLocation: e.target.value })}
-                  />
-                  <label>Majority Audience Location:</label>
-                  <input
-                    type="text"
-                    value={tempInfo.majorityAudienceLocation}
-                    onChange={(e) => setTempInfo({ ...tempInfo, majorityAudienceLocation: e.target.value })}
-                  />
-                  <label>Audience Age Group:</label>
-                  <input
-                    type="text"
-                    value={tempInfo.audienceAgeGroup}
-                    onChange={(e) => setTempInfo({ ...tempInfo, audienceAgeGroup: e.target.value })}
-                  />
-                  <label>Audience Gender Demographics:</label>
-                  <input
-                    type="text"
-                    value={tempInfo.audienceGenderDemographics}
-                    onChange={(e) => setTempInfo({ ...tempInfo, audienceGenderDemographics: e.target.value })}
-                  />
-                  <label>Gender:</label>
-                  <input
-                    type="text"
-                    value={tempInfo.gender}
-                    onChange={(e) => setTempInfo({ ...tempInfo, gender: e.target.value })}
-                  />
-                  <label>Industries (comma-separated):</label>
-                  <input
-                    type="text"
-                    value={Array.isArray(tempInfo.industries) ? tempInfo.industries.join(', ') : ''}
-                    onChange={(e) =>
-                      setTempInfo({
-                        ...tempInfo,
-                        industries: e.target.value.split(',').map(item => item.trim()),
-                      })
-                    }
-                  />
-                  <label>Niche Platforms (comma-separated):</label>
-                  <input
-                    type="text"
-                    value={Array.isArray(tempInfo.nichePlatforms) ? tempInfo.nichePlatforms.join(', ') : ''}
-                    onChange={(e) =>
-                      setTempInfo({
-                        ...tempInfo,
-                        nichePlatforms: e.target.value.split(',').map(item => item.trim()),
-                      })
-                    }
-                  />
-                  <div className={styles['edit-form-buttons']}>
-                    <button className={`${styles['save-btn']} elastic-pop`} onClick={handleSaveClick}>Save</button>
-                    <button className={`${styles['cancel-btn']} elastic-pop`} onClick={handleCancelClick}>Cancel</button>
+                <div className={styles['edit-profile-container']}>
+                  <h3 className={styles['section-title']}>Edit Profile</h3>
+                  
+                  <div className={styles['edit-form']}>
+                    <div className={styles['form-row']}>
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Profile Image URL</label>
+                        <input
+                          type="text"
+                          className={styles['form-input']}
+                          value={tempInfo.profileImage}
+                          onChange={(e) => setTempInfo({ ...tempInfo, profileImage: e.target.value })}
+                          placeholder="Enter image URL"
+                        />
+                      </div>
+                      
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Display Name</label>
+                        <input
+                          type="text"
+                          className={styles['form-input']}
+                          value={tempInfo.name}
+                          onChange={(e) => setTempInfo({ ...tempInfo, name: e.target.value })}
+                          placeholder="Your name"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className={styles['form-row']}>
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Experience (Years)</label>
+                        <input
+                          type="number"
+                          className={styles['form-input']}
+                          value={tempInfo.experience}
+                          onChange={(e) => setTempInfo({ ...tempInfo, experience: e.target.value })}
+                        />
+                      </div>
+                      
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Followers Count</label>
+                        <input
+                          type="number"
+                          className={styles['form-input']}
+                          value={tempInfo.numFollowers}
+                          onChange={(e) => setTempInfo({ ...tempInfo, numFollowers: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className={styles['form-row']}>
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Your Location</label>
+                        <input
+                          type="text"
+                          className={styles['form-input']}
+                          value={tempInfo.influencerLocation}
+                          onChange={(e) => setTempInfo({ ...tempInfo, influencerLocation: e.target.value })}
+                        />
+                      </div>
+                      
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Audience Location</label>
+                        <input
+                          type="text"
+                          className={styles['form-input']}
+                          value={tempInfo.majorityAudienceLocation}
+                          onChange={(e) => setTempInfo({ ...tempInfo, majorityAudienceLocation: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className={styles['form-row']}>
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Audience Age Group</label>
+                        <input
+                          type="text"
+                          className={styles['form-input']}
+                          value={tempInfo.audienceAgeGroup}
+                          onChange={(e) => setTempInfo({ ...tempInfo, audienceAgeGroup: e.target.value })}
+                        />
+                      </div>
+                      
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Audience Gender</label>
+                        <input
+                          type="text"
+                          className={styles['form-input']}
+                          value={tempInfo.audienceGenderDemographics}
+                          onChange={(e) => setTempInfo({ ...tempInfo, audienceGenderDemographics: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className={styles['form-row']}>
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Your Gender</label>
+                        <input
+                          type="text"
+                          className={styles['form-input']}
+                          value={tempInfo.gender}
+                          onChange={(e) => setTempInfo({ ...tempInfo, gender: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className={styles['form-row']}>
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Industries (comma-separated)</label>
+                        <input
+                          type="text"
+                          className={styles['form-input']}
+                          value={Array.isArray(tempInfo.industries) ? tempInfo.industries.join(', ') : ''}
+                          onChange={(e) =>
+                            setTempInfo({
+                              ...tempInfo,
+                              industries: e.target.value.split(',').map(item => item.trim()),
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className={styles['form-row']}>
+                      <div className={styles['form-group']}>
+                        <label className={styles['form-label']}>Platforms (comma-separated)</label>
+                        <input
+                          type="text"
+                          className={styles['form-input']}
+                          value={Array.isArray(tempInfo.nichePlatforms) ? tempInfo.nichePlatforms.join(', ') : ''}
+                          onChange={(e) =>
+                            setTempInfo({
+                              ...tempInfo,
+                              nichePlatforms: e.target.value.split(',').map(item => item.trim()),
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className={styles['form-buttons']}>
+                      <button 
+                        className={styles['save-btn']} 
+                        onClick={handleSaveClick}
+                      >
+                        Save Changes
+                      </button>
+                      <button 
+                        className={styles['cancel-btn']} 
+                        onClick={handleCancelClick}
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
                 </div>
               ) : (
-                <div className={styles['profile-section']}>
-                  <div className={styles['profile-pic-container']}>
-                    <img
-                      src={influencerInfo.profileImage || influencerBack}
-                      alt="Profile"
-                      className={styles['profile-pic']}
+                <div className={styles['profile-view']}>
+                  <div className={styles['profile-header']}>
+                    <ProfileAvatar 
+                      imageUrl={influencerInfo.profileImage} 
+                      altImage={influencerBack}
+                      name={influencerInfo.name} 
                     />
+                    
+                    <div className={styles['profile-actions']}>
+                      <button 
+                        className={styles['edit-profile-btn']} 
+                        onClick={handleEditClick}
+                      >
+                        Edit Profile
+                      </button>
+                    </div>
                   </div>
-                  <div className={styles['profile-view']}>
-                    <p><strong>Name:</strong> {influencerInfo.name}</p>
-                    <p><strong>Experience:</strong> {influencerInfo.experience} year</p>
-                    <p><strong>Number of Followers:</strong> {influencerInfo.numFollowers}</p>
-                    <p><strong>Location:</strong> {influencerInfo.influencerLocation}</p>
-                    <p><strong>Majority Audience Location:</strong> {influencerInfo.majorityAudienceLocation}</p>
-                    <p><strong>Audience Age Group:</strong> {influencerInfo.audienceAgeGroup}</p>
-                    <p><strong>Audience Gender Demographics:</strong> {influencerInfo.audienceGenderDemographics}</p>
-                    <p><strong>Gender:</strong> {influencerInfo.gender}</p>
-                    <p><strong>Industry:</strong> {Array.isArray(influencerInfo.industries) ? influencerInfo.industries.join(', ') : ''}</p>
-                    <p><strong>Niche Platforms:</strong> {Array.isArray(influencerInfo.nichePlatforms) ? influencerInfo.nichePlatforms.join(', ') : ''}</p>
-                    <button className={`${styles['edit-btn']} elastic-pop`} onClick={handleEditClick}>Edit Info</button>
+                  
+                  <div className={styles['profile-details']}>
+                    <div className={styles['detail-section']}>
+                      <h3 className={styles['detail-heading']}>Personal Info</h3>
+                      <div className={styles['detail-grid']}>
+                        <div className={styles['detail-item']}>
+                          <span className={styles['detail-label']}>Experience:</span>
+                          <span className={styles['detail-value']}>{influencerInfo.experience} year</span>
+                        </div>
+                        <div className={styles['detail-item']}>
+                          <span className={styles['detail-label']}>Followers:</span>
+                          <span className={styles['detail-value']}>{influencerInfo.numFollowers.toLocaleString()}</span>
+                        </div>
+                        <div className={styles['detail-item']}>
+                          <span className={styles['detail-label']}>Location:</span>
+                          <span className={styles['detail-value']}>{influencerInfo.influencerLocation}</span>
+                        </div>
+                        <div className={styles['detail-item']}>
+                          <span className={styles['detail-label']}>Gender:</span>
+                          <span className={styles['detail-value']}>{influencerInfo.gender}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className={styles['detail-section']}>
+                      <h3 className={styles['detail-heading']}>Audience Demographics</h3>
+                      <div className={styles['detail-grid']}>
+                        <div className={styles['detail-item']}>
+                          <span className={styles['detail-label']}>Audience Location:</span>
+                          <span className={styles['detail-value']}>{influencerInfo.majorityAudienceLocation}</span>
+                        </div>
+                        <div className={styles['detail-item']}>
+                          <span className={styles['detail-label']}>Age Group:</span>
+                          <span className={styles['detail-value']}>{influencerInfo.audienceAgeGroup}</span>
+                        </div>
+                        <div className={styles['detail-item']}>
+                          <span className={styles['detail-label']}>Gender Distribution:</span>
+                          <span className={styles['detail-value']}>{influencerInfo.audienceGenderDemographics}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className={styles['tag-section']}>
+                      <div className={styles['tag-container']}>
+                        <h3 className={styles['tag-heading']}>Industries</h3>
+                        <div className={styles['tags']}>
+                          {Array.isArray(influencerInfo.industries) && influencerInfo.industries.map((industry, index) => (
+                            <span key={index} className={styles['tag']}>{industry}</span>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className={styles['tag-container']}>
+                        <h3 className={styles['tag-heading']}>Platforms</h3>
+                        <div className={styles['tags']}>
+                          {Array.isArray(influencerInfo.nichePlatforms) && influencerInfo.nichePlatforms.map((platform, index) => (
+                            <span key={index} className={styles['tag']}>{platform}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
-          </div>
-
-          {/* AmplifyPlanCard */}
-          <AmplifyPlanCard />
-
-          {/* BRAND REQUESTS SECTION */}
-          <section id="brandRequests" className={`${styles['brand-requests-section']} ${styles['fade-in-left']}`}>
-            <h2 className="animated-underline">Brand Requests</h2>
-            <div className={styles['requests-list']}>
+          </section>
+          
+          {/* AI Recommended Campaign */}
+          <section className={styles['ai-recommendation']}>
+            <AmplifyPlanCard />
+          </section>
+          
+          {/* Brand Requests Section */}
+          <section 
+            id="brandRequests" 
+            className={`${styles['section-container']} ${animateSection === 'brandRequests' ? styles['animate-in'] : ''}`}
+          >
+            <div className={styles['section-header']}>
+              <h2 className={styles['section-title']}>
+                <span className={styles['section-icon']}>🔔</span>
+                Brand Requests
+              </h2>
+              <div className={styles['section-actions']}>
+                <button 
+                  className={styles['refresh-button']} 
+                  onClick={fetchDashboardData}
+                >
+                  Refresh
+                </button>
+              </div>
+            </div>
+            
+            <div className={styles['cards-container']}>
               {brandRequests.length === 0 ? (
-                <p>No brand requests at the moment.</p>
+                <div className={styles['empty-state']}>
+                  <div className={styles['empty-icon']}>📭</div>
+                  <p className={styles['empty-message']}>No brand requests at the moment.</p>
+                  <p className={styles['empty-tip']}>
+                    Apply to campaigns below to connect with brands!
+                  </p>
+                </div>
               ) : (
                 brandRequests.map((req) => (
                   <BrandRequestCard key={req._id} request={req} onAccept={handleAcceptRequest} />
@@ -649,12 +1477,37 @@ function InfluencerDashboard() {
               )}
             </div>
           </section>
-
+          
           {/* Active Campaigns Section */}
-          <section id="activeCampaigns" className={`${styles['campaign-section']} ${styles['fade-in-left']}`}>
-            <h2 className="animated-underline">ACTIVE CAMPAIGNS</h2>
-            <div className={styles.campaigns}>
-              {activeCampaigns.length > 0 ? (
+          <section 
+            id="activeCampaigns" 
+            className={`${styles['section-container']} ${animateSection === 'activeCampaigns' ? styles['animate-in'] : ''}`}
+          >
+            <div className={styles['section-header']}>
+              <h2 className={styles['section-title']}>
+                <span className={styles['section-icon']}>🚀</span>
+                Active Campaigns
+              </h2>
+              <div className={styles['section-actions']}>
+                <button 
+                  className={styles['refresh-button']} 
+                  onClick={fetchDashboardData}
+                >
+                  Refresh
+                </button>
+              </div>
+            </div>
+            
+            <div className={styles['cards-container']}>
+              {activeCampaigns.length === 0 ? (
+                <div className={styles['empty-state']}>
+                  <div className={styles['empty-icon']}>🚀</div>
+                  <p className={styles['empty-message']}>No active campaigns yet.</p>
+                  <p className={styles['empty-tip']}>
+                    Apply for campaigns or accept brand requests to get started!
+                  </p>
+                </div>
+              ) : (
                 activeCampaigns.map((campaign) => (
                   <ActiveCampaignCard
                     key={campaign._id || campaign.campaignId?._id}
@@ -663,33 +1516,67 @@ function InfluencerDashboard() {
                     onRefresh={fetchDashboardData}
                   />
                 ))
-              ) : (
-                <p>No active campaigns at the moment.</p>
               )}
             </div>
           </section>
-
+          
           {/* All Campaigns Section */}
-          <section id="allCampaigns" className={`${styles['campaign-section']} ${styles['fade-in-right']}`}>
-            <h2 className="animated-underline">All Campaigns</h2>
-            <div className={styles['big-campaigns']}>
-              {allCampaigns.map((campaign) => (
-                <AllCampaignCard
-                  key={campaign._id}
-                  campaign={campaign}
-                  influencerId={influencerInfo._id}
-                  onApplied={fetchDashboardData}
-                  appliedCampaignIds={appliedCampaignIds}
-                  activeCampaignIds={activeCampaignIds}
-                />
-              ))}
+          <section 
+            id="allCampaigns" 
+            className={`${styles['section-container']} ${animateSection === 'allCampaigns' ? styles['animate-in'] : ''}`}
+          >
+            <div className={styles['section-header']}>
+              <h2 className={styles['section-title']}>
+                <span className={styles['section-icon']}>🔍</span>
+                Explore Campaigns
+              </h2>
+              <div className={styles['section-actions']}>
+                <button 
+                  className={styles['refresh-button']} 
+                  onClick={fetchDashboardData}
+                >
+                  Refresh
+                </button>
+              </div>
+            </div>
+            
+            <div className={styles['big-cards-container']}>
+              {allCampaigns.length === 0 ? (
+                <div className={styles['empty-state']}>
+                  <div className={styles['empty-icon']}>📝</div>
+                  <p className={styles['empty-message']}>No campaigns available at the moment.</p>
+                  <p className={styles['empty-tip']}>
+                    Check back later for new opportunities!
+                  </p>
+                </div>
+              ) : (
+                allCampaigns.map((campaign) => (
+                  <AllCampaignCard
+                    key={campaign._id}
+                    campaign={campaign}
+                    influencerId={influencerInfo._id}
+                    onApplied={fetchDashboardData}
+                    appliedCampaignIds={appliedCampaignIds}
+                    activeCampaignIds={activeCampaignIds}
+                  />
+                ))
+              )}
             </div>
           </section>
+          
+          {/* Quick AI Chatbot */}
           <AiChatbot />
+          
+          {/* Scroll To Top Button */}
+          <button 
+            className={styles['scroll-top-btn']} 
+            onClick={() => scrollToSection('top')}
+          >
+            <span className={styles['scroll-icon']}>⬆</span>
+          </button>
         </div>
       </div>
-    </>
-  );
-}
-
-export default InfluencerDashboard;
+    );
+  }
+  
+  export default InfluencerDashboard;
