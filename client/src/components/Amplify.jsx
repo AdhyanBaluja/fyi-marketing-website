@@ -59,6 +59,7 @@ function Amplify() {
   const [showAchievement, setShowAchievement] = useState(false);
   const [pulseEffect, setPulseEffect] = useState(false);
   const [networkMode, setNetworkMode] = useState('default'); // 'default', 'celebration', 'processing'
+  const [campaignCreated, setCampaignCreated] = useState(false);
   
   // Interactive visualization state
   const [networkNodes, setNetworkNodes] = useState(generateRandomNodes(16));
@@ -275,6 +276,8 @@ function Amplify() {
     return () => clearInterval(interval);
   }, [networkNodes, formCompletion, networkMode]);
 
+
+
   // Handle input changes with enhanced focus effects
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -330,20 +333,20 @@ function Amplify() {
     
   };
 
-  // Handle game completion callback
+    
+  // Step 4: Handle the game's completion by adding this function
   const handleGameComplete = (finalScore) => {
     setGameScore(finalScore);
     setShowMiniGame(false);
     
-    // If API hasn't returned yet, redirect now
-    if (isCreating) {
-      setShowSuccessPopup(true);
-      
-      setTimeout(() => {
-        navigate('/loading');
-      }, 3000);
-    }
+    // Show success popup and then navigate
+    setShowSuccessPopup(true);
+    
+    setTimeout(() => {
+      navigate('/loading');
+    }, 3000);
   };
+
 
   // Submit form with enhanced animations
   const handleSubmit = async (e) => {
@@ -361,77 +364,60 @@ function Amplify() {
     if (networkRef.current) {
       networkRef.current.classList.add('network-processing');
     }
-
+  
     // Show mini-game
     setShowMiniGame(true);
-
-    // Set up a simulated campaign creation time (15-25 seconds)
-    const campaignCreationTime = Math.floor(Math.random() * 10000) + 15000;
-    
-    campaignCreationTimer.current = setTimeout(async () => {
-      try {
-        const payload = {
-          campaignType: 'amplify',
-          businessDescription: formData.businessDescription,
-          industry: formData.industry,
-          timeframeStart: formData.timeframe.start,
-          timeframeEnd: formData.timeframe.end,
-          platforms: formData.platforms,
-          marketTrends: formData.marketTrends,
-          targetAudience: formData.targetAudience,
-          brandMessage: formData.brandMessage,
-        };
-
-        const token = localStorage.getItem('token');
-        const response = await axios.post(
-          `${API_BASE_URL}/api/ai/generateCampaign`,
-          payload,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        const newCampaign = response.data.campaign;
-        if (newCampaign && newCampaign._id) {
-          // If game is still showing, let its close handler manage redirects
-          if (showMiniGame) {
-            // Store the campaign ID for later use
-            localStorage.setItem('latestCampaignId', newCampaign._id);
-          } else {
-            // Game already closed, show success and redirect
-            setShowSuccessPopup(true);
-            
-            // Store the new campaign ID in localStorage
-            localStorage.setItem('latestCampaignId', newCampaign._id);
-            
-            // Add delay for animation
-            setTimeout(() => {
-              // Then navigate to /loading
-              navigate('/loading');
-            }, 3000);
-          }
-        } else {
-          setErrorMessage('Campaign created, but no ID returned.');
-          setNetworkMode('default');
-          setShowMiniGame(false);
-        }
-      } catch (err) {
-        console.error('Error creating amplify campaign:', err);
-        setErrorMessage('Failed to create AI campaign. Please try again.');
+  
+    try {
+      const payload = {
+        campaignType: 'amplify',
+        businessDescription: formData.businessDescription,
+        industry: formData.industry,
+        timeframeStart: formData.timeframe.start,
+        timeframeEnd: formData.timeframe.end,
+        platforms: formData.platforms,
+        marketTrends: formData.marketTrends,
+        targetAudience: formData.targetAudience,
+        brandMessage: formData.brandMessage,
+      };
+  
+      const token = localStorage.getItem('token');
+      const response = await axios.post(
+        `${API_BASE_URL}/api/ai/generateCampaign`,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      const newCampaign = response.data.campaign;
+      if (newCampaign && newCampaign._id) {
+        // Store the new campaign ID in localStorage
+        localStorage.setItem('latestCampaignId', newCampaign._id);
+        
+        // Signal to game that campaign is created
+        setCampaignCreated(true);
+      } else {
+        setErrorMessage('Campaign created, but no ID returned.');
         setNetworkMode('default');
         setShowMiniGame(false);
-        
-        if (formRef.current) {
-          formRef.current.classList.add('submit-error');
-          setTimeout(() => {
-            formRef.current.classList.remove('submit-error');
-          }, 800);
-        }
-      } finally {
-        setIsCreating(false);
-        if (formRef.current) {
-          formRef.current.classList.remove('submit-ripple');
-        }
       }
-    }, campaignCreationTime);
+    } catch (err) {
+      console.error('Error creating amplify campaign:', err);
+      setErrorMessage('Failed to create AI campaign. Please try again.');
+      setNetworkMode('default');
+      setShowMiniGame(false);
+      
+      if (formRef.current) {
+        formRef.current.classList.add('submit-error');
+        setTimeout(() => {
+          formRef.current.classList.remove('submit-error');
+        }, 800);
+      }
+    } finally {
+      setIsCreating(false);
+      if (formRef.current) {
+        formRef.current.classList.remove('submit-ripple');
+      }
+    }
   };
 
   // Clean up timers when component unmounts
@@ -551,7 +537,7 @@ function Amplify() {
                 onFocus={() => setActiveField('industry')}
                 onBlur={() => setActiveField(null)}
               >
-                <option value="">--Select Industry--</option>
+                <option value=""></option>
                 <option value="Fashion">Fashion</option>
                 <option value="Technology">Technology</option>
                 <option value="Healthcare">Healthcare</option>
@@ -936,12 +922,15 @@ function Amplify() {
       
       {/* Mini-Game Modal - Now a separate imported component */}
       {showMiniGame && (
-        <div className="modal-overlay">
-          <div className="modal-container">
-            <BrandBuilderGame onClose={handleGameComplete} />
-          </div>
-        </div>
-      )}
+  <div className="modal-overlay">
+    <div className="modal-container">
+      <BrandBuilderGame 
+        onClose={handleGameComplete} 
+        campaignCreated={campaignCreated}
+      />
+    </div>
+  </div>
+)}
       
       {/* Success animation popup */}
       {showSuccessPopup && (

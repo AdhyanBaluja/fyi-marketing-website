@@ -771,7 +771,7 @@ input {
   border-radius: var(--border-radius-md);
   font-size: 1rem;
   background-color: var(--color-input-bg);
-  /* color: var(--color-text); */
+  color: #FF7D00;
   font-family: 'Poppins', sans-serif;
   resize: none;
   box-shadow: var(--shadow-input);
