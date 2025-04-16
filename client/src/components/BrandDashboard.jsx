@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './BrandDashboard.css';
+import cubeIcon from '../assets/cube-icon.png';
+import mailboxIcon from '../assets/mailbox-icon.png';
 
 // Use environment variable for API base URL, fallback to localhost if not defined
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
@@ -740,7 +742,7 @@ const themes = {
           onMouseLeave={() => handleCardHover('pending-requests', false)}
         >
           <div className="requests-icon">
-            <img src="../assets/cube-icon.png" alt="Pending Requests" className="cube-icon" />
+          <img src={cubeIcon} alt="Pending Requests" className="cube-icon" />
           </div>
           <h3>Pending Requests (From Influencers)</h3>
           <p className="stats-value">{pendingRequests}</p>
@@ -752,7 +754,7 @@ const themes = {
       <section className="applications-section">
         <div className="section-header">
           <h2>
-            <img src="../assets/mailbox-icon.png" alt="Applications" className="mailbox-icon" />
+          <img src={mailboxIcon} alt="Applications" className="mailbox-icon" />
             <span className="section-title">Influencer Applications</span>
           </h2>
           <div className="section-line"></div>

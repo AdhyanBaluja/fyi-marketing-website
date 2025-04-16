@@ -459,7 +459,7 @@ button {
   border: 1px solid var(--color-border-light);
   z-index: 0;
   animation: fadeSlideUp 0.3s ease-out;
-  width: 500px;
+  width: 700px;
   height: 350px;
 }
 
@@ -473,7 +473,7 @@ button {
 
 .theme-options-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 120px;
   margin-bottom: 15px;
 }
@@ -524,16 +524,17 @@ button {
   font-size: 0.9rem;
   cursor: pointer;
   position: relative;
-  left: 280px;
+  left: 250px;
+  bottom: 40px;
 }
-
+/* 
 .toggle-label input {
   margin-right: 8px;
 }
 
 .toggle-text {
   margin-left: 5px;
-}
+} */
 
 /* ==================== NOTIFICATIONS ==================== */
 .notification-container {
