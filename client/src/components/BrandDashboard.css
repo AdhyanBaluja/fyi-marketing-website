@@ -2974,3 +2974,9 @@ button {
     opacity: 0.3;
   }
 }
+
+.icon-symbol {
+  font-size: 2rem;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}

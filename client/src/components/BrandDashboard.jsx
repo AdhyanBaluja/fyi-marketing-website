@@ -742,8 +742,8 @@ const themes = {
           onMouseLeave={() => handleCardHover('pending-requests', false)}
         >
           <div className="requests-icon">
-          <img src={cubeIcon} alt="Pending Requests" className="cube-icon" />
-          </div>
+  <span className="icon-symbol">📦</span>
+</div>
           <h3>Pending Requests (From Influencers)</h3>
           <p className="stats-value">{pendingRequests}</p>
           <div className="card-shine"></div>
@@ -801,7 +801,7 @@ const themes = {
       <section id="allCampaigns" className="campaigns-section" ref={campaignsRef}>
         <div className="section-header">
           <h2>
-            <img src="/path/to/document-icon.png" alt="Campaigns" className="document-icon" />
+          <img src={mailboxIcon} alt="Applications" className="mailbox-icon" />
             <span className="section-title">All Campaigns</span>
           </h2>
           <div className="section-line"></div>
