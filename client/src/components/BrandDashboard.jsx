@@ -4,6 +4,7 @@ import axios from 'axios';
 import './BrandDashboard.css';
 import cubeIcon from '../assets/cube-icon.png';
 import mailboxIcon from '../assets/mailbox-icon.png';
+import AiChatbot from './AiChatbot';
 
 // Use environment variable for API base URL, fallback to localhost if not defined
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
@@ -1124,26 +1125,6 @@ const themes = {
         )}
       </section>
       
-      {/* Quick Actions floating button */}
-      <div className="quick-actions-container">
-        <button className="quick-actions-btn">
-          <span className="quick-btn-icon">⚡</span>
-        </button>
-        <div className="quick-actions-menu">
-          <button className="quick-action-item" onClick={handleStartCampaignClick}>
-            <span className="quick-icon">🚀</span>
-            <span>New Campaign</span>
-          </button>
-          <button className="quick-action-item" onClick={handleFindInfluencersClick}>
-            <span className="quick-icon">🔍</span>
-            <span>Find Influencers</span>
-          </button>
-          <button className="quick-action-item" onClick={handleBuyPlanClick}>
-            <span className="quick-icon">💎</span>
-            <span>Upgrade Plan</span>
-          </button>
-        </div>
-      </div>
       
       {/* Animated background elements */}
       {animatedBackground && (
@@ -1288,6 +1269,7 @@ const themes = {
           </div>
         </div>
       )}
+      <AiChatbot/>
     </div>
   );
 }
