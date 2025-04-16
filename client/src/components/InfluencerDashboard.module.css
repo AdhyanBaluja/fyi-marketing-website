@@ -442,6 +442,8 @@
   box-shadow: var(--shadow-medium);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   will-change: transform, box-shadow; /* Performance optimization */
+  position: relative;
+  top: 30px;
 }
 
 .theme-selector-button:hover,
