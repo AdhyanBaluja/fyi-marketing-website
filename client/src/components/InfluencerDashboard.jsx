@@ -710,6 +710,7 @@ function BrandRequestCard({ request, onAccept }) {
       ref={cardRef}
       className={`${styles['brand-request-card']} ${styles['neo-card']} ${styles['flip-card']} ${isFlipped ? styles['is-flipped'] : ''} ${isVisible ? styles['visible'] : ''}`}
       onClick={() => setIsFlipped(!isFlipped)}
+      
     >
       <NotificationToast 
         message={toast.message} 
@@ -1658,23 +1659,22 @@ function InfluencerDashboard() {
           </div>
           
           <div className={styles['cards-container']}>
-            {brandRequests.length === 0 ? (
-              <EmptyState 
-                icon="📭" 
-                message="No brand requests at the moment." 
-                tip="Apply to campaigns below to connect with brands!" 
-              />
-            ) : (
-              brandRequests.map((req, index) => (
-                <BrandRequestCard
-                  key={req._id}
-                  request={req}
-                  onAccept={handleAcceptRequest}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                />
-              ))
-            )}
-          </div>
+  {brandRequests.length === 0 ? (
+    <EmptyState 
+      icon="📭" 
+      message="No brand requests at the moment." 
+      tip="Apply to campaigns below to connect with brands!" 
+    />
+  ) : (
+    brandRequests.map((req, index) => (
+      <BrandRequestCard
+        key={req._id}
+        request={req}
+        onAccept={handleAcceptRequest}
+      />
+    ))
+  )}
+</div>
         </section>
         
         {/* Active Campaigns Section */}

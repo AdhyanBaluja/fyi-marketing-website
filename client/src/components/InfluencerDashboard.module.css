@@ -632,7 +632,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: pulse 2s infinite;
+  /* animation: pulse 2s infinite; */
 }
 
 .logout-item {
@@ -748,7 +748,7 @@
   display: flex;
   align-items: center;
   border-left: 4px solid var(--primary-color);
-  animation: fadeIn 0.5s ease, pulse 6s ease-in-out infinite;
+  /* animation: fadeIn 0.5s ease, pulse 6s ease-in-out infinite; */
   will-change: transform, box-shadow; /* Performance optimization */
 }
 
@@ -824,7 +824,7 @@
 }
 
 .title-highlight {
-  position: relative;
+  /* position: relative; */
   display: inline-block;
 }
 
@@ -1112,8 +1112,35 @@
   animation: fadeIn 1s ease forwards;
   animation-delay: 0.2s;
   will-change: opacity, transform; /* Performance optimization */
+
+  
+}
+.section-container {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  margin-bottom: 40px;
+  min-height: 200px;
 }
 
+#brandRequests {
+  overflow: visible;
+  height: auto;
+  min-height: 300px;
+  padding-bottom: 30px;
+}
+
+.brand-request-card {
+  z-index: 10;
+  position: relative;
+}
+
+.neo-card.visible {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
 .active-section {
   opacity: 1;
   transform: translateY(0);
@@ -1161,11 +1188,14 @@
   background: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
 }
-
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--space-lg);
+  width: 100%;
+  min-height: 100px; /* Ensure minimum height */
+  position: relative;
+  z-index: 2; /* Ensure content appears above background */
 }
 
 .big-cards-container {
@@ -1673,10 +1703,13 @@
   box-shadow: none;
 }
 
-/* Brand Request Card */
 .brand-request-card {
-  perspective: 1000px;
-  cursor: pointer;
+  opacity: 1 !important; /* Force visibility */
+  transform: translateY(0) !important; /* Reset any transform */
+  height: auto;
+  min-height: 200px;
+  visibility: visible !important;
+  display: block;
 }
 
 .flip-card {
