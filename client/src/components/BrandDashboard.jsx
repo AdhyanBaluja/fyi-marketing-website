@@ -53,14 +53,13 @@ function BrandDashboard() {
   const [influencerApplications, setInfluencerApplications] = useState([]);
 
   // For showing welcome animation
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
   
   // For notifications panel
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([
     { id: 1, text: 'New influencer application received!', time: '2 hours ago', read: false },
-    { id: 2, text: 'Campaign "Summer Launch" is trending!', time: '1 day ago', read: false },
-    { id: 3, text: '@influencer_123 completed their task', time: '2 days ago', read: true }
+    { id: 2, text: 'Campaign "Summer Launch" is trending!', time: '1 day ago', read: false }
   ]);
 
   const token = localStorage.getItem('token');
@@ -102,15 +101,6 @@ function BrandDashboard() {
       document.body.className = '';
     };
   }, [currentTheme]);
-
-  useEffect(() => {
-    // Show welcome animation for 3 seconds then fade out
-    const timer = setTimeout(() => {
-      setShowWelcome(false);
-    }, 3000);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     // Mark page as loaded after short delay to trigger animations
@@ -406,6 +396,7 @@ function BrandDashboard() {
 
   // Calendar logic
   const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+  const firstDayOfMonth = new Date(calendarYear, calendarMonth, 1).getDay();
 
   const handlePrevMonth = () => {
     if (calendarMonth === 0) {
@@ -650,7 +641,7 @@ function BrandDashboard() {
       </nav>
 
       {/* Header with AI button */}
-      <header className={`brand-dash-header ${pageLoaded ? 'fade-in-down' : ''}`}>
+      <header className="brand-dash-header">
         <div className="header-content">
           <h1>Your Brand Dashboard</h1>
           <p className="header-subtitle">Welcome to your command center</p>
@@ -672,7 +663,7 @@ function BrandDashboard() {
       </header>
 
       {/* Membership status */}
-      <div className={`membership-banner ${membershipPlan.toLowerCase()}-plan ${pageLoaded ? 'fade-in' : ''}`}>
+      <div className="membership-banner">
         <div className="membership-icon">{membershipPlan === 'Pro' ? '⭐' : membershipPlan === 'Premium' ? '💎' : '🔄'}</div>
         <div className="membership-info">
           <span className="membership-label">Current Plan:</span>
@@ -686,7 +677,7 @@ function BrandDashboard() {
       </div>
 
       {/* Stats / progress area */}
-      <section className={`stats-section ${pageLoaded ? 'fade-in-up' : ''}`}>
+      <section className="stats-section">
         <div 
           className={`stats-card ${hoverCards['total-campaigns'] ? 'hover-active' : ''}`}
           onMouseEnter={() => handleCardHover('total-campaigns', true)}
@@ -720,7 +711,7 @@ function BrandDashboard() {
       </section>
 
       {/* Additional "Requests" columns */}
-      <section className={`requests-section ${pageLoaded ? 'fade-in-up-delay' : ''}`}>
+      <section className="requests-section">
         <div 
           className={`requests-card ${hoverCards['active-requests'] ? 'hover-active' : ''}`}
           onMouseEnter={() => handleCardHover('active-requests', true)}
@@ -736,7 +727,9 @@ function BrandDashboard() {
           onMouseEnter={() => handleCardHover('pending-requests', true)}
           onMouseLeave={() => handleCardHover('pending-requests', false)}
         >
-          <div className="requests-icon">📥</div>
+          <div className="requests-icon">
+            <img src="/path/to/cube-icon.png" alt="Pending Requests" className="cube-icon" />
+          </div>
           <h3>Pending Requests (From Influencers)</h3>
           <p className="stats-value">{pendingRequests}</p>
           <div className="card-shine"></div>
@@ -744,9 +737,12 @@ function BrandDashboard() {
       </section>
 
       {/* Influencer Applications Section */}
-      <section className={`applications-section ${pageLoaded ? 'fade-in-up-delay-2' : ''}`}>
+      <section className="applications-section">
         <div className="section-header">
-          <h2><span className="section-icon">👋</span> Influencer Applications</h2>
+          <h2>
+            <img src="/path/to/mailbox-icon.png" alt="Applications" className="mailbox-icon" />
+            <span className="section-title">Influencer Applications</span>
+          </h2>
           <div className="section-line"></div>
         </div>
         {influencerApplications.length === 0 ? (
@@ -761,7 +757,7 @@ function BrandDashboard() {
           <div className="applications-container">
             {influencerApplications.map((app, index) => (
               <div 
-                className={`application-card ${pageLoaded ? 'fade-in-slide slide-delay-' + index : ''}`} 
+                className="application-card" 
                 key={app.requestId}
               >
                 <div className="application-header">
@@ -788,9 +784,12 @@ function BrandDashboard() {
       </section>
 
       {/* All Campaigns Section */}
-      <section id="allCampaigns" className={`campaigns-section ${pageLoaded ? 'bounce-in' : ''}`} ref={campaignsRef}>
+      <section id="allCampaigns" className="campaigns-section" ref={campaignsRef}>
         <div className="section-header">
-          <h2><span className="section-icon">📝</span> All Campaigns</h2>
+          <h2>
+            <img src="/path/to/document-icon.png" alt="Campaigns" className="document-icon" />
+            <span className="section-title">All Campaigns</span>
+          </h2>
           <div className="section-line"></div>
         </div>
         {loadingCampaigns ? (
@@ -807,8 +806,7 @@ function BrandDashboard() {
               onClick={membershipPlan === 'Free' ? () => openModal('upgradeModal') : handleStartCampaignClick}
             >
               Create Your First Campaign
-            </button>
-          </div>
+            </button></div>
         ) : (
           <div className="campaigns-table-container">
             <table className="campaigns-table">
@@ -821,7 +819,7 @@ function BrandDashboard() {
               </thead>
               <tbody>
                 {campaigns.map((c, index) => (
-                  <tr key={c._id} className={`table-row ${pageLoaded ? 'fade-in-row row-delay-' + index : ''}`}>
+                  <tr key={c._id} className="table-row">
                     <td 
                       onClick={() => handleCampaignClick(c._id)} 
                       className="campaign-name-cell"
@@ -858,9 +856,12 @@ function BrandDashboard() {
       </section>
 
       {/* IMPROVED BRAND-LEVEL CALENDAR => All Active Campaign Events */}
-      <section className={`calendar-section ${pageLoaded ? 'fade-in-up-delay-3' : ''}`}>
+      <section className="calendar-section">
         <div className="section-header">
-          <h2><span className="section-icon">📅</span> Campaign Calendar</h2>
+          <h2>
+            <span className="section-icon">📅</span>
+            <span className="section-title">Campaign Calendar</span>
+          </h2>
           <div className="section-line"></div>
         </div>
         
@@ -894,15 +895,13 @@ function BrandDashboard() {
         </div>
         
         <div className="calendar-grid">
-          {Array.from({
-            length: new Date(calendarYear, calendarMonth, 1).getDay(),
-          }).map((_, idx) => (
-            <div key={`empty-${idx}`} className="calendar-day empty"></div>
+          {/* Empty cells for days before the first day of month */}
+          {Array.from({ length: firstDayOfMonth }).map((_, idx) => (
+            <div key={`empty-start-${idx}`} className="calendar-day empty"></div>
           ))}
           
-          {Array.from({
-            length: daysInMonth,
-          }).map((_, idx) => {
+          {/* Actual days of the month */}
+          {Array.from({ length: daysInMonth }).map((_, idx) => {
             const day = idx + 1;
             const dayEvents = getEventsForDay(day);
             const styleForDay = getDayStyle(dayEvents);
@@ -973,7 +972,7 @@ function BrandDashboard() {
                 const platforms = platformsStr.split(',').map(p => p.trim().toLowerCase());
                 
                 return (
-                  <div key={i} className={`day-event-card ${pageLoaded ? 'slide-in-right delay-' + i : ''}`}>
+                  <div key={i} className="day-event-card">
                     <div className="event-header">
                       <h4>{ev.event || 'Event'}</h4>
                       <span className="event-time">{ev.date?.split('T')[1]?.substring(0, 5) || 'All day'}</span>
@@ -1039,9 +1038,12 @@ function BrandDashboard() {
       </section>
 
       {/* Joined Influencers Section */}
-      <section className={`influencer-requests-section ${pageLoaded ? 'fade-in-up-delay-4' : ''}`}>
+      <section className="influencer-requests-section">
         <div className="section-header">
-          <h2><span className="section-icon">🤝</span> Joined Influencers</h2>
+          <h2>
+            <span className="section-icon">🤝</span>
+            <span className="section-title">Joined Influencers</span>
+          </h2>
           <div className="section-line"></div>
         </div>
         
@@ -1058,7 +1060,7 @@ function BrandDashboard() {
             {joinedInfluencers.map((camp, campIndex) => (
               <div 
                 key={camp.campaignId} 
-                className={`joined-influencers-card ${pageLoaded ? 'fade-in-scale scale-delay-' + campIndex : ''}`}
+                className="joined-influencers-card"
               >
                 <div className="joined-card-header">
                   <h3>{camp.campaignName}</h3>
@@ -1072,7 +1074,7 @@ function BrandDashboard() {
                     {camp.joinedInfluencers.map((inf, idx) => (
                       <div 
                         key={idx} 
-                        className={`joined-influencer-item ${pageLoaded ? 'pop-in pop-delay-' + idx : ''}`}
+                        className="joined-influencer-item"
                       >
                         <div className="influencer-avatar-container">
                           <img
@@ -1110,7 +1112,7 @@ function BrandDashboard() {
       
       {/* Quick Actions floating button */}
       <div className="quick-actions-container">
-        <button className="quick-actions-btn pulse-animation">
+        <button className="quick-actions-btn">
           <span className="quick-btn-icon">⚡</span>
         </button>
         <div className="quick-actions-menu">
