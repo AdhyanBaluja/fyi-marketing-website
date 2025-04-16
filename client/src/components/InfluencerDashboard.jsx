@@ -2,15 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './InfluencerDashboard.module.css';
-import useScrollReveal from '../hooks/useScrollReveal';
-import AiChatbot from './AiChatbot.jsx';
 import brandLogo from '../assets/bird_2.jpg';
 import influencerBack from '../assets/InfluencerBack.png';
 
-// ==================== Environment Variable ====================
+// Environment Variable
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
-// Theme options with color schemes
+// Enhanced theme options with color schemes
 const themeOptions = [
   {
     name: "Cosmic Blue",
@@ -69,8 +67,19 @@ const themeOptions = [
   }
 ];
 
-// Cosmic Nebula Loader Component
+// Enhanced Cosmic Nebula Loader Component
 function CosmicNebulaLoader() {
+  const [loadingText, setLoadingText] = useState("Preparing Your Dashboard");
+  const [dotCount, setDotCount] = useState(0);
+
+  useEffect(() => {
+    const textInterval = setInterval(() => {
+      setDotCount((prev) => (prev < 3 ? prev + 1 : 0));
+    }, 500);
+
+    return () => clearInterval(textInterval);
+  }, []);
+
   return (
     <div className={styles["cosmic-loader-container"]}>
       <div className={styles["nebula-background"]}></div>
@@ -87,52 +96,32 @@ function CosmicNebulaLoader() {
           </div>
         </div>
         <div className={styles["star-field"]}>
-          {[...Array(20)].map((_, i) => (
+          {[...Array(30)].map((_, i) => (
             <div key={i} className={styles["star"]} style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`
+              animationDelay: `${Math.random() * 2}s`,
+              width: `${Math.random() * 2 + 1}px`,
+              height: `${Math.random() * 2 + 1}px`,
+              opacity: Math.random() * 0.7 + 0.3
             }}></div>
           ))}
         </div>
         <div className={styles["loading-text"]}>
-          <span>P</span>
-          <span>r</span>
-          <span>e</span>
-          <span>p</span>
-          <span>a</span>
-          <span>r</span>
-          <span>i</span>
-          <span>n</span>
-          <span>g</span>
-          <span>&nbsp;</span>
-          <span>Y</span>
-          <span>o</span>
-          <span>u</span>
-          <span>r</span>
-          <span>&nbsp;</span>
-          <span>D</span>
-          <span>a</span>
-          <span>s</span>
-          <span>h</span>
-          <span>b</span>
-          <span>o</span>
-          <span>a</span>
-          <span>r</span>
-          <span>d</span>
+          {`${loadingText}${'.'.repeat(dotCount)}`}
         </div>
       </div>
     </div>
   );
 }
 
-// Notification Toast Component
+// Enhanced Notification Toast Component with animations
 function NotificationToast({ message, type, onClose, visible }) {
   useEffect(() => {
     if (visible) {
       const timer = setTimeout(() => {
         onClose();
-      }, 3000);
+      }, 3500);
       return () => clearTimeout(timer);
     }
   }, [visible, onClose]);
@@ -153,29 +142,47 @@ function NotificationToast({ message, type, onClose, visible }) {
   );
 }
 
-// Theme Selector Component
+// Enhanced Theme Selector with advanced motion effects
 function ThemeSelector({ currentTheme, onThemeChange }) {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   
   return (
-    <div className={styles["theme-selector-container"]}>
+    <div className={styles["theme-selector-container"]} ref={dropdownRef}>
       <button 
-        className={styles["theme-selector-button"]}
+        className={`${styles["theme-selector-button"]} ${isOpen ? styles["theme-button-active"] : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className={styles["color-circle"]} style={{ background: themeOptions.find(t => t.id === currentTheme)?.colors.primary }}></span>
+        <span 
+          className={styles["color-circle"]} 
+          style={{ background: themeOptions.find(t => t.id === currentTheme)?.colors.primary }}
+        ></span>
         <span>Theme</span>
       </button>
       
       {isOpen && (
         <div className={styles["theme-dropdown"]}>
-          {themeOptions.map((theme) => (
+          {themeOptions.map((theme, index) => (
             <div 
               key={theme.id}
               className={`${styles["theme-option"]} ${currentTheme === theme.id ? styles["active-theme"] : ""}`}
               onClick={() => {
                 onThemeChange(theme.id);
                 setIsOpen(false);
+              }}
+              style={{
+                animationDelay: `${index * 0.05}s`
               }}
             >
               <div className={styles["theme-preview"]}>
@@ -197,36 +204,61 @@ function ThemeSelector({ currentTheme, onThemeChange }) {
   );
 }
 
-// Custom Animation Background
+// Enhanced Animated Background with responsive floating shapes
 function AnimatedBackground() {
+  const [dimensions, setDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const shapesCount = dimensions.width < 768 ? 8 : 15;
+
   return (
     <div className={styles["animated-background"]}>
       <div className={styles["floating-shapes-container"]}>
-        {Array(15).fill().map((_, i) => (
-          <div 
-            key={i}
-            className={styles["floating-shape"]}
-            style={{
-              width: `${Math.random() * 60 + 20}px`,
-              height: `${Math.random() * 60 + 20}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDuration: `${Math.random() * 15 + 15}s`,
-              animationDelay: `${Math.random() * 5}s`,
-              opacity: Math.random() * 0.5 + 0.1
-            }}
-          ></div>
-        ))}
+        {Array(shapesCount).fill().map((_, i) => {
+          const size = Math.random() * (dimensions.width < 768 ? 40 : 60) + 20;
+          return (
+            <div 
+              key={i}
+              className={styles["floating-shape"]}
+              style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDuration: `${Math.random() * 15 + 15}s`,
+                animationDelay: `${Math.random() * 5}s`,
+                opacity: Math.random() * 0.5 + 0.1,
+                transform: `rotate(${Math.random() * 360}deg)`
+              }}
+            ></div>
+          );
+        })}
       </div>
       <div className={styles["glow-overlay"]}></div>
     </div>
   );
 }
 
-function SectionUnderline() {
-  return <div className={styles['section-underline']}></div>;
+// Enhanced Section Underline for better visual separation
+function SectionUnderline({ width = "100px" }) {
+  return <div className={styles['section-underline']} style={{ width }}></div>;
 }
-// Main Card Components with enhanced animations
+
+// Enhanced Active Campaign Card with interactive animations
 function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   const cardRef = useRef(null);
   const [tempProgress, setTempProgress] = useState(campaign.progress || 0);
@@ -241,6 +273,7 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [toast, setToast] = useState({ visible: false, message: '', type: 'info' });
   const [isVisible, setIsVisible] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     setTasks(campaign.tasks || []);
@@ -333,8 +366,13 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   return (
     <div
       ref={cardRef}
-      className={`${styles['campaign-card']} ${styles['neo-card']} ${isExpanded ? styles['expanded'] : ''} ${isVisible ? styles['visible'] : ''}`}
+      className={`${styles['campaign-card']} ${styles['neo-card']} ${isExpanded ? styles['expanded'] : ''} ${isVisible ? styles['visible'] : ''} ${isHovered ? styles['card-hovered'] : ''}`}
       onClick={() => setIsExpanded(!isExpanded)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        animationDelay: '0.3s'
+      }}
     >
       <NotificationToast 
         message={toast.message} 
@@ -349,10 +387,13 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
         <div className={styles['brand-info']}>
           <div className={styles['logo-wrapper']}>
             <img src={brandLogo} alt={brandName} className={styles['campaign-logo']} />
+            <div className={styles['logo-shimmer']}></div>
           </div>
           <h3 className={styles['campaign-title']}>
             {campaignName}
-            <SectionUnderline width="70%" />
+            <div className={styles['title-underline']}>
+              <div className={styles['underline-shine']}></div>
+            </div>
           </h3>
         </div>
         <div className={styles['expand-indicator']}>
@@ -381,40 +422,42 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
         </div>
 
         <div className={styles['progress-container']} onClick={(e) => e.stopPropagation()}>
-  <div className={styles['progress-info']}>
-    <span className={styles['progress-text']}>Progress: {campaign.progress || 0}%</span>
-  </div>
-  
-  <div className={styles['progress-bar']}>
-    <div 
-      className={styles['progress-fill']} 
-      style={{ width: `${campaign.progress || 0}%` }}
-    ></div>
-  </div>
-  
-  {/* Progress Update Controls */}
-  <div className={styles['progress-update']} onClick={(e) => e.stopPropagation()}>
-    <input
-      type="range"
-      min="0"
-      max="100"
-      value={tempProgress}
-      onChange={(e) => setTempProgress(e.target.value)}
-      onClick={(e) => e.stopPropagation()}
-      className={styles['range-slider']}
-    />
-    <span className={styles['range-value']}>{tempProgress}%</span>
-    <button 
-      className={styles['update-btn']} 
-      onClick={(e) => {
-        e.stopPropagation();
-        handleSaveProgress();
-      }}
-    >
-      Update
-    </button>
-  </div>
-</div>
+          <div className={styles['progress-label']}>
+            <span>Progress</span>
+            <span>{campaign.progress || 0}%</span>
+          </div>
+          
+          <div className={styles['progress-bar']}>
+            <div 
+              className={styles['progress-fill']} 
+              style={{ width: `${campaign.progress || 0}%` }}
+            ></div>
+            <div className={styles['progress-glow']}></div>
+          </div>
+          
+          {/* Progress Update Controls */}
+          <div className={styles['progress-update']} onClick={(e) => e.stopPropagation()}>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={tempProgress}
+              onChange={(e) => setTempProgress(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              className={styles['range-slider']}
+            />
+            <span className={styles['range-value']}>{tempProgress}%</span>
+            <button 
+              className={styles['save-progress-btn']} 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSaveProgress();
+              }}
+            >
+              Update
+            </button>
+          </div>
+        </div>
 
         {/* Tasks Section */}
         <div 
@@ -427,8 +470,12 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
           </div>
           
           <ul className={styles['task-list']}>
-            {tasks.map((task) => (
-              <li key={task._id} className={styles['task-item']}>
+            {tasks.map((task, index) => (
+              <li 
+                key={task._id} 
+                className={styles['task-item']}
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
                 <span>{task.text}</span>
                 <button 
                   className={styles['remove-task-btn']} 
@@ -460,6 +507,7 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
             <button 
               type="submit" 
               className={styles['add-task-btn']}
+              onClick={(e) => e.stopPropagation()}
             >
               <span>+</span>
             </button>
@@ -485,6 +533,7 @@ function ActiveCampaignCard({ campaign, onUpdateProgress, onRefresh }) {
   );
 }
 
+// Enhanced All Campaign Card with hover effects
 function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds, activeCampaignIds }) {
   const cardRef = useRef(null);
   const brandName = campaign.brandName || 'Unknown Brand';
@@ -574,11 +623,14 @@ function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds
       <div className={styles['big-card-left']}>
         <div className={styles['logo-wrapper']}>
           <img src={brandLogo} alt={brandName} className={`${styles['campaign-logo']} ${styles['big-logo']}`} />
+          <div className={styles['logo-shimmer']}></div>
         </div>
         <div className={styles['campaign-info']}>
           <h3 className={styles['campaign-title']}>
             {campaign.name || 'Untitled Campaign'}
-            <SectionUnderline width="70%" />
+            <div className={styles['title-underline']}>
+              <div className={styles['underline-shine']}></div>
+            </div>
           </h3>
           <div className={styles['info-row']}>
             <span className={styles['info-label']}>Brand:</span>
@@ -611,6 +663,7 @@ function AllCampaignCard({ campaign, influencerId, onApplied, appliedCampaignIds
   );
 }
 
+// Enhanced Flipcard for Brand Requests
 function BrandRequestCard({ request, onAccept }) {
   const cardRef = useRef(null);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -671,7 +724,9 @@ function BrandRequestCard({ request, onAccept }) {
           <div className={styles['card-glare']}></div>
           <h3 className={styles['request-title']}>
             {request.campaignName}
-            <SectionUnderline width="70%" />
+            <div className={styles['title-underline']}>
+              <div className={styles['underline-shine']}></div>
+            </div>
           </h3>
           <div className={styles['info-row']}>
             <span className={styles['info-label']}>Brand:</span>
@@ -695,7 +750,9 @@ function BrandRequestCard({ request, onAccept }) {
           <div className={styles['card-glare']}></div>
           <h3 className={styles['request-title']}>
             Request Details
-            <SectionUnderline width="70%" />
+            <div className={styles['title-underline']}>
+              <div className={styles['underline-shine']}></div>
+            </div>
           </h3>
           <div className={styles['info-row']}>
             <span className={styles['info-label']}>Campaign:</span>
@@ -704,7 +761,7 @@ function BrandRequestCard({ request, onAccept }) {
           <div className={styles['info-row']}>
             <span className={styles['info-label']}>Received:</span>
             <span className={styles['info-value']}>
-              {new Date().toLocaleDateString()}
+              {new Date(request.createdAt || Date.now()).toLocaleDateString()}
             </span>
           </div>
           <div className={styles['info-row']}>
@@ -732,12 +789,17 @@ function BrandRequestCard({ request, onAccept }) {
   );
 }
 
-
-// Profile Avatar Component with hover effects
+// Enhanced Profile Avatar Component with interactive elements
 function ProfileAvatar({ imageUrl, altImage, name }) {
+  const [isHovered, setIsHovered] = useState(false);
+  
   return (
-    <div className={styles['profile-avatar-container']}>
-      <div className={styles['avatar-frame']}>
+    <div 
+      className={styles['profile-avatar-container']}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className={`${styles['avatar-frame']} ${isHovered ? styles['avatar-hovered'] : ''}`}>
         <img 
           src={imageUrl || altImage} 
           alt={name || "Profile"} 
@@ -746,6 +808,78 @@ function ProfileAvatar({ imageUrl, altImage, name }) {
         <div className={styles['avatar-glow']}></div>
       </div>
       <div className={styles['avatar-name']}>{name}</div>
+    </div>
+  );
+}
+
+// Enhanced Empty State Component with animations
+function EmptyState({ icon, message, tip }) {
+  return (
+    <div className={styles['empty-state']}>
+      <div className={styles['empty-icon']}>{icon}</div>
+      <p className={styles['empty-message']}>{message}</p>
+      {tip && <p className={styles['empty-tip']}>{tip}</p>}
+    </div>
+  );
+}
+
+// Enhanced Animated Counter component for dashboard stats
+function AnimatedCounter({ value, label, icon, index }) {
+  const [count, setCount] = useState(0);
+  const counterRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (counterRef.current) {
+      observer.observe(counterRef.current);
+    }
+
+    return () => {
+      if (counterRef.current) {
+        observer.unobserve(counterRef.current);
+      }
+    };
+  }, []);
+  
+  useEffect(() => {
+    if (!isVisible) return;
+    
+    let start = 0;
+    const end = parseInt(value);
+    const duration = 1500;
+    const increment = end / (duration / 16); // 60fps
+    
+    const timer = setInterval(() => {
+      start += increment;
+      if (start > end) start = end;
+      setCount(Math.floor(start));
+      if (start === end) clearInterval(timer);
+    }, 16);
+    
+    return () => clearInterval(timer);
+  }, [value, isVisible]);
+  
+  return (
+    <div 
+      ref={counterRef} 
+      className={`${styles['stat-card']} ${isVisible ? styles['stat-visible'] : ''}`}
+      style={{ 
+        '--i': index,
+        animationDelay: `${index * 0.1}s`
+      }}
+    >
+      <div className={styles['stat-icon']}>{icon}</div>
+      <div className={styles['stat-value']}>{count}</div>
+      <div className={styles['stat-label']}>{label}</div>
     </div>
   );
 }
@@ -837,6 +971,15 @@ function InfluencerDashboard() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Simulate initial data loading
+  useEffect(() => {
+    // Artificially delay the loading state to showcase the loader animation
+    const timer = setTimeout(() => { 
+      setIsLoading(false); 
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     if (!influencerInfo.profileImage || influencerInfo.profileImage.trim() === '') {
       setShowProfileBanner(true);
@@ -851,23 +994,13 @@ function InfluencerDashboard() {
     if (theme) {
       const root = document.documentElement;
       root.style.setProperty('--primary-color', theme.colors.primary);
+      root.style.setProperty('--primary-color-rgb', hexToRgb(theme.colors.primary));
       root.style.setProperty('--secondary-color', theme.colors.secondary);
+      root.style.setProperty('--secondary-color-rgb', hexToRgb(theme.colors.secondary));
       root.style.setProperty('--bg-gradient-start', theme.colors.background.split('(')[1].split(',')[0]);
       root.style.setProperty('--bg-gradient-end', theme.colors.background.split(',')[1].split(')')[0]);
       root.style.setProperty('--card-bg', theme.colors.cardBg);
       root.style.setProperty('--text-color', theme.colors.text);
-      
-      // Calculate RGB values for the primary color
-      const hexToRgb = (hex) => {
-        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? 
-          `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
-      };
-      
-      const primaryRgb = hexToRgb(theme.colors.primary);
-      if (primaryRgb) {
-        root.style.setProperty('--primary-color-rgb', primaryRgb);
-      }
     }
   }, [activeTheme]);
 
@@ -896,13 +1029,14 @@ function InfluencerDashboard() {
     });
   }, [allCampaigns, activeCampaigns, brandRequests]);
 
-  // Hide loading screen after 2 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => { 
-      setIsLoading(false); 
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  // Utility function to convert hex to rgb for CSS variables
+  const hexToRgb = (hex) => {
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? 
+      `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+  };
 
   const fetchInfluencerProfile = async () => {
     const token = localStorage.getItem('token');
@@ -1025,6 +1159,7 @@ function InfluencerDashboard() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchDashboardData();
+      showToast('Request accepted successfully!', 'success');
     } catch (error) {
       console.error('Error accepting brand request:', error);
       showToast('Failed to accept request', 'error');
@@ -1063,69 +1198,6 @@ function InfluencerDashboard() {
     setIsMobileNavActive((prev) => !prev);
   };
 
-  // Animated counter component for dashboard stats
-  const AnimatedCounter = ({ value, label, icon }) => {
-    const [count, setCount] = useState(0);
-    const counterRef = useRef(null);
-    const [isVisible, setIsVisible] = useState(false);
-    
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-          }
-        },
-        { threshold: 0.1 }
-      );
-  
-      if (counterRef.current) {
-        observer.observe(counterRef.current);
-      }
-  
-      return () => {
-        if (counterRef.current) {
-          observer.unobserve(counterRef.current);
-        }
-      };
-    }, []);
-    
-    useEffect(() => {
-      if (!isVisible) return;
-      
-      let start = 0;
-      const end = parseInt(value);
-      const duration = 1500;
-      const increment = end / (duration / 16); // 60fps
-      
-      const timer = setInterval(() => {
-        start += increment;
-        if (start > end) start = end;
-        setCount(Math.floor(start));
-        if (start === end) clearInterval(timer);
-      }, 16);
-      
-      return () => clearInterval(timer);
-    }, [value, isVisible]);
-    
-    return (
-      <div ref={counterRef} className={`${styles['stat-card']} ${isVisible ? styles['stat-visible'] : ''}`}>
-        <div className={styles['stat-icon']}>{icon}</div>
-        <div className={styles['stat-value']}>{count}</div>
-        <div className={styles['stat-label']}>{label}</div>
-      </div>
-    );
-  };
-
-  // Empty state component with animation
-  const EmptyState = ({ icon, message, tip }) => (
-    <div className={styles['empty-state']}>
-      <div className={styles['empty-icon']}>{icon}</div>
-      <p className={styles['empty-message']}>{message}</p>
-      {tip && <p className={styles['empty-tip']}>{tip}</p>}
-    </div>
-  );
-
   return (
     <div 
       ref={pageRef} 
@@ -1159,21 +1231,31 @@ function InfluencerDashboard() {
       <div className={styles['dashboard-container']}>
         {/* Navigation Bar */}
         <nav className={styles['main-nav']}>
-  <div className={styles['nav-left']}>
-    <h2 className={styles['nav-logo']}>
-      lets<span>FYI</span>
-    </h2>
-  </div>
-  
-  <ul className={styles['nav-menu']}>
-    <li className={activeSection === 'top' ? styles['active'] : ''}>
-      <span className={styles['nav-icon']}>📊</span>
-      Dashboard
-    </li>
-    <li className={activeSection === 'brandRequests' ? styles['active'] : ''}>
-      <span className={styles['nav-icon']}>🔔</span>
-      Requests
-    </li>
+          <div className={styles['nav-left']}>
+            <h2 className={styles['nav-logo']}>
+              lets<span>FYI</span>
+              <div className={styles['logo-shine']}></div>
+            </h2>
+          </div>
+          
+          <ul className={`${styles['nav-menu']} ${isMobileNavActive ? styles['menu-active'] : ''}`}>
+            <li 
+              onClick={() => scrollToSection('top')}
+              className={activeSection === 'top' ? styles['active'] : ''}
+            >
+              <span className={styles['nav-icon']}>📊</span>
+              Dashboard
+            </li>
+            <li 
+              onClick={() => scrollToSection('brandRequests')}
+              className={activeSection === 'brandRequests' ? styles['active'] : ''}
+            >
+              <span className={styles['nav-icon']}>🔔</span>
+              Requests
+              {brandRequests.length > 0 && (
+                <span className={styles['nav-badge']}>{brandRequests.length}</span>
+              )}
+            </li>
             <li 
               onClick={() => scrollToSection('activeCampaigns')}
               className={activeSection === 'activeCampaigns' ? styles['active'] : ''}
@@ -1185,7 +1267,7 @@ function InfluencerDashboard() {
               onClick={() => scrollToSection('allCampaigns')}
               className={activeSection === 'allCampaigns' ? styles['active'] : ''}
             >
-              <span className={styles['nav-icon']}>📝</span>
+              <span className={styles['nav-icon']}>🔍</span>
               Explore
             </li>
             <li onClick={handleLogout} className={styles['logout-item']}>
@@ -1193,6 +1275,15 @@ function InfluencerDashboard() {
               Logout
             </li>
           </ul>
+          
+          <div 
+            className={`${styles['mobile-menu-toggle']} ${isMobileNavActive ? styles['menu-active'] : ''}`}
+            onClick={toggleMobileNav}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </nav>
         
         {/* Profile Completion Banner */}
@@ -1219,8 +1310,14 @@ function InfluencerDashboard() {
           <div className={styles['header-content']}>
             <div className={styles['welcome-message']}>
               <h1 className={styles['page-title']}>
-                <span className={styles['title-highlight']}>Influencer Dashboard</span>
-                <SectionUnderline width="300px" />
+                <span className={styles['title-highlight']}>
+                  Influencer Dashboard
+                  <div className={styles['shining-underline-container']}>
+                    <div className={styles['shining-underline']}>
+                      <div className={styles['shining-effect']}></div>
+                    </div>
+                  </div>
+                </span>
               </h1>
               <p className={styles['greeting-text']}>
                 Welcome back, <span className={styles['user-name']}>{influencerInfo.name}</span>!
@@ -1233,329 +1330,352 @@ function InfluencerDashboard() {
                 value={dashboardStats.activeCampaigns} 
                 label="Active Campaigns" 
                 icon="🔥" 
+                index={0}
               />
               <AnimatedCounter 
                 value={dashboardStats.pendingRequests} 
                 label="Pending Requests" 
                 icon="🔔" 
+                index={1}
               />
               <AnimatedCounter 
                 value={dashboardStats.averageProgress} 
                 label="Avg. Progress %" 
                 icon="📈" 
+                index={2}
               />
               <AnimatedCounter 
                 value={dashboardStats.completedCampaigns} 
                 label="Completed" 
                 icon="✅" 
+                index={3}
               />
             </div>
           </div>
         </section>
         
-        {/* Profile Card */}
-{/* Profile Card */}
-<section className={styles['profile-section']}>
-  <div className={styles['profile-card']}>
-    {isEditing ? (
-      /* Edit Profile Mode */
-      <div className={styles['edit-profile-container']}>
-        <h3 className={styles['section-title']}>
-          Edit Profile
-          <div className={styles['section-underline']}></div>
-        </h3>
-        
-        <div className={styles['edit-form']}>
-          <div className={styles['form-row']}>
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Profile Image URL</label>
-              <input
-                type="text"
-                className={styles['form-input']}
-                value={tempInfo.profileImage}
-                onChange={(e) => setTempInfo({ ...tempInfo, profileImage: e.target.value })}
-                placeholder="Enter image URL"
-              />
+        {/* AI Recommendation Card */}
+        <section className={styles['ai-recommendation']}>
+          <div className={`${styles['amplify-card']} ${styles['ai-glow']} ${styles['neo-card']} ${styles['visible']}`}>
+            <div className={styles['card-glare']}></div>
+            <div className={styles['ai-badge']}>
+              <span className={styles['ai-icon']}>AI</span> Recommendation
             </div>
-            
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Display Name</label>
-              <input
-                type="text"
-                className={styles['form-input']}
-                value={tempInfo.name}
-                onChange={(e) => setTempInfo({ ...tempInfo, name: e.target.value })}
-                placeholder="Your name"
-              />
-            </div>
-          </div>
-          
-          <div className={styles['form-row']}>
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Experience (Years)</label>
-              <input
-                type="number"
-                className={styles['form-input']}
-                value={tempInfo.experience}
-                onChange={(e) => setTempInfo({ ...tempInfo, experience: e.target.value })}
-              />
-            </div>
-            
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Followers Count</label>
-              <input
-                type="number"
-                className={styles['form-input']}
-                value={tempInfo.numFollowers}
-                onChange={(e) => setTempInfo({ ...tempInfo, numFollowers: e.target.value })}
-              />
-            </div>
-          </div>
-          
-          <div className={styles['form-row']}>
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Your Location</label>
-              <input
-                type="text"
-                className={styles['form-input']}
-                value={tempInfo.influencerLocation}
-                onChange={(e) => setTempInfo({ ...tempInfo, influencerLocation: e.target.value })}
-              />
-            </div>
-            
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Audience Location</label>
-              <input
-                type="text"
-                className={styles['form-input']}
-                value={tempInfo.majorityAudienceLocation}
-                onChange={(e) => setTempInfo({ ...tempInfo, majorityAudienceLocation: e.target.value })}
-              />
-            </div>
-          </div>
-          
-          <div className={styles['form-row']}>
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Audience Age Group</label>
-              <input
-                type="text"
-                className={styles['form-input']}
-                value={tempInfo.audienceAgeGroup}
-                onChange={(e) => setTempInfo({ ...tempInfo, audienceAgeGroup: e.target.value })}
-              />
-            </div>
-            
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Audience Gender</label>
-              <input
-                type="text"
-                className={styles['form-input']}
-                value={tempInfo.audienceGenderDemographics}
-                onChange={(e) => setTempInfo({ ...tempInfo, audienceGenderDemographics: e.target.value })}
-              />
-            </div>
-          </div>
-          
-          <div className={styles['form-row']}>
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Your Gender</label>
-              <input
-                type="text"
-                className={styles['form-input']}
-                value={tempInfo.gender}
-                onChange={(e) => setTempInfo({ ...tempInfo, gender: e.target.value })}
-              />
-            </div>
-          </div>
-          
-          <div className={styles['form-row']}>
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Industries (comma-separated)</label>
-              <input
-                type="text"
-                className={styles['form-input']}
-                value={Array.isArray(tempInfo.industries) ? tempInfo.industries.join(', ') : ''}
-                onChange={(e) =>
-                  setTempInfo({
-                    ...tempInfo,
-                    industries: e.target.value.split(',').map(item => item.trim()),
-                  })
-                }
-              />
-            </div>
-          </div>
-          
-          <div className={styles['form-row']}>
-            <div className={styles['form-group']}>
-              <label className={styles['form-label']}>Platforms (comma-separated)</label>
-              <input
-                type="text"
-                className={styles['form-input']}
-                value={Array.isArray(tempInfo.nichePlatforms) ? tempInfo.nichePlatforms.join(', ') : ''}
-                onChange={(e) =>
-                  setTempInfo({
-                    ...tempInfo,
-                    nichePlatforms: e.target.value.split(',').map(item => item.trim()),
-                  })
-                }
-              />
-            </div>
-          </div>
-          
-          <div className={styles['form-buttons']}>
-            <button 
-              className={styles['save-btn']} 
-              onClick={handleSaveClick}
-            >
-              Save Changes
-            </button>
-            <button 
-              className={styles['cancel-btn']} 
-              onClick={handleCancelClick}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    ) : (
-      /* Profile View Mode */
-      <div className={styles['profile-content']}>
-        <div className={styles['profile-main']}>
-          <div className={styles['profile-avatar-container']}>
-            <div className={styles['profile-avatar']}>
-              <img 
-                src={influencerInfo.profileImage || influencerBack} 
-                alt={influencerInfo.name}
-              />
-            </div>
-            <h3 className={styles['profile-name']}>{influencerInfo.name}</h3>
-          </div>
-          
-          <button 
-            className={styles['edit-profile-btn']} 
-            onClick={handleEditClick}
-          >
-            Edit Profile
-          </button>
-        </div>
-        
-        <div className={styles['profile-details']}>
-          <div className={styles['profile-section-header']}>
-            <h3 className={styles['profile-section-title']}>
-              Personal Info
-              <div className={styles['section-underline']}></div>
+            <h3 className={styles['ai-title']}>
+              Personalized Growth Strategy
+              <span className={styles['sparkle-effect']}></span>
             </h3>
-          </div>
-          
-          <div className={styles['detail-grid']}>
-            <div className={styles['detail-item']}>
-              <span className={styles['detail-label']}>Audience Location:</span>
-              <span className={styles['detail-value']}>{influencerInfo.majorityAudienceLocation}</span>
-            </div>
-            <div className={styles['detail-item']}>
-              <span className={styles['detail-label']}>Age Group:</span>
-              <span className={styles['detail-value']}>{influencerInfo.audienceAgeGroup}</span>
-            </div>
-            <div className={styles['detail-item']}>
-              <span className={styles['detail-label']}>Gender Distribution:</span>
-              <span className={styles['detail-value']}>{influencerInfo.audienceGenderDemographics}</span>
-            </div>
-          </div>
-          
-          <div className={styles['tag-sections']}>
-            <div className={styles['tag-section']}>
-              <h3 className={styles['tag-section-title']}>
-                Industries
-                <div className={styles['section-underline']}></div>
-              </h3>
-              <div className={styles['tags']}>
-                {Array.isArray(influencerInfo.industries) && influencerInfo.industries.map((industry, index) => (
-                  <span key={index} className={styles['tag']}>{industry}</span>
-                ))}
+            <div className={styles['info-column']}>
+              <div className={styles['info-row']}>
+                <span className={styles['info-label']}>Insight:</span>
+                <span className={styles['info-value']}>Based on your profile, fashion and fitness content performs best with your audience demographic.</span>
+              </div>
+              <div className={styles['info-row']}>
+                <span className={styles['info-label']}>Suggestion:</span>
+                <span className={styles['info-value']}>Focus on creating collaborative content with fitness brands to increase engagement by up to 34%.</span>
+              </div>
+              <div className={styles['info-row']}>
+                <span className={styles['info-label']}>Action:</span>
+                <span className={styles['info-value']}>Apply to the "Fitness Revolution" campaign which matches your content style.</span>
               </div>
             </div>
-            
-            <div className={styles['tag-section']}>
-              <h3 className={styles['tag-section-title']}>
-                Platforms
-                <div className={styles['section-underline']}></div>
-              </h3>
-              <div className={styles['tags']}>
-                {Array.isArray(influencerInfo.nichePlatforms) && influencerInfo.nichePlatforms.map((platform, index) => (
-                  <span key={index} className={styles['tag']}>{platform}</span>
-                ))}
-              </div>
+            <div className={styles['ai-action-btn']}>
+              <button className={styles['learn-more-btn']}>
+                Apply Now
+                <span className={styles['btn-icon']}>→</span>
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-    )}
-  </div>
-</section>
+        </section>
         
+        {/* Profile Card */}
+        <section className={styles['profile-section']}>
+          <div className={styles['profile-card']}>
+            {isEditing ? (
+              /* Edit Profile Mode */
+              <div className={styles['edit-profile-container']}>
+                <h3 className={styles['section-title']}>
+                  Edit Profile
+                  <div className={styles['section-underline']}></div>
+                </h3>
+                
+                <div className={styles['edit-form']}>
+                  <div className={styles['form-row']}>
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Profile Image URL</label>
+                      <input
+                        type="text"
+                        className={styles['form-input']}
+                        value={tempInfo.profileImage}
+                        onChange={(e) => setTempInfo({ ...tempInfo, profileImage: e.target.value })}
+                        placeholder="Enter image URL"
+                      />
+                    </div>
+                    
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Display Name</label>
+                      <input
+                        type="text"
+                        className={styles['form-input']}
+                        value={tempInfo.name}
+                        onChange={(e) => setTempInfo({ ...tempInfo, name: e.target.value })}
+                        placeholder="Your name"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={styles['form-row']}>
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Experience (Years)</label>
+                      <input
+                        type="number"
+                        className={styles['form-input']}
+                        value={tempInfo.experience}
+                        onChange={(e) => setTempInfo({ ...tempInfo, experience: e.target.value })}
+                      />
+                    </div>
+                    
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Followers Count</label>
+                      <input
+                        type="number"
+                        className={styles['form-input']}
+                        value={tempInfo.numFollowers}
+                        onChange={(e) => setTempInfo({ ...tempInfo, numFollowers: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={styles['form-row']}>
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Your Location</label>
+                      <input
+                        type="text"
+                        className={styles['form-input']}
+                        value={tempInfo.influencerLocation}
+                        onChange={(e) => setTempInfo({ ...tempInfo, influencerLocation: e.target.value })}
+                      />
+                    </div>
+                    
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Audience Location</label>
+                      <input
+                        type="text"
+                        className={styles['form-input']}
+                        value={tempInfo.majorityAudienceLocation}
+                        onChange={(e) => setTempInfo({ ...tempInfo, majorityAudienceLocation: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={styles['form-row']}>
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Audience Age Group</label>
+                      <input
+                        type="text"
+                        className={styles['form-input']}
+                        value={tempInfo.audienceAgeGroup}
+                        onChange={(e) => setTempInfo({ ...tempInfo, audienceAgeGroup: e.target.value })}
+                      />
+                    </div>
+                    
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Audience Gender</label>
+                      <input
+                        type="text"
+                        className={styles['form-input']}
+                        value={tempInfo.audienceGenderDemographics}
+                        onChange={(e) => setTempInfo({ ...tempInfo, audienceGenderDemographics: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={styles['form-row']}>
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Your Gender</label>
+                      <input
+                        type="text"
+                        className={styles['form-input']}
+                        value={tempInfo.gender}
+                        onChange={(e) => setTempInfo({ ...tempInfo, gender: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={styles['form-row']}>
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Industries (comma-separated)</label>
+                      <input
+                        type="text"
+                        className={styles['form-input']}
+                        value={Array.isArray(tempInfo.industries) ? tempInfo.industries.join(', ') : ''}
+                        onChange={(e) =>
+                          setTempInfo({
+                            ...tempInfo,
+                            industries: e.target.value.split(',').map(item => item.trim()),
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={styles['form-row']}>
+                    <div className={styles['form-group']}>
+                      <label className={styles['form-label']}>Platforms (comma-separated)</label>
+                      <input
+                        type="text"
+                        className={styles['form-input']}
+                        value={Array.isArray(tempInfo.nichePlatforms) ? tempInfo.nichePlatforms.join(', ') : ''}
+                        onChange={(e) =>
+                          setTempInfo({
+                            ...tempInfo,
+                            nichePlatforms: e.target.value.split(',').map(item => item.trim()),
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className={styles['form-buttons']}>
+                    <button 
+                      className={styles['save-btn']} 
+                      onClick={handleSaveClick}
+                    >
+                      Save Changes
+                    </button>
+                    <button 
+                      className={styles['cancel-btn']} 
+                      onClick={handleCancelClick}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Profile View Mode */
+              <div className={styles['profile-content']}>
+                <div className={styles['profile-main']}>
+                  <ProfileAvatar 
+                    imageUrl={influencerInfo.profileImage} 
+                    altImage={influencerBack}
+                    name={influencerInfo.name}
+                  />
+                  
+                  <button 
+                    className={styles['edit-profile-btn']} 
+                    onClick={handleEditClick}
+                  >
+                    Edit Profile
+                  </button>
+                </div>
+                
+                <div className={styles['profile-details']}>
+                  <div className={styles['profile-section-header']}>
+                    <h3 className={styles['profile-section-title']}>
+                      Personal Info
+                      <div className={styles['section-underline']}></div>
+                    </h3>
+                  </div>
+                  
+                  <div className={styles['detail-grid']}>
+                    <div className={styles['detail-item']}>
+                      <span className={styles['detail-label']}>Audience Location:</span>
+                      <span className={styles['detail-value']}>{influencerInfo.majorityAudienceLocation}</span>
+                    </div>
+                    <div className={styles['detail-item']}>
+                      <span className={styles['detail-label']}>Age Group:</span>
+                      <span className={styles['detail-value']}>{influencerInfo.audienceAgeGroup}</span>
+                    </div>
+                    <div className={styles['detail-item']}>
+                      <span className={styles['detail-label']}>Gender Distribution:</span>
+                      <span className={styles['detail-value']}>{influencerInfo.audienceGenderDemographics}</span>
+                    </div>
+                    <div className={styles['detail-item']}>
+                      <span className={styles['detail-label']}>Followers:</span>
+                      <span className={styles['detail-value']}>{influencerInfo.numFollowers.toLocaleString()}</span>
+                    </div>
+                    <div className={styles['detail-item']}>
+                      <span className={styles['detail-label']}>Experience:</span>
+                      <span className={styles['detail-value']}>{influencerInfo.experience} years</span>
+                    </div>
+                    <div className={styles['detail-item']}>
+                      <span className={styles['detail-label']}>Location:</span>
+                      <span className={styles['detail-value']}>{influencerInfo.influencerLocation}</span>
+                    </div>
+                  </div>
+                  
+                  <div className={styles['tag-sections']}>
+                    <div className={styles['tag-section']}>
+                      <h3 className={styles['tag-section-title']}>
+                        Industries
+                        <div className={styles['section-underline']}></div>
+                      </h3>
+                      <div className={styles['tags']}>
+                        {Array.isArray(influencerInfo.industries) && influencerInfo.industries.map((industry, index) => (
+                          <span key={index} className={styles['tag']} style={{ animationDelay: `${index * 0.1}s` }}>{industry}</span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className={styles['tag-section']}>
+                      <h3 className={styles['tag-section-title']}>
+                        Platforms
+                        <div className={styles['section-underline']}></div>
+                      </h3>
+                      <div className={styles['tags']}>
+                        {Array.isArray(influencerInfo.nichePlatforms) && influencerInfo.nichePlatforms.map((platform, index) => (
+                          <span key={index} className={styles['tag']} style={{ animationDelay: `${index * 0.1}s` }}>{platform}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
         
         {/* Brand Requests Section */}
         <section 
-  id="brandRequests" 
-  className={`${styles['section-container']} ${activeSection === 'brandRequests' ? styles['active-section'] : ''}`}
->
-  <div className={styles['section-header']}>
-    <h2 className={styles['section-title']}>
-      <span className={styles['section-icon']}>🔔</span>
-      Brand Requests
-      <div className={styles['section-underline']}></div>
-    </h2>
-  </div>
-  
-  <div className={styles['cards-container']}>
-    
-    
-    {/* Regular Brand Requests */}
-    {brandRequests.length === 0 ? (
-      <div className={styles['empty-state']}>
-        <div className={styles['empty-icon']}>📭</div>
-        <p className={styles['empty-message']}>No brand requests at the moment.</p>
-        <p className={styles['empty-tip']}>Apply to campaigns below to connect with brands!</p>
-      </div>
-    ) : (
-      brandRequests.map((req) => (
-        <div key={req._id} className={styles['brand-request-card']}>
-          <h3 className={styles['request-title']}>
-            {req.campaignName}
-            <div className={styles['section-underline']}></div>
-          </h3>
-          
-          <div className={styles['brand-request-info']}>
-            <div className={styles['info-row']}>
-              <span className={styles['info-label']}>Brand:</span>
-              <span className={styles['info-value']}>{req.brandName || 'Unknown Brand'}</span>
+          id="brandRequests" 
+          className={`${styles['section-container']} ${activeSection === 'brandRequests' ? styles['active-section'] : ''}`}
+        >
+          <div className={styles['section-header']}>
+            <div className={styles['section-title']}>
+              <span className={styles['section-icon']}>🔔</span>
+              Brand Requests
+              <div className={styles['section-underline']}></div>
             </div>
-            
-            <div className={styles['info-row']}>
-              <span className={styles['info-label']}>Budget:</span>
-              <span className={styles['info-value']}>{req.budget || 'N/A'}</span>
-            </div>
-            
-            <div className={styles['request-status']}>
-              <span className={`${styles['status-indicator']} ${styles[`status-${req.status}`]}`}></span>
-              <span className={styles['status-text']}>{req.status}</span>
+            <div className={styles['section-actions']}>
+              <button 
+                className={styles['refresh-button']} 
+                onClick={fetchDashboardData}
+              >
+                Refresh
+              </button>
             </div>
           </div>
           
-          {req.status === 'pending' && (
-            <button 
-              className={styles['accept-btn']} 
-              onClick={() => handleAcceptRequest(req._id)}
-            >
-              Accept Request
-            </button>
-          )}
-        </div>
-      ))
-    )}
-  </div>
-</section>
+          <div className={styles['cards-container']}>
+            {brandRequests.length === 0 ? (
+              <EmptyState 
+                icon="📭" 
+                message="No brand requests at the moment." 
+                tip="Apply to campaigns below to connect with brands!" 
+              />
+            ) : (
+              brandRequests.map((req, index) => (
+                <BrandRequestCard
+                  key={req._id}
+                  request={req}
+                  onAccept={handleAcceptRequest}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                />
+              ))
+            )}
+          </div>
+        </section>
         
         {/* Active Campaigns Section */}
         <section 
@@ -1563,11 +1683,11 @@ function InfluencerDashboard() {
           className={`${styles['section-container']} ${activeSection === 'activeCampaigns' ? styles['active-section'] : ''}`}
         >
           <div className={styles['section-header']}>
-            <h2 className={styles['section-title']}>
+            <div className={styles['section-title']}>
               <span className={styles['section-icon']}>🚀</span>
               Active Campaigns
-              <SectionUnderline width="150px" />
-            </h2>
+              <div className={styles['section-underline']}></div>
+            </div>
             <div className={styles['section-actions']}>
               <button 
                 className={styles['refresh-button']} 
@@ -1586,12 +1706,13 @@ function InfluencerDashboard() {
                 tip="Apply for campaigns or accept brand requests to get started!"
               />
             ) : (
-              activeCampaigns.map((campaign) => (
+              activeCampaigns.map((campaign, index) => (
                 <ActiveCampaignCard
                   key={campaign._id || campaign.campaignId?._id}
                   campaign={campaign}
                   onUpdateProgress={handleUpdateProgress}
                   onRefresh={fetchDashboardData}
+                  style={{ '--i': index }}
                 />
               ))
             )}
@@ -1604,11 +1725,11 @@ function InfluencerDashboard() {
           className={`${styles['section-container']} ${activeSection === 'allCampaigns' ? styles['active-section'] : ''}`}
         >
           <div className={styles['section-header']}>
-            <h2 className={styles['section-title']}>
+            <div className={styles['section-title']}>
               <span className={styles['section-icon']}>🔍</span>
               Explore Campaigns
-              <SectionUnderline width="150px" />
-            </h2>
+              <div className={styles['section-underline']}></div>
+            </div>
             <div className={styles['section-actions']}>
               <button 
                 className={styles['refresh-button']} 
@@ -1627,7 +1748,7 @@ function InfluencerDashboard() {
                 tip="Check back later for new opportunities!"
               />
             ) : (
-              allCampaigns.map((campaign) => (
+              allCampaigns.map((campaign, index) => (
                 <AllCampaignCard
                   key={campaign._id}
                   campaign={campaign}
@@ -1635,14 +1756,18 @@ function InfluencerDashboard() {
                   onApplied={fetchDashboardData}
                   appliedCampaignIds={appliedCampaignIds}
                   activeCampaignIds={activeCampaignIds}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 />
               ))
             )}
           </div>
         </section>
         
-        {/* Quick AI Chatbot */}
-        <AiChatbot />
+        {/* Chatbot Button */}
+        <div className={styles['chatbot-bubble']}>
+          <div className={styles['chat-icon']}>💬</div>
+          <div className={styles['chat-pulse']}></div>
+        </div>
         
         {/* Footer Section */}
         <footer className={styles['dashboard-footer']}>
