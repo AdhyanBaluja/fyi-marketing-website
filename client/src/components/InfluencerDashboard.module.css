@@ -1198,47 +1198,9 @@
   z-index: 2; /* Ensure content appears above background */
 }
 
-/* Fix for the flipped card height issue */
 .brand-request-card {
   height: auto;
   min-height: 300px; /* Increase this value as needed */
-}
-
-.card-inner, .card-front, .card-back {
-  position: relative; /* Change from absolute to relative */
-  height: 100%;
-  width: 100%;
-  backface-visibility: hidden;
-}
-
-.card-back {
-  position: absolute; /* Keep this absolute */
-  top: 0;
-  left: 0;
-  transform: rotateY(180deg);
-  background: var(--card-bg);
-  min-height: 100%; /* Ensure it's at least as tall as the front */
-  height: auto; /* Allow it to grow based on content */
-  padding-bottom: 80px; /* Extra padding at bottom for the button */
-}
-
-/* Make sure the accept button is properly positioned */
-.accept-btn {
-  margin-top: 20px;
-  position: relative;
-  bottom: 0;
-}
-
-/* Fix for the flip container to ensure proper height calculation */
-.is-flipped .card-inner {
-  transform: rotateY(180deg);
-  height: auto;
-}
-
-/* Ensure the flip container expands to fit content */
-.flip-card {
-  min-height: 300px;
-  height: auto;
 }
 
 .big-cards-container {
