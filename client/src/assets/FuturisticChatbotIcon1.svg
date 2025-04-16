@@ -1,0 +1,435 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- Defs for gradients, filters and animations -->
+  <defs>
+    <!-- Premium gradients with expanded color palettes -->
+    <linearGradient id="deepSpaceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020814" />
+      <stop offset="40%" stop-color="#05101e" />
+      <stop offset="60%" stop-color="#091426" />
+      <stop offset="100%" stop-color="#0c182c" />
+    </linearGradient>
+    
+    <linearGradient id="luxuryBlueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3aa0ff" />
+      <stop offset="50%" stop-color="#2c95ff" />
+      <stop offset="100%" stop-color="#1a56b0" />
+    </linearGradient>
+    
+    <linearGradient id="eliteOrangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff8f4f" />
+      <stop offset="50%" stop-color="#ff7e3d" />
+      <stop offset="100%" stop-color="#ff4d00" />
+    </linearGradient>
+    
+    <linearGradient id="goldAccentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff5e0" />
+      <stop offset="50%" stop-color="#ffe8b3" />
+      <stop offset="100%" stop-color="#ffd280" />
+    </linearGradient>
+
+    <!-- Premium glass effects -->
+    <linearGradient id="crystalGlassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.18)" />
+      <stop offset="30%" stop-color="rgba(255,255,255,0.12)" />
+      <stop offset="70%" stop-color="rgba(255,255,255,0.07)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0.03)" />
+    </linearGradient>
+    
+    <radialGradient id="glowingSphereGradient" cx="50%" cy="50%" r="50%" fx="45%" fy="45%">
+      <stop offset="0%" stop-color="rgba(44, 149, 255, 0.25)" />
+      <stop offset="60%" stop-color="rgba(44, 149, 255, 0.1)" />
+      <stop offset="100%" stop-color="rgba(44, 149, 255, 0)" />
+    </radialGradient>
+    
+    <radialGradient id="ambientGlowGradient" cx="50%" cy="55%" r="70%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="rgba(255, 126, 61, 0.15)" />
+      <stop offset="50%" stop-color="rgba(255, 126, 61, 0.05)" />
+      <stop offset="100%" stop-color="rgba(10, 20, 38, 0)" />
+    </radialGradient>
+
+    <!-- Enhanced filters -->
+    <filter id="premiumGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 15 -6" result="coloredBlur"/>
+      <feComposite in="SourceGraphic" in2="coloredBlur" operator="over" />
+    </filter>
+    
+    <filter id="ultraNeonGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -5" result="coloredBlur"/>
+      <feComposite in="SourceGraphic" in2="coloredBlur" operator="over" />
+    </filter>
+    
+    <filter id="crystalShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+      <feOffset in="blur" dx="0" dy="5" result="offsetBlur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.6"/>
+      </feComponentTransfer>
+      <feComposite in="SourceGraphic" in2="offsetBlur" operator="over"/>
+    </filter>
+    
+    <filter id="delicateBlur" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="1" />
+    </filter>
+
+    <!-- Advanced animation defs -->
+    <clipPath id="circleClip">
+      <circle cx="200" cy="200" r="180" />
+    </clipPath>
+    
+    <!-- Random wave animation that happens very occasionally -->
+    <animate 
+      id="waveAnimationRare" 
+      attributeName="opacity" 
+      values="0;1;1;1;0" 
+      dur="1s" 
+      begin="20s;90s;180s;300s;450s;650s" 
+      repeatCount="1" />
+      
+    <!-- Blinking animation with more natural pattern -->
+    <animate 
+      id="naturalBlinkAnimation" 
+      attributeName="ry" 
+      values="12;1;12" 
+      dur="0.2s" 
+      begin="3s;7s;12s;18s;25s;34s;40s;55s;73s;88s;100s;130s;180s;230s;290s;350s;410s;480s;560s" 
+      repeatCount="1" />
+      
+    <!-- Cinematic lighting effects animation -->
+    <animate 
+      id="cinematicLightingEffect" 
+      attributeName="opacity" 
+      values="0.8;1;0.8" 
+      dur="15s" 
+      begin="0s" 
+      repeatCount="indefinite" />
+  </defs>
+  
+  <!-- Main background with enhanced depth -->
+  <circle cx="200" cy="200" r="195" fill="url(#deepSpaceGradient)" />
+  <circle cx="200" cy="200" r="190" fill="none" stroke="url(#eliteOrangeGradient)" stroke-width="0.7" opacity="0.4" />
+  <circle cx="200" cy="200" r="185" fill="none" stroke="url(#luxuryBlueGradient)" stroke-width="0.5" opacity="0.3" />
+  
+  <!-- Premium background elements with animated lighting -->
+  <g opacity="0.9">
+    <circle cx="200" cy="200" r="160" fill="url(#ambientGlowGradient)" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.9;0.8" dur="15s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Advanced geometric background patterns for premium tech look -->
+  <g opacity="0.04">
+    <!-- Delicate grid pattern -->
+    <path d="M50,50 L350,50 M50,100 L350,100 M50,150 L350,150 M50,200 L350,200 M50,250 L350,250 M50,300 L350,300 M50,350 L350,350" stroke="#fff" stroke-width="0.3" />
+    <path d="M50,50 L50,350 M100,50 L100,350 M150,50 L150,350 M200,50 L200,350 M250,50 L250,350 M300,50 L300,350 M350,50 L350,350" stroke="#fff" stroke-width="0.3" />
+    
+    <!-- Luxury circuit patterns with varied opacity for depth -->
+    <path d="M50,80 C100,120 150,70 200,100 C250,130 300,80 350,120" stroke="#2c95ff" stroke-width="0.4" opacity="0.6" />
+    <path d="M50,100 C100,140 150,90 200,120 C250,150 300,100 350,140" stroke="#2c95ff" stroke-width="0.4" opacity="0.4" />
+    <path d="M50,320 C100,280 150,330 200,300 C250,270 300,320 350,280" stroke="#ff7e3d" stroke-width="0.4" opacity="0.6" />
+    <path d="M50,300 C100,260 150,310 200,280 C250,250 300,300 350,260" stroke="#ff7e3d" stroke-width="0.4" opacity="0.4" />
+    
+    <!-- Abstract geometric shapes -->
+    <path d="M100,100 L150,150 L100,200 L150,250 L100,300" stroke="#fff" stroke-width="0.3" opacity="0.5" fill="none" />
+    <path d="M300,100 L250,150 L300,200 L250,250 L300,300" stroke="#fff" stroke-width="0.3" opacity="0.5" fill="none" />
+  </g>
+  
+  <!-- Subtle parallax effect layers -->
+  <g opacity="0.06">
+    <circle cx="205" cy="205" r="160" fill="none" stroke="#fff" stroke-width="0.3">
+      <animate attributeName="cx" values="205;195;205" dur="20s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="205;195;205" dur="20s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="195" cy="195" r="140" fill="none" stroke="#fff" stroke-width="0.3">
+      <animate attributeName="cx" values="195;205;195" dur="25s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="195;205;195" dur="25s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Enhanced central avatar container -->
+  <g transform="translate(200, 200)">
+    <!-- Multi-layered background for premium depth -->
+    <circle cx="0" cy="0" r="120" fill="rgba(10, 20, 38, 0.8)" filter="url(#crystalShadow)" />
+    <circle cx="0" cy="0" r="118" fill="rgba(8, 16, 32, 0.6)" stroke="rgba(44, 149, 255, 0.2)" stroke-width="0.5" />
+    <circle cx="0" cy="0" r="115" fill="rgba(6, 12, 24, 0.4)" stroke="rgba(255, 126, 61, 0.15)" stroke-width="0.3" />
+    
+    <!-- Premium glowing sphere effect -->
+    <circle cx="0" cy="0" r="110" fill="url(#glowingSphereGradient)" />
+    
+    <!-- High-end hexagonal framing for tech aesthetic -->
+    <path d="M-80,-45 L0,-90 L80,-45 L80,45 L0,90 L-80,45 Z" fill="none" stroke="url(#luxuryBlueGradient)" stroke-width="0.6" opacity="0.3" />
+    <path d="M-70,-40 L0,-80 L70,-40 L70,40 L0,80 L-70,40 Z" fill="none" stroke="url(#eliteOrangeGradient)" stroke-width="0.5" opacity="0.25" />
+    <path d="M-60,-35 L0,-70 L60,-35 L60,35 L0,70 L-60,35 Z" fill="none" stroke="url(#goldAccentGradient)" stroke-width="0.4" opacity="0.2" />
+    
+    <!-- Subtle animated rings -->
+    <circle cx="0" cy="0" r="100" fill="none" stroke="rgba(44, 149, 255, 0.15)" stroke-width="0.5" stroke-dasharray="3,3">
+      <animate attributeName="r" values="100;105;100" dur="30s" repeatCount="indefinite" />
+      <animate attributeName="stroke-dashoffset" from="0" to="100" dur="50s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle cx="0" cy="0" r="90" fill="none" stroke="rgba(255, 126, 61, 0.1)" stroke-width="0.5" stroke-dasharray="5,5">
+      <animate attributeName="r" values="90;95;90" dur="40s" repeatCount="indefinite" />
+      <animate attributeName="stroke-dashoffset" from="0" to="-100" dur="60s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Ultra-modern AI face design with premium glass effect -->
+    <g>
+      <!-- Premium glass effect container -->
+      <circle cx="0" cy="0" r="75" fill="url(#crystalGlassGradient)" stroke="rgba(255, 255, 255, 0.2)" stroke-width="0.3" />
+      
+      <!-- Premium light reflections -->
+      <path d="M-40,-60 L-20,-70 Q0,-75 20,-70 L40,-60" fill="none" stroke="rgba(255, 255, 255, 0.4)" stroke-width="0.5" />
+      <path d="M-30,60 L-15,70 Q0,75 15,70 L30,60" fill="none" stroke="rgba(255, 255, 255, 0.3)" stroke-width="0.5" />
+      
+      <!-- Enhanced eyes with dynamic lighting effects -->
+      <g>
+        <!-- Premium left eye -->
+        <ellipse cx="-25" cy="-15" rx="15" ry="12" fill="rgba(44, 149, 255, 0.15)" stroke="#2c95ff" stroke-width="1">
+          <animate attributeName="ry" values="12;1;12" dur="0.2s" begin="3s;7s;12s;18s;25s;34s;40s;55s;73s;88s;100s;130s;180s;230s;290s;350s;410s;480s;560s" repeatCount="1" />
+        </ellipse>
+        <circle cx="-25" cy="-15" r="6" fill="url(#luxuryBlueGradient)" filter="url(#delicateBlur)" />
+        <circle cx="-22" cy="-18" r="2" fill="#fff" opacity="0.9" />
+        
+        <!-- Premium right eye -->
+        <ellipse cx="25" cy="-15" rx="15" ry="12" fill="rgba(44, 149, 255, 0.15)" stroke="#2c95ff" stroke-width="1">
+          <animate attributeName="ry" values="12;1;12" dur="0.2s" begin="3s;7s;12s;18s;25s;34s;40s;55s;73s;88s;100s;130s;180s;230s;290s;350s;410s;480s;560s" repeatCount="1" />
+        </ellipse>
+        <circle cx="25" cy="-15" r="6" fill="url(#luxuryBlueGradient)" filter="url(#delicateBlur)" />
+        <circle cx="28" cy="-18" r="2" fill="#fff" opacity="0.9" />
+      </g>
+      
+      <!-- Enhanced animated expressions -->
+      <g>
+        <!-- Premium smile with subtle animation -->
+        <path d="M-30,20 Q0,45 30,20" fill="none" stroke="url(#luxuryBlueGradient)" stroke-width="2" stroke-linecap="round" filter="url(#delicateBlur)">
+          <animate attributeName="d" values="M-30,20 Q0,45 30,20; M-30,25 Q0,55 30,25; M-30,20 Q0,45 30,20" dur="2s" begin="20s;90s;180s;300s;450s;650s" repeatCount="1" />
+        </path>
+        
+        <!-- Subtle mood indicators -->
+        <circle cx="-40" cy="0" r="7" fill="url(#eliteOrangeGradient)" opacity="0">
+          <animate attributeName="opacity" values="0;0.2;0" dur="0.5s" begin="17s;87s;177s;297s;447s;647s" repeatCount="1" />
+        </circle>
+        <circle cx="40" cy="0" r="7" fill="url(#eliteOrangeGradient)" opacity="0">
+          <animate attributeName="opacity" values="0;0.2;0" dur="0.5s" begin="17s;87s;177s;297s;447s;647s" repeatCount="1" />
+        </circle>
+      </g>
+      
+      <!-- Premium facial accent details -->
+      <path d="M-50,-50 L-40,-40 M40,-40 L50,-50" stroke="rgba(255, 255, 255, 0.6)" stroke-width="0.5" opacity="0.7" />
+      <path d="M-50,50 L-40,40 M40,40 L50,50" stroke="rgba(255, 255, 255, 0.6)" stroke-width="0.5" opacity="0.7" />
+      
+      <!-- Subtle tech pattern overlays -->
+      <path d="M-20,-40 L20,-40 M-30,-30 L30,-30 M-40,-20 L40,-20" stroke="rgba(44, 149, 255, 0.2)" stroke-width="0.3" stroke-dasharray="1,2" />
+      <path d="M-20,40 L20,40 M-30,30 L30,30 M-40,20 L40,20" stroke="rgba(44, 149, 255, 0.2)" stroke-width="0.3" stroke-dasharray="1,2" />
+    </g>
+    
+    <!-- Premium waving hand that appears at very rare random intervals -->
+    <g transform="translate(80, 30)" opacity="0">
+      <!-- Links animation to the rare random intervals -->
+      <animate 
+        attributeName="opacity" 
+        values="0;1;1;1;0" 
+        dur="1.8s" 
+        begin="20s;90s;180s;300s;450s;650s" 
+        repeatCount="1" />
+      
+      <!-- Premium hand waving animation with natural motion curve -->
+      <animateTransform 
+        attributeName="transform" 
+        type="rotate" 
+        values="0,0,0; -15,0,0; 0,0,0; -15,0,0; 0,0,0" 
+        additive="sum"
+        calcMode="spline"
+        keySplines="0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1; 0.4 0 0.6 1"
+        dur="1.8s" 
+        begin="20s;90s;180s;300s;450s;650s" 
+        repeatCount="1" />
+        
+      <!-- Premium hand design with glass effect and dynamic lighting -->
+      <g filter="url(#delicateBlur)">
+        <path d="M-5,-5 C-10,-8 -10,-18 -5,-25 L5,-25 C10,-18 10,-8 5,-5 Z" fill="url(#luxuryBlueGradient)" opacity="0.9" />
+        <path d="M5,-5 C10,-8 10,-18 15,-25 L25,-25 C30,-18 30,-8 25,-5 Z" fill="url(#luxuryBlueGradient)" opacity="0.9" />
+        <path d="M-15,-15 C-20,-20 -15,-28 -8,-25 L-5,-20 Z" fill="url(#luxuryBlueGradient)" opacity="0.9" />
+        
+        <!-- Subtle glow effect -->
+        <ellipse cx="10" cy="-15" rx="20" ry="15" fill="none" stroke="rgba(44, 149, 255, 0.4)" stroke-width="0.7" opacity="0.8" />
+        
+        <!-- Light reflections -->
+        <path d="M0,-22 L5,-22 M10,-22 L15,-22" stroke="rgba(255, 255, 255, 0.7)" stroke-width="0.7" opacity="0.9" />
+      </g>
+    </g>
+  </g>
+  
+  <!-- Premium speech bubble with "Hi!" that appears with the waving hand -->
+  <g transform="translate(260, 115)" opacity="0">
+    <!-- Same animation timing as hand but with subtle offset -->
+    <animate 
+      attributeName="opacity" 
+      values="0;1;1;1;0" 
+      dur="1.8s" 
+      begin="20s;90s;180s;300s;450s;650s" 
+      repeatCount="1" />
+      
+    <!-- Premium animated movement with natural curve -->
+    <animateTransform 
+      attributeName="transform" 
+      type="translate" 
+      values="260,115; 265,110; 260,115" 
+      calcMode="spline"
+      keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"
+      dur="1.8s" 
+      begin="20s;90s;180s;300s;450s;650s" 
+      repeatCount="1" />
+    
+    <!-- Luxury speech bubble design with crystal glass effect -->
+    <path d="M0,0 L-40,0 Q-55,0 -55,15 L-55,45 Q-55,60 -40,60 L-20,60 L0,80 L0,60 L0,60 Q15,60 15,45 L15,15 Q15,0 0,0 Z" 
+          fill="url(#crystalGlassGradient)" 
+          stroke="url(#eliteOrangeGradient)" 
+          stroke-width="1.5" />
+    
+    <!-- Premium inner glow effect -->
+    <path d="M-2,2 L-38,2 Q-52,2 -52,16 L-52,44 Q-52,58 -38,58 L-20,58 L-2,76 L-2,58 L-2,58 Q12,58 12,44 L12,16 Q12,2 -2,2 Z" 
+          fill="none" 
+          stroke="rgba(255, 255, 255, 0.15)" 
+          stroke-width="0.5" />
+    
+    <!-- Premium "Hi!" text with enhanced glow effect -->
+    <text x="-20" y="38" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#fff" text-anchor="middle" filter="url(#premiumGlow)">Hi!</text>
+    <text x="-20" y="38" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="rgba(255, 255, 255, 0.2)" text-anchor="middle" filter="url(#delicateBlur)">Hi!</text>
+  </g>
+  
+  <!-- Premium pulsing rings with enhanced depth and variable speeds -->
+  <g opacity="0.7">
+    <circle cx="200" cy="200" r="140" fill="none" stroke="url(#luxuryBlueGradient)" stroke-width="0.5" opacity="0.2">
+      <animate attributeName="r" values="140;150;140" dur="20s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.2;0.1;0.2" dur="20s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle cx="200" cy="200" r="160" fill="none" stroke="url(#eliteOrangeGradient)" stroke-width="0.5" opacity="0.15">
+      <animate attributeName="r" values="160;170;160" dur="25s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.15;0.05;0.15" dur="25s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle cx="200" cy="200" r="180" fill="none" stroke="url(#goldAccentGradient)" stroke-width="0.3" opacity="0.1">
+      <animate attributeName="r" values="180;190;180" dur="30s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.1;0.03;0.1" dur="30s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Enhanced dynamic particles with varied behaviors -->
+  <g>
+    <!-- Blue particles -->
+    <circle cx="130" cy="100" r="1.5" fill="url(#luxuryBlueGradient)" filter="url(#delicateBlur)">
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="7s" repeatCount="indefinite" />
+      <animate attributeName="r" values="1.5;2.5;1.5" dur="7s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="100;95;100" dur="10s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle cx="270" cy="120" r="1.5" fill="url(#luxuryBlueGradient)" filter="url(#delicateBlur)">
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="9s" repeatCount="indefinite" />
+      <animate attributeName="r" values="1.5;2.5;1.5" dur="9s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="120;115;120" dur="12s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Orange particles -->
+    <circle cx="130" cy="300" r="1.5" fill="url(#eliteOrangeGradient)" filter="url(#delicateBlur)">
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="8s" repeatCount="indefinite" />
+      <animate attributeName="r" values="1.5;2.5;1.5" dur="8s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="300;305;300" dur="11s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle cx="270" cy="280" r="1.5" fill="url(#eliteOrangeGradient)" filter="url(#delicateBlur)">
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="10s" repeatCount="indefinite" />
+      <animate attributeName="r" values="1.5;2.5;1.5" dur="10s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="280;285;280" dur="13s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Cream particles -->
+    <circle cx="200" cy="80" r="1.5" fill="url(#goldAccentGradient)" filter="url(#delicateBlur)">
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="11s" repeatCount="indefinite" />
+      <animate attributeName="r" values="1.5;2.5;1.5" dur="11s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="80;75;80" dur="14s" repeatCount="indefinite" />
+    </circle>
+    
+    <circle cx="200" cy="320" r="1.5" fill="url(#goldAccentGradient)" filter="url(#delicateBlur)">
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="12s" repeatCount="indefinite" />
+      <animate attributeName="r" values="1.5;2.5;1.5" dur="12s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="320;325;320" dur="15s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Orbital particles with premium lighting effects -->
+  <g opacity="0.8">
+    <!-- Blue orbital -->
+    <circle cx="90" cy="200" r="3" fill="url(#luxuryBlueGradient)" filter="url(#ultraNeonGlow)">
+      <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="60s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Orange orbital -->
+    <circle cx="200" cy="90" r="3" fill="url(#eliteOrangeGradient)" filter="url(#ultraNeonGlow)">
+      <animateTransform attributeName="transform" type="rotate" from="90 200 200" to="450 200 200" dur="70s" repeatCount="indefinite" />
+    </circle>
+    
+    <!-- Cream orbital -->
+    <circle cx="310" cy="200" r="3" fill="url(#goldAccentGradient)" filter="url(#ultraNeonGlow)">
+      <animateTransform attributeName="transform" type="rotate" from="180 200 200" to="540 200 200" dur="80s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+<!-- Premium shooting stars that occasionally animate across the background -->
+  <g>
+    <path d="M50,50 L70,70" stroke="url(#goldAccentGradient)" stroke-width="1.5" stroke-linecap="round" opacity="0">
+      <animate attributeName="opacity" values="0;0.8;0" dur="0.5s" begin="35s;125s;245s;398s;512s" repeatCount="1" />
+      <animateTransform attributeName="transform" type="translate" from="0,0" to="200,200" dur="0.5s" begin="35s;125s;245s;398s;512s" repeatCount="1" />
+    </path>
+    
+    <path d="M350,50 L330,70" stroke="url(#luxuryBlueGradient)" stroke-width="1.5" stroke-linecap="round" opacity="0">
+      <animate attributeName="opacity" values="0;0.8;0" dur="0.5s" begin="65s;168s;285s;415s;546s" repeatCount="1" />
+      <animateTransform attributeName="transform" type="translate" from="0,0" to="-200,200" dur="0.5s" begin="65s;168s;285s;415s;546s" repeatCount="1" />
+    </path>
+    
+    <path d="M50,350 L70,330" stroke="url(#eliteOrangeGradient)" stroke-width="1.5" stroke-linecap="round" opacity="0">
+      <animate attributeName="opacity" values="0;0.8;0" dur="0.5s" begin="95s;212s;325s;445s;578s" repeatCount="1" />
+      <animateTransform attributeName="transform" type="translate" from="0,0" to="200,-200" dur="0.5s" begin="95s;212s;325s;445s;578s" repeatCount="1" />
+    </path>
+  </g>
+  
+  <!-- Ultra-premium lighting flares that randomly appear and fade -->
+  <g>
+    <circle cx="100" cy="100" r="2" fill="#fff" opacity="0" filter="url(#premiumGlow)">
+      <animate attributeName="opacity" values="0;0.7;0" dur="0.8s" begin="22s;117s;256s;389s;499s" repeatCount="1" />
+      <animate attributeName="r" values="2;20;2" dur="0.8s" begin="22s;117s;256s;389s;499s" repeatCount="1" />
+    </circle>
+    
+    <circle cx="300" cy="100" r="2" fill="#fff" opacity="0" filter="url(#premiumGlow)">
+      <animate attributeName="opacity" values="0;0.7;0" dur="0.8s" begin="45s;155s;289s;423s;536s" repeatCount="1" />
+      <animate attributeName="r" values="2;20;2" dur="0.8s" begin="45s;155s;289s;423s;536s" repeatCount="1" />
+    </circle>
+    
+    <circle cx="100" cy="300" r="2" fill="#fff" opacity="0" filter="url(#premiumGlow)">
+      <animate attributeName="opacity" values="0;0.7;0" dur="0.8s" begin="77s;195s;328s;458s;567s" repeatCount="1" />
+      <animate attributeName="r" values="2;20;2" dur="0.8s" begin="77s;195s;328s;458s;567s" repeatCount="1" />
+    </circle>
+    
+    <circle cx="300" cy="300" r="2" fill="#fff" opacity="0" filter="url(#premiumGlow)">
+      <animate attributeName="opacity" values="0;0.7;0" dur="0.8s" begin="103s;228s;368s;488s;601s" repeatCount="1" />
+      <animate attributeName="r" values="2;20;2" dur="0.8s" begin="103s;228s;368s;488s;601s" repeatCount="1" />
+    </circle>
+  </g>
+  
+  <!-- High-end brand label at bottom -->
+  <g transform="translate(200, 350)">
+    <!-- Premium text container -->
+    <rect x="-100" y="-18" width="200" height="36" rx="18" fill="rgba(5, 10, 20, 0.6)" stroke="url(#goldAccentGradient)" stroke-width="1" />
+    
+    <!-- High-end brand text -->
+    <text x="0" y="7" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#goldAccentGradient)" text-anchor="middle" filter="url(#delicateBlur)">AI ASSISTANT</text>
+    
+    <!-- Premium overlay text for depth -->
+    <text x="0" y="7" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle" opacity="0.8" filter="url(#ultraNeonGlow)">AI ASSISTANT</text>
+  </g>
+
+  <!-- Cinematic grain overlay for premium film look -->
+  <rect width="400" height="400" fill="url(#noiseTexture)" opacity="0.02" />
+</svg>

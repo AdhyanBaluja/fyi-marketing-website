@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <defs>
+    <linearGradient id="darkBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050a14" />
+      <stop offset="100%" stop-color="#101c30" />
+    </linearGradient>
+    
+    <linearGradient id="orangeAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff7e3d" />
+      <stop offset="100%" stop-color="#ff4d00" />
+    </linearGradient>
+    
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Simple background circle -->
+  <circle cx="40" cy="40" r="39" fill="url(#darkBg)" />
+  <circle cx="40" cy="40" r="36" fill="none" stroke="url(#orangeAccent)" stroke-width="1" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.3;0.6" dur="2s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Big, visible "Hi" text -->
+  <text x="40" y="45" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#fff" text-anchor="middle" filter="url(#glow)">Hi</text>
+  
+  <!-- Simple waving hand that appears at random intervals -->
+  <g transform="translate(62, 30) rotate(-15)" opacity="0">
+    <!-- Animation to make hand appear randomly -->
+    <animate 
+      attributeName="opacity" 
+      values="0;1;1;1;0" 
+      dur="1s" 
+      begin="0s;15s;35s;60s;90s;130s" 
+      repeatCount="1" />
+    
+    <!-- Waving animation -->
+    <animateTransform 
+      attributeName="transform" 
+      type="rotate" 
+      values="-15,0,0; 15,0,0; -15,0,0; 15,0,0; -15,0,0" 
+      additive="sum" 
+      dur="0.8s" 
+      begin="0s;15s;35s;60s;90s;130s" 
+      repeatCount="1" />
+    
+    <!-- Simple hand shape that's visible at small sizes -->
+    <rect x="-6" y="-15" width="12" height="15" rx="4" fill="#fff" />
+    <path d="M-6,-5 L-10,-8 L-8,-12 L-4,-10 Z" fill="#fff" />
+  </g>
+</svg>

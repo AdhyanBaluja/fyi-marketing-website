@@ -1,60 +1,1104 @@
-/* ============= ICON STYLES ============= */
+/* ============= FUTURISTIC CHATBOT - DARKER THEME ============= */
+/* Dark theme with navies, oranges, blues, cream accents for 20-70 year old demographic */
+/* Optimized for dopamine and serotonin triggers */
 
-/* The chat icon pulses/bounces gently */
-.ai-chat-icon {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  cursor: pointer;
-  z-index: 9999;
-  animation: pulseIcon 2s infinite;
-  transition: transform 0.2s ease;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  --primary-dark: #0a1120;       /* Darker navy blue base */
+  --secondary-dark: #111b2b;     /* Slightly lighter navy */
+  --deep-dark: #050a14;          /* Very dark navy for contrast */
+  --accent-orange: #ff6d24;      /* Vibrant orange */
+  --accent-blue: #2c95ff;        /* Richer blue */
+  --accent-cream: #fff1d6;       /* Warm cream */
+  --accent-purple: #8b4dff;      /* Deep purple */
+  --text-light: #f0f5ff;         /* Light blue-tinted text */
+  --text-secondary: #a0b4d8;     /* Secondary light text */
+  --success-green: #4ade80;      /* Success color */
+  --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7);
+  --neon-glow: 0 0 15px;
+  --neon-shadow: 0 0 20px;
 }
 
-@keyframes pulseIcon {
-  0%, 100% {
+/* ============= BASE CONTAINER ============= */
+.futuristic-chatbot-container {
+  font-family: 'Poppins', sans-serif;
+  --webkit-font-smoothing: antialiased;
+  z-index: 9999;
+}
+
+/* ============= CHAT ICON ============= */
+.futuristic-chat-icon {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
+  z-index: 9999;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* The icon inner container */
+.icon-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--deep-dark);
+  background: linear-gradient(135deg, var(--secondary-dark), var(--deep-dark));
+  box-shadow: var(--card-shadow), var(--neon-glow) var(--accent-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  z-index: 2;
+}
+
+/* Outer pulse ring */
+.icon-pulse-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid var(--accent-orange);
+  opacity: 0;
+  z-index: 1;
+  animation: pulseRing 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+@keyframes pulseRing {
+  0% {
+    opacity: 0.3;
     transform: scale(1);
   }
   50% {
-    transform: scale(1.1);
+    opacity: 0;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
   }
 }
 
-.ai-chat-icon:hover {
-  transform: scale(1.15);
+/* Icon SVG styling */
+.chat-bot-icon-svg {
+  width: 60%;
+  height: 60%;
+  margin-bottom: 2px;
 }
 
-.ai-chat-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.icon-circle {
+  fill: none;
+  stroke: var(--accent-orange);
+  stroke-width: 2;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  animation: draw-circle 2s ease forwards, glow-stroke 3s ease-in-out infinite alternate;
+}
+
+@keyframes draw-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes glow-stroke {
+  from {
+    stroke: var(--accent-orange);
+    filter: drop-shadow(0 0 2px var(--accent-orange));
+  }
+  to {
+    stroke: var(--accent-blue);
+    filter: drop-shadow(0 0 6px var(--accent-blue));
+  }
+}
+
+.icon-face {
+  opacity: 0;
+  animation: fade-in 0.3s 1.5s ease forwards;
+}
+
+.icon-eye {
+  fill: var(--accent-blue);
+  animation: blink 4s infinite;
+}
+
+@keyframes blink {
+  0%, 45%, 50%, 100% {
+    transform: scaleY(1);
+  }
+  48% {
+    transform: scaleY(0.1);
+  }
+}
+
+.icon-smile {
+  fill: none;
+  stroke: var(--accent-blue);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+/* Icon text */
+.icon-text {
+  color: var(--text-light);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+/* Hover effects for the icon */
+.futuristic-chat-icon.icon-hover .icon-inner {
+  transform: translateY(-5px);
+  box-shadow: var(--card-shadow), var(--neon-glow) var(--accent-blue);
+}
+
+.futuristic-chat-icon.icon-hover .icon-text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
 }
 
 /* ============= CHAT WINDOW ============= */
-.ai-chat-window {
+.futuristic-chat-window {
   position: fixed;
-  bottom: 90px;
-  right: 20px;
-  width: 340px;
-  height: 480px;
+  bottom: 25px;
+  right: 25px;
+  width: 380px;
+  height: 550px;
   overflow: hidden;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-  z-index: 10000;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
+  z-index: 10000;
+  background: var(--primary-dark);
+  box-shadow: var(--card-shadow);
+  animation: slide-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transform-origin: bottom right;
 }
 
-/* Shifting gradient background */
-.gradient-shift {
-  background: linear-gradient(135deg, #2b2bff, #ff2bc9, #ff8c2b, #2bcffb);
-  background-size: 600% 600%;
-  animation: gradientMove 6s ease infinite;
+/* Neo-brutalism card style but darker */
+.neo-brutalism-card {
+  border: 2px solid #000;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+  transition: all 0.3s ease;
 }
 
-@keyframes gradientMove {
+.neo-brutalism-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.8);
+}
+
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Cool gradient border animated */
+.futuristic-chat-window::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    var(--accent-orange), 
+    var(--accent-purple), 
+    var(--accent-blue), 
+    var(--accent-orange));
+  z-index: -1;
+  border-radius: 22px;
+  background-size: 400% 400%;
+  animation: gradient-border 6s ease infinite;
+  opacity: 0.7;
+}
+
+@keyframes gradient-border {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ============= CHAT HEADER ============= */
+.futuristic-chat-header {
+  background: linear-gradient(to right, var(--deep-dark), var(--primary-dark));
+  color: var(--text-light);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 18px 18px 0 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-circle {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-face {
+  width: 70%;
+  height: 70%;
+  position: relative;
+}
+
+.avatar-eye {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--text-light);
+  border-radius: 50%;
+  top: 10px;
+}
+
+.avatar-eye:first-child {
+  left: 8px;
+  animation: blink 4s infinite;
+}
+
+.avatar-eye:last-child {
+  right: 8px;
+  animation: blink 4s 0.2s infinite;
+}
+
+.avatar-smile {
+  position: absolute;
+  width: 12px;
+  height: 6px;
+  border-bottom: 2px solid var(--text-light);
+  border-radius: 50%;
+  bottom: 6px;
+  left: 13px;
+}
+
+.header-info h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--accent-cream);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--success-green);
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 5px rgba(74, 222, 128, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.minimize-btn, .close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.minimize-btn:hover, .close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+}
+
+.minimize-icon {
+  width: 12px;
+  height: 2px;
+  background-color: currentColor;
+  display: block;
+}
+
+.close-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ============= CHAT MESSAGES ============= */
+.futuristic-chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background: linear-gradient(to bottom, 
+    rgba(5, 10, 20, 0.95), 
+    rgba(15, 25, 40, 0.95));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-attachment: fixed;
+  
+  /* Subtle grid pattern */
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  
+  /* Cool scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-blue) var(--deep-dark);
+}
+
+.futuristic-chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.futuristic-chat-messages::-webkit-scrollbar-track {
+  background: var(--deep-dark);
+}
+
+.futuristic-chat-messages::-webkit-scrollbar-thumb {
+  background-color: var(--accent-blue);
+  border-radius: 10px;
+}
+
+.messages-date-indicator {
+  text-align: center;
+  margin: 10px 0;
+  position: relative;
+}
+
+.messages-date-indicator::before,
+.messages-date-indicator::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 30%;
+  height: 1px;
+  background: linear-gradient(to right, var(--accent-orange), var(--accent-blue));
+  transition: width 0.5s ease;
+}
+
+.futuristic-chat-header:hover .header-info h4::after {
+  width: 100%;
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 380px) {
+  .futuristic-chat-header {
+    padding: 10px;
+  }
+  
+  .header-info h4 {
+    font-size: 14px;
+  }
+  
+  .avatar-circle {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .bubble-text {
+    font-size: 13px;
+  }
+  
+  .futuristic-chat-input input {
+    padding: 10px 15px;
+    padding-right: 45px;
+  }
+  
+  .send-button {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .futuristic-chat-bubble {
+    max-width: 90%;
+  }
+}
+
+/* ============= FINAL TOUCHES & ACCESSIBILITY ============= */
+
+/* Focus visible outlines for accessibility */
+.futuristic-chat-input input:focus-visible,
+.send-button:focus-visible,
+.close-btn:focus-visible,
+.minimize-btn:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+/* Reduce motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .typing-indicator span {
+    animation: none !important;
+  }
+  
+  .icon-pulse-ring {
+    animation: none !important;
+    opacity: 0.5;
+  }
+}
+
+/* Improve contrast for better readability */
+.bubble-timestamp {
+  color: var(--text-light);
+  opacity: 0.8;
+}
+
+/* Button active states */
+.send-button:active {
+  transform: scale(0.95);
+}
+
+/* Improved transitions */
+.futuristic-chat-bubble,
+.bubble-content,
+.futuristic-chat-icon,
+.futuristic-chat-window,
+.futuristic-chat-input input,
+.send-button {
+  will-change: transform, opacity;
+}
+
+/* Enhanced chatbot icon animations for desktop */
+@media (min-width: 768px) {
+  .icon-inner:hover {
+    transform: rotate(5deg);
+  }
+  
+  .futuristic-chat-icon:hover .icon-pulse-ring {
+    animation: pulseRing 1.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+  }
+}
+
+/* Dark overlay for messages area */
+.futuristic-chat-messages {
+  position: relative;
+}
+
+.futuristic-chat-messages::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+/* Deep navy theme message bubbles with stronger contrast */
+.bot-bubble .bubble-content {
+  background: linear-gradient(135deg, rgba(44, 149, 255, 0.18), rgba(20, 60, 120, 0.08));
+  border-left: 2px solid var(--accent-blue);
+}
+
+.user-bubble .bubble-content {
+  background: linear-gradient(135deg, rgba(255, 109, 36, 0.18), rgba(160, 50, 20, 0.08));
+  border-right: 2px solid var(--accent-orange);
+}
+
+/* More pronounced container borders */
+.futuristic-chat-window {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Orange glow effect on send button */
+.send-button {
+  box-shadow: 0 0 10px rgba(255, 109, 36, 0.3);
+}
+
+/* Header title with cream accent */
+.header-info h4 {
+  text-shadow: 0 0 10px rgba(255, 241, 214, 0.2);
+  letter-spacing: 0.5px;
+}
+
+/* Status text with more visibility */
+.status-text {
+  color: var(--text-light);
+  opacity: 0.9;
+}
+
+/* Enhanced message area with subtle navy gradient */
+.futuristic-chat-messages {
+  background: linear-gradient(to bottom, 
+    rgba(5, 10, 20, 0.98), 
+    rgba(10, 20, 40, 0.95));
+}
+
+/* Button hover effects with better visibility */
+.send-button:hover {
+  background: linear-gradient(135deg, #ff7d3a 0%, #ff5000 100%);
+}
+
+/* Additional cream accent for certain UI elements */
+.messages-date-indicator span {
+  border: 1px solid rgba(255, 241, 214, 0.1);
+}
+
+/* Darker scrollbar for better theme cohesion */
+.futuristic-chat-messages::-webkit-scrollbar-track {
+  background: rgba(5, 10, 20, 0.9);
+}
+
+/* Enhanced neo-brutalism with darker shadows */
+.neo-brutalism-card {
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.9);
+}
+
+/* Message typing animation with smoother transition */
+@keyframes typing {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+
+.messages-date-indicator::before {
+  left: 0;
+}
+
+.messages-date-indicator::after {
+  right: 0;
+}
+
+.messages-date-indicator span {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: rgba(5, 10, 20, 0.8);
+  border-radius: 12px;
+}
+
+/* Chat bubble styles */
+.futuristic-chat-bubble {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 85%;
+  margin-bottom: 8px;
+  animation: message-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@keyframes message-pop {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bot-bubble {
+  align-self: flex-start;
+}
+
+.user-bubble {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.bubble-avatar {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-mini-circle {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-mini-face {
+  width: 65%;
+  height: 65%;
+  position: relative;
+}
+
+.avatar-mini-face::before,
+.avatar-mini-face::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: white;
+  border-radius: 50%;
+  top: 5px;
+}
+
+.avatar-mini-face::before {
+  left: 5px;
+}
+
+.avatar-mini-face::after {
+  right: 5px;
+}
+
+.avatar-mini-face::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 4px;
+  border-bottom: 1.5px solid white;
+  border-radius: 50%;
+  bottom: 5px;
+  left: 7px;
+}
+
+.bubble-content {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 18px;
+  padding: 10px 15px;
+  position: relative;
+  backdrop-filter: blur(5px);
+  overflow: hidden;
+}
+
+.bot-bubble .bubble-content {
+  border-top-left-radius: 4px;
+  background: linear-gradient(135deg, rgba(44, 149, 255, 0.15), rgba(30, 80, 150, 0.05));
+  border-left: 2px solid var(--accent-blue);
+}
+
+.user-bubble .bubble-content {
+  border-top-right-radius: 4px;
+  background: linear-gradient(135deg, rgba(255, 109, 36, 0.15), rgba(180, 60, 20, 0.05));
+  border-right: 2px solid var(--accent-orange);
+}
+
+.bubble-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  filter: blur(10px);
+  opacity: 0.3;
+}
+
+.bot-bubble .bubble-content::before {
+  background: var(--accent-blue);
+}
+
+.user-bubble .bubble-content::before {
+  background: var(--accent-orange);
+}
+
+.bubble-text {
+  color: var(--text-light);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 5px;
+}
+
+.bubble-timestamp {
+  text-align: right;
+  font-size: 10px;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 0;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  display: inline-block;
+  opacity: 0.6;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation: typing 1s infinite 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation: typing 1s infinite 0.3s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation: typing 1s infinite 0.6s;
+}
+
+@keyframes typing {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+/* ============= CHAT INPUT ============= */
+.futuristic-chat-input {
+  background: var(--deep-dark);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 0 0 18px 18px;
+  position: relative;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.futuristic-chat-input input {
+  flex: 1;
+  background: rgba(5, 10, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  padding: 12px 15px;
+  padding-right: 50px;
+  color: var(--text-light);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.futuristic-chat-input input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--accent-blue);
+}
+
+.futuristic-chat-input input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.send-button {
+  position: absolute;
+  right: 5px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--accent-orange) 0%, #ff4400 100%);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0.9;
+  transform: scale(0.9);
+}
+
+.send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.send-active {
+  transform: scale(1);
+  opacity: 1;
+  box-shadow: 0 0 10px rgba(255, 109, 36, 0.5);
+}
+
+.send-hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 109, 36, 0.6);
+}
+
+.send-icon {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  transform: translateX(-1px);
+  transition: transform 0.3s ease;
+}
+
+.send-button:hover .send-icon {
+  transform: translateX(2px);
+}
+
+.input-features {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding: 0 10px;
+}
+
+.feature-hint {
+  font-size: 11px;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* ============= RESPONSIVE STYLES ============= */
+@media (max-width: 480px) {
+  .futuristic-chat-window {
+    width: 100%;
+    height: 70vh;
+    bottom: 0;
+    right: 0;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .futuristic-chat-window::before {
+    border-radius: 22px 22px 0 0;
+  }
+  
+  .futuristic-chat-header {
+    border-radius: 18px 18px 0 0;
+  }
+  
+  .futuristic-chat-input {
+    border-radius: 0;
+  }
+  
+  .futuristic-chat-icon {
+    bottom: 15px;
+    right: 15px;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* ============= ANIMATIONS ============= */
+/* Subtle rotation animation for the avatar */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Star twinkling effect in the background */
+.futuristic-chat-messages::after {
+  content: '';
+  position: fixed;
+  width: 2px;
+  height: 2px;
+  background: white;
+  box-shadow: 
+    30px 40px white, 
+    60px 120px white, 
+    120px 200px white,
+    180px 40px white, 
+    220px 90px white, 
+    280px 160px white,
+    40px 180px white, 
+    100px 280px white, 
+    160px 320px white,
+    260px 320px white, 
+    340px 280px white, 
+    320px 220px white;
+  border-radius: 50%;
+  opacity: 0.15;
+  pointer-events: none;
+  animation: twinkle 5s infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Special effects for dopamine triggers */
+.futuristic-chat-bubble {
+  transition: transform 0.2s ease;
+}
+
+.futuristic-chat-bubble:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Custom animations for reinforcement/reward */
+@keyframes success-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+  }
+}
+
+/* Special effect when messages are sent successfully */
+.user-bubble:last-of-type .bubble-content {
+  animation: success-pulse 1s ease-out;
+}
+
+/* ============= ADDITIONAL MICROINTERACTIONS ============= */
+/* Liquid button effect */
+.send-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.send-button:active::before {
+  width: 120%;
+  height: 120%;
+}
+
+/* Focus effect for input */
+.input-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent-blue);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.futuristic-chat-input input:focus + .send-button + .input-container::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Cool wave effect at the bottom */
+.futuristic-chat-input::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -10px;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(135deg, transparent 25%, var(--deep-dark) 25%, var(--deep-dark) 50%, transparent 50%, transparent 75%, var(--deep-dark) 75%);
+  background-size: 20px 20px;
+  opacity: 0.5;
+}
+
+/* Glowing text effect for bot messages on hover */
+.bot-bubble .bubble-text:hover {
+  text-shadow: 0 0 5px rgba(44, 149, 255, 0.5);
+  transition: text-shadow 0.3s ease;
+}
+
+/* Subtle animation for user bubble */
+.user-bubble {
+  animation-delay: 0.1s;
+}
+
+/* Animated background gradient for the main window */
+.futuristic-chat-window {
+  background: linear-gradient(135deg, 
+    rgba(5, 10, 20, 0.97), 
+    rgba(10, 17, 32, 0.97),
+    rgba(5, 10, 20, 0.97));
+  background-size: 200% 200%;
+  animation: gradientBackground 15s ease infinite;
+}
+
+@keyframes gradientBackground {
   0% {
     background-position: 0% 50%;
   }
@@ -66,171 +1110,281 @@
   }
 }
 
-/* Slide in from right */
-.slide-in-right {
-  animation: slideInRight 0.6s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+/* Special shadow effect for active chat */
+.futuristic-chat-window:focus-within {
+  box-shadow: var(--card-shadow), 0 0 15px rgba(44, 149, 255, 0.3);
 }
 
-@keyframes slideInRight {
+/* 3D depth effect for messages */
+.futuristic-chat-bubble {
+  perspective: 1000px;
+}
+
+.bubble-content {
+  transform: translateZ(0);
+  transition: transform 0.3s ease;
+}
+
+.futuristic-chat-bubble:hover .bubble-content {
+  transform: translateZ(5px);
+}
+
+/* Shimmer effect on header */
+.futuristic-chat-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.07),
+    transparent
+  );
+  animation: shimmer 4s infinite;
+}
+
+@keyframes shimmer {
   0% {
-    transform: translateX(100%);
-    opacity: 0;
+    left: -100%;
   }
   100% {
-    transform: translateX(0);
-    opacity: 1;
+    left: 100%;
   }
 }
 
-/* ============= HEADER ============= */
-.chat-window-header {
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  padding: 10px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 12px 12px 0 0;
-  /* Add a subtle neon glow */
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+/* Enhanced focus state for input */
+.futuristic-chat-input input:focus {
+  box-shadow: 
+    inset 0 0 8px rgba(0, 0, 0, 0.3),
+    0 0 0 1px var(--accent-blue),
+    0 0 8px rgba(44, 149, 255, 0.4);
 }
 
-.chat-window-header h4 {
-  margin: 0;
-  font-size: 1rem;
+/* Animated bounce for send button on user input */
+@keyframes send-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(-1px);
+  }
 }
 
-.chat-window-header button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #fff;
-  font-size: 1.1rem;
-  transition: transform 0.2s;
+.send-button.send-active {
+  animation: send-bounce 1s ease-in;
 }
 
-.chat-window-header button:hover {
-  transform: scale(1.15);
+/* Header glow effect */
+.header-info h4 {
+  position: relative;
+  display: inline-block;
+  color: var(--accent-cream);
 }
 
-/* ============= MESSAGES ============= */
-.chat-window-messages {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-  background: rgba(255, 255, 255, 0.1);
-  /* Give a subtle translucent effect for messages area */
-  backdrop-filter: blur(8px);
+/* This file contains the missing part of the CSS from where it was cut off */
+
+/* ============= HEADER GLOW EFFECT (COMPLETION) ============= */
+.header-info h4::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(to right, var(--accent-orange), var(--accent-blue));
+  transition: width 0.5s ease;
 }
 
-/* Chat Bubbles */
-.chat-bubble {
-  margin: 8px 0;
-  max-width: 80%;
-  padding: 8px 14px;
-  border-radius: 12px;
-  line-height: 1.4;
-  font-size: 0.95rem;
-  animation: fadeIn 0.3s ease forwards;
+.futuristic-chat-header:hover .header-info h4::after {
+  width: 100%;
+}
+
+/* ============= ENHANCED MOBILE RESPONSIVENESS ============= */
+@media (max-width: 380px) {
+  .futuristic-chat-header {
+    padding: 10px;
+  }
+  
+  .header-info h4 {
+    font-size: 14px;
+  }
+  
+  .avatar-circle {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .bubble-text {
+    font-size: 13px;
+  }
+  
+  .futuristic-chat-input input {
+    padding: 10px 15px;
+    padding-right: 45px;
+  }
+  
+  .send-button {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .futuristic-chat-bubble {
+    max-width: 90%;
+  }
+}
+
+/* ============= FINAL TOUCHES & ACCESSIBILITY ============= */
+/* Focus visible outlines for accessibility */
+.futuristic-chat-input input:focus-visible,
+.send-button:focus-visible,
+.close-btn:focus-visible,
+.minimize-btn:focus-visible {
+  outline: 2px solid var(--accent-blue);
+  outline-offset: 2px;
+}
+
+/* Reduce motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .typing-indicator span {
+    animation: none !important;
+  }
+  
+  .icon-pulse-ring {
+    animation: none !important;
+    opacity: 0.5;
+  }
+}
+
+/* Improve contrast for better readability */
+.bubble-timestamp {
+  color: var(--text-light);
+  opacity: 0.8;
+}
+
+/* Button active states */
+.send-button:active {
+  transform: scale(0.95);
+}
+
+/* Improved transitions */
+.futuristic-chat-bubble,
+.bubble-content,
+.futuristic-chat-icon,
+.futuristic-chat-window,
+.futuristic-chat-input input,
+.send-button {
+  will-change: transform, opacity;
+}
+
+/* Enhanced chatbot icon animations for desktop */
+@media (min-width: 768px) {
+  .icon-inner:hover {
+    transform: rotate(5deg);
+  }
+  
+  .futuristic-chat-icon:hover .icon-pulse-ring {
+    animation: pulseRing 1.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+  }
+}
+
+/* ============= DARK THEME ENHANCEMENTS ============= */
+/* Dark overlay for messages area */
+.futuristic-chat-messages {
   position: relative;
 }
 
-/* small glow behind the bubble */
-.chat-bubble::before {
+.futuristic-chat-messages::before {
   content: '';
   position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  opacity: 0.3;
-  filter: blur(6px);
-  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Deep navy theme message bubbles with stronger contrast */
+.bot-bubble .bubble-content {
+  background: linear-gradient(135deg, rgba(44, 149, 255, 0.18), rgba(20, 60, 120, 0.08));
+  border-left: 2px solid var(--accent-blue);
 }
 
-/* BOT BUBBLE STYLES */
-.chat-bubble.bot {
-  background: rgba(255, 255, 255, 0.8);
-  color: #333;
-  align-self: flex-start;
-}
-.chat-bubble.bot::before {
-  background: #ffffff;
+.user-bubble .bubble-content {
+  background: linear-gradient(135deg, rgba(255, 109, 36, 0.18), rgba(160, 50, 20, 0.08));
+  border-right: 2px solid var(--accent-orange);
 }
 
-/* USER BUBBLE STYLES */
-.chat-bubble.user {
-  background: rgba(0, 255, 170, 0.85);
-  color: #111;
-  align-self: flex-end;
-}
-.chat-bubble.user::before {
-  background: #00ffaa;
+/* More pronounced container borders */
+.futuristic-chat-window {
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* ============= INPUT AREA ============= */
-.chat-window-input {
-  display: flex;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 0 0 12px 12px;
+/* Orange glow effect on send button */
+.send-button {
+  box-shadow: 0 0 10px rgba(255, 109, 36, 0.3);
 }
 
-.chat-window-input input {
-  flex: 1;
-  border: none;
-  border-radius: 6px;
-  padding: 7px;
-  margin-right: 8px;
-  font-size: 0.9rem;
-  outline: none;
+/* Header title with cream accent */
+.header-info h4 {
+  text-shadow: 0 0 10px rgba(255, 241, 214, 0.2);
+  letter-spacing: 0.5px;
 }
 
-.chat-window-input button {
-  padding: 7px 14px;
-  background: #00897b;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background 0.3s;
-}
-.chat-window-input button:hover {
-  background: #00b69d;
+/* Status text with more visibility */
+.status-text {
+  color: var(--text-light);
+  opacity: 0.9;
 }
 
-/* ============= MEDIA QUERIES (RESPONSIVE) ============= */
-@media (max-width: 480px) {
-  /* Resize the chat icon on smaller screens */
-  .ai-chat-icon {
-    bottom: 15px;
-    right: 15px;
-    width: 50px;
-    height: 50px;
+/* Enhanced message area with subtle navy gradient */
+.futuristic-chat-messages {
+  background: linear-gradient(to bottom, 
+    rgba(5, 10, 20, 0.98), 
+    rgba(10, 20, 40, 0.95));
+}
+
+/* Button hover effects with better visibility */
+.send-button:hover {
+  background: linear-gradient(135deg, #ff7d3a 0%, #ff5000 100%);
+}
+
+/* Additional cream accent for certain UI elements */
+.messages-date-indicator span {
+  border: 1px solid rgba(255, 241, 214, 0.1);
+}
+
+/* Darker scrollbar for better theme cohesion */
+.futuristic-chat-messages::-webkit-scrollbar-track {
+  background: rgba(5, 10, 20, 0.9);
+}
+
+/* Enhanced neo-brutalism with darker shadows */
+.neo-brutalism-card {
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.9);
+}
+
+/* Message typing animation with smoother transition */
+@keyframes typing {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
   }
-
-  /* Make the chat window occupy a larger portion of the screen */
-  .ai-chat-window {
-    bottom: 70px;
-    right: 5%;
-    width: 90%;
-    height: 60vh; /* Use a viewport-based height */
-  }
-
-  /* Adjust some font sizes */
-  .chat-window-header h4 {
-    font-size: 0.9rem;
-  }
-
-  .chat-bubble {
-    font-size: 0.85rem;
-  }
-
-  .chat-window-input input {
-    font-size: 0.85rem;
+  50% {
+    transform: translateY(-5px);
+    opacity: 1;
   }
 }
