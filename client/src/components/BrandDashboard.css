@@ -22,164 +22,227 @@ button {
 
 /* ----- MIDNIGHT OCEAN THEME (DEFAULT) ----- */
 .theme-midnight {
-  --color-bg-primary: #001524;
-  --color-bg-secondary: #012A36;
-  --color-bg-tertiary: #0E1D24;
-  --color-bg-card: #18323C;
-  --color-bg-card-hover: #203642;
+  --color-bg-primary: #001429;        /* Deepest ocean blue */
+  --color-bg-secondary: #002642;      /* Deep midnight blue */
+  --color-bg-tertiary: #003B5F;       /* Rich ocean blue */
+  --color-bg-card: #004E7C;           /* Dark blue with slight teal */
+  --color-bg-card-hover: #005F8F;     /* Slightly brighter blue */
   
-  --color-accent-primary: #FF7D08;
-  --color-accent-secondary: #D26506;
-  --color-accent-tertiary: #FFA047;
+  --color-accent-primary: #FF8F1F;    /* Warm orange (moonlight on water) */
+  --color-accent-secondary: #E67300;  /* Deeper orange */
+  --color-accent-tertiary: #FFB459;   /* Soft glowing orange */
   
-  --color-text-light: #F8F1E5;
-  --color-text-dim: rgba(248, 241, 229, 0.75);
-  --color-text-dark: #0E1D24;
+  --color-text-light: #E6F3FF;        /* Pale moonlit blue */
+  --color-text-dim: rgba(230, 243, 255, 0.75); /* Semi-transparent light blue */
+  --color-text-dark: #001524;         /* Near black with blue tint */
   
-  --color-border-light: rgba(248, 241, 229, 0.2);
-  --color-border-accent: rgba(255, 125, 8, 0.5);
+  --color-border-light: rgba(230, 243, 255, 0.2); /* Semi-transparent light blue */
+  --color-border-accent: rgba(255, 143, 31, 0.5); /* Semi-transparent orange */
   
-  --color-success: #4CAF50;
-  --color-warning: #FF9800;
-  --color-danger: #FF5252;
+  --color-success: #4CAF50;           /* Standard success green */
+  --color-warning: #FF9800;           /* Standard warning orange */
+  --color-danger: #FF5252;            /* Standard danger red */
   
-  --color-calendar-empty: #F8F1E5;
+  --color-calendar-empty: #E6F3FF;    /* Pale moonlit blue */
   
-  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.7);
   
-  --glow-accent: 0 0 15px rgba(255, 125, 8, 0.5);
-  --glow-light: 0 0 15px rgba(248, 241, 229, 0.3);
+  --glow-accent: 0 0 15px rgba(255, 143, 31, 0.4); /* Subtle orange glow */
+  --glow-light: 0 0 15px rgba(230, 243, 255, 0.3); /* Subtle blue glow */
 }
 
 /* ----- SUNSET VIBES THEME ----- */
 .theme-sunset {
-  --color-bg-primary: #2C0735;
-  --color-bg-secondary: #40075E;
-  --color-bg-tertiary: #560A86;
-  --color-bg-card: #6B0FB0;
-  --color-bg-card-hover: #7B21C2;
+  --color-bg-primary: #1A0F23;        /* Deep twilight purple-blue */
+  --color-bg-secondary: #341B32;      /* Dark sunset purple */
+  --color-bg-tertiary: #5F2736;       /* Rich sunset red-purple */
+  --color-bg-card: #863A45;           /* Deep sunset red */
+  --color-bg-card-hover: #A34B52;     /* Richer sunset red */
   
-  --color-accent-primary: #FF8811;
-  --color-accent-secondary: #F67B01;
-  --color-accent-tertiary: #FFAA51;
+  --color-accent-primary: #FF9E5E;    /* Warm sunset orange */
+  --color-accent-secondary: #FF7D55;  /* Vibrant sunset coral */
+  --color-accent-tertiary: #FFBE94;   /* Soft sunset peach */
   
-  --color-text-light: #FDF7FF;
-  --color-text-dim: rgba(253, 247, 255, 0.75);
-  --color-text-dark: #230628;
+  --color-text-light: #FFF6F0;        /* Warm sunset glow */
+  --color-text-dim: rgba(255, 246, 240, 0.75); /* Semi-transparent warm white */
+  --color-text-dark: #1A0F1E;         /* Deep night background */
   
-  --color-border-light: rgba(253, 247, 255, 0.2);
-  --color-border-accent: rgba(255, 136, 17, 0.5);
+  --color-border-light: rgba(255, 246, 240, 0.2); /* Semi-transparent warm white */
+  --color-border-accent: rgba(255, 158, 94, 0.5); /* Semi-transparent sunset orange */
   
-  --color-success: #4CAF50;
-  --color-warning: #FF9800;
-  --color-danger: #FF5252;
+  --color-success: #4CAF50;           /* Standard success green */
+  --color-warning: #FF9800;           /* Standard warning orange */
+  --color-danger: #FF5252;            /* Standard danger red */
   
-  --color-calendar-empty: #FDF7FF;
+  --color-calendar-empty: #FFF6F0;    /* Warm sunset glow */
   
-  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.7);
   
-  --glow-accent: 0 0 15px rgba(255, 136, 17, 0.5);
-  --glow-light: 0 0 15px rgba(253, 247, 255, 0.3);
+  --glow-accent: 0 0 15px rgba(255, 158, 94, 0.5); /* Orange sunset glow */
+  --glow-light: 0 0 15px rgba(255, 246, 240, 0.3); /* Warm white glow */
 }
 
 /* ----- FOREST EMERALD THEME ----- */
 .theme-forest {
-  --color-bg-primary: #0C2427;
-  --color-bg-secondary: #124C4C;
-  --color-bg-tertiary: #1B6769;
-  --color-bg-card: #227F7E;
-  --color-bg-card-hover: #2A9592;
+  --color-bg-primary: #0B2E1C;        /* Deep forest green */
+  --color-bg-secondary: #114B2B;      /* Rich pine green */
+  --color-bg-tertiary: #186239;       /* Emerald forest green */
+  --color-bg-card: #1E7848;           /* Vibrant forest green */
+  --color-bg-card-hover: #259454;     /* Brighter emerald green */
   
-  --color-accent-primary: #8FD694;
-  --color-accent-secondary: #6BC271;
-  --color-accent-tertiary: #B3E6B8;
+  --color-accent-primary: #97D494;    /* Fresh leaf green */
+  --color-accent-secondary: #6BC271;  /* Slightly deeper leaf green */
+  --color-accent-tertiary: #C4E8C2;   /* Light leaf green */
   
-  --color-text-light: #F0F7F4;
-  --color-text-dim: rgba(240, 247, 244, 0.75);
-  --color-text-dark: #0A1E1F;
+  --color-text-light: #F0FFF7;        /* Misty forest white */
+  --color-text-dim: rgba(240, 255, 247, 0.75); /* Semi-transparent forest white */
+  --color-text-dark: #0A1E15;         /* Deep forest shadow */
   
-  --color-border-light: rgba(240, 247, 244, 0.2);
-  --color-border-accent: rgba(143, 214, 148, 0.5);
+  --color-border-light: rgba(240, 255, 247, 0.2); /* Semi-transparent forest white */
+  --color-border-accent: rgba(151, 212, 148, 0.5); /* Semi-transparent leaf green */
   
-  --color-success: #4CAF50;
-  --color-warning: #FFC107;
-  --color-danger: #F44336;
+  --color-success: #4CAF50;           /* Standard success green */
+  --color-warning: #FFC107;           /* Standard warning yellow */
+  --color-danger: #F44336;            /* Standard danger red */
   
-  --color-calendar-empty: #F0F7F4;
+  --color-calendar-empty: #F0FFF7;    /* Misty forest white */
   
-  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.7);
   
-  --glow-accent: 0 0 15px rgba(143, 214, 148, 0.5);
-  --glow-light: 0 0 15px rgba(240, 247, 244, 0.3);
+  --glow-accent: 0 0 15px rgba(151, 212, 148, 0.5); /* Leaf green glow */
+  --glow-light: 0 0 15px rgba(240, 255, 247, 0.3); /* Forest mist glow */
 }
 
 /* ----- COSMIC PURPLE THEME ----- */
 .theme-cosmic {
-  --color-bg-primary: #13022C;
-  --color-bg-secondary: #241052;
-  --color-bg-tertiary: #372978;
-  --color-bg-card: #4B37A3;
-  --color-bg-card-hover: #5C48B4;
+  --color-bg-primary: #0B0033;        /* Deep space purple-black */
+  --color-bg-secondary: #230966;      /* Rich cosmic purple */
+  --color-bg-tertiary: #3A1D99;       /* Vibrant nebula purple */
+  --color-bg-card: #4F2CB3;           /* Bright cosmic purple */
+  --color-bg-card-hover: #6039CC;     /* Glowing cosmic purple */
   
-  --color-accent-primary: #BA02FF;
-  --color-accent-secondary: #9D00D9;
-  --color-accent-tertiary: #D33FFF;
+  --color-accent-primary: #D237FF;    /* Vibrant cosmic magenta */
+  --color-accent-secondary: #B620E0;  /* Deeper cosmic purple */
+  --color-accent-tertiary: #E671FF;   /* Soft cosmic lavender */
   
-  --color-text-light: #F1EBFF;
-  --color-text-dim: rgba(241, 235, 255, 0.75);
-  --color-text-dark: #0C0121;
+  --color-text-light: #F5EEFF;        /* Stardust white */
+  --color-text-dim: rgba(245, 238, 255, 0.75); /* Semi-transparent cosmic white */
+  --color-text-dark: #0A0021;         /* Deep space black */
   
-  --color-border-light: rgba(241, 235, 255, 0.2);
-  --color-border-accent: rgba(186, 2, 255, 0.5);
+  --color-border-light: rgba(245, 238, 255, 0.2); /* Semi-transparent cosmic white */
+  --color-border-accent: rgba(210, 55, 255, 0.5); /* Semi-transparent cosmic magenta */
   
-  --color-success: #4CAF50;
-  --color-warning: #FFC107;
-  --color-danger: #F44336;
+  --color-success: #4CAF50;           /* Standard success green */
+  --color-warning: #FFC107;           /* Standard warning yellow */
+  --color-danger: #F44336;            /* Standard danger red */
   
-  --color-calendar-empty: #F1EBFF;
+  --color-calendar-empty: #F5EEFF;    /* Stardust white */
   
-  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.7);
   
-  --glow-accent: 0 0 15px rgba(186, 2, 255, 0.5);
-  --glow-light: 0 0 15px rgba(241, 235, 255, 0.3);
+  --glow-accent: 0 0 15px rgba(210, 55, 255, 0.6); /* Cosmic purple glow */
+  --glow-light: 0 0 15px rgba(245, 238, 255, 0.3); /* Stardust glow */
 }
 
 /* ----- DESERT GOLD THEME ----- */
 .theme-desert {
-  --color-bg-primary: #2E1503;
-  --color-bg-secondary: #4A2511;
-  --color-bg-tertiary: #674023;
-  --color-bg-card: #825734;
-  --color-bg-card-hover: #9A6C46;
+  --color-bg-primary: #301E11;        /* Deep desert night */
+  --color-bg-secondary: #4A2F1B;      /* Rich desert brown */
+  --color-bg-tertiary: #664026;       /* Warm desert sand */
+  --color-bg-card: #7D502E;           /* Desert dune brown */
+  --color-bg-card-hover: #956236;     /* Sun-warmed sand */
   
-  --color-accent-primary: #FFB627;
-  --color-accent-secondary: #E29900;
-  --color-accent-tertiary: #FFCC66;
+  --color-accent-primary: #FFB627;    /* Bright desert gold */
+  --color-accent-secondary: #E29900;  /* Deep desert amber */
+  --color-accent-tertiary: #FFCC66;   /* Soft desert sunrise */
   
-  --color-text-light: #FFEFD3;
-  --color-text-dim: rgba(255, 239, 211, 0.75);
-  --color-text-dark: #261000;
+  --color-text-light: #FFF6E5;        /* Desert white */
+  --color-text-dim: rgba(255, 246, 229, 0.75); /* Semi-transparent desert white */
+  --color-text-dark: #261506;         /* Desert shadow */
   
-  --color-border-light: rgba(255, 239, 211, 0.2);
-  --color-border-accent: rgba(255, 182, 39, 0.5);
+  --color-border-light: rgba(255, 246, 229, 0.2); /* Semi-transparent desert white */
+  --color-border-accent: rgba(255, 182, 39, 0.5); /* Semi-transparent desert gold */
   
-  --color-success: #4CAF50;
-  --color-warning: #FF9800;
-  --color-danger: #FF5252;
+  --color-success: #4CAF50;           /* Standard success green */
+  --color-warning: #FF9800;           /* Standard warning orange */
+  --color-danger: #FF5252;            /* Standard danger red */
   
-  --color-calendar-empty: #FFEFD3;
+  --color-calendar-empty: #FFF6E5;    /* Desert white */
   
-  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.7);
   
-  --glow-accent: 0 0 15px rgba(255, 182, 39, 0.5);
-  --glow-light: 0 0 15px rgba(255, 239, 211, 0.3);
+  --glow-accent: 0 0 15px rgba(255, 182, 39, 0.5); /* Desert gold glow */
+  --glow-light: 0 0 15px rgba(255, 246, 229, 0.3); /* Desert heat glow */
 }
 
+/* ----- SPECIAL THEME (Red & Black) ----- */
+.theme-special {
+  --color-bg-primary: #0D0000;        /* Dark black with subtle red tint */
+  --color-bg-secondary: #1F0000;      /* Deep ruby black */
+  --color-bg-tertiary: #390000;       /* Rich dark red */
+  --color-bg-card: #5C0000;           /* Dark blood red */
+  --color-bg-card-hover: #7A0000;     /* Slightly brighter blood red */
+  
+  --color-accent-primary: #FF2E2E;    /* Vibrant bright red */
+  --color-accent-secondary: #D50000;  /* Deep crimson */
+  --color-accent-tertiary: #FF7171;   /* Soft light red */
+  
+  --color-text-light: #FFF1F1;        /* Pale red-tinted white */
+  --color-text-dim: rgba(255, 241, 241, 0.75); /* Semi-transparent light red */
+  --color-text-dark: #110000;         /* Near black with subtle red tint */
+  
+  --color-border-light: rgba(255, 241, 241, 0.2); /* Semi-transparent light red */
+  --color-border-accent: rgba(255, 46, 46, 0.5); /* Semi-transparent bright red */
+  
+  --color-success: #4CAF50;           /* Standard success green */
+  --color-warning: #FF9800;           /* Standard warning orange */
+  --color-danger: #FF5252;            /* Standard danger red */
+  
+  --color-calendar-empty: #FFF1F1;    /* Pale red-tinted white */
+  
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.7);
+  
+  --glow-accent: 0 0 15px rgba(255, 46, 46, 0.5); /* Red glow */
+  --glow-light: 0 0 15px rgba(255, 241, 241, 0.3); /* Light red glow */
+}
+
+/* ----- CUTE THEME (Teal & Hot Pink) ----- */
+.theme-cute {
+  --color-bg-primary: #003C4D;        /* Deep teal */
+  --color-bg-secondary: #004D61;      /* Rich teal */
+  --color-bg-tertiary: #00687A;       /* Medium teal */
+  --color-bg-card: #008094;           /* Vibrant teal */
+  --color-bg-card-hover: #0098AD;     /* Bright teal */
+  
+  --color-accent-primary: #FF459A;    /* Hot pink */
+  --color-accent-secondary: #E0187B;  /* Deep pink */
+  --color-accent-tertiary: #FF8DC1;   /* Soft pink */
+  
+  --color-text-light: #F4FBFF;        /* Cool teal white */
+  --color-text-dim: rgba(244, 251, 255, 0.75); /* Semi-transparent teal white */
+  --color-text-dark: #00262F;         /* Deep teal dark */
+  
+  --color-border-light: rgba(244, 251, 255, 0.2); /* Semi-transparent teal white */
+  --color-border-accent: rgba(255, 69, 154, 0.5); /* Semi-transparent hot pink */
+  
+  --color-success: #4CAF50;           /* Standard success green */
+  --color-warning: #FF9800;           /* Standard warning orange */
+  --color-danger: #FF5252;            /* Standard danger red */
+  
+  --color-calendar-empty: #F4FBFF;    /* Cool teal white */
+  
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.7);
+  
+  --glow-accent: 0 0 15px rgba(255, 69, 154, 0.5); /* Hot pink glow */
+  --glow-light: 0 0 15px rgba(244, 251, 255, 0.3); /* Teal white glow */
+}
 /* ==================== CONTAINER STYLES ==================== */
 .brand-dashboard-container {
   min-height: 100vh;
@@ -190,7 +253,7 @@ button {
   z-index: 0;
 }
 
-/* Animated background */
+/* Enhanced animated background */
 .brand-dashboard-container.animated-bg::before {
   content: '';
   position: fixed;
@@ -198,12 +261,15 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, 
+  background: radial-gradient(ellipse at top left, 
     var(--color-bg-primary) 0%, 
-    var(--color-bg-secondary) 50%, 
-    var(--color-bg-primary) 100%);
-  opacity: 0.7;
+    transparent 70%),
+    radial-gradient(ellipse at bottom right, 
+    var(--color-bg-secondary) 0%, 
+    transparent 70%);
+  opacity: 0.8;
   z-index: -2;
+  animation: gradientPulse 15s ease infinite;
 }
 
 .animated-bg .background-animations {
@@ -221,53 +287,61 @@ button {
   position: absolute;
   border-radius: 50%;
   filter: blur(60px);
-  opacity: 0.15;
+  opacity: 0.2;
   z-index: -1;
+  animation-duration: 20s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  background-size: 400% 400%;
 }
 
 .shape-1 {
-  width: 300px;
-  height: 300px;
-  background-color: var(--color-accent-primary);
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(45deg, var(--color-accent-primary), var(--color-accent-secondary));
   top: 10%;
   left: 15%;
-  animation: float1 25s infinite ease-in-out;
+  animation-name: floatAndGlow1;
 }
 
 .shape-2 {
-  width: 250px;
-  height: 250px;
-  background-color: var(--color-accent-secondary);
+  width: 350px;
+  height: 350px;
+  background: linear-gradient(135deg, var(--color-accent-secondary), var(--color-accent-tertiary));
   top: 40%;
   right: 10%;
-  animation: float2 30s infinite ease-in-out;
+  animation-name: floatAndGlow2;
+  animation-delay: 3s;
 }
 
 .shape-3 {
-  width: 200px;
-  height: 200px;
-  background-color: var(--color-accent-tertiary);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--color-accent-tertiary), var(--color-accent-primary));
   bottom: 15%;
   left: 20%;
-  animation: float3 20s infinite ease-in-out;
+  animation-name: floatAndGlow3;
+  animation-delay: 6s;
 }
 
 .shape-4 {
-  width: 350px;
-  height: 350px;
-  background-color: var(--color-bg-tertiary);
+  width: 450px;
+  height: 450px;
+  background: conic-gradient(var(--color-bg-tertiary), var(--color-accent-secondary), var(--color-bg-tertiary));
   top: 5%;
   right: 30%;
-  animation: float4 35s infinite ease-in-out;
+  animation-name: floatAndGlow4;
+  animation-delay: 9s;
 }
 
 .shape-5 {
-  width: 280px;
-  height: 280px;
-  background-color: var(--color-accent-secondary);
+  width: 380px;
+  height: 380px;
+  background: linear-gradient(-45deg, var(--color-accent-secondary), var(--color-bg-card-hover));
   bottom: 10%;
   right: 25%;
-  animation: float5 28s infinite ease-in-out;
+  animation-name: floatAndGlow5;
+  animation-delay: 12s;
 }
 
 /* ==================== WELCOME ANIMATION ==================== */
@@ -385,6 +459,8 @@ button {
   border: 1px solid var(--color-border-light);
   z-index: 0;
   animation: fadeSlideUp 0.3s ease-out;
+  width: 500px;
+  height: 350px;
 }
 
 .theme-options-panel h3 {
@@ -398,7 +474,7 @@ button {
 .theme-options-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 120px;
   margin-bottom: 15px;
 }
 
@@ -447,6 +523,8 @@ button {
   color: var(--color-text-light);
   font-size: 0.9rem;
   cursor: pointer;
+  position: relative;
+  left: 280px;
 }
 
 .toggle-label input {
@@ -1453,7 +1531,7 @@ button {
   border: 1px solid var(--color-border-light);
   border-radius: 6px;
   padding: 0.5rem;
-  color: var(--color-text-light);
+  color: lightgray;
   font-size: 0.9rem;
   outline: none;
   cursor: pointer;
@@ -2770,5 +2848,128 @@ button {
   .modal-container {
     width: 95%;
     max-width: none;
+  }
+}
+
+/* Enhanced animation keyframes */
+@keyframes gradientPulse {
+  0%, 100% {
+    opacity: 0.8;
+    background-position: 0% 0%;
+  }
+  50% {
+    opacity: 0.6;
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes floatAndGlow1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    background-position: 0% 0%;
+    opacity: 0.2;
+  }
+  25% {
+    transform: translate(40px, 30px) scale(1.1);
+    background-position: 100% 0%;
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(20px, 60px) scale(0.9);
+    background-position: 100% 100%;
+    opacity: 0.25;
+  }
+  75% {
+    transform: translate(-30px, 30px) scale(1.1);
+    background-position: 0% 100%;
+    opacity: 0.3;
+  }
+}
+
+@keyframes floatAndGlow2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    background-position: 0% 0%;
+    opacity: 0.2;
+  }
+  25% {
+    transform: translate(-30px, 40px) scale(1.1);
+    background-position: 100% 0%;
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-50px, 20px) scale(0.9);
+    background-position: 100% 100%;
+    opacity: 0.25;
+  }
+  75% {
+    transform: translate(-20px, -30px) scale(1.2);
+    background-position: 0% 100%;
+    opacity: 0.3;
+  }
+}
+
+@keyframes floatAndGlow3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    background-position: 0% 0%;
+    opacity: 0.2;
+  }
+  25% {
+    transform: translate(20px, -35px) scale(1.1) rotate(15deg);
+    background-position: 100% 0%;
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(40px, 0px) scale(0.95) rotate(30deg);
+    background-position: 100% 100%;
+    opacity: 0.25;
+  }
+  75% {
+    transform: translate(20px, 35px) scale(1.05) rotate(15deg);
+    background-position: 0% 100%;
+    opacity: 0.3;
+  }
+}
+
+@keyframes floatAndGlow4 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0.15;
+  }
+  25% {
+    transform: translate(-35px, -25px) scale(1.15) rotate(-10deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate(-10px, -45px) scale(0.9) rotate(-20deg);
+    opacity: 0.2;
+  }
+  75% {
+    transform: translate(35px, -30px) scale(1.1) rotate(-10deg);
+    opacity: 0.25;
+  }
+}
+
+@keyframes floatAndGlow5 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    background-position: 0% 0%;
+    opacity: 0.2;
+  }
+  25% {
+    transform: translate(30px, 25px) scale(1.05) rotate(10deg);
+    background-position: 100% 0%;
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(0px, 40px) scale(0.9) rotate(20deg);
+    background-position: 100% 100%;
+    opacity: 0.25;
+  }
+  75% {
+    transform: translate(-30px, 15px) scale(1.1) rotate(10deg);
+    background-position: 0% 100%;
+    opacity: 0.3;
   }
 }

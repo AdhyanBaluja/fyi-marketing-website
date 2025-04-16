@@ -66,33 +66,45 @@ function BrandDashboard() {
   const userId = localStorage.getItem('userId');
 
   // Theme definitions
-  const themes = {
-    midnight: {
-      name: 'Midnight Ocean',
-      icon: '🌊',
-      description: 'Deep blues with orange accents'
-    },
-    sunset: {
-      name: 'Sunset Vibes',
-      icon: '🌅',
-      description: 'Warm oranges and purples'
-    },
-    forest: {
-      name: 'Forest Emerald',
-      icon: '🌲',
-      description: 'Rich greens with earthy tones'
-    },
-    cosmic: {
-      name: 'Cosmic Purple',
-      icon: '🔮',
-      description: 'Deep purples with neon accents'
-    },
-    desert: {
-      name: 'Desert Gold',
-      icon: '🏜️',
-      description: 'Sandy golds with rustic accents'
-    }
-  };
+  // Theme definitions
+const themes = {
+  midnight: {
+    name: 'Midnight Ocean',
+    icon: '🌊',
+    description: 'Deep blues with orange accents'
+  },
+  sunset: {
+    name: 'Sunset Vibes',
+    icon: '🌅',
+    description: 'Warm oranges and purples'
+  },
+  forest: {
+    name: 'Forest Emerald',
+    icon: '🌲',
+    description: 'Rich greens with earthy tones'
+  },
+  cosmic: {
+    name: 'Cosmic Purple',
+    icon: '🔮',
+    description: 'Deep purples with neon accents'
+  },
+  desert: {
+    name: 'Desert Gold',
+    icon: '🏜️',
+    description: 'Sandy golds with rustic accents'
+  },
+  // Add your new themes here
+  special: {
+    name: 'Special',
+    icon: '🔥',
+    description: 'Bold reds with sleek black'
+  },
+  cute: {
+    name: 'Cute',
+    icon: '💖',
+    description: 'Soothing teal with vibrant pink'
+  }
+};
 
   useEffect(() => {
     // Apply theme to document
@@ -728,7 +740,7 @@ function BrandDashboard() {
           onMouseLeave={() => handleCardHover('pending-requests', false)}
         >
           <div className="requests-icon">
-            <img src="/path/to/cube-icon.png" alt="Pending Requests" className="cube-icon" />
+            <img src="../assets/cube-icon.png" alt="Pending Requests" className="cube-icon" />
           </div>
           <h3>Pending Requests (From Influencers)</h3>
           <p className="stats-value">{pendingRequests}</p>
@@ -740,7 +752,7 @@ function BrandDashboard() {
       <section className="applications-section">
         <div className="section-header">
           <h2>
-            <img src="/path/to/mailbox-icon.png" alt="Applications" className="mailbox-icon" />
+            <img src="../assets/mailbox-icon.png" alt="Applications" className="mailbox-icon" />
             <span className="section-title">Influencer Applications</span>
           </h2>
           <div className="section-line"></div>

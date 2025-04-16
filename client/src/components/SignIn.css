@@ -1,6 +1,7 @@
 /* src/components/SignIn.css */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Raleway:wght@300;400;700&display=swap');
 
+/* =========== RESET & GLOBAL STYLES =========== */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,176 +10,804 @@
 
 body {
   font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
 }
 
-/* 
-   Full-viewport container with a gradient 
-   modified to use palette colors instead of pastel turquoise to pink
-*/
-.signin-container {
+/* =========== COSMIC UNIVERSE CONTAINER =========== */
+.cosmic-universe {
+  position: relative;
   min-height: 100vh;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* Gradient background using palette colors */
-  background: linear-gradient(
-    135deg, 
-    #FFECD1 0%, 
-    #15616D 100%
-  );
+  overflow: hidden;
+  
+  /* Deep space dark background */
+  background: linear-gradient(135deg, #0a0e17 0%, #1c1e26 50%, #141228 100%);
+  transition: transform 0.8s ease-in-out;
 }
 
-/* The card with the login form using palette colors */
-.signin-card {
-  background-color: #FFECD1; /* replaced white */
+.cosmos-transition-out {
+  transform: scale(1.5);
+  opacity: 0;
+}
+
+.universe-loaded {
+  animation: universeExpand 1.2s ease-out forwards;
+}
+
+@keyframes universeExpand {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========== SPACE PARTICLES & NEBULAS =========== */
+.stellar-particle {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+  animation: twinkle 8s infinite ease-in-out;
+}
+
+.nebula-cloud {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.2;
+  animation: pulsateNebula 15s infinite alternate ease-in-out;
+}
+
+.nebula-top-right {
+  top: -10%;
+  right: -5%;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, rgba(255, 125, 0, 0.4) 0%, rgba(21, 97, 109, 0.2) 70%);
+}
+
+.nebula-bottom-left {
+  bottom: -15%;
+  left: -10%;
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(circle, rgba(21, 97, 109, 0.4) 0%, rgba(255, 125, 0, 0.1) 70%);
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes pulsateNebula {
+  0% {
+    transform: scale(1);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 0.25;
+  }
+}
+
+/* =========== COSMIC PORTAL =========== */
+.cosmic-portal {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 125, 0, 0.05) 0%, rgba(21, 97, 109, 0.01) 70%);
+  box-shadow: 0 0 80px 20px rgba(255, 125, 0, 0.1);
+  z-index: 1;
+  opacity: 0;
+  transition: all 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.portal-opened {
+  width: 200vw;
+  height: 200vw;
+  opacity: 0.8;
+}
+
+.portal-inner-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%;
+  height: 110%;
+  border: 2px solid rgba(255, 125, 0, 0.2);
+  border-radius: 50%;
+  animation: rotatePortal 25s linear infinite;
+}
+
+.portal-inner-ring::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background-color: #FF7D00;
+  border-radius: 50%;
+  box-shadow: 0 0 15px 5px rgba(255, 125, 0, 0.5);
+}
+
+@keyframes rotatePortal {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* =========== GALACTIC RING =========== */
+.galactic-ring {
+  position: absolute;
+  width: 140vw;
+  height: 140vw;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotateRing 120s linear infinite;
+}
+
+.galactic-ring::before {
+  content: '';
+  position: absolute;
+  width: 110%;
+  height: 110%;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.galactic-ring::after {
+  content: '';
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.01);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes rotateRing {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* =========== SIGN IN CONTAINER =========== */
+.cosmic-signin-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  perspective: 1000px;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.signin-revealed {
+  animation: revealForm 1s 0.5s forwards cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+@keyframes revealForm {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========== SIGNIN CARD =========== */
+.cosmic-signin-card {
+  background: linear-gradient(135deg, rgba(10, 14, 23, 0.7) 0%, rgba(20, 18, 40, 0.9) 100%);
   width: 90%;
   max-width: 400px;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  padding: 2.5rem;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   text-align: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
 }
 
-.signin-card h2 {
-  margin-bottom: 1rem;
-  font-weight: 600;
-  color: #001524; /* replaced #333 */
+.cosmic-signin-card::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(45deg, #FF7D00, transparent, #15616D, transparent, #FF7D00);
+  z-index: -1;
+  border-radius: 25px;
+  animation: borderGlow 10s linear infinite;
+  opacity: 0.4;
 }
 
-/* Form groups: label + input */
-.form-group {
-  margin-bottom: 1rem;
+@keyframes borderGlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.nebula-shake {
+  animation: shakeError 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shakeError {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-8px);
+  }
+  40%, 80% {
+    transform: translateX(8px);
+  }
+}
+
+/* =========== STARDUST LOGO =========== */
+.stardust-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+
+.logo-orbit {
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(255, 125, 0, 0.3);
+  border-radius: 50%;
+  animation: rotateOrbit 8s linear infinite;
+  position: relative;
+}
+
+.logo-planet {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #FF7D00 0%, #78290F 100%);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 20px 5px rgba(255, 125, 0, 0.3);
+}
+
+.logo-orbit::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: #15616D;
+  border-radius: 50%;
+  top: 10%;
+  left: 50%;
+  box-shadow: 0 0 15px 3px rgba(21, 97, 109, 0.5);
+}
+
+@keyframes rotateOrbit {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========== TITLE ANIMATION =========== */
+.supernova-title {
+  color: #FFECD1;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.supernova-title::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 4px;
+  background: linear-gradient(90deg, #FF7D00, #15616D);
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+/* =========== FORM GROUPS =========== */
+.astral-form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.input-focused {
+  transform: translateX(5px);
+}
+
+.celestial-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #FFECD1;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+  transition: color 0.3s ease;
+}
+
+.interstellar-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.cosmic-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: rgba(0, 21, 36, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #FFECD1;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.cosmic-input:focus {
+  outline: none;
+  border-color: #FF7D00;
+  box-shadow: 0 0 0 2px rgba(255, 125, 0, 0.2);
+  background: rgba(0, 21, 36, 0.5);
+}
+
+.cosmic-input::placeholder {
+  color: rgba(255, 236, 209, 0.3);
+}
+
+.cosmic-glow {
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(255, 125, 0, 0.8) 0%, rgba(255, 125, 0, 0) 70%);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+}
+
+.input-focused .cosmic-glow {
+  opacity: 0.3;
+  animation: moveGlow 3s infinite alternate ease-in-out;
+}
+
+@keyframes moveGlow {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(300px) translateY(0);
+  }
+}
+
+/* =========== ERROR MESSAGE =========== */
+.meteor-error {
+  background: rgba(120, 41, 15, 0.2);
+  color: #FF7D00;
+  border-left: 3px solid #FF7D00;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  border-radius: 0 6px 6px 0;
+  animation: fadeInError 0.4s ease forwards;
   text-align: left;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-weight: 500;
-  color: #001524; /* replaced #555 */
+@keyframes fadeInError {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.form-group input {
-  width: 100%;
-  padding: 0.55rem;
-  border: 2px solid #001524; /* replaced #ddd */
-  border-radius: 4px;
-  font-size: 1rem;
-  outline: none;
-  background-color: #FFECD1; /* using palette background for inputs */
-  color: #001524; /* dark text for readability */
-}
-
-.form-group input:focus {
-  border-color: #FF7D00; /* replaced #ff6150 with palette color */
-}
-
-/* "Forgot your password?" link in a lighter style */
-.forgot-password {
-  margin-bottom: 1.5rem;
-  text-align: right;
-}
-
-.forgot-password a {
-  font-size: 0.9rem;
-  color: #001524; /* replaced #999 */
-  text-decoration: underline;
-  filter: blur(0.1px) brightness(1.05);
-  transition: color 0.2s;
-}
-
-.forgot-password a:hover {
-  color: #15616D; /* replaced #666 with a palette color */
-  filter: none;
-}
-
-/* Login button */
-.signin-btn {
-  background-color: #FF7D00; /* replaced #ff6150 */
-  color: #FFECD1; /* replaced white with palette color */
+/* =========== SIGN IN BUTTON =========== */
+.quantum-signin-btn {
+  background: linear-gradient(135deg, #FF7D00 0%, #78290F 100%);
+  color: #FFECD1;
   border: none;
   width: 100%;
-  padding: 0.7rem;
-  border-radius: 4px;
+  padding: 0.8rem;
+  border-radius: 6px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  margin-bottom: 1rem;
-  transition: background-color 0.3s;
+  margin: 0.5rem 0 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 125, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.signin-btn:hover {
-  background-color: #78290F; /* replaced #e95445 */
+.quantum-signin-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 125, 0, 0.4);
 }
 
-/* Sign up link at bottom */
-.signup-cta {
+.quantum-signin-btn:active {
+  transform: translateY(1px);
+}
+
+.quantum-signin-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(45deg);
+  transition: transform 0.6s ease;
+  z-index: 1;
+}
+
+.quantum-signin-btn:hover::before {
+  transform: rotate(45deg) translate(50%, 50%);
+}
+
+.quantum-signin-btn.pulsating {
+  animation: btnPulse 1.5s infinite alternate;
+}
+
+@keyframes btnPulse {
+  0% {
+    box-shadow: 0 0 15px rgba(255, 125, 0, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(255, 125, 0, 0.6);
+  }
+}
+
+/* =========== LOADING ANIMATION =========== */
+.warp-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+}
+
+.warp-circle {
+  width: 8px;
+  height: 8px;
+  background-color: #FFECD1;
+  border-radius: 50%;
+  animation: warpBounce 1.4s infinite ease-in-out both;
+}
+
+.warp-circle:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.warp-circle:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes warpBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.3;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =========== SEPARATOR =========== */
+.cosmic-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.star-line {
+  flex-grow: 1;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    transparent
+  );
+}
+
+.galaxy-orb {
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #FF7D00, #78290F);
+  border-radius: 50%;
+  margin: 0 15px;
+  position: relative;
+  box-shadow: 0 0 10px rgba(255, 125, 0, 0.5);
+}
+
+.galaxy-orb::before, .galaxy-orb::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 2px;
+  background: rgba(255, 125, 0, 0.3);
+  top: 50%;
+  margin-top: -1px;
+  border-radius: 1px;
+}
+
+.galaxy-orb::before {
+  left: -20px;
+}
+
+.galaxy-orb::after {
+  right: -20px;
+}
+
+/* =========== SIGNUP CTA =========== */
+.comet-signup-cta {
   font-size: 0.95rem;
-  color: #001524; /* replaced #444 */
+  color: #FFECD1;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
 }
 
-.signup-cta span {
-  color: #FF7D00; /* replaced #ff6150 */
-  text-decoration: underline;
-  cursor: pointer;
+.comet-signup-cta:hover {
+  opacity: 1;
+}
+
+.pulsar-link {
+  color: #FF7D00;
   font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.pulsar-link:hover {
+  text-shadow: 0 0 10px rgba(255, 125, 0, 0.5);
+}
+
+.pulsar-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background: linear-gradient(90deg, transparent, #FF7D00, transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.pulsar-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* =========== SUCCESS OVERLAY =========== */
+.interstellar-success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 21, 36, 0.85);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInOverlay 0.4s ease forwards;
+  backdrop-filter: blur(8px);
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cosmic-success-icon {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1.5rem;
+}
+
+.success-circle {
+  fill: none;
+  stroke: #15616D;
+  stroke-width: 2;
+  stroke-dasharray: 69;
+  stroke-dashoffset: 69;
+  animation: drawCircle 0.8s ease forwards;
+}
+
+.success-checkmark {
+  fill: none;
+  stroke: #FF7D00;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 34;
+  stroke-dashoffset: 34;
+  animation: drawCheck 0.8s 0.5s ease forwards;
+}
+
+@keyframes drawCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.cosmic-welcome-message {
+  color: #FFECD1;
+  font-size: 1.8rem;
+  font-family: 'Raleway', sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeInMessage 0.5s 0.8s ease forwards;
+}
+
+@keyframes fadeInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* =========== MEDIA QUERIES =========== */
 
 /* Tablets (max-width: 768px) */
 @media (max-width: 768px) {
-  .signin-card {
-    width: 80%;
-    padding: 1.5rem;
+  .cosmic-signin-card {
+    width: 85%;
+    padding: 2rem;
   }
 
-  .signin-card h2 {
-    font-size: 1.4rem;
+  .stardust-logo {
+    width: 70px;
+    height: 70px;
   }
 
-  .form-group input {
+  .supernova-title {
+    font-size: 1.8rem;
+  }
+
+  .celestial-label {
+    font-size: 0.85rem;
+  }
+
+  .cosmic-input {
     font-size: 0.95rem;
-    padding: 0.5rem;
+    padding: 0.7rem 0.9rem;
   }
 
-  .signin-btn {
+  .quantum-signin-btn {
     font-size: 0.9rem;
-    padding: 0.6rem;
+    padding: 0.7rem;
+  }
+
+  .cosmic-welcome-message {
+    font-size: 1.6rem;
   }
 }
 
 /* Mobile (max-width: 480px) */
 @media (max-width: 480px) {
-  .signin-card {
+  .cosmic-signin-card {
     width: 90%;
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
-  .signin-card h2 {
-    font-size: 1.2rem;
+  .stardust-logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
   }
 
-  .form-group label {
+  .supernova-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .celestial-label {
+    font-size: 0.8rem;
+  }
+
+  .cosmic-input {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .quantum-signin-btn {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .comet-signup-cta {
     font-size: 0.85rem;
   }
 
-  .form-group input {
-    font-size: 0.85rem;
-    padding: 0.45rem;
+  .cosmic-welcome-message {
+    font-size: 1.4rem;
   }
-
-  .forgot-password a {
-    font-size: 0.85rem;
-  }
-
-  .signin-btn {
-    font-size: 0.85rem;
-    padding: 0.5rem;
-  }
-
-  .signup-cta {
-    font-size: 0.85rem;
+  
+  .nebula-top-right, .nebula-bottom-left {
+    opacity: 0.15;
   }
 }
