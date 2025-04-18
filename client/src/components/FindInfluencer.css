@@ -678,7 +678,7 @@ button {
 }
 
 /* ===== NOTIFICATION SYSTEM ===== */
-.premium-notification {
+.premium-notification-1 {
   position: fixed;
   top: 100px;
   right: -400px;
@@ -699,11 +699,11 @@ button {
   overflow: hidden;
 }
 
-.premium-notification.show {
+.premium-notification-1.show {
   right: 20px;
 }
 
-.notification-icon {
+.notification-icon-1 {
   background: rgba(16, 185, 129, 0.2);
   width: 30px;
   height: 30px;
@@ -715,13 +715,13 @@ button {
   font-size: 16px;
 }
 
-.notification-message {
+.notification-message-1 {
   font-size: 14px;
   line-height: 1.4;
   flex: 1;
 }
 
-.notification-progress {
+.notification-progress-1 {
   position: absolute;
   bottom: 0;
   left: 0;

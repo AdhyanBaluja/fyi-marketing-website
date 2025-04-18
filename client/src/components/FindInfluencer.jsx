@@ -744,26 +744,19 @@ if (filters.influencerLocation && filters.influencerLocation !== "--Select--") {
         button.classList.add('btn-success');
         button.innerHTML = '<span class="success-icon">✓</span> Sent!';
         
-        // Show success notification with proper styling
-        setSuccessMessage("Invite sent successfully!");
-        setShowSuccess(true);
-        
-        // Ensure notification visibility
-        const notification = document.querySelector('.premium-notification');
-        if (notification) {
-          notification.style.opacity = '1'; // Force opacity
-          notification.style.background = 'var(--premium-glass-bg)'; // Force background
-          notification.style.backdropFilter = 'blur(10px)'; // Force blur
-          notification.style.border = '1px solid var(--premium-glass-border)'; // Force border
-        }
-        
         setTimeout(() => {
-          setShowSuccess(false);
           button.classList.remove('btn-success');
           button.disabled = false;
           button.innerHTML = 'Send Invite';
         }, 3000);
       }
+      
+      // Show success notification
+      setSuccessMessage("Invite sent successfully!");
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
       
     } catch (err) {
       console.error("Error sending invite:", err);
@@ -834,21 +827,11 @@ if (filters.influencerLocation && filters.influencerLocation !== "--Select--") {
       </div>
       
       {/* Success notification */}
-      {/* Success notification with enhanced styling */}
-<div 
-  className={`premium-notification ${showSuccess ? 'show' : ''}`}
-  style={{
-    background: 'var(--premium-glass-bg)',
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)', // For Safari
-    boxShadow: 'var(--premium-shadow-md)',
-    border: '1px solid var(--premium-glass-border)',
-  }}
->
-  <div className="notification-icon">✓</div>
-  <div className="notification-message">{successMessage}</div>
-  <div className="notification-progress"></div>
-</div>
+      <div className={`premium-notification-1 ${showSuccess ? 'show' : ''}`}>
+        <div className="notification-icon-1">✓</div>
+        <div className="notification-message-1">{successMessage}</div>
+        <div className="notification-progress-1"></div>
+      </div>
       
       {/* Theme toggle */}
       <button 
