@@ -89,6 +89,100 @@ function CampaignResults() {
     fetchCampaign(campaignId);
   }, [campaignId]);
 
+  // Add this function right after your existing useEffect hooks in the CampaignResults component
+// Around line 82-83 after the existing useEffects
+
+// Add this new useEffect for enabling image downloads
+useEffect(() => {
+  if (!loading && campaign) {
+    // Function to enable right-clicks on images
+    const enableImageDownloads = () => {
+      // Find all image elements
+      const images = document.querySelectorAll('.fy-bingo-card-image');
+      
+      // For each image, ensure right-clicks work
+      images.forEach(img => {
+        img.addEventListener('contextmenu', (e) => {
+          // Allow the default right-click menu
+          e.stopPropagation();
+        });
+        
+        // Remove any other click handlers that might interfere
+        img.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      });
+    };
+    
+    // Call the function
+    enableImageDownloads();
+    
+    // Set a small timeout to ensure images are loaded
+    const imageLoadTimeout = setTimeout(() => {
+      enableImageDownloads();
+    }, 1000);
+    
+    // Cleanup
+    return () => {
+      clearTimeout(imageLoadTimeout);
+    };
+  }
+}, [loading, campaign]);
+
+// The rest of your component continues as before...
+
+// Add this function to implement click-to-expand functionality for images
+// Place this with your other useEffect hooks
+
+useEffect(() => {
+  if (!loading && campaign) {
+    // Function to enable expanding images on click
+    const enableImageExpand = () => {
+      // Find all image elements
+      const images = document.querySelectorAll('.fy-bingo-card-image');
+      
+      // For each image, add click handler to expand/collapse
+      images.forEach(img => {
+        img.addEventListener('click', (e) => {
+          e.stopPropagation();
+          
+          // Toggle expanded class
+          img.classList.toggle('expanded');
+          
+          // If expanded, add click handler to document to close on click outside
+          if (img.classList.contains('expanded')) {
+            document.addEventListener('click', function closeExpandedImage(e) {
+              if (e.target !== img) {
+                img.classList.remove('expanded');
+                document.removeEventListener('click', closeExpandedImage);
+              }
+            });
+            
+            // Also close on ESC key
+            document.addEventListener('keydown', function handleEsc(e) {
+              if (e.key === 'Escape') {
+                img.classList.remove('expanded');
+                document.removeEventListener('keydown', handleEsc);
+              }
+            });
+          }
+        });
+      });
+    };
+    
+    // Call the function once images should be loaded
+    const imageLoadTimeout = setTimeout(() => {
+      enableImageExpand();
+    }, 1000);
+    
+    // Cleanup
+    return () => {
+      clearTimeout(imageLoadTimeout);
+    };
+  }
+}, [loading, campaign]);
+
+
   const fetchCampaign = async (id) => {
     setLoading(true);
     try {

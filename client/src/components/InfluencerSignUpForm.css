@@ -1546,7 +1546,7 @@ body, html {
     rgba(255, 125, 0, 0) 60%, 
     rgba(255, 125, 0, 0) 100%);
   transform: rotate(45deg);
-  animation: lightLeak 15s infinite linear;
+  /* animation: lightLeak 15s infinite linear; */
   pointer-events: none;
 }
 
