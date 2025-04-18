@@ -614,12 +614,66 @@ function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
   const [currentSection, setCurrentSection] = useState('hero');
   const [pageLoaded, setPageLoaded] = useState(false);
+
+// Define the available color themes based on palette tables
+const colorThemes = [
+  // Original themes
+  'theme-amber',         // Warm orange/gold
+  'theme-cyan',          // Cool blue/cyan
+  'theme-lavender',      // Soft purple
+  'theme-mint',          // Fresh green
+  'theme-peach',         // Gentle peach/coral
+  'theme-jade',          // Teal/jade
+  
+  // First expansion set
+  'theme-emerald',       // Rich green
+  'theme-ruby',          // Deep red
+  'theme-sunset',        // Orange/sunset
+  'theme-sapphire',      // Deep blue
+  'theme-amethyst',      // Rich purple
+  'theme-aqua',          // Bright teal
+  'theme-rosegold',      // Pink/rose gold
+  'theme-electric',      // Electric blue
+  'theme-golden',        // Rich gold
+  'theme-coral',         // Vibrant coral
+  'theme-indigo',        // Deep indigo
+  
+  // Premium expansion set
+  'theme-nebula',        // Purple/violet nebula
+  'theme-aurora',        // Aurora green
+  'theme-crimson',       // Crimson red
+  'theme-prism',         // Prism blue
+  'theme-opal',          // Opal teal
+  'theme-magenta',       // Magenta pink
+  'theme-royal',         // Royal purple
+  'theme-turquoise',     // Deep turquoise
+  'theme-amberglow',     // Amber glow
+  'theme-ultraviolet',   // Ultraviolet purple
+  'theme-flamingo',      // Flamingo pink
+  'theme-ocean',         // Ocean blue
+  'theme-neon',          // Neon cyan
+  'theme-sunsetblaze',   // Sunset blaze orange
+  'theme-emeraldfire',   // Emerald fire green
+  'theme-cosmic',        // Cosmic purple
+  'theme-midnightblue',  // Midnight blue
+  'theme-rosepetal',     // Rose petal pink
+  'theme-arctic',        // Arctic blue
+  'theme-energy',        // Energy yellow
+  'theme-tropical',      // Tropical teal
+  'theme-galaxy'         // Galaxy purple
+];
+  
+// State to hold the current theme
+const [currentTheme, setCurrentTheme] = useState('');
   
   // Fix for cursor issue with video background
   useEffect(() => {
     // Add a small delay to ensure everything is loaded
     const loadTimer = setTimeout(() => {
       setPageLoaded(true);
+      // Select a random theme on initial load
+const randomTheme = colorThemes[Math.floor(Math.random() * colorThemes.length)];
+setCurrentTheme(randomTheme);
     }, 500);
     
     const fixCursorIssue = () => {
@@ -826,57 +880,56 @@ function LandingPage() {
           data-tooltip="Get Started"
         ></div>
       </div>
+{/* ========== ENHANCED HERO SECTION ========== */}
+<section id="hero" className={`hero-section ${currentTheme}`} ref={heroSectionRef}>
+  {/* Local video background container */}
+  <div className="hero-video-container">
+    <video 
+      className="hero-video" 
+      ref={videoRef} 
+      muted 
+      loop 
+      playsInline
+      poster="../assets/landingPage-fallback.jpg" // Fallback image if video fails
+    >
+      <source src={landingPageVideo} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+    <div className="hero-overlay"></div>
+  </div>
+  
+  {/* Centered hero content */}
+  <div className="hero-content">
+    <div className="hero-title-container">
+      <TypewriterTitle />
+    </div>
 
-      {/* ========== HERO SECTION ========== */}
-      <section id="hero" className="hero-section" ref={heroSectionRef}>
-        {/* Local video background container */}
-        <div className="hero-video-container">
-          <video 
-            className="hero-video" 
-            ref={videoRef} 
-            muted 
-            loop 
-            playsInline
-            poster="../assets/landingPage-fallback.jpg" // Fallback image if video fails
-          >
-            <source src={landingPageVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <div className="hero-overlay"></div>
-        </div>
+    <p className="hero-subtitle">
+      Get started today to know more
+    </p>
 
-
-        {/* Centered hero content */}
-        <div className="hero-content animate-on-scroll fade-up">
-          <TypewriterTitle />
-
-          <p className="hero-subtitle">
-            Get started today to know more
-          </p>
-
-          <div className="hero-cta">
-            <button
-              className="cta-button influencer-cta pulse-animation"
-              onClick={handleInfluencerClick}
-            >
-              I AM INFLUENCER
-            </button>
-            <button
-              className="cta-button brand-cta pulse-animation"
-              onClick={handleBrandClick}
-            >
-              I AM BRAND
-            </button>
-          </div>
-          
-          {/* Scroll indicator */}
-          <div className="scroll-indicator">
-            <div className="scroll-arrow"></div>
-            <p>Scroll to explore</p>
-          </div>
-        </div>
-      </section>
-
+    <div className="hero-cta">
+      <button
+        className="cta-button influencer-cta"
+        onClick={handleInfluencerClick}
+      >
+        I AM INFLUENCER
+      </button>
+      <button
+        className="cta-button brand-cta"
+        onClick={handleBrandClick}
+      >
+        I AM BRAND
+      </button>
+    </div>
+  </div>
+  
+  {/* Scroll indicator - centered at bottom */}
+  <div className="scroll-indicator">
+    <div className="scroll-arrow"></div>
+    <p>SCROLL TO EXPLORE</p>
+  </div>
+</section>
       {/* ========== BENEFITS SECTION ========== */}
       <section 
         id="benefits"
