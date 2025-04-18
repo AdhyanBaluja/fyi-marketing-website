@@ -138,22 +138,22 @@ function InfluencerSignUpForm() {
   const [platformDetails, setPlatformDetails] = useState({});
   const [showLottie, setShowLottie] = useState(false);
 
- // Mouse cursor effect with proper cleanup
-useEffect(() => {
-  const handleMouseMove = (e) => {
-    setMouseCursor({ x: e.clientX, y: e.clientY });
-  };
+//  // Mouse cursor effect with proper cleanup
+// useEffect(() => {
+//   const handleMouseMove = (e) => {
+//     setMouseCursor({ x: e.clientX, y: e.clientY });
+//   };
   
-  // Only add listener if we're on this page
-  window.addEventListener('mousemove', handleMouseMove);
+//   // Only add listener if we're on this page
+//   window.addEventListener('mousemove', handleMouseMove);
   
-  // Crucial cleanup function to remove the event listener
-  return () => {
-    window.removeEventListener('mousemove', handleMouseMove);
-    // Reset cursor position on unmount
-    setMouseCursor({ x: 0, y: 0 });
-  };
-}, []);
+//   // Crucial cleanup function to remove the event listener
+//   return () => {
+//     window.removeEventListener('mousemove', handleMouseMove);
+//     // Reset cursor position on unmount
+//     setMouseCursor({ x: 0, y: 0 });
+//   };
+// }, []);
   
   // Industry & Platform options
   const industryOptions = [
@@ -342,38 +342,9 @@ useEffect(() => {
     <div className="influencer-page-container">
       <NavBar />
       
-      {/* Custom animated cursor */}
-      <motion.div 
-  className="custom-cursor"
-  style={{
-    left: mouseCursor.x,
-    top: mouseCursor.y,
-    pointerEvents: 'none' // Add this
-  }}
-  animate={{
-    scale: [1, 1.2, 1],
-    opacity: [0.3, 0.5, 0.3], // Lower opacity values
-  }}
-/>
       
-      {/* Animated background layers */}
-      <div className="dynamic-backdrop">
-        <div className="cosmos">
-          <div className="stars"></div>
-          <div className="stars"></div>
-          <div className="stars"></div>
-          <div className="stars"></div>
-          <div className="stars"></div>
-        </div>
-
-        <div className="animated-gradient-bg"></div>
-        
-        <div className="glowing-orbs-container">
-          <div className="orb orb-1"></div>
-          <div className="orb orb-2"></div>
-          <div className="orb orb-3"></div>
-        </div>
-      </div>
+      
+      
       
       {/* Show confetti animation on selection */}
       {showLottie && (
